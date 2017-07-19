@@ -1,0 +1,125 @@
+*{
+  margin:0;
+  padding:0;
+}
+body{
+  background-color:#f0f0f0;
+  font-family: helvetica, serif;
+}
+
+/***********************REGISTRATION**************************/
+.form{
+  max-width: 852px;
+  margin: 50px auto;
+  border-radius: 5px;
+  padding: 20px;
+  background-color: #fff;
+}
+
+.image-crop {
+  /*margin-top: 100px;*/
+  text-align: center;
+}
+.image-crop .btn {
+  width: 140px;
+}
+.image-crop .crop-card {
+  margin-top: 10px;
+  /*width: 400px;*/
+  margin-left: auto;
+  margin-right: auto;
+}
+.image-crop .image-wrap {
+  height: 200px;
+  margin-top: 40px;
+  background-color: #f0f0f0;
+}
+
+#upload-btn{
+  display: flex;
+}
+.upload-file-btn {
+  overflow: hidden;
+  position: relative;
+  margin: 0 5px;
+}
+.upload-file-btn .btn-text {
+  font-size: 14px;
+}
+.upload-file-btn input {
+  font-size: 200px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+}
+
+/*.main{*/
+  /*position:relative;*/
+  /*top:20px;*/
+  /*height:600px;*/
+  /*width:800px;*/
+  /*background-size:cover;*/
+  /*margin-left:auto;*/
+  /*margin-right:auto;*/
+/*}*/
+/*.form{*/
+  /*float:left;*/
+  /*height:86%;*/
+  /*width:100%;*/
+  /*box-sizing:border-box;*/
+  /*padding:40px;*/
+/*}*/
+/*.register label {*/
+  /*display: inline-block;*/
+  /*width: 10%;*/
+  /*text-align: right;*/
+  /*margin: 10px;*/
+/*}*/
+/*.textbox{*/
+  /*height:50px;*/
+  /*width:80%;*/
+  /*border-radius:3px;*/
+  /*border:rgba(0,0,0,.3) 2px solid;*/
+  /*box-sizing:border-box;*/
+  /*padding:10px;*/
+  /*margin-bottom:30px;*/
+/*}*/
+/*.textbox:focus{*/
+  /*outline:none;*/
+  /*border:rgba(24,149,215,1) 2px solid;*/
+  /*color:rgba(24,149,215,1);*/
+/*}*/
+/*.button{*/
+  /*height:50px;*/
+  /*width:100%;*/
+  /*border-radius:3px;*/
+  /*border:rgba(0,0,0,.3) 0px solid;*/
+  /*box-sizing:border-box;*/
+  /*padding:10px;*/
+  /*margin-bottom:30px;*/
+  /*background:#90c843;*/
+  /*color:#FFF;*/
+  /*font-weight:bold;*/
+  /*font-size: 12pt;*/
+  /*transition:background .4s;*/
+  /*cursor:pointer;*/
+/*}*/
+/*.button:hover{*/
+  /*background:#80b438;*/
+/*}*/
+/*.form-group.required label:after {*/
+  /*content:" *";*/
+  /*color:red;*/
+/*}*/
+.pb-0{
+  background-image: url('../-min.jpg');
+}
+.btn-success{
+  background-color: #002A54;
+  border-color: #002A54;
+}
+.btn-success:hover{
+  background-color: #00254B;
+  border-color: #00254B;
+}

@@ -1,0 +1,196 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container form">
+    <form action="{% url 'signUp' %}" enctype="multipart/form-data" method="POST">
+        <label>
+            Name
+            <span>*</span>
+        </label>
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="input-prepend">
+                    {{form.fName}}
+                    {% if form.fName.errors %}
+                      {% for error in form.fName.errors %}
+                      <div class="alert alert-danger"><strong>{{ error|escape }}</strong></div>
+                      {% endfor %}
+                    {% endif %}
+                </div>
+                <p class="help-block">First Name</p>
+            </div>
+            <div class="col-sm-4">
+                <div class="input-prepend">
+                    {{form.mName}}
+                    {% if form.mName.errors %}
+                      {% for error in form.mName.errors %}
+                      <div class="alert alert-danger"><strong>{{ error|escape }}</strong></div>
+                      {% endfor %}
+                    {% endif %}
+                </div>
+                <p class="help-block">Middle Name</p>
+            </div>
+            <div class="col-sm-4">
+                <div class="input-prepend">
+                    {{form.lName}}
+                    {% if form.lName.errors %}
+                      {% for error in form.lName.errors %}
+                      <div class="alert alert-danger"><strong>{{ error|escape }}</strong></div>
+                      {% endfor %}
+                    {% endif %}
+                </div>
+                <p class="help-block">Last Name</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
+                <label for="dob">
+                    Date of Birth
+                    <span>*</span>
+                </label>
+                <div class="input-group date"
+                     data-provide="datepicker"
+                     data-date-start-date="01/01/1900"
+                     data-date-autoclose="true"
+                     data-date-start-view="decade"
+                     data-date-format="dd/mm/yyyy">
+                    {{form.dob}}
+                    {% if form.dob.errors %}
+                      {% for error in form.dob.errors %}
+                      <div class="alert alert-danger"><strong>{{ error|escape }}</strong></div>
+                      {% endfor %}
+                    {% endif %}
+                    <div class="input-group-addon">
+                        <span class="glyphicon glyphicon-th"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4 col-sm-offset-4">
+                <div class="form-group required" style="display: inline-block">
+                    <label for="gender">Gender</label>
+                    <span>*</span>
+                    {{form.gender}}
+                    {% if form.gender.errors %}
+                      {% for error in form.gender.errors %}
+                      <div class="alert alert-danger"><strong>{{ error|escape }}</strong></div>
+                      {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-8">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group required">
+                            <label for="client_id_type">Client ID(Type)</label>
+                            {{form.type}}
+                            {% if form.type.errors %}
+                              {% for error in form.type.errors %}
+                              <div class="alert alert-danger"><strong>{{ error|escape }}</strong></div>
+                              {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group required">
+                            <label for="client_id">ID No.</label>
+                            {{form.id}}
+                            {% if form.id.errors %}
+                              {% for error in form.id.errors %}
+                              <div class="alert alert-danger"><strong>{{ error|escape }}</strong></div>
+                              {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group required">
+                            <label for="email">Email</label>
+                            <span>*</span>
+                            {{form.id}}
+                            {% if form.email.errors %}
+                              {% for error in form.email.errors %}
+                              <div class="alert alert-danger"><strong>{{ error|escape }}</strong></div>
+                              {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <label for="mobile">Mobile Number</label>
+                        <span>*</span>
+                        {{form.phone}}
+                        {% if form.phone.errors %}
+                          {% for error in form.phone.errors %}
+                          <div class="alert alert-danger"><strong>{{ error|escape }}</strong></div>
+                          {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="">
+                    <div class="form-group required">
+                        <label>Upload scanned copy of ID</label>
+{#                        <input type="file" id="id_file" value="Upload scanned copy of ID" class="form-control" required/>#}
+                        <div class="image-crop">
+                            <div id="upload-btn">
+                                <div class="btn btn-primary upload-file-btn">
+                                    <span class="btn-text">Choose File</span>
+                                    {{form.image}}
+                                    {% if form.image.errors %}
+                                      {% for error in form.image.errors %}
+                                      <div class="alert alert-danger"><strong>{{ error|escape }}</strong></div>
+                                      {% endfor %}
+                                    {% endif %}
+                                </div>
+                                <div class="btn btn-primary save-btn">Save</div>
+                            </div>
+                            <div class="card crop-card">
+                                <div class="card-block">
+                                    <div class="image-wrap d-flex justify-content-center align-items-center">
+                                        <canvas id="canvas" height="200"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label for="bot_cds">BOT CDS Account</label>
+                    <input type="text" id="bot_cds" class="form-control"/>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label for="dse_cds">DSE CDS Account</label>
+                    <input type="text" id="dse_cds" class="form-control"/>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <input type="submit" value="Create Account" id="create-account" class="btn btn-success"/>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.min.js"></script>
+    <script src="/web/static/js/jquery.caret.js"></script>
+    <script src="/web/static/js/jquery.mobilePhoneNumber.js"></script>
+    <script src="/web/static/js/registration.js"></script>
+{% endblock %}
