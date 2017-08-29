@@ -56,7 +56,7 @@ class IndividualAccount(models.Model):
     last_name = models.CharField(max_length=30)
     dob = models.DateField()
     gender = models.CharField(max_length=1, choices=GENDER)
-    client_id = models.CharField(max_length=15, unique=True, primary_key=True, null=True)
+    client_id = models.CharField(max_length=15, unique=True, primary_key=True)
     pin = models.CharField(max_length=4, unique=True, null=True)
     email = models.EmailField()
     msisdn = models.CharField(max_length=12, db_index=True, default='NA', validators=[telephone])
@@ -84,7 +84,7 @@ class JointAccount(models.Model):
     first_admin = models.CharField(max_length=30)
     sec_admin = models.CharField(max_length=30, null=True)
     pochi_id = models.CharField(max_length=20, null=True)
-    members = models.ManyToManyField(IndividualAccount, through=JointAccountMembers)
+    members = models.ManyToManyField(IndividualAccount, through='JointAccountMembers')
     members_count = models.IntegerField()
     created_at = models.DateTimeField()
 
