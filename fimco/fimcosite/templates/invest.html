@@ -1,0 +1,399 @@
+{% extends "base.html" %}
+{% block links %}
+    <link href="static/css/plugins/bootstrap-wizard.css" rel="stylesheet" />
+{% endblock %}
+{% block content %}
+    <div class="center">
+        <div class="container">
+            <div class="row">
+                <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable">
+                    <div id="wid-id-0">
+                        <header role="heading">
+                            <h2></h2>
+                        </header>
+                        <!-- widget div-->
+                        <div role="content">
+                            <!-- widget content -->
+                            <div class="widget-body">
+                                <div class="card row">
+                                    <div class="col-sm-12 col-md-12 col-lg-12">
+                                        <form id="wizard" novalidate="novalidate">
+                                            <div id="bootstrap-wizard" class="col-sm-12">
+                                                <div class="form-bootstrapWizard">
+                                                    <ul class="bootstrapWizard form-wizard">
+                                                        <li role="presentation" class="active" data-target="#step1">
+                                                            <a href="#tab1" data-toggle="tab" class="active"> <span class="step">1</span> <span class="title">Basic information</span> </a>
+                                                        </li>
+                                                        <li role="presentation" class="disabled" data-target="#step2">
+                                                            <a href="#tab2" data-toggle="tab"> <span class="step">2</span> <span class="title">Upload ID</span> </a>
+                                                        </li>
+                                                        <li role="presentation" class="disabled" data-target="#step3" class="">
+                                                            <a href="#tab3" data-toggle="tab"> <span class="step">3</span> <span class="title">Cash-out Form</span> </a>
+                                                        </li>
+                                                        <li role="presentation" class="disabled" data-target="#step4">
+                                                            <a href="#tab4" data-toggle="tab"> <span class="step">4</span> <span class="title">Terms & Conditions</span> </a>
+                                                        </li>
+                                                        <li role="presentation" class="disabled" data-target="#step5">
+                                                            <a href="#tab5" data-toggle="tab"> <span class="step"><i class="fa fa-check"></i></span><span class="title">Complete</span> </a>
+                                                        </li>
+                                                    </ul>
+                                                    <div class="clearfix"></div>
+                                                </div>
+                                                <div class="tab-content">
+                                                    <div class="tab-pane active" id="tab1">
+                                                        <br>
+                                                        <h3><strong>Step 1 </strong> - Basic Information</h3>
+
+                                                        <div class="form-actions">
+                                                            <div class="row">
+                                                                <div class="col-sm-12">
+                                                                    <h5 class="info-text"> Please tell us more about yourself.</h5>
+                                                                    <div class="row">
+                                                                        <div class="col-sm-4 col-sm-offset-1">
+                                                                            <div class="picture-container">
+                                                                                <div class="picture">
+                                                                                    <img src="static/img/default-avatar.jpg" class="picture-src" id="wizardPicturePreview" />
+                                                                                    {{ rForm.image }}
+{#                                                                                    <input type="file" id="picture">#}
+                                                                                </div>
+                                                                                <h6>Choose Picture</h6>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-sm-4">
+                                                                            <div class="form-group">
+                                                                                <label>First Name <small>(required)</small></label>
+                                                                                {{ rForm.fName }}
+{#                                                                                <input name="firstname" type="text" class="form-control" placeholder="Arthur...">#}
+                                                                            </div>
+                                                                            <div class="form-group">
+                                                                                <label>Last Name <small>(required)</small></label>
+                                                                                {{ rForm.lName }}
+{#                                                                                <input name="lastname" type="text" class="form-control" placeholder="David...">#}
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-sm-3">
+                                                                            <div class="form-group">
+                                                                                <label>Date of Birth <small>(required)</small></label>
+                                                                                {{ rForm.dob }}
+{#                                                                                <input name="dob" type="date" class="form-control">#}
+                                                                            </div>
+                                                                            <div class="form-group">
+                                                                                <label>Gender <small>(required)</small></label>
+                                                                                {{ rForm.gender }}
+{#                                                                                <select name="gender" class="form-control">#}
+{#                                                                                    <option value="Male"> Male </option>#}
+{#                                                                                    <option value="Female"> Female </option>#}
+{#                                                                                    <option value="Other"> Other </option>#}
+{#                                                                                </select>#}
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-sm-4">
+                                                                            <div class="form-group">
+                                                                                <label>Email </label>
+                                                                                {{ rForm.email }}
+{#                                                                                <input name="email" type="email" class="form-control" placeholder="arthur@selcom.net">#}
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-sm-4">
+                                                                            <div class="form-group">
+                                                                                <label>Mobile no. <small>(required)</small></label>
+                                                                                {{ rForm.phone }}
+{#                                                                                <input name="mobile" type="number" class="form-control">#}
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-sm-4">
+                                                                            <div class="form-group">
+                                                                                <label>Password <small>(required)</small></label>
+                                                                                {{ rForm.password }}
+{#                                                                                <input name="pass" type="password" class="form-control">#}
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-sm-4">
+                                                                            <div class="form-group">
+                                                                                <label>Re-enter Password <small>(required)</small></label>
+                                                                                {{ rForm.verify }}
+{#                                                                                <input name="repass" type="password" class="form-control">#}
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <ul class="pager wizard no-margin">
+                                                                        <li class="next">
+                                                                            <input type='button' class='btn next-step' name='next' value='Next' />
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="tab-pane" id="tab2">
+                                                        <br>
+                                                        <h3><strong>Step 2</strong> - Upload ID</h3>
+                                                        <h4>
+                                                            Replace this with instructions for acceptable forms of ID. Praesent mollis diam at neque aliquet eleifend. In posuere non sem nec vestibulum. Mauris nec dictum felis. Nullam ac fermentum leo. Etiam quis ipsum lacinia, maximus nisl nec, consequat nulla. Curabitur id tempus nulla, sit amet luctus erat. Sed tristique tempor massa vel cursus. Pellentesque mattis nulla vel ligula venenatis, vel pharetra lacus eleifend.
+                                                        </h4>
+                                                        <div class="form-actions">
+                                                            <div class="row">
+                                                                <div class="col-sm-3">
+                                                                    <div class="form-group">
+                                                                        <label>Select ID type <small>(required)</small></label>
+                                                                        {{ rForm.id_choice }}
+{#                                                                        <select name="idtype" class="form-control">#}
+{#                                                                            <option value="national"> National ID </option>#}
+{#                                                                            <option value="voting"> Voting ID </option>#}
+{#                                                                            <option value="driving"> Driving license </option>#}
+{#                                                                            <option value="passport"> Passport </option>#}
+{#                                                                        </select>#}
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-4">
+                                                                    <div class="form-group">
+                                                                        <label>Client ID <small>(required)</small></label>
+                                                                        {{ rForm.client_id }}
+{#                                                                        <input name="identity" type="text" class="form-control">#}
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-4">
+                                                                    <div class="picture-container">
+                                                                        <div class="sqr-picture">
+                                                                            <img src="static/img/images.png" class="picture-src" id="wizardFilePreview" />
+                                                                            {{ rForm.scanned_id }}
+{#                                                                            <input type="file" id="file">#}
+                                                                        </div>
+                                                                        <h6>Select your ID</h6>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-sm-12">
+                                                                    <ul class="pager wizard no-margin">
+                                                                        <li class="previous">
+                                                                            <input type='button' class='btn prev-step' name='previous' value='Previous' />
+                                                                        </li>
+                                                                        <li class="next disabled">
+                                                                            <input type='button' class='btn next-step' name='next' value='Next' />
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="tab-pane" id="tab3">
+                                                        <br>
+                                                        <h3><strong>Step 3</strong> - Cash-out Form</h3>
+                                                        <div class="form-actions">
+                                                            <div class="row">
+                                                                <div class="col-sm-6">
+                                                                    <div class="row">
+                                                                        <div class="col-sm-4">
+                                                                            <div class="form-group">
+                                                                                <label>Card holder name <small>*</small></label>
+                                                                                <input name="holder" type="text" class="form-control" placeholder="Arthur G. Ndossi">
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-sm-5">
+                                                                            <div class="form-group">
+                                                                                <label>Card number <small>*</small></label>
+                                                                                <input name="cardno" type="number" class="form-control">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-sm-6">
+                                                                            <div class="form-group">
+                                                                                <label>Card expiration date <small>*</small></label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-sm-4">
+                                                                            <div class="form-group">
+                                                                                <label>CVV2/CVC2 code <small>*</small></label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-sm-3">
+                                                                            <div class="form-group">
+                                                                                <select name="month" class="form-control">
+                                                                                    <option value="1"> January </option>
+                                                                                    <option value="2"> February </option>
+                                                                                    <option value="3"> March </option>
+                                                                                    <option value="4"> April </option>
+                                                                                    <option value="5"> May </option>
+                                                                                    <option value="6"> June </option>
+                                                                                    <option value="7"> July </option>
+                                                                                    <option value="8"> August </option>
+                                                                                    <option value="9"> September </option>
+                                                                                    <option value="10"> October </option>
+                                                                                    <option value="11"> November </option>
+                                                                                    <option value="12"> December </option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-sm-3">
+                                                                            <div class="form-group">
+                                                                                <select name="year" class="form-control">
+                                                                                    <script>
+                                                                                        var thisDate = new Date();
+                                                                                        var year = thisDate.getFullYear();
+                                                                                        for(var i = year; i < year+10; i++){
+                                                                                          document.write('<option value="'+i+'">'+i+'</option>');
+                                                                                        }
+                                                                                    </script>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-sm-3 col-sm-offset-3">
+                                                                            <div class="form-group">
+                                                                                <input name="cvv2" type="number" class="form-control">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-sm-12">
+                                                                    <ul class="pager wizard no-margin">
+                                                                        <li class="previous">
+                                                                            <input type='button' class='btn prev-step' name='previous' value='Previous' />
+                                                                        </li>
+                                                                        <li class="next disabled">
+                                                                            <input type='button' class='btn next-step' name='next' value='Next' />
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="tab-pane" id="tab4">
+                                                        <br>
+                                                        <h3><strong>Step 5</strong> - Terms & Conditions</h3>
+                                                        <br>
+                                                        <div id="terms">
+                                                            <h1>Terms and Conditions ("Terms")</h1>
+                                                            <p>Last updated: August 12, 2017</p>
+                                                            <p>Please read these Terms and Conditions ("Terms", "Terms and Conditions") carefully before using the www.fimco.co.tz website (the "Service") operated by FIMCO ("us", "we", or "our").</p>
+                                                            <p>Your access to and use of the Service is conditioned on your acceptance of and compliance with these Terms. These Terms apply to all visitors, users and others who access or use the Service.</p>
+                                                            <p>By accessing or using the Service you agree to be bound by these Terms. If you disagree with any part of the terms then you may not access the Service. This Terms & Conditions agreement is licensed by <a href="https://termsfeed.com" rel="nofollow">TermsFeed</a> to FIMCO.</p>
+                                                            <h2>Accounts</h2>
+                                                            <p>When you create an account with us, you must provide us information that is accurate, complete, and current at all times. Failure to do so constitutes a breach of the Terms, which may result in immediate termination of your account on our Service.</p>
+                                                            <p>You are responsible for safeguarding the password that you use to access the Service and for any activities or actions under your password, whether your password is with our Service or a third-party service.</p>
+                                                            <p>You agree not to disclose your password to any third party. You must notify us immediately upon becoming aware of any breach of security or unauthorized use of your account.</p>
+                                                            <h2>Links To Other Web Sites</h2>
+                                                            <p>Our Service may contain links to third-party web sites or services that are not owned or controlled by FIMCO.</p>
+                                                            <p>FIMCO has no control over, and assumes no responsibility for, the content, privacy policies, or practices of any third party web sites or services. You further acknowledge and agree that FIMCO shall not be responsible or liable, directly or indirectly, for any damage or loss caused or alleged to be caused by or in connection with use of or reliance on any such content, goods or services available on or through any such web sites or services.</p>
+                                                            <p>We strongly advise you to read the terms and conditions and privacy policies of any third-party web sites or services that you visit.</p>
+                                                            <h2>Governing Law</h2>
+                                                            <p>These Terms shall be governed and construed in accordance with the laws of Tanzania, without regard to its conflict of law provisions.</p>
+                                                            <p>Our failure to enforce any right or provision of these Terms will not be considered a waiver of those rights. If any provision of these Terms is held to be invalid or unenforceable by a court, the remaining provisions of these Terms will remain in effect. These Terms constitute the entire agreement between us regarding our Service, and supersede and replace any prior agreements we might have between us regarding the Service.</p>
+                                                            <h2>Changes</h2>
+                                                            <p>We reserve the right, at our sole discretion, to modify or replace these Terms at any time. If a revision is material we will try to provide at least 30 days notice prior to any new terms taking effect. What constitutes a material change will be determined at our sole discretion.</p>
+                                                            <p>By continuing to access or use our Service after those revisions become effective, you agree to be bound by the revised terms. If you do not agree to the new terms, please stop using the Service.</p>
+                                                            <h2>Contact Us</h2>
+                                                            <p>If you have any questions about these Terms, please contact us.</p>
+                                                        </div>
+                                                        <br>
+                                                        <div class="row">
+                                                            <div class="col-sm-2">
+                                                                <div class="choice" data-toggle="wizard-checkbox">
+                                                                    <input type="checkbox" name="agreement" value="accept">
+                                                                    <div class="card card-checkboxes card-hover-effect">
+                                                                        <i class="icon-ok"></i>
+                                                                        <p>Accept</p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-2">
+                                                                <div class="choice" data-toggle="wizard-checkbox">
+                                                                    <input type="checkbox" name="agreement" value="decline">
+                                                                    <div class="card card-checkboxes card-hover-effect">
+                                                                        <i class="icon-remove-sign"></i>
+                                                                        <p>Decline</p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <br>
+                                                        <div class="form-actions">
+                                                            <div class="row">
+                                                                <div class="col-sm-12">
+                                                                    <ul class="pager wizard no-margin">
+                                                                        <li class="previous">
+                                                                            <input type='button' class='btn prev-step' name='previous' value='Previous' />
+                                                                        </li>
+                                                                        <li class="next disabled">
+                                                                            <input type='button' class='btn next-step' name='next' value='Next' />
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="tab-pane" id="tab5">
+                                                        <br>
+                                                        <h3><strong>Step 4</strong> - Complete</h3>
+                                                        <br>
+                                                        <h1 class="text-center text-success">
+                                                            <strong><i class="fa fa-check fa-lg"></i> You have successfully completed registration!</strong>
+                                                        </h1>
+                                                        <br>
+                                                        <br>
+                                                        <div class="form-actions">
+                                                            <div class="row">
+                                                                <div class="col-sm-12">
+                                                                    <ul class="pager wizard no-margin">
+                                                                        <li class="previous">
+                                                                            <input type='button' class='btn prev-step' name='previous' value='Previous' />
+                                                                        </li>
+                                                                        <li class="next disabled">
+                                                                            <input type='button' class='btn' name='finish' value='Finish' />
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- end widget content -->
+                        </div>
+                        <!-- end widget div -->
+                    </div>
+                    <!-- end widget -->
+                </article>
+                </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer id="footer" class="sticky">
+        <div class="copyright">
+            <div class="container">
+                <ul class="float-right m-0 list-inline mobile-block">
+                    <li><a href="#">Terms &amp; Conditions</a></li>
+                    <li>&bull;</li>
+                    <li><a href="#">Privacy</a></li>
+                </ul>
+
+                &copy; All Rights Reserved, Company LTD
+            </div>
+        </div>
+
+    </footer>
+    <!-- /FOOTER -->
+{% endblock %}
+
+
+{% block scripts %}
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
+    <script type="text/javascript" src="static/js/vendors/bootstrap.min.js"></script>
+    <!--  More information about jquery.validate here: http://jqueryvalidation.org/	 -->
+    <script type="text/javascript" src="static/js/vendors/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="static/js/bootstrap-wizard.js"></script>
+{% endblock %}

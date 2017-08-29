@@ -25,7 +25,7 @@ class IndividualAccount(models.Model):
     gender = models.CharField(max_length=1, choices=GENDER)
     client_id = models.CharField(max_length=15, primary_key=True)
     email = models.EmailField()
-    msisdn = models.CharField(validators=[telephone])
+    msisdn = models.CharField(max_length=12, db_index=True, default='NA', validators=[telephone])
     bot_cds = models.CharField(max_length=15, null=True)
     dse_cds = models.CharField(max_length=15, null=True)
     status = models.CharField(max_length=4, choices=STATUS)
@@ -36,7 +36,7 @@ class IndividualAccount(models.Model):
 class JointAccount(models.Model):
     group_name = models.CharField(max_length=30)
     purpose = models.CharField(max_length=30, null=True)
-    pochi_id = models.CharField()
+    pochi_id = models.CharField(max_length=20, null=True)
 
 
 class JointAccountAdmins(models.Model):

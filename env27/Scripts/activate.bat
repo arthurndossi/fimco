@@ -1,5 +1,5 @@
 @echo off
-set "VIRTUAL_ENV=C:\Users\MADS\PycharmProjects\ecommerce-bbt\env27"
+set "VIRTUAL_ENV=C:\Users\MADS\PycharmProjects\FIMCO\env27"
 
 if defined _OLD_VIRTUAL_PROMPT (
     set "PROMPT=%_OLD_VIRTUAL_PROMPT%"

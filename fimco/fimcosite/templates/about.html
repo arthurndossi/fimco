@@ -1,292 +1,169 @@
 {% extends "base.html" %}
+
+{% block links %}
+    <link href="static/css/plugins/jquery.fullPage.css" rel="stylesheet" type="text/css" />
+    <link href="static/css/plugins/slick/slick.css" rel="stylesheet" type="text/css"/>
+    <link href="static/css/plugins/slick/slick-theme.css" rel="stylesheet" type="text/css"/>
+    <link href="static/css/about.css" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
 {% block content %}
-<!--
-				PAGE HEADER
-
-				CLASSES:
-					.page-header-xs	= 20px margins
-					.page-header-md	= 50px margins
-					.page-header-lg	= 80px margins
-					.page-header-xlg= 130px margins
-					.dark			= dark page header
-
-					.shadow-before-1 	= shadow 1 header top
-					.shadow-after-1 	= shadow 1 header bottom
-					.shadow-before-2 	= shadow 2 header top
-					.shadow-after-2 	= shadow 2 header bottom
-					.shadow-before-3 	= shadow 3 header top
-					.shadow-after-3 	= shadow 3 header bottom
-			-->
-			<section class="page-header page-header-xs">
-				<div class="container">
-
-					<h1>ABOUT US</h1>
-
-					<!-- breadcrumbs -->
-					<ol class="breadcrumb">
-						<li><a href="#">Home</a></li>
-						<li><a href="#">Pages</a></li>
-						<li class="active">About Us</li>
-					</ol><!-- /breadcrumbs -->
-
-				</div>
-			</section>
-			<!-- /PAGE HEADER -->
-
-
-
-
-			<!-- -->
-			<section>
-				<div class="container">
-
-					<div class="row">
-
-						<div class="col-lg-5 col-md-5 col-sm-5">
-
-							<img class="img-fluid" src="demo_files/images/girl_looking-min.jpg" alt="">
-
-						</div>
-
-						<div class="col-lg-7 col-md-7 col-sm-7">
-							<h2 class="fs-25">We believe in Simple &amp; Creative</h2>
-
-							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Magnam in minima iusto voluptatem aliquam odit odio. Aliquam voluptatibus beatae officiis?</p>
-							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique excepturi voluptates placeat ducimus delectus magnam tempore dolore dolorem quisquam porro modi voluptatum eum saepe dolorum ratione officia sint eos minus.</p>
-							<blockquote>
-								<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas metus nulla, commodo a sodales sed, dignissim pretium nunc.</p>
-								<cite>Albert Einstein</cite>
-							</blockquote>
-
-						</div>
-
-					</div>
-
-				</div>
-			</section>
-			<!-- / -->
-
-
-
-
-			<!-- -->
-			<section>
-				<div class="container">
-
-					<!-- FEATURED BOXES 3 -->
-					<div class="row">
-						<div class="col-md-3 col-xs-6">
-							<div class="text-center">
-								<i class="ico-light ico-lg ico-rounded ico-hover et-circle-compass"></i>
-								<h4>Web Design</h4>
-								<p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus.</p>
-
-								<a href="#">
-									Read
-									<!-- /word rotator -->
-									<span class="word-rotator" data-delay="2000">
-										<span class="items">
-											<span>more</span>
-											<span>now</span>
-										</span>
-									</span><!-- /word rotator -->
-									<i class="glyphicon glyphicon-menu-right fs-12"></i>
-								</a>
-
-							</div>
-						</div>
-						<div class="col-md-3 col-xs-6">
-							<div class="text-center">
-								<i class="ico-light ico-lg ico-rounded ico-hover et-piechart"></i>
-								<h4>Web Analytics</h4>
-								<p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus.</p>
-
-								<a href="#">
-									Read
-									<!-- /word rotator -->
-									<span class="word-rotator" data-delay="2000">
-										<span class="items">
-											<span>more</span>
-											<span>now</span>
-										</span>
-									</span><!-- /word rotator -->
-									<i class="glyphicon glyphicon-menu-right fs-12"></i>
-								</a>
-
-							</div>
-						</div>
-						<div class="col-md-3 col-xs-6">
-							<div class="text-center">
-								<i class="ico-light ico-lg ico-rounded ico-hover et-strategy"></i>
-								<h4>Web Development</h4>
-								<p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus.</p>
-
-								<a href="#">
-									Read
-									<!-- /word rotator -->
-									<span class="word-rotator" data-delay="2000">
-										<span class="items">
-											<span>more</span>
-											<span>now</span>
-										</span>
-									</span><!-- /word rotator -->
-									<i class="glyphicon glyphicon-menu-right fs-12"></i>
-								</a>
-
-							</div>
-						</div>
-						<div class="col-md-3 col-xs-6">
-							<div class="text-center">
-								<i class="ico-light ico-lg ico-rounded ico-hover et-streetsign"></i>
-								<h4>Marketing</h4>
-								<p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus. </p>
-
-								<a href="#">
-									Read
-									<!-- /word rotator -->
-									<span class="word-rotator" data-delay="2000">
-										<span class="items">
-											<span>more</span>
-											<span>now</span>
-										</span>
-									</span><!-- /word rotator -->
-									<i class="glyphicon glyphicon-menu-right fs-12"></i>
-								</a>
-
-							</div>
-						</div>
-					</div>
-					<!-- /FEATURED BOXES 3 -->
-
-				</div>
-			</section>
-			<!-- / -->
-
-
-
-			<!-- PARALLAX -->
-			<section class="parallax parallax-2" style="background-image: url('static/img/1200x800/18-min.jpg');">
-				<div class="overlay dark-8"><!-- dark overlay [1 to 9 opacity] --></div>
-
-				<div class="container">
-
-					<div class="row countTo-sm text-center">
-
-						<div class="col-xs-6 col-sm-3 col-xs-6">
-							<i class="ico-lg ico-transparent et-megaphone"></i>
-							<div class="block fs-40" style="color: #3498db;">
-								<strong class="countTo fs-40" data-speed="3000">1303</strong>
-							</div>
-							<h3 class="fs-15 mt-10 mb-0">CUSTOMERS</h3>
-						</div>
-
-						<div class="col-xs-6 col-sm-3 col-xs-6">
-							<i class="ico-lg ico-transparent et-chat"></i>
-							<div class="block fs-40" style="color: #e74c3c;">
-								<strong class="countTo fs-40" data-speed="3000">100</strong> %
-							</div>
-							<h3 class="fs-15 mt-10 mb-0">SUPPORT</h3>
-						</div>
-
-						<div class="col-xs-6 col-sm-3 col-xs-6">
-							<i class="ico-lg ico-transparent et-flag"></i>
-							<div class="block fs-40" style="color: #16a085;">
-								<strong class="countTo fs-40" data-speed="3000">82</strong> %
-							</div>
-							<h3 class="fs-15 mt-10 mb-0">CUSTOMER CARE</h3>
-						</div>
-
-						<div class="col-xs-6 col-sm-3 col-xs-6">
-							<i class="ico-lg ico-transparent et-puzzle"></i>
-							<div class="block fs-40" style="color: #9b59b6;">
-								<strong class="countTo fs-40" data-speed="3000">9877</strong>
-							</div>
-							<h3 class="fs-15 mt-10 mb-0">DELIVERY</h3>
-						</div>
-
-					</div>
-
-				</div>
-
-			</section>
-			<!-- /PARALLAX -->
-
-
-			<!-- CLIENTS -->
-			<section class="section-sm">
-				<div class="container">
-
-					<header class="text-center mb-10">
-						<h3>HAPPY CLIENTS</h3>
-					</header>
-
-					<hr class="mb-60" />
-
-					<!--
-						Note: remove class="rounded" from the img for squared image!
-					-->
-					<div class="row">
-						<div class="col-md-4">
-							<div class="testimonial testimonial-bordered p-15">
-								<figure class="float-left">
-									<img class="rounded" src="demo_files/images/people/300x300/2-min.jpg" alt="" />
-								</figure>
-								<div class="testimonial-content">
-									<p>Incidunt deleniti blanditiis quas aperiam recusandae consequatur ullam quibusdam cum libero!</p>
-									<cite>
-										Felicia Doe
-										<span>Company Ltd.</span>
-									</cite>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-4">
-							<div class="testimonial testimonial-bordered p-15">
-								<figure class="float-left">
-									<img class="rounded" src="demo_files/images/people/300x300/1-min.jpg" alt="" />
-								</figure>
-								<div class="testimonial-content">
-									<p>Incidunt deleniti blanditiis quas aperiam recusandae consequatur ullam quibusdam cum libero!</p>
-									<cite>
-										Joana Doe
-										<span>Company Ltd.</span>
-									</cite>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-4">
-							<div class="testimonial testimonial-bordered p-15">
-								<figure class="float-left">
-									<img class="rounded" src="demo_files/images/people/300x300/6-min.jpg" alt="" />
-								</figure>
-								<div class="testimonial-content">
-									<p>Incidunt deleniti blanditiis quas aperiam recusandae consequatur ullam quibusdam cum libero!</p>
-									<cite>
-										Melissa Doe
-										<span>Company Ltd.</span>
-									</cite>
-								</div>
-							</div>
-						</div>
-					</div>
-
-				</div>
-			</section>
-			<!-- /CLIENTS -->
-
-
-
-			<!-- BUTTON CALLOUT -->
-			<a href="#purchase" rel="nofollow" target="_blank" class="btn btn-xlg btn-warning fs-20 fullwidth m-0 rad-0 p-40">
-				<span class="font-lato fs-30">
-					Did Smarty convinced you?
-					<strong>Purchase now &raquo;</strong>
-				</span>
-			</a>
-			<!-- /BUTTON CALLOUT -->
-
+    <div id="fullpage">
+        <div class="section" id="section0" data-model-name="section0">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="single-item">
+                            <div>
+                                <h2>Our values</h2>
+                                <p>We focus on delivering investment management excellence that investors can rely on - now and over the long term..</p>
+                            </div>
+                            <div>
+                                <h2>Dilligence</h2>
+                                <p>We work hard; intelligently and persistently to create value for our clients.</p>
+                            </div>
+                            <div>
+                                <h2>Integrity</h2>
+                                <p>We abide strictly to principles of market and professional conduct without compromise in creating value for our clients.</p>
+                            </div>
+                            <div>
+                                <h2>Innovation</h2>
+                                <p>We are constantly looking for ways to improve our products and services to create value for our clients.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="section" id="section1" data-model-name="section1">
+            <div class="intro">
+                <h2>Our Mission</h2>
+                <p>
+                    Being the most trusted gateway to experiencing TZ financial markets offering Information, advise and execution capabilities across all asset classes leveraging innovating channels.
+                </p>
+            </div>
+        </div>
+        <div class="section" id="section2" data-model-name="section2">
+            <div class="container">
+                <div class="section-content">
+                    <div class="section-title">
+                        Our Vision
+                    </div>
+                    <div class="sub-header">
+                        <span>
+                            Revolutionize the approach, mentality and propensity of investment/savings by leveraging innovative platforms and enhancing financial literacy.
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="section" id="section3" data-model-name="section3">
+            <div class="slide" id="slide1">
+                <div class="container">
+                <div class="row">
+                    <div class="title">The Founders</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="multiple-items">
+                        <div class="card-box">
+                            <div class="card card-with-border">
+                                <img class="card-img-top" src="static/img/200x250.png">
+                                <div class="card-block">
+                                    <figure class="profile profile-inline">
+                                        <img src="static/img/200x250.png" class="profile-avatar" alt="">
+                                    </figure>
+                                    <h4 class="card-title">Ivan</h4>
+                                    <div class="card-text">
+                                        Director.
+                                    </div>
+                                </div>
+                                <div class="card-footer text-center">
+                                    <a href="#" class="btn btn-danger btn-fill btn-round">Read more</a>
+                                </div>
+                                <div class="filter"></div>
+                            </div> <!-- end card -->
+                        </div>
+                        <div class="card-box">
+                            <div class="card card-with-border">
+                                <img class="card-img-top" src="static/img/200x250.png">
+                                <div class="card-block">
+                                    <figure class="profile profile-inline">
+                                        <img src="static/img/200x250.png" class="profile-avatar" alt="">
+                                    </figure>
+                                    <h4 class="card-title">Abdul</h4>
+                                    <div class="card-text">
+                                        Director.
+                                    </div>
+                                </div>
+                                <div class="card-footer text-center">
+                                    <a href="#" class="btn btn-danger btn-fill btn-round">Read more</a>
+                                </div>
+                                <div class="filter"></div>
+                            </div> <!-- end card -->
+                        </div>
+                        <div class="card-box">
+                            <div class="card card-with-border">
+                                <img class="card-img-top" src="static/img/200x250.png">
+                                <div class="card-block">
+                                    <figure class="profile profile-inline">
+                                        <img src="static/img/200x250.png" class="profile-avatar" alt="">
+                                    </figure>
+                                    <h4 class="card-title">Sarah</h4>
+                                    <div class="card-text">
+                                        Non-executive Director.
+                                    </div>
+                                </div>
+                                <div class="card-footer text-center">
+                                    <a href="#" class="btn btn-danger btn-fill btn-round">Read more</a>
+                                </div>
+                                <div class="filter"></div>
+                            </div> <!-- end card -->
+                        </div>
+                        <div class="card-box">
+                            <div class="card card-with-border">
+                                <img class="card-img-top" src="static/img/200x250.png">
+                                <div class="card-block">
+                                    <figure class="profile profile-inline">
+                                        <img src="static/img/200x250.png" class="profile-avatar" alt="">
+                                    </figure>
+                                    <h4 class="card-title">Rosario</h4>
+                                    <div class="card-text">
+                                        Non-executive Director.
+                                    </div>
+                                </div>
+                                <div class="card-footer text-center">
+                                    <a href="#" class="btn btn-danger btn-fill btn-round">Read more</a>
+                                </div>
+                                <div class="filter"></div>
+                            </div> <!-- end card -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+            <div class="slide" id="slide2">
+                <h2>Video profile of the company</h2>
+            </div>
+            <div class="slide" id="slide3">
+                <h2>Animated videos on investing</h2>
+            </div>
+        </div>
+        <div class="section" id="section4" data-model-name="section4">
+            <div class="intro">
+                <h2>Our Investment Approach</h2>
+                <p>Sustainable client value creation from financial markets is key cornerstone of our strategy.</p>
+                <p>We wish to open our clients to opportunities they would otherwise not see or not know.</p>
+                <p>We maximize on the use of innovative technology to distribute our products in a seamless and transparent way.</p>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block scripts %}
-    <script src="static/js/main.js"></script>
+    <script type="text/javascript" src="static/js/vendors/slick.min.js"></script>
+    <script type="text/javascript" src="static/js/vendors/scrolloverflow.min.js"></script>
+	<script type="text/javascript" src="static/js/vendors/jquery.fullPage.min.js"></script>
+    <script type="text/javascript" src="static/js/about.js"></script>
 {% endblock %}

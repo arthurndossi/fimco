@@ -1,0 +1,232 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <section class="page-header page-header-xs">
+        <div class="container">
+
+            <h1>{{ pform.fName }}</h1>
+
+            <!-- breadcrumbs -->
+            <ol class="breadcrumb">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Pages</a></li>
+                <li class="active">Login</li>
+            </ol><!-- /breadcrumbs -->
+
+        </div>
+    </section>
+    <!-- /PAGE HEADER -->
+
+    <!-- -->
+    <section>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 offset-md-3">
+                    <h1>Edit Profile</h1>
+                    <div class="personal-info">
+                        <h3>Personal Info</h3>
+                    </div>
+                    {{ form.non_field_errors }}
+                    <form class="m-0 sky-form" action="{% url 'profile' %}" enctype="multipart/form-data" method="POST">
+                        <fieldset>
+                            <div class="row">
+                                <div class="col-md-8 col-sm-8">
+                                    <label>First Name *</label>
+                                    <label class="input mb-10">
+                                        <i class="ico-append fa fa-user-o"></i>
+                                        {{pForm.fName}}
+                                        {% if pForm.fName.errors %}
+                                        {% for error in pForm.fName.errors %}
+                                        <div class="alert alert-danger"><strong>{{ error|escape }}</strong></div>
+                                        {% endfor %}
+                                        {% endif %}
+                                        <b class="tooltip tooltip-bottom-right">Your First Name</b>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8 col-sm-8">
+                                    <label>Middle Name </label>
+                                    <label class="input mb-10">
+                                        <i class="ico-append fa fa-user-o"></i>
+                                        {{pForm.mName}}
+                                        {% if pForm.mName.errors %}
+                                        {% for error in pForm.mName.errors %}
+                                        <div class="alert alert-danger"><strong>{{ error|escape }}</strong></div>
+                                        {% endfor %}
+                                        {% endif %}
+                                        <b class="tooltip tooltip-bottom-right">Your Middle Name</b>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8 col-sm-8">
+                                    <label for="register:last_name">Last Name *</label>
+                                    <label class="input mb-10">
+                                        <i class="ico-append fa fa-user-o"></i>
+                                        {{pForm.lName}}
+                                        {% if pForm.lName.errors %}
+                                        {% for error in pForm.lName.errors %}
+                                        <div class="alert alert-danger"><strong>{{ error|escape }}</strong></div>
+                                        {% endfor %}
+                                        {% endif %}
+                                        <b class="tooltip tooltip-bottom-right">Your Last Name</b>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6">
+                                    <label for="register:dob">Date of Birth *</label>
+                                    <label class="input mb-10">
+                                        <i class="ico-append fa fa-calendar"></i>
+                                        <div class="input-group"
+                                             data-provide="datepicker"
+                                             data-date-start-date="01/01/1900"
+                                             data-date-autoclose="true"
+                                             data-date-start-view="decade"
+                                             data-date-format="dd/mm/yyyy"
+                                             style="display: block">
+                                            {{pForm.dob}}
+                                            {% if pForm.dob.errors %}
+                                                {% for error in pForm.dob.errors %}
+                                                    <div class="alert alert-danger">
+                                                      <strong>{{ error|escape }}</strong>
+                                                    </div>
+                                                {% endfor %}
+                                            {% endif %}
+                                            <b class="tooltip tooltip-bottom-right">
+                                                Your Date of birth
+                                            </b>
+                                        </div>
+                                    </label>
+                                </div>
+                                <div class="col-md-6 col-sm-6">
+                                    <label for="register:gender">Gender</label>
+                                    <label class="input mb-10">
+                                        {{pForm.gender}}
+                                        {% if pForm.gender.errors %}
+                                        {% for error in pForm.gender.errors %}
+                                        <div class="alert alert-danger"><strong>{{ error|escape }}</strong></div>
+                                        {% endfor %}
+                                        {% endif %}
+                                        <b class="tooltip tooltip-bottom-right">Your Gender</b>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4 col-sm-4">
+                                    <label><input type="radio" name="clientID">
+                                        Driving License
+                                    </label>
+                                    <label><input type="radio" name="clientID">Passport</label>
+                                    <label><input type="radio" name="clientID">Voter ID</label>
+                                    <label><input type="radio" name="clientID">National ID</label>
+                                </div>
+                                <div class="col-md-8 col-sm-8">
+                                    <div class="row">
+                                        <label for="register:client_id">Client ID *</label>
+                                        <label class="input mb-10">
+                                            <i class="ico-append fa fa-id-card-o"></i>
+                                            {{pForm.client_id}}
+                                            {% if pForm.client_id.errors %}
+                                            {% for error in pForm.client_id.errors %}
+                                            <div class="alert alert-danger"><strong>{{ error|escape }}</strong></div>
+                                            {% endfor %}
+                                            {% endif %}
+                                            <b class="tooltip tooltip-bottom-right">
+                                                Enter any of ID's listed
+                                            </b>
+                                        </label>
+                                    </div>
+                                    <div class="row">
+                                        {{ pForm.image }}
+                                        {% if pForm.image.errors %}
+                                        {% for error in pForm.image.errors %}
+                                        <div class="alert alert-danger"><strong>{{ error|escape }}</strong></div>
+                                        {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6">
+                                    <label for="register:email">Email *</label>
+                                    <label class="input mb-10">
+                                        <i class="ico-append fa fa-envelope-o"></i>
+                                        {{pForm.email}}
+                                        {% if pForm.email.errors %}
+                                        {% for error in pForm.email.errors %}
+                                        <div class="alert alert-danger"><strong>{{ error|escape }}</strong></div>
+                                        {% endfor %}
+                                        {% endif %}
+                                        <b class="tooltip tooltip-bottom-right">Your Email</b>
+                                    </label>
+                                </div>
+                                <div class="col-md-6 col-sm-6">
+                                    <label for="register:phone">Phone</label>
+                                    <label class="input mb-10">
+                                        <i class="ico-append fa fa-phone"></i>
+                                        {{pForm.phone}}
+                                        {% if pForm.phone.errors %}
+                                        {% for error in pForm.phone.errors %}
+                                        <div class="alert alert-danger"><strong>{{ error|escape }}</strong></div>
+                                        {% endfor %}
+                                        {% endif %}
+                                        <b class="tooltip tooltip-bottom-right">
+                                            Your Phone (optional)
+                                        </b>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6">
+                                    <label for="register:email">BOT CDS</label>
+                                    <label class="input mb-10">
+                                        <i class="ico-append fa fa-credit-card"></i>
+                                        {{pForm.bot_account}}
+                                        {% if pForm.bot_account.errors %}
+                                        {% for error in pForm.bot_account.errors %}
+                                        <div class="alert alert-danger"><strong>{{ error|escape }}</strong></div>
+                                        {% endfor %}
+                                        {% endif %}
+                                        <b class="tooltip tooltip-bottom-right">
+                                            BOT account number (optional)
+                                        </b>
+                                    </label>
+                                </div>
+                                <div class="col-md-6 col-sm-6">
+                                    <label for="register:phone">DSE CDS</label>
+                                    <label class="input mb-10">
+                                        <i class="ico-append fa fa-credit-card-alt"></i>
+                                        {{pForm.dse_account}}
+                                        {% if pForm.dse_account.errors %}
+                                        {% for error in pForm.dse_account.errors %}
+                                        <div class="alert alert-danger"><strong>{{ error|escape }}</strong></div>
+                                        {% endfor %}
+                                        {% endif %}
+                                        <b class="tooltip tooltip-bottom-right">
+                                            DSE account number (optional)
+                                        </b>
+                                    </label>
+                                </div>
+                            </div>
+                            <hr />
+                        </fieldset>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fa fa-check"></i> Save
+                                </button>
+                            </div>
+                        </div>
+                        {% csrf_token %}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

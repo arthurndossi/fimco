@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block links %}
+    <link rel="stylesheet" type="text/css" href="static/css/login.css" />
+{% endblock %}
+{% block content %}
+<div class="wrapper">
+    <div class="row">
+        <div class="col-md-12 center">
+            <h1 class="pageTitle">Welcome to the secure section of our website</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-7">
+            <p><strong>Register for an online account</strong></p>
+            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+            <p><strong>First time investors</strong></p>
+            <p>Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur.</p>
+        </div>
+        <div class="col-md-5">
+            <div class="panel panel-default gray">
+                <div class="panel-heading center">
+                    <h3 class="panel-title"><i class="fa fa-lock lock" aria-hidden="true"></i>Secure account login</h3>
+                </div>
+                <div class="panel-body">
+                    <form action="" method="post">
+                        <div class="group">
+                            {{ lForm.phone }}
+{#                            <input class="inputMaterial gray" type="text" required>#}
+                            <span class="highlight"></span>
+                            <span class="bar"></span>
+                            <label>Username</label>
+                        </div>
+                        <div class="group">
+                            {{ lForm.password }}
+{#                            <input class="inputMaterial gray" type="password" required>#}
+                            <span class="highlight"></span>
+                            <span class="bar"></span>
+                            <label>Password</label>
+                        </div>
+                        <div class="center">
+                            <button id="buttonlogin" class="red-button" type="submit">Login<i class="fa fa-chevron-circle-right next" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="panel-footer center">
+                    <a id="panel-link">Forgotten username or password?</a>
+                </div>
+            </div>
+            <p>By signing in to FIMCO you are confirming that you have read and understood our <a id="terms">terms and conditions</a>.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
