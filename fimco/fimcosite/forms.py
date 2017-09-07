@@ -28,14 +28,14 @@ class LoginForm(forms.Form):
     phone = forms.IntegerField(
         validators=[validate_slug],
         widget=forms.NumberInput(attrs={
-            'class': 'form-control',
+            'class': 'inputMaterial gray',
             'required': True
         })
     )
     password = forms.CharField(
         validators=[validate_slug],
         widget=forms.PasswordInput(attrs={
-            'class': 'form-control',
+            'class': 'inputMaterial gray',
             'required': True
         })
     )

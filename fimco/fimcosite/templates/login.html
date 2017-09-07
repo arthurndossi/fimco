@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block links %}
-    <link rel="stylesheet" type="text/css" href="static/css/login.css" />
+    <link rel="stylesheet" type="text/css" href="/static/css/login.css" />
 {% endblock %}
 {% block content %}
 <div class="wrapper">
@@ -25,18 +25,17 @@
                     <form action="" method="post">
                         <div class="group">
                             {{ lForm.phone }}
-{#                            <input class="inputMaterial gray" type="text" required>#}
                             <span class="highlight"></span>
                             <span class="bar"></span>
-                            <label>Username</label>
+                            <label>Phone number</label>
                         </div>
                         <div class="group">
                             {{ lForm.password }}
-{#                            <input class="inputMaterial gray" type="password" required>#}
                             <span class="highlight"></span>
                             <span class="bar"></span>
                             <label>Password</label>
                         </div>
+                        {% csrf_token %}
                         <div class="center">
                             <button id="buttonlogin" class="red-button" type="submit">Login<i class="fa fa-chevron-circle-right next" aria-hidden="true"></i>
                             </button>

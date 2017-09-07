@@ -1,0 +1,34 @@
+/** Blue	#002954
+			#001429
+ **************************************************************** **/
+	::selection {
+		background: #002954;
+	}
+	::-moz-selection {
+		background: #002954; /* Firefox */
+	}
+
+
+	.btn-primary {
+		border-color:#001429;
+		background-color: #002954;
+	}
+
+	/**
+		IMPORTANT
+	**/
+	.btn-primary,
+	.alert-theme-color,
+	.panel-primary>.panel-heading {
+		background-color: #002954 !important;
+	}
+	.panel-primary,
+	.panel-primary>.panel-heading {
+		border-color: #001429 !important;
+	}
+	
+	@media only screen and (min-width: 768px) {
+		body.min #aside ul.nav>li:hover>a span {
+			background-color: #001429;
+		}
+	}

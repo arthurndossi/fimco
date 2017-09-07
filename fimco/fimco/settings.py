@@ -27,6 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['54.158.24.171', '127.0.0.1']
 
+AUTH_USER_MODEL = 'fimcosite.Profile'
+
 
 # Application definition
 

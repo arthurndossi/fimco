@@ -5,7 +5,7 @@
 
 	NOTE! 	Do not change anything here if you want to
 			be able to update in the future! Please use
-			your custom script (eg. custom.js).
+			your custom script.
 
 
 	TABLE CONTENTS

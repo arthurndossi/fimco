@@ -6,7 +6,7 @@ var plugin_path = '/static/pochi/plugins/';
 
 	NOTE! 	Do not change anything here if you want to
 			be able to update in the future! Please use
-			your custom script (eg. custom.js).
+			your custom script.
 
 	TABLE CONTENTS
 	-------------------------------
@@ -1783,11 +1783,6 @@ var plugin_path = '/static/pochi/plugins/';
 
 			jQuery(panel).fadeOut(300, function() {
 				jQuery(this).remove();
-
-				// FUNCTION ON custom.js
-				if (typeof _closePanel == 'function') { 
-					_closePanel(panel_id); 
-				}
 			});
 		});
 

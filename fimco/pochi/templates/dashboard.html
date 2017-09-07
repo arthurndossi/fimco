@@ -22,6 +22,8 @@
 		<link href="/static/pochi/css/essentials.css" rel="stylesheet" type="text/css" />
 		<link href="/static/pochi/css/layout.css" rel="stylesheet" type="text/css" />
         <link href="/static/pochi/css/dashboard.css" rel="stylesheet" type="text/css" />
+        <link href="/static/pochi/css/navyblue.css" rel="stylesheet" type="text/css" />
+        {% block links %}{% endblock %}
 
 	</head>
 
@@ -36,7 +38,7 @@
 				<nav id="sideNav"><!-- MAIN MENU -->
 					<ul class="nav nav-list">
 						<li class="active">
-							<a class="dashboard" href="admin.html">
+							<a class="dashboard" href="{% url 'pochi' %}">
 								<span>POCHI</span>
 							</a>
 						</li>
@@ -46,44 +48,44 @@
 					<h3>MARKET INFORMATION</h3>
 					<ul class="nav nav-list">
 						<li>
-							<a href="">
+							<a href="{% url 'markets' %}">
 								<i class="main-icon fa fa-cart-arrow-down"></i>
 								<span class="label label-success pull-right">2</span> <span>Markets Home</span>
 							</a>
 						</li>
 						<li>
-							<a href="">
+							<a href="{% url 'exchange' %}">
 								<i class="main-icon fa fa-exchange"></i>
 								<span class="label label-danger pull-right">PRO</span> <span>Exchange Rates</span>
 							</a>
 						</li>
                         <li>
-							<a href="#">
-								<i class="fa fa-menu-arrow pull-right"></i>
+							<a href="{% url 'interests' %}">
+{#								<i class="fa fa-menu-arrow pull-right"></i>#}
 								<i class="main-icon fa fa-bar-chart-o"></i> <span>Interests Rates</span>
 							</a>
 						</li>
 						<li>
-							<a href="#">
-								<i class="fa fa-menu-arrow pull-right"></i>
+							<a href="{% url 'share' %}">
+{#								<i class="fa fa-menu-arrow pull-right"></i>#}
 								<i class="main-icon fa fa-table"></i> <span>Share Prices</span>
 							</a>
 						</li>
 						<li>
-							<a href="#">
-								<i class="fa fa-menu-arrow pull-right"></i>
+							<a href="{% url 'macro' %}">
+{#								<i class="fa fa-menu-arrow pull-right"></i>#}
 								<i class="main-icon fa fa-pencil-square-o"></i> <span>Macro Data</span>
 							</a>
 						</li>
 						<li>
-							<a href="#">
-								<i class="fa fa-menu-arrow pull-right"></i>
+							<a href="{% url 'auction' %}">
+{#								<i class="fa fa-menu-arrow pull-right"></i>#}
 								<i class="main-icon fa fa-gift"></i> <span>Auction Data</span>
 							</a>
 						</li>
 						<li>
-							<a href="#">
-								<i class="fa fa-menu-arrow pull-right"></i>
+							<a href="{% url 'commodities' %}">
+{#								<i class="fa fa-menu-arrow pull-right"></i>#}
 								<i class="main-icon fa fa-money"></i> <span>Commodity Prices</span>
 							</a>
 						</li>
@@ -143,25 +145,22 @@
 								</span>
 							</a>
 							<ul class="dropdown-menu hold-on-click">
-								<li><!-- my calendar -->
-									<a href=""><i class="fa fa-calendar"></i> Calendar</a>
-								</li>
 								<li><!-- my inbox -->
-									<a href="#"><i class="fa fa-envelope"></i> Inbox
+									<a href="{% url 'messages' %}"><i class="fa fa-envelope"></i> Notifications
 										<span class="pull-right label label-default">0</span>
 									</a>
 								</li>
 								<li><!-- settings -->
-									<a href=""><i class="fa fa-cogs"></i> Settings</a>
+									<a href="{% url 'profile' %}"><i class="fa fa-cogs"></i> Edit profile</a>
 								</li>
 
 								<li class="divider"></li>
 
 								<li><!-- lockscreen -->
-									<a href="page-lock.html"><i class="fa fa-lock"></i> Lock Screen</a>
+									<a href="{% url 'lock' %}"><i class="fa fa-lock"></i> Lock Screen</a>
 								</li>
 								<li><!-- logout -->
-									<a href=""><i class="fa fa-power-off"></i> Log Out</a>
+									<a href="{% url 'logout' %}"><i class="fa fa-power-off"></i> Log Out</a>
 								</li>
 							</ul>
 						</li>
@@ -171,6 +170,8 @@
 				</nav>
 			</header>
 			<!-- /HEADER -->
+
+            {% include 'modals.html' %}
 
 			<!-- MIDDLE -->
 			{% block content %}{% endblock %}
@@ -184,7 +185,8 @@
 		<!-- PAGE LEVEL SCRIPT -->
         <script type="text/javascript" src="/static/pochi/plugins/salvattore.min.js"></script>
         <script type="text/javascript" src="/static/pochi/js/admin.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.bundle.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+        <script type="text/javascript" src="/static/pochi/js/daily.js"></script>
         {% block scripts %}{% endblock %}
 	</body>
 </html>

@@ -1,47 +1,40 @@
 from __future__ import unicode_literals
 
-from datetime import datetime
-from django.contrib.auth.models import User
+from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.core.validators import RegexValidator
 from django.db import models
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 
 telephone = RegexValidator(r'^([+]?(\d{1,3}\s?)|[0])\s?\d+(\s?\-?\d{2,4}){1,3}?$', 'Not a valid phone number.')
 
 
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    birth_date = models.DateField
-    gender = models.CharField
-    identity_type = models.CharField
-    identity = models.CharField
-    scanned_id = models.ImageField
-    phone = models.CharField
-    image = models.ImageField
+class UserManager(BaseUserManager):
+    use_in_migrations = True
 
-    bot_account = models.CharField
-    dse_account = models.CharField
+    def _create_user(self, msisdn, password, **extra_fields):
+        """
+        Creates and saves a User with the given email and password.
+        """
+        if not msisdn:
+            raise ValueError('The phone number must be set')
+        profile = self.model(msisdn=msisdn, **extra_fields)
+        profile.set_password(password)
+        profile.save(using=self._db)
+        return profile
 
-    @receiver(post_save, sender=User)
-    def create_user_profile(sender, instance, created, **kwargs):
-        if created:
-            Profile.objects.create(user=instance)
+    def create_user(self, msisdn, password=None, **extra_fields):
+        extra_fields.setdefault('is_superuser', False)
+        return self._create_user(msisdn, password, **extra_fields)
 
-    @receiver(post_save, sender=User)
-    def save_user_profile(sender, instance, **kwargs):
-        instance.profile.save()
+    def create_superuser(self, msisdn, password, **extra_fields):
+        extra_fields.setdefault('is_superuser', True)
 
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError('Superuser must have is_superuser=True.')
 
-def generate_client_id():
-    pass
-
-
-def generate_pin():
-    pass
+        return self._create_user(msisdn, password, **extra_fields)
 
 
-class IndividualAccount(models.Model):
+class Profile(AbstractBaseUser):
     GENDER = (
         ('M', 'MALE'),
         ('F', 'FEMALE'),
@@ -52,29 +45,58 @@ class IndividualAccount(models.Model):
         ('FAIL', 'UNSUCCESSFUL'),
         ('DONE', 'PENDING')
     )
-    first_name = models.CharField(max_length=30)
-    last_name = models.CharField(max_length=30)
+    first_name = models.CharField('first name', max_length=30, blank=True)
+    last_name = models.CharField('last name', max_length=30, blank=True)
+    avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
+    email = models.EmailField('email address', unique=True)
+    msisdn = models.CharField(max_length=12, unique=True, db_index=True, default='NA', validators=[telephone])
     dob = models.DateField()
     gender = models.CharField(max_length=1, choices=GENDER)
     client_id = models.CharField(max_length=15, unique=True, primary_key=True)
     pin = models.CharField(max_length=4, unique=True, null=True)
-    email = models.EmailField()
-    msisdn = models.CharField(max_length=12, db_index=True, default='NA', validators=[telephone])
     bot_cds = models.CharField(max_length=15, null=True)
     dse_cds = models.CharField(max_length=15, null=True)
     status = models.CharField(max_length=4, choices=STATUS)
-    register_date = models.DateField(auto_created=True)
+    register_date = models.DateTimeField('date joined', auto_now_add=True)
     pochi_id = models.CharField(max_length=20, null=True)
+
+    objects = UserManager()
+
+    USERNAME_FIELD = 'msisdn'
+    REQUIRED_FIELDS = []
+
+    class Meta:
+        verbose_name = 'profile'
+        verbose_name_plural = 'profiles'
+
+    def get_short_name(self):
+        return self.first_name
+
+    def get_full_name(self):
+        full_name = '%s %s' % (self.first_name, self.last_name)
+        return full_name.strip()
+
+    def email_user(self, subject, message, from_email=None, **kwargs):
+        from django.core.mail import send_mail
+        send_mail(subject, message, from_email, [self.email], **kwargs)
 
     def clean(self):
         self.status = 'DONE'
-        self.register_date = datetime.date
+        # self.register_date = datetime.date
         if self.get_status_display() == 'SUCCESSFUL':
             self.client_id = generate_client_id()
             self.pin = generate_pin()
 
     def __str__(self):
         return self.pochi_id
+
+
+def generate_client_id():
+    pass
+
+
+def generate_pin():
+    pass
 
 
 class JointAccount(models.Model):
@@ -84,7 +106,7 @@ class JointAccount(models.Model):
     first_admin = models.CharField(max_length=30)
     sec_admin = models.CharField(max_length=30, null=True)
     pochi_id = models.CharField(max_length=20, null=True)
-    members = models.ManyToManyField(IndividualAccount, through='JointAccountMembers')
+    members = models.ManyToManyField(Profile, through='JointAccountMembers')
     members_count = models.IntegerField()
     created_at = models.DateTimeField()
 
@@ -93,40 +115,5 @@ class JointAccount(models.Model):
 
 
 class JointAccountMembers(models.Model):
-    member = models.ForeignKey(IndividualAccount, on_delete=models.CASCADE)
+    member = models.ForeignKey(Profile, on_delete=models.CASCADE)
     group = models.ForeignKey(JointAccount, related_name='group_members', on_delete=models.CASCADE)
-
-
-class Stocks(models.Model):
-    name = models.CharField(max_length=30)
-    price = models.PositiveIntegerField()
-    rate = models.DecimalField(max_digits=4, decimal_places=2)
-
-
-class Bonds(models.Model):
-    name = models.CharField(max_length=30)
-    bond_yield = models.DecimalField(max_digits=6, decimal_places=3)
-    change = models.DecimalField(max_digits=6, decimal_places=3)
-
-
-class Currencies(models.Model):
-    home = models.CharField(max_length=3)
-    away = models.CharField(max_length=3)
-    rate = models.DecimalField(max_digits=6, decimal_places=4)
-
-
-class Commodities(models.Model):
-    index = models.CharField(max_length=15)
-    last = models.DecimalField(max_digits=6, decimal_places=2)
-    change = models.DecimalField(max_digits=4, decimal_places=2)
-
-
-class Exchange(models.Model):
-    exchange = models.ForeignKey(Currencies, related_name='exchange')
-    date = models.DateTimeField(auto_now=True)
-    day_high = models.DecimalField(max_digits=7, decimal_places=4)
-    day_low = models.DecimalField(max_digits=7, decimal_places=4)
-    # last
-    percentage_change = models.DecimalField(max_digits=4, decimal_places=2)
-    bid = models.DecimalField(max_digits=7, decimal_places=4)
-    offer = models.DecimalField(max_digits=6, decimal_places=4)
