@@ -1,14 +1,16 @@
 /**
  * Created by Arthur on 9/6/2017.
  */
-var currencyModal = '';
 
-$(".currencyModal").on( "shown.bs.modal", function() {
-    currencyModal = $('#'+$(this).attr("id"));
-    var str = $(this).attr("id");
-    currencyModal.submit(function(e) {
-        e.preventDefault();
-        var curr = str.split("viewModal");
-        $('#'+curr+'Exchange').load('/pochi/'+curr)
-    });
+$(".rates a").click(function(){
+    var id = $(this).attr("data-name");
+    if(id === "interests"){
+        $(".content").load("interests #all");
+    }else{
+        $(".content").load("interests #"+id+"Table");
+    }
+});
+
+$('tr[data-href]').on("click", function() {
+    document.location = $(this).data('href');
 });

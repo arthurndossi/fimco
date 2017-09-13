@@ -1,0 +1,118 @@
+<div class="front" id="all">
+    <table border="0" id="overnightTable">
+        <caption>Overnight Rates Table</caption>
+        <tr class="th">
+            <th class="cell">Current Date</th>
+            <th class="cell">Previous Date</th>
+            <th class="cell">High Date</th>
+            <th class="cell">Low Date</th>
+            <th class="cell">Change</th>
+        </tr>
+        <tr>
+            <td class="cell">{{ overnight.currentDate }}</td>
+            <td class="cell">{{ overnight.previousDate }}</td>
+            <td class="cell">{{ overnight.highDate }}</td>
+            <td class="cell">{{ overnight.lowDate }}</td>
+            <td class="cell">{{ overnight.change }}</td>
+        </tr>
+    </table>
+    {% for key, value in interests.items %}
+    <table border="0" id="{{ key }}Table">
+        <caption>{{ key }} Rates Table</caption>
+        <tr>
+            <th></th>
+            <th>Current Date</th>
+            <th>Previous Date</th>
+            <th>High Date</th>
+            <th>Low Date</th>
+            <th>Change</th>
+        </tr>
+        {%  for property in value %}
+            <tr>
+                <th>{{ property.duration }}</th>
+                <td>{{ property.currentDate }}</td>
+                <td>{{ property.previousDate }}</td>
+                <td>{{ property.highDate }}</td>
+                <td>{{ property.lowDate }}</td>
+                <td>{{ property.change }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    {% endfor %}
+</div>
+{% for key, value in interests.items %}
+<div class="responsive-tables">
+    <div class="little1 active">
+        <table>
+            <tr>
+                <th></th>
+                <th>Current Date</th>
+            </tr>
+            {%  for property in value %}
+            <tr>
+                <th>{{ property.duration }}</th>
+                <td>{{ property.currentDate }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <div class="little2 activetwo">
+        <table>
+            <tr>
+                <th></th>
+                <th>Previous Date</th>
+            </tr>
+            {%  for property in value %}
+            <tr>
+                <th>{{ property.duration }}</th>
+                <td>{{ property.previousDate }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <div class="little3">
+        <table>
+            <tr>
+                <th></th>
+                <th>High Date</th>
+            </tr>
+            {%  for property in value %}
+            <tr>
+                <th>{{ property.duration }}</th>
+                <td>{{ property.highDate }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <div class="little4">
+        <table>
+            <tr>
+                <th></th>
+                <th>Low Date</th>
+            </tr>
+            {%  for property in value %}
+            <tr>
+                <th>{{ property.duration }}</th>
+                <td>{{ property.lowDate }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <div class="little5">
+        <table>
+            <tr>
+                <th></th>
+                <th>Change</th>
+            </tr>
+            {%  for property in value %}
+            <tr>
+                <th>{{ property.duration }}</th>
+                <td>{{ property.change }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <button class="next-table"></button>
+    <button class="prev-table"></button>
+</div>
+{% endfor %}

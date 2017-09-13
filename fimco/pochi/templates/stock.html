@@ -1,0 +1,138 @@
+{% extends "dashboard.html" %}
+{% block links %}
+    <link href="/static/pochi/css/interests.css" rel="stylesheet" type="text/css" />
+    <link href="/static/pochi/css/stocks.css" rel="stylesheet" type="text/css" />
+{% endblock %}
+{% block content %}
+    <section id="middle">
+        <div id="content" class="dashboard padding-20">
+            <div class="row">
+                <h2> Dar es salaam Stock Exchange</h2>
+                <hr>
+                <div class="col-md-8">
+                    <div class="card card-dropdown">
+                        <div class="card-body">
+                            <div id="headerQuoteContainer">
+                                <div class="sectionQuote">
+                                    <div class="label">Price</div>
+                                    <div class="dataHeader">12,547.41</div>
+                                </div>
+                                <div class="sectionQuote">
+                                    <div class="label">Today's Change</div>
+                                    <div><span class="dataHeader changeUp">+72.17</span> <span class="dataParenthetical changeUp">(0.58%)</span></div>
+                                </div>
+                                <div class="sectionQuote">
+                                    <div class="label">Open</div>
+                                    <div class="dataHeader">12,527.40</div>
+                                </div>
+                                <div class="sectionQuote">
+                                    <div class="label">Prev Close</div>
+                                    <div class="dataHeader">12,475.20</div>
+                                </div>
+                            </div>
+                            <table class="indexInfo" border="0" cellpadding="0" cellspacing="0">
+                                <tbody>
+                                    <tr>
+                                        <td class="infoLeft">
+                                            <table class="dataTable" cellspacing="0" cellpadding="0" width="98%" border="0">
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="label">Day's High</td>
+                                                        <td class="data">12,556.80</td>
+                                                    </tr>
+                                                    <tr class="stripe">
+                                                        <td class="label">52-wk High</td>
+                                                        <td class="data">12,951.50</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                        <td class="infoRight">
+                                            <table class="dataTable" cellspacing="0" cellpadding="0" width="98%" border="0">
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="label">Day's Low</td>
+                                                        <td class="data">12,512.60</td>
+                                                    </tr>
+
+                                                    <tr class="stripe">
+                                                        <td class="label">52-wk Low</td>
+                                                        <td class="data">10,174.90</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="timestamp">Data as of&nbsp;Tue Sep 12, 2017 | 9:29am EDT.</div>
+                            <div class="dividerInlineH">&nbsp;</div>
+                            <div class="stock-img">
+                                <img src="//www.reuters.wallst.com/enhancements/chartapi/index_chart_api.asp?symbol=.GDAXI&amp;headerType=quote&amp;width=540&amp;height=249&amp;duration=5">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#company" role="tab">Market</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="#sector" role="tab">Currencies</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#change" role="tab">Commodities</a>
+                        </li>
+                    </ul>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="company" role="tabpanel">
+                            <table border="0" class="table table-striped">
+                                <caption>Market Summary</caption>
+                                {% for market in markets %}
+                                <tr>
+                                    <td>{{ market.name }}</td>
+                                    <td>{{ market.sector }}</td>
+                                    <td>{{ market.change }}</td>
+                                </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                        <div class="tab-pane" id="sector" role="tabpanel">
+                            <table border="0" class="table table-striped">
+                                <caption>Currencies</caption>
+                                {% for currency in currencies %}
+                                <tr>
+                                    <td>{{ currency.name }}</td>
+                                    <td>{{ currency.exchange }}</td>
+                                    <td>{{ currency.change }}</td>
+                                </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                        <div class="tab-pane" id="change" role="tabpanel">
+                            <table border="0" class="table table-striped">
+                                <caption>Commodities</caption>
+                                {% for commodity in commodities %}
+                                <tr>
+                                    <td>{{ commodity.name }}</td>
+                                    <td>{{ commodity.price }}</td>
+                                    <td>{{ commodity.change }}</td>
+                                </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block scripts %}
+{#     <script type="text/javascript" src="/static/pochi/js/rates.js"></script>#}
+{#     <script type="text/javascript" src="/static/pochi/js/ajax.js"></script>#}
+{% endblock %}

@@ -1,0 +1,220 @@
+{% extends "dashboard.html" %}
+{% block links %}
+    <link href="/static/pochi/css/interests.css" rel="stylesheet" type="text/css" />
+    <link href="/static/pochi/css/home.css" rel="stylesheet" type="text/css" />
+{% endblock %}
+{% block content %}
+    <section id="middle">
+        <div id="content" class="dashboard padding-20">
+            <div class="row">
+                <div class="col-md-8">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="small" style="padding-left: 10px; text-align: left;">
+                                    <span>Prices</span></th>
+                                <th class="small" style="text-align: left">
+                                    Last</th>
+                                <th class="small">
+                                    Reference</th>
+                                <th class="small hidden-sm hidden-xs">
+                                    Previous</th>
+                                <th class="small hidden-sm hidden-xs">
+                                    Range</th>
+                                <th class="small hidden-md hidden-sm hidden-xs">
+                                    Frequency</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="padding-left: 10px; text-align: left; font-weight: 600; white-space: normal;">
+                                    <a href="/tanzania/inflation-cpi">Inflation Rate</a>
+                                </td>
+                                <td style="text-align: left">
+                                    5<small>%</small>
+                                </td>
+                                <td>
+                                    <span style="background-color: #adadad;" class="label label-default">Aug/17</span>
+                                </td>
+                                <td class="hidden-sm hidden-xs">5.2</td>
+                                <td class="hidden-sm hidden-xs">3.4 : 19.8</td>
+                                <td class="hidden-md hidden-sm hidden-xs small">
+                                    Monthly</td>
+                                <td>
+                                    <a target="_blank" style="text-align: center" href="/tanzania/inflation-cpi"><img border="0" src="https://d3fy651gv2fhd3.cloudfront.net/charts/preview.png?h=15&amp;w=30&amp;n=4&amp;y=0&amp;y2=0&amp;x=0&amp;title=false&amp;lbl=0&amp;bg=0&amp;url=/tanzania/inflation-cpi&amp;version=20170831" data-chart="/tanzania/inflation-cpi" title="Inflation Rate" data-placement="right"></a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left: 10px; text-align: left; font-weight: 600; white-space: normal;">
+                                    <a href="/tanzania/consumer-price-index-cpi">Consumer Price Index CPI</a>
+                                </td>
+                                <td style="text-align: left">
+                                    108<small>Index Points</small>
+                                </td>
+                                <td>
+                                    <span style="background-color: #adadad;" class="label label-default">Aug/17</span>
+                                </td>
+                                <td class="hidden-sm hidden-xs">109</td>
+                                <td class="hidden-sm hidden-xs">58.89 : 109</td>
+                                <td class="hidden-md hidden-sm hidden-xs small">
+                                    Monthly
+                                </td>
+                                <td>
+                                    <a target="_blank" style="text-align: center" href="/tanzania/consumer-price-index-cpi"><img border="0" src="https://d3fy651gv2fhd3.cloudfront.net/charts/preview.png?h=15&amp;w=30&amp;n=4&amp;y=0&amp;y2=0&amp;x=0&amp;title=false&amp;lbl=0&amp;bg=0&amp;url=/tanzania/consumer-price-index-cpi&amp;version=20170831" data-chart="/tanzania/consumer-price-index-cpi" title="Consumer Price Index CPI" data-placement="right"></a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left: 10px; text-align: left; font-weight: 600; white-space: normal;">
+                                    <a href="/tanzania/food-inflation">Food Inflation</a>
+                                </td>
+                                <td style="text-align: left">
+                                    8.6<small>%</small>
+                                </td>
+                                <td>
+                                    <span style="background-color: #adadad;" class="label label-default">Aug/17</span>
+                                </td>
+                                <td class="hidden-sm hidden-xs">8.9</td>
+                                <td class="hidden-sm hidden-xs">4.9 : 27.84</td>
+                                <td class="hidden-md hidden-sm hidden-xs small">
+                                    Monthly</td>
+                                <td>
+                                    <a target="_blank" style="text-align: center" href="/tanzania/food-inflation"><img border="0" src="https://d3fy651gv2fhd3.cloudfront.net/charts/preview.png?h=15&amp;w=30&amp;n=4&amp;y=0&amp;y2=0&amp;x=0&amp;title=false&amp;lbl=0&amp;bg=0&amp;url=/tanzania/food-inflation&amp;version=20170831" data-chart="/tanzania/food-inflation" title="Food Inflation" data-placement="right"></a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left: 10px; text-align: left; font-weight: 600; white-space: normal;">
+                                    <a href="/tanzania/cpi-transportation">CPI Transportation</a>
+                                </td>
+                                <td style="text-align: left">
+                                    99.37<small>Index Points</small>
+                                </td>
+                                <td>
+                                    <span style="background-color: #adadad;" class="label label-default">Aug/17</span>
+                                </td>
+                                <td class="hidden-sm hidden-xs">99.59</td>
+                                <td class="hidden-sm hidden-xs">75.59 : 101</td>
+                                <td class="hidden-md hidden-sm hidden-xs small">
+                                    Monthly</td>
+                                <td>
+                                    <a target="_blank" style="text-align: center" href="/tanzania/cpi-transportation"><img border="0" src="https://d3fy651gv2fhd3.cloudfront.net/charts/preview.png?h=15&amp;w=30&amp;n=4&amp;y=0&amp;y2=0&amp;x=0&amp;title=false&amp;lbl=0&amp;bg=0&amp;url=/tanzania/cpi-transportation&amp;version=20170831" data-chart="/tanzania/cpi-transportation" title="CPI Transportation" data-placement="right"></a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left: 10px; text-align: left; font-weight: 600; white-space: normal;">
+                                    <a href="/tanzania/export-prices">Export Prices</a></td>
+                                <td style="text-align: left">
+                                    144<small>Index points</small>
+                                </td>
+                                <td>
+                                    <span style="background-color: #adadad;" class="label label-default">Jun/17</span>
+                                </td>
+                                <td class="hidden-sm hidden-xs">143</td>
+                                <td class="hidden-sm hidden-xs">100 : 144</td>
+                                <td class="hidden-md hidden-sm hidden-xs small">
+                                    Quarterly</td>
+                                <td>
+                                    <a target="_blank" style="text-align: center" href="/tanzania/export-prices"><img border="0" src="https://d3fy651gv2fhd3.cloudfront.net/charts/preview.png?h=15&amp;w=30&amp;n=4&amp;y=0&amp;y2=0&amp;x=0&amp;title=false&amp;lbl=0&amp;bg=0&amp;url=/tanzania/export-prices&amp;version=20170630" data-chart="/tanzania/export-prices" title="Export Prices" data-placement="right"></a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left: 10px; text-align: left; font-weight: 600; white-space: normal;">
+                                    <a href="/tanzania/import-prices">Import Prices</a>
+                                </td>
+                                <td style="text-align: left">
+                                    119<small>Index points</small>
+                                </td>
+                                <td>
+                                    <span style="background-color: #adadad;" class="label label-default">Jun/17</span>
+                                </td>
+                                <td class="hidden-sm hidden-xs">120</td>
+                                <td class="hidden-sm hidden-xs">100 : 120</td>
+                                <td class="hidden-md hidden-sm hidden-xs small">
+                                    Quarterly</td>
+                                <td>
+                                    <a target="_blank" style="text-align: center" href="/tanzania/import-prices"><img border="0" src="https://d3fy651gv2fhd3.cloudfront.net/charts/preview.png?h=15&amp;w=30&amp;n=4&amp;y=0&amp;y2=0&amp;x=0&amp;title=false&amp;lbl=0&amp;bg=0&amp;url=/tanzania/import-prices&amp;version=20170630" data-chart="/tanzania/import-prices" title="Import Prices" data-placement="right"></a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left: 10px; text-align: left; font-weight: 600; white-space: normal;">
+                                    <a href="/tanzania/inflation-rate-mom">Inflation Rate Mom</a>
+                                </td>
+                                <td style="text-align: left">
+                                    <span style="color: darkred;">-0.4</span>
+                                    <small>%</small>
+                                </td>
+                                <td>
+                                    <span style="background-color: #adadad;" class="label label-default">Aug/17</span>
+                                </td>
+                                <td class="hidden-sm hidden-xs"><span style="color: darkred;">-0.2</span></td>
+                                <td class="hidden-sm hidden-xs"><span style="color: darkred;">-2.88</span> : 24.89</td>
+                                <td class="hidden-md hidden-sm hidden-xs small">
+                                    Monthly</td>
+                                <td>
+                                    <a target="_blank" style="text-align: center" href="/tanzania/inflation-rate-mom"><img border="0" src="https://d3fy651gv2fhd3.cloudfront.net/charts/preview.png?h=15&amp;w=30&amp;n=4&amp;y=0&amp;y2=0&amp;x=0&amp;title=false&amp;lbl=0&amp;bg=0&amp;url=/tanzania/inflation-rate-mom&amp;version=20170831" data-chart="/tanzania/inflation-rate-mom" title="Inflation Rate Mom" data-placement="right"></a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left: 10px; text-align: left; font-weight: 600; white-space: normal;">
+                                    <a href="/tanzania/producer-prices">Producer Prices</a>
+                                </td>
+                                <td style="text-align: left">
+                                    116<small>Index points</small>
+                                </td>
+                                <td>
+                                    <span style="background-color: #adadad;" class="label label-default">Jun/17</span>
+                                </td>
+                                <td class="hidden-sm hidden-xs">116</td>
+                                <td class="hidden-sm hidden-xs">104 : 119</td>
+                                <td class="hidden-md hidden-sm hidden-xs small">
+                                    Quarterly</td>
+                                <td>
+                                    <a target="_blank" style="text-align: center" href="/tanzania/producer-prices"><img border="0" src="https://d3fy651gv2fhd3.cloudfront.net/charts/preview.png?h=15&amp;w=30&amp;n=4&amp;y=0&amp;y2=0&amp;x=0&amp;title=false&amp;lbl=0&amp;bg=0&amp;url=/tanzania/producer-prices&amp;version=20170630" data-chart="/tanzania/producer-prices" title="Producer Prices" data-placement="right"></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-4">
+                    <h2>Macro data variables</h2>
+                    <div class="panel-group wrap" id="bs-collapse">
+                    {% for key, value in macros.items %}
+                        <div class="panel">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#" href="#{{ key }}">
+                                        {{ key }}
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="{{ key }}" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <ul>
+                                        {% for k, v in value.items %}
+                                            <li><a data-name="" id="">{{ k }}</a></li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#bs-collapse')
+                .on('show.bs.collapse', function(a) {
+                    $(a.target).prev('.panel-heading').addClass('active');
+                })
+                .on('hide.bs.collapse', function(a) {
+                    $(a.target).prev('.panel-heading').removeClass('active');
+                });
+        });
+    </script>
+{% endblock %}

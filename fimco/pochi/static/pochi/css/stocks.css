@@ -1,0 +1,105 @@
+.card-dropdown{
+    clear: both;
+    border: 1px solid #DDDDDD;
+    padding: 25px 0;
+    overflow: hidden;
+    max-width: 90%;
+}
+
+#headerQuoteContainer {
+    display: inline;
+    float: left;
+    text-align: center;
+    font-size: 12px;
+    font-family: arial, serif;
+    border-bottom: 3px solid #CCCCCC;
+    padding-bottom: 20px;
+    margin-bottom: 3px;
+    margin-top: 20px;
+    width: 100%;
+    color: #002A54;
+}
+
+.sectionQuote {
+    float: left;
+    border-right: 1px solid #CCCCCC;
+    margin-right: 10px;
+    padding-left: 10px;
+    width: 20%;
+    height: 54px;
+}
+
+.label {
+    font-weight: bold;
+    margin-bottom: 8px;
+    font-size: 11px;
+    color: #002A54;
+}
+
+.dataHeader {
+    font-size: 20px;
+}
+
+.changeUp {
+    color: #458D37;
+}
+
+.dataParenthetical {
+    font-size: 10px;
+}
+
+table.indexInfo, table.dataTable {
+    margin: 0;
+    border: none;
+}
+
+table.dataTable tr td {
+    line-height: 1.2;
+    font-size: 12px;
+    padding: 10px 5px 10px;
+    vertical-align: top;
+}
+
+table.dataTable tr td.data {
+    text-align: right;
+    white-space: nowrap;
+}
+
+table.indexInfo td.infoLeft {
+    width: 49%;
+    border-right: none;
+    border-bottom: none;
+}
+
+.dataTable .stripe {
+    background-color: #F3F3F3;
+}
+
+.dataTable .label {
+    font-weight: bold;
+    margin-bottom: 8px;
+    border-right: none;
+    float: left;
+}
+
+.timestamp {
+    text-align: right;
+    margin-bottom: 2px;
+    font-size: 11px;
+    color: #999;
+    font-weight: normal;
+}
+
+.dividerInlineH {
+    float: left;
+    clear: both;
+    width: 100%;
+    margin: 0;
+    height: 10px;
+    background: #FFF url(//s3.reutersmedia.net/resources_v2/images/dotsHorizontal.gif) top left repeat-x;
+    overflow: hidden;
+}
+
+.stock-img{
+    text-align: center;
+}

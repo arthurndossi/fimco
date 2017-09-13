@@ -15,4 +15,10 @@ urlpatterns = [
     url(r'^profile$', views.edit_profile, name='profile'),
     url(r'^lock$', views.lock, name='lock'),
     url(r'^rates$', views.rates, name='rates'),
+    url(r'^stocks$', views.stocks, name='stocks'),
+    # url(r'^overnight$', views.overnight_rates, name='overnight_view'),
+    # url(r'^bills$', views.bill, name='bill_view'),
+    # url(r'^bonds$', views.bond, name='bond_view'),
+    # url(r'^libor$', views.libor, name='libor_view'),
+    # url(r'^table/rates$', views.all_rates, name='all_rates'),
 ]
