@@ -3,10 +3,11 @@
  */
 $(document).ready(function() {
     $('#fullpage').fullpage({
-        anchors: ['1', '2', '3'],
-        sectionsColor: ['#003366', '#002952', '#001f3d'],
+        anchors: ['#', 'inform', 'advice', 'execute', 'footer'],
+        sectionsColor: ['#003366', '#002952', '#001f3d', "#001429", '#333'],
         navigation: true,
         navigationPosition: 'right',
-        navigationTooltips: ['First page', 'Second page', 'Third page']
+        navigationTooltips: ['Home', 'Inform', 'Advice', 'Execute', 'footer'],
+        scrollBar: true
     });
 });

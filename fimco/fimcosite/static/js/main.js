@@ -22,10 +22,12 @@ if($("#topBar").length > 0) {
       if(_scrollTop > 100) {
         if($("#toTop").is(":hidden")) {
           $("#toTop").show();
+          alert("shown")
         }
       } else {
         if($("#toTop").is(":visible")) {
           $("#toTop").hide();
+          alert("hidden")
         }
       }
     }

@@ -8,6 +8,7 @@ body{
   -webkit-font-smoothing: antialiased;
   font-size: 16px;
   line-height: 1.5;
+  color: white;
 }
 p {
   display: block;
@@ -277,4 +278,11 @@ a.btn.btn-sm {
   background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 15px;
+}
+
+footer{
+  background-color: white;
+  height: 100px;
+  padding: 20px 0;
+  color: #002A54;
 }
