@@ -3,23 +3,46 @@
 // input.bind('country.mobilePhoneNumber', function(e, country) {
 //   $('.country').text(country || '')
 // });
-// $('#identity').hide();
+var id = $('#id_client_id'), choice = $("#id_id_choice");
+$('#client_input').hide();
 
 $('#next, #prev').click(function (e) {
     e.preventDefault();
    $('#one, #two, #next, #prev, #finish').toggle()
 });
 
-// $('input:radio[name="clientID"]')
-//   .change(function () {
-//       if($(this).is(':checked') && $(this).val() === 'driving'){
-//           $('#client').attr('pattern', '^\\d{10}$')
-//       }else if ($(this).is(':checked') && $(this).val() === 'passport'){
-//           $('#client').attr('pattern', '^[A-Z]{2}[0-9]{6}$')
-//       }else if ($(this).is(':checked') && $(this).val() === 'voting'){
-//           $('#client').attr('pattern', '^(T-)([a-zA-Z0-9]{4}(-)){2}([a-zA-Z0-9]){3}(-)[a-zA-Z0-9]$')
-//       }else if ($(this).is(':checked') && $(this).val() === 'national'){
-//           $('#client').attr('pattern', '^[A-Z0-9]{8}(-)([A-Z0-9]{5}(-)){2}[A-Z0-9]{2}$')
-//       }
-//       $('#identity').show();
-//   });
+choice.on('change', function() {
+    var id_choice = choice.find(":selected").val();
+    if (id_choice === 'national'){
+        id.attr('pattern', '^[A-Z0-9]{8}(-)([A-Z0-9]{5}(-)){2}[A-Z0-9]{2}$')
+    }else if (id_choice === 'voting'){
+        id.attr('pattern', '^(T-)([a-zA-Z0-9]{4}(-)){2}([a-zA-Z0-9]){3}(-)[a-zA-Z0-9]$')
+    }else if (id_choice === 'passport'){
+        id.attr('pattern', '^[A-Z]{2}[0-9]{6}$')
+    }else if (id_choice === 'driving'){
+        id.attr('pattern', '^\\d{10}$')
+    }
+    $('#client_input').show();
+});
+
+// Prepare the preview for profile picture
+$("#picture, #file").change(function(){
+    if (this.id == 'picture') {
+        readURL(this, 'wizardPicturePreview');
+    }
+    else if (this.id == 'file') {
+        readURL(this, 'wizardFilePreview');
+    }
+});
+
+//Function to show image before upload
+function readURL(input, id) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            $('#'+id).attr('src', e.target.result).fadeIn('slow');
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+}
