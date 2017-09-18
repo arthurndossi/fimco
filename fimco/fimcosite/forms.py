@@ -28,14 +28,13 @@ class LoginForm(forms.Form):
     phone = forms.IntegerField(
         validators=[validate_slug],
         widget=forms.NumberInput(attrs={
-            'class': 'inputMaterial gray',
+            'type': 'tel',
             'required': True
         })
     )
     password = forms.CharField(
-        validators=[validate_slug],
         widget=forms.PasswordInput(attrs={
-            'class': 'inputMaterial gray',
+            'type': 'password',
             'required': True
         })
     )
@@ -48,7 +47,6 @@ class RegisterForm(forms.Form):
         validators=[alphabetic],
         widget=forms.TextInput(attrs={
             'required': True,
-            'class': "form-control",
         })
     )
     lName = forms.CharField(min_length=2,
@@ -56,17 +54,14 @@ class RegisterForm(forms.Form):
                             validators=[alphabetic],
                             widget=forms.TextInput(attrs={
                                 'required': True,
-                                'class': "form-control",
                             })
                             )
     dob = forms.DateField(widget=forms.DateInput(attrs={
                                 'required': True,
-                                'class': "form-control",
                             }))
-    gender = forms.ChoiceField(choices=GENDER, widget=forms.TextInput(attrs={'class': "form-control"}))
+    gender = forms.ChoiceField(choices=GENDER)
     client_id = forms.CharField(
         widget=forms.TextInput(attrs={
-            'class': 'form-control',
             'required': True
         })
     )
@@ -76,18 +71,16 @@ class RegisterForm(forms.Form):
     scanned_id = forms.ImageField(
         widget=forms.ClearableFileInput(attrs={'id': 'file'})
     )
-    id_choice = forms.ChoiceField(choices=ID_TYPES, widget=forms.TextInput(attrs={'class': "form-control"}))
+    id_choice = forms.ChoiceField(choices=ID_TYPES)
     email = forms.EmailField(max_length=50,
                              widget=forms.TextInput(attrs={
                                 'required': True,
-                                'class': "form-control"
                              })
                              )
     phone = forms.CharField(validators=[telephone],
                             widget=PhoneInput(attrs={
                                 'x-autocompletetype': 'tel',
                                 'required': True,
-                                'class': "form-control"
                             })
                             )
     bot_cds = forms.CharField()
@@ -96,14 +89,14 @@ class RegisterForm(forms.Form):
         validators=[validate_slug],
         widget=forms.PasswordInput(attrs={
             'required': True,
-            'class': "form-control"
+            
         })
     )
     verify = forms.CharField(
         validators=[validate_slug],
         widget=forms.PasswordInput(attrs={
             'required': True,
-            'class': "form-control"
+            
         })
     )
 
@@ -116,10 +109,9 @@ class JointAccountForm(forms.Form):
         validators=[alphabetic],
         widget=forms.TextInput(attrs={
             'required': True,
-            'class': "form-control",
         })
     )
-    purpose = forms.ChoiceField(choices=PURPOSE, widget=forms.TextInput(attrs={'class': "form-control"}))
+    purpose = forms.ChoiceField(choices=PURPOSE, widget=forms.TextInput(attrs={}))
     admin_id_one = forms.CharField(
         widget=forms.TextInput(attrs={
             'class': 'form-control',

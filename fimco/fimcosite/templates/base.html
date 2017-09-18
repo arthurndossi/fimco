@@ -1,135 +1,253 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>FIMCO</title>
+    <head>
+        <meta charset="UTF-8">
+        <title>FIMCO</title>
 
-    <meta name="description" content="" />
-    <meta name="Arthur" content="FIMCO [www.fimco.co.tz]" />
+        <meta name="description" content="" />
+        <meta name="Arthur" content="FIMCO [www.fimco.co.tz]" />
 
-    <!-- mobile settings -->
-    <meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1, user-scalable=0" />
-    <!--[if IE]><meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'><![endif]-->
+        <!-- mobile settings -->
+        <meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1, user-scalable=0" />
+        <!--[if IE]><meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'><![endif]-->
 
-    <!-- WEB FONTS : use %7C instead of | (pipe) -->
-    <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,500,600,700%7CRoboto:300,400,400italic,600,700"
-          rel="stylesheet" type="text/css" />
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-          rel="stylesheet" type="text/css">
+        <!-- WEB FONTS : use %7C instead of | (pipe) -->
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600%7CRaleway:300,400,500,600,700%7C
+                    Lato:300,400,400italic,600,700" rel="stylesheet" type="text/css" />
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+              rel="stylesheet" type="text/css">
 
-    <!-- CORE CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
-          integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+        <!-- CORE CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
+              integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker3.standalone.min.css">
-    <link rel="stylesheet" href="/static/css/header-1.css">
-    <link rel="stylesheet" href="/static/css/main.css">
+        <!-- REVOLUTION SLIDER -->
+        <link href="/static/plugins/slider.revolution.v5/css/pack.css" rel="stylesheet" type="text/css" />
 
-    {% block links %}
-    {% endblock %}
-</head>
+        <!-- THEME CSS -->
+        <link href="/static/css/essentials.css" rel="stylesheet" type="text/css" />
+        <link href="/static/css/layout.css" rel="stylesheet" type="text/css" />
+        <link href="/static/css/thematics-restaurant.css" rel="stylesheet" type="text/css" />
 
-<body class="smoothscroll enable-animation">
+        <!-- PAGE LEVEL SCRIPTS -->
+        <link href="/static/css/header-1.css" rel="stylesheet" type="text/css" />
 
-{#    {% if user.is_authenticated and not user.is_anonymous %}#}
-        {% include "top-bar.html" %}
-{#    {% endif %}#}
+        {% block links %}
+        {% endblock %}
+    </head>
 
-    <div id="header" class="navbar-toggleable-md sticky clearfix">
-        <!-- SEARCH HEADER -->
-        <div class="search-box over-header">
-            <a id="closeSearch" href="#" class="fa fa-remove"></a>
+	<body class="smoothscroll enable-animation">
 
-            <form action="" method="GET">
-                <input type="text" class="form-control" placeholder="Search" />
-            </form>
-        </div>
-        <!-- /SEARCH HEADER -->
+		{% include "top-bar.html" %}
 
-        <!-- TOP NAV -->
-        <header id="topNav">
-            <div class="container">
+		<!-- wrapper -->
+		<div id="wrapper">
+			<div id="header" class="navbar-toggleable-md sticky header-md clearfix">
+				<!-- TOP NAV -->
+				<header id="topNav">
+					<div class="container">
+						<!-- Mobile Menu Button -->
+						<button class="btn btn-mobile" data-toggle="collapse" data-target=".nav-main-collapse">
+							<i class="fa fa-bars"></i>
+						</button>
 
-                <!-- Mobile Menu Button -->
-                <button class="btn btn-mobile" data-toggle="collapse" data-target=".nav-main-collapse">
-                    <i class="fa fa-bars"></i>
-                </button>
+						<!-- Logo -->
+						<a class="logo float-left"  href="{% url 'index' %}">
+							<img src="/static/img/fimco_logo.png" alt=""/>
+						</a>
 
-                <!-- BUTTONS -->
-                <ul class="float-right nav nav-pills nav-second-main">
-                    <!-- SEARCH -->
-                    <li class="search">
-                        <a href="javascript:;">
-                            <i class="fa fa-search"></i>
-                        </a>
-                    </li>
-                    <!-- /SEARCH -->
-                </ul>
-                <!-- /BUTTONS -->
-
-                <!-- Logo -->
-                <a class="logo float-left" href="index.html">
-                    <img src="/static/img/fimco_logo.png" alt="" />
-                </a>
-
-                <div class="navbar-collapse collapse nav-main-collapse">
-                    <nav class="nav-main">
-                        <ul id="topMain" class="nav nav-pills nav-main">
-                            <li class="dropdown">
-                                <a class="dropdown-toggle">
-                                    WHO WE ARE
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="{% url 'about' %}#section0">Our values</a></li>
-                                    <li><a href="{% url 'about' %}#section1">Our mission</a></li>
-                                    <li><a href="{% url 'about' %}#section2">Our vision</a></li>
-                                    <li><a href="{% url 'about' %}#section3">Our people</a></li>
-                                    <li class="divider"></li>
+						<div class="navbar-collapse collapse nav-main-collapse">
+                            <nav class="nav-main">
+                                <ul id="topMain" class="nav nav-pills nav-main">
+                                    <li class="dropdown">
+                                        <a class="dropdown-toggle">
+                                            WHO WE ARE
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="{% url 'about' %}#section0">Our values</a></li>
+                                            <li><a href="{% url 'about' %}#section1">Our mission</a></li>
+                                            <li><a href="{% url 'about' %}#section2">Our vision</a></li>
+                                            <li><a href="{% url 'about' %}#section3">Our people</a></li>
+                                            <li class="divider"></li>
+                                            <li>
+                                                <a href="{% url 'about' %}#section4">
+                                                    <span class="badge badge-danger float-right">new</span>
+                                                    Our investment approach
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
                                     <li>
-                                        <a href="{% url 'about' %}#section4">
-                                            <span class="badge badge-danger float-right">new</span>
-                                            Our investment approach
+                                        <a href="{% url 'blog' %}">
+                                            BLOG
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{% url 'pochi' %}">
+                                            POCHI
                                         </a>
                                     </li>
                                 </ul>
-                            </li>
-                            <li class="dropdown">
-                                <a class="dropdown-toggle" href="#">
-                                    WHAT WE OFFER
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="{% url 'pochi' %}">POCHI</a></li>
-                                    <li><a href="{% url 'markets' %}">FUND MANAGEMENT</a></li>
-                                    <li><a>BROKERAGE</a></li>
+                            </nav>
+						</div>
+					</div>
+				</header>
+				<!-- /Top Nav -->
+			</div>
+
+			{% block content %}
+            {% endblock %}
+
+			<!-- FOOTER -->
+			<footer id="footer">
+				<div class="copyright">
+					<div class="container">
+                        <div class="row">
+                            <div class="col-md-2 col-sm-2">
+                                <!-- Footer Logo -->
+							    <img class="footer-logo footer-2" src="/static/img/fimco-footer.png" alt="" />
+                            </div>
+                            <div class="col-md-6 col-sm-6">
+                                <ul class="float-right m-0 list-inline mobile-block">
+                                    <li><a href="#">Terms &amp; Conditions</a></li>
+                                    <li>&bull;</li>
+                                    <li><a href="#">Privacy</a></li>
                                 </ul>
-                            </li>
-                            <li class="dropdown">
-                                <a class="dropdown-toggle" href="#">
-                                    USEFUL RESOURCES
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li><a>Calculator</a></li>
-                                    <li><a>How to invest cash</a></li>
-                                    <li><a>Rates</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>
-        </header>
-        <!-- /Top Nav -->
-    </div>
+                                &copy; All Rights Reserved, FIMCO LTD
+                            </div>
+                            <div class="col-md-4 col-sm-4 hidden-xs-down">
+                                <!-- Social Icons -->
+                                <div class="ml-50 clearfix">
+                                    <p class="mb-10">Follow Us</p>
+                                    <a href="#" class="social-icon social-icon-sm social-icon-transparent social-facebook float-left" data-toggle="tooltip" data-placement="top" title="Facebook">
+                                        <i class="icon-facebook"></i>
+                                        <i class="icon-facebook"></i>
+                                    </a>
 
-    {% block content %}
-    {% endblock %}
+                                    <a href="#" class="social-icon social-icon-sm social-icon-transparent social-twitter float-left" data-toggle="tooltip" data-placement="top" title="Twitter">
+                                        <i class="icon-twitter"></i>
+                                        <i class="icon-twitter"></i>
+                                    </a>
+
+                                    <a href="#" class="social-icon social-icon-sm social-icon-transparent social-gplus float-left" data-toggle="tooltip" data-placement="top" title="Google plus">
+                                        <i class="icon-gplus"></i>
+                                        <i class="icon-gplus"></i>
+                                    </a>
+
+                                    <a href="#" class="social-icon social-icon-sm social-icon-transparent social-linkedin float-left" data-toggle="tooltip" data-placement="top" title="Linkedin">
+                                        <i class="icon-linkedin"></i>
+                                        <i class="icon-linkedin"></i>
+                                    </a>
+
+                                    <a href="#" class="social-icon social-icon-sm social-icon-transparent social-rss float-left" data-toggle="tooltip" data-placement="top" title="Rss">
+                                        <i class="icon-rss"></i>
+                                        <i class="icon-rss"></i>
+                                    </a>
+                                </div>
+                                <!-- /Social Icons -->
+                            </div>
+                        </div>
+					</div>
+				</div>
+			</footer>
+            <!-- /FOOTER -->
+		</div>
+		<!-- /wrapper -->
 
 
-<!-- JAVASCRIPT FILES -->
-    <script type="text/javascript" src="/static/js/vendors/jquery-3.2.1.min.js"></script>
-	<script type="text/javascript" src="/static/js/modified.js"></script>
+		<!-- SCROLL TO TOP -->
+		<a href="#" id="toTop"></a>
+
+
+		<!-- PRELOADER -->
+		<div id="preloader">
+			<div class="inner">
+				<span class="loader"></span>
+			</div>
+		</div>
+        <!-- /PRELOADER -->
+
+
+		<!-- JAVASCRIPT FILES -->
+		<script type="text/javascript">var plugin_path = '/static/plugins/';</script>
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+                integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+                crossorigin="anonymous"></script>
+
+		<script type="text/javascript" src="/static/js/scripts.js"></script>
+
+		<!-- REVOLUTION SLIDER -->
+		<script type="text/javascript" src="/static/plugins/slider.revolution.v5/js/jquery.themepunch.tools.min.js"></script>
+		<script type="text/javascript" src="/static/plugins/slider.revolution.v5/js/jquery.themepunch.revolution.min.js"></script>
+		<script type="text/javascript">
+			jQuery(document).ready(function() {
+				if(jQuery("#rev_slider_72_1").revolution == undefined){
+					revslider_showDoubleJqueryError("#rev_slider_72_1");
+				}else{
+					revapi66 = jQuery("#rev_slider_72_1").show().revolution({
+						sliderType:"standard",
+						jsFileLocation:plugin_path + "slider.revolution.v5/js/",
+						sliderLayout:"fullscreen",
+						dottedOverlay:"none",
+						delay:9000,
+						navigation: {
+							keyboardNavigation:"on",
+							keyboard_direction: "vertical",
+							mouseScrollNavigation:"on",
+							onHoverStop:"off",
+							touch:{
+								touchenabled:"on",
+								swipe_threshold: 75,
+								swipe_min_touches: 1,
+								swipe_direction: "vertical",
+								drag_block_vertical: false
+							},
+							bullets: {
+								enable:true,
+								hide_onmobile:true,
+								hide_under:1024,
+								style:"hephaistos",
+								hide_onleave:false,
+								direction:"vertical",
+								h_align:"right",
+								v_align:"center",
+								h_offset:30,
+								v_offset:0,
+								space:5,
+								tmp:''
+							}
+						},
+
+						responsiveLevels:[1240,1024,778,480],
+						gridwidth:[1400,1240,778,480],
+						gridheight:[868,768,960,720],
+						lazyType:"none",
+						shadow:0,
+						spinner:"off",
+						stopLoop:"on",
+						stopAfterLoops:0,
+						stopAtSlide:1,
+						shuffle:"off",
+						autoHeight:"off",
+						fullScreenAlignForce:"off",
+						fullScreenOffsetContainer: jQuery("#header").hasClass('transparent') || jQuery("#header").hasClass('translucent') ? null : "#header",
+						fullScreenOffset: "",
+						disableProgressBar:"on",
+						hideThumbsOnMobile:"off",
+						hideSliderAtLimit:0,
+						hideCaptionAtLimit:0,
+						hideAllCaptionAtLilmit:0,
+						debugMode:false,
+						fallbacks: {
+							simplifyAll:"off",
+							nextSlideOnWindowFocus:"off",
+							disableFocusListener:false,
+						}
+					});
+				}
+			});
+		</script>
     {% block scripts %}
     {% endblock %}
-</body>
+	</body>
 </html>
-

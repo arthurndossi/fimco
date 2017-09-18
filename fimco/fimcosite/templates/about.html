@@ -1,169 +1,396 @@
 {% extends "base.html" %}
 
 {% block links %}
-    <link href="static/css/plugins/jquery.fullPage.css" rel="stylesheet" type="text/css" />
-    <link href="static/css/plugins/slick/slick.css" rel="stylesheet" type="text/css"/>
-    <link href="static/css/plugins/slick/slick-theme.css" rel="stylesheet" type="text/css"/>
     <link href="static/css/about.css" rel="stylesheet" type="text/css"/>
 {% endblock %}
 
 {% block content %}
-    <div id="fullpage">
-        <div class="section" id="section0" data-model-name="section0">
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="single-item">
-                            <div>
-                                <h2>Our values</h2>
-                                <p>We focus on delivering investment management excellence that investors can rely on - now and over the long term..</p>
+    <!-- -->
+    <section>
+        <div class="container">
+            <div class="row">
+                <!-- LEFT -->
+                <div class="col-md-9">
+                    <img class="float-left" src="/static/img/smart-min.png" alt="" />
+                    <div class="heading-title">
+                        <h2>Who Are We?</h2>
+                    </div>
+                    <p>Lorem ipsum dolor sit amet tempus malesuada. Suspendisse in dui. Ut elit metus, quis consectetuer
+                        congue augue quis erat. Quisque pretium eu, aliquam odio. Donec a pellentesque consectetuer,
+                        augue nec odio. Nam accumsan at, porttitor sem at porttitor laoreet viverra mattis.
+                        Aliquam ultricies accumsan. In tempus. Pellentesque felis.
+                    </p>
+                    <p>Aliquam nisl. Nunc condimentum wisi. Aenean nonummy risus at eros. Suspendisse congue odio at
+                        purus. Quisque eu justo. Quisque eu eros. Sed accumsan dictum, laoreet sit amet ante.
+                        Curabitur ultrices iaculis. In gravida eros in consequat diam. Donec nonummy, tellus in lorem
+                        lorem pretium magna. In hac habitasse platea dictumst. Suspendisse elit eu scelerisque a,
+                        gravida vel, purus. Class aptent taciti sociosqu ad litora torquent per conubia nostra,
+                        per inceptos hymenaeos.
+                    </p>
+                    <blockquote>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas metus nulla, commodo a
+                            sodales sed, dignissim pretium nunc.
+                        </p>
+                        <cite>Anonymous</cite>
+                    </blockquote>
+                </div>
+                <!-- /LEFT -->
+
+                <!-- RIGHT -->
+                <div class="col-md-3">
+
+                    <div class="box-static box-border-top mb-60">
+                        <div class="box-title">
+                            <h4>Why deal with us</h4>
+                        </div>
+                        <ul class="list-unstyled list-icons p-15 pb-0">
+                            <li class="mb-20">
+                                <i class="fa fa-check text-success fs-18"></i>
+                                <span class="block bold fs-18">Choice</span>
+                                <small>Whatever your needs, experience and appetite for risk, we have an investment opportunity to suit you</small>
+                            </li>
+                            <li class="mb-20">
+                                <i class="fa fa-check text-success fs-18"></i>
+                                <span class="block bold fs-18">Expertise</span>
+                                <small>We combine financial expertise with ground-breaking technology to make investing smarter and easier</small>
+                            </li>
+                            <li class="mb-20">
+                                <i class="fa fa-check text-success fs-18"></i>
+                                <span class="block bold fs-18">Simplicity</span>
+                                <small>Our investment platforms are designed to be simple and intuitive, our language clear and straightforward</small>
+                            </li>
+                        </ul>
+                        <hr />
+                    </div>
+                    <hr />
+                    <!-- SOCIAL ICONS -->
+                    <div class="hidden-xs-down text-center">
+                        <a href="#" class="social-icon social-icon-border social-facebook" data-toggle="tooltip" data-placement="top" title="Facebook">
+                            <i class="icon-facebook"></i>
+                            <i class="icon-facebook"></i>
+                        </a>
+
+                        <a href="#" class="social-icon social-icon-border social-twitter" data-toggle="tooltip" data-placement="top" title="Twitter">
+                            <i class="icon-twitter"></i>
+                            <i class="icon-twitter"></i>
+                        </a>
+
+                        <a href="#" class="social-icon social-icon-border social-gplus" data-toggle="tooltip" data-placement="top" title="Google plus">
+                            <i class="icon-gplus"></i>
+                            <i class="icon-gplus"></i>
+                        </a>
+
+                        <a href="#" class="social-icon social-icon-border social-linkedin" data-toggle="tooltip" data-placement="top" title="Linkedin">
+                            <i class="icon-linkedin"></i>
+                            <i class="icon-linkedin"></i>
+                        </a>
+                    </div>
+                </div>
+                <!-- /RIGHT -->
+            </div>
+            <header class="text-center mb-10" id="section0">
+                <h3>OUR VALUES</h3>
+            </header>
+
+            <hr class="mb-60" />
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="heading-title heading-border-bottom heading-color">
+                        <h3>Diligence</h3>
+                    </div>
+                    <p>We work hard; intelligently and persistently to create value for our clients.</p>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="heading-title heading-border-bottom heading-color">
+                        <h3>Integrity</h3>
+                    </div>
+                    <p>We abide strictly to principles of market and professional conduct without compromise in creating
+                        value for our clients.
+                    </p>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="heading-title heading-border-bottom heading-color">
+                        <h3>Innovation</h3>
+                    </div>
+                    <p>We are constantly looking for ways to improve our products and services to create value for our clients.</p>
+                </div>
+            </div>
+            <div class="row mt-60">
+                <div class="col-sm-6" id="section1">
+                    <div class="heading-title heading-border-bottom heading-color">
+                        <h3>Our Mission</h3>
+                        <p>we always complete our missions</p>
+                    </div>
+                    <p>Being the most trusted gateway to experiencing TZ financial markets offering Information, advise
+                        and execution capabilities across all asset classes leveraging innovating channels.
+                    </p>
+                </div>
+                <div class="col-sm-6" id="section2">
+                    <div class="heading-title heading-border-bottom heading-color">
+                        <h3>Our Vision</h3>
+                        <p>our experience is all you need</p>
+                    </div>
+                    <p>Revolutionize the approach, mentality and propensity of investment/savings by leveraging innovative platforms and enhancing financial literacy.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- / -->
+    <!-- PARALLAX -->
+    <header class="text-center mb-10" id="section3">
+        <h3>THE FOUNDERS</h3>
+    </header>
+    <hr class="mb-60" />
+    <section class="parallax parallax-2" id="section3">
+        <div class="overlay dark-5"><!-- dark overlay [1 to 9 opacity] --></div>
+        <div class="container">
+            <div class="row">
+                <!-- item -->
+                <div class="col-md-3 col-sm-6">
+                    <div class="box-flip box-color box-icon box-icon-center box-icon-round box-icon-large text-center">
+                        <div class="front">
+                            <div class="box1 box-default">
+                                <div class="box-icon-title">
+                                    <img class="img-fluid" src="demo_files/images/people/460x700/7-min.jpg" alt="" />
+                                    <h2>Abdulrahman Said</h2>
+                                    <small>Director</small>
+                                </div>
                             </div>
-                            <div>
-                                <h2>Dilligence</h2>
-                                <p>We work hard; intelligently and persistently to create value for our clients.</p>
+                        </div>
+                        <div class="back">
+                            <div class="box2 box-default">
+                                <h4 class="m-0">Abdulrahman Said</h4>
+                                <small>Director</small>
+                                <hr />
+                                <p>Nullam id dolor id nibh ultricies vehicula ut id elit. Integer posuere erat a ante venenatis dapibus posuere</p>
+                                <hr />
+                                <a href="#" class="social-icon social-icon-sm social-facebook">
+                                    <i class="fa fa-facebook"></i>
+                                    <i class="fa fa-facebook"></i>
+                                </a>
+                                <a href="#" class="social-icon social-icon-sm social-twitter">
+                                    <i class="fa fa-twitter"></i>
+                                    <i class="fa fa-twitter"></i>
+                                </a>
+                                <a href="#" class="social-icon social-icon-sm social-linkedin">
+                                    <i class="fa fa-linkedin"></i>
+                                    <i class="fa fa-linkedin"></i>
+                                </a>
                             </div>
-                            <div>
-                                <h2>Integrity</h2>
-                                <p>We abide strictly to principles of market and professional conduct without compromise in creating value for our clients.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- /item -->
+                <!-- item -->
+                <div class="col-md-3 col-sm-6">
+                    <div class="box-flip box-color box-icon box-icon-center box-icon-round box-icon-large text-center">
+                        <div class="front">
+                            <div class="box1 box-default">
+                                <div class="box-icon-title">
+                                    <img class="img-fluid" src="demo_files/images/people/460x700/12-min.jpg" alt="" />
+                                    <h2>Ivan Tarimo</h2>
+                                    <small>Director</small>
+                                </div>
                             </div>
-                            <div>
-                                <h2>Innovation</h2>
-                                <p>We are constantly looking for ways to improve our products and services to create value for our clients.</p>
+                        </div>
+                        <div class="back">
+                            <div class="box2 box-default">
+                                <h4 class="m-0">Ivan Tarimo</h4>
+                                <small>Director</small>
+                                <hr />
+                                <p>Nullam id dolor id nibh ultricies vehicula ut id elit. Integer posuere erat a ante venenatis dapibus posuere</p>
+                                <hr />
+                                <a href="#" class="social-icon social-icon-sm social-facebook">
+                                    <i class="fa fa-facebook"></i>
+                                    <i class="fa fa-facebook"></i>
+                                </a>
+                                <a href="#" class="social-icon social-icon-sm social-twitter">
+                                    <i class="fa fa-twitter"></i>
+                                    <i class="fa fa-twitter"></i>
+                                </a>
+                                <a href="#" class="social-icon social-icon-sm social-linkedin">
+                                    <i class="fa fa-linkedin"></i>
+                                    <i class="fa fa-linkedin"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /item -->
+                <!-- item -->
+                <div class="col-md-3 col-sm-6">
+                    <div class="box-flip box-color box-icon box-icon-center box-icon-round box-icon-large text-center">
+                        <div class="front">
+                            <div class="box1 box-default">
+                                <div class="box-icon-title">
+                                    <img class="img-fluid" src="demo_files/images/people/460x700/10-min.jpg" alt="" />
+                                    <h2>Sameer Hirji</h2>
+                                    <small>Director</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="back">
+                            <div class="box2 box-default">
+                                <h4 class="m-0">Sameer Hirji</h4>
+                                <small>Director</small>
+                                <hr />
+                                <p>Nullam id dolor id nibh ultricies vehicula ut id elit. Integer posuere erat a ante venenatis dapibus posuere</p>
+                                <hr />
+                                <a href="#" class="social-icon social-icon-sm social-facebook">
+                                    <i class="fa fa-facebook"></i>
+                                    <i class="fa fa-facebook"></i>
+                                </a>
+                                <a href="#" class="social-icon social-icon-sm social-twitter">
+                                    <i class="fa fa-twitter"></i>
+                                    <i class="fa fa-twitter"></i>
+                                </a>
+                                <a href="#" class="social-icon social-icon-sm social-linkedin">
+                                    <i class="fa fa-linkedin"></i>
+                                    <i class="fa fa-linkedin"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /item -->
+                <!-- item -->
+                <div class="col-md-3 col-sm-6">
+                    <div class="box-flip box-color box-icon box-icon-center box-icon-round box-icon-large text-center">
+                        <div class="front">
+                            <div class="box1 box-default">
+                                <div class="box-icon-title">
+                                    <img class="img-fluid" src="demo_files/images/people/460x700/8-min.jpg" alt="" />
+                                    <h2>Rosario Arun</h2>
+                                    <small>Director</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="back">
+                            <div class="box2 box-default">
+                                <h4 class="m-0">Rosario Arun</h4>
+                                <small>Director</small>
+                                <hr />
+                                <p>Nullam id dolor id nibh ultricies vehicula ut id elit. Integer posuere erat a ante venenatis dapibus posuere</p>
+                                <hr />
+                                <a href="#" class="social-icon social-icon-sm social-facebook">
+                                    <i class="fa fa-facebook"></i>
+                                    <i class="fa fa-facebook"></i>
+                                </a>
+                                <a href="#" class="social-icon social-icon-sm social-twitter">
+                                    <i class="fa fa-twitter"></i>
+                                    <i class="fa fa-twitter"></i>
+                                </a>
+                                <a href="#" class="social-icon social-icon-sm social-linkedin">
+                                    <i class="fa fa-linkedin"></i>
+                                    <i class="fa fa-linkedin"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /item -->
+            </div>
+        </div>
+    </section>
+    <!-- /PARALLAX -->
+    <section class="section-sm" id="section4">
+        <div class="container">
+            <header class="text-center mb-10">
+                <h3>OUR INVESTMENT APPROACH</h3>
+            </header>
+            <hr class="mb-60" />
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="heading-title heading-border-bottom">
+                        <h3>Register</h3>
+                    </div>
+                    <div class="toggle toggle-transparent-body toggle-accordion">
+                        <div class="toggle active">
+                            <label>Personal Info</label>
+                            <div class="toggle-content">
+                                <p>Enter your personal details; names, email, ID, phone... to create your profile. </p>
+                            </div>
+                        </div>
+                        <div class="toggle">
+                            <label>Upload photo</label>
+                            <div class="toggle-content">
+                                <p>Upload photo of your ID(Voting card ID, Licence ID, National ID or Passport).</p>
+                            </div>
+                        </div>
+                        <div class="toggle">
+                            <label>Your Account</label>
+                            <div class="toggle-content">
+                                <p>Advise us your preferred bank A/C you wish to use to forward proceeds.</p>
+                            </div>
+                        </div>
+                        <div class="toggle">
+                            <label>Money in/out of POCHI</label>
+                            <div class="toggle-content">
+                                <p>Receive a POCHI ID and login via app or website; transfer cash and get started.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="heading-title heading-border-bottom">
+                        <h3>Get Started</h3>
+                    </div>
+                    <div class="toggle toggle-transparent-body toggle-accordion">
+                        <div class="toggle active">
+                            <label>Invest now</label>
+                            <div class="toggle-content">
+                                <p>Transfer cash to your fimco account and view your cash transactions through POCHI. </p>
+                            </div>
+                        </div>
+                        <div class="toggle">
+                            <label>Manage your finances</label>
+                            <div class="toggle-content">
+                                <p>Manage your cash, returns and planning through POCHI interface.</p>
+                            </div>
+                        </div>
+                        <div class="toggle">
+                            <label>Setup and join groups</label>
+                            <div class="toggle-content">
+                                <p>Setup and join groups through Joint POCHI Accounts with other FIMCO members and invest in groups.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="heading-title heading-border-bottom">
+                        <h3>Data and Analysis</h3>
+                    </div>
+                    <div class="toggle toggle-transparent-body toggle-accordion">
+                        <div class="toggle active">
+                            <label>POCHI Admin Dashboard</label>
+                            <div class="toggle-content">
+                                <p>View data related to your balance, interests, POCHI rates, fees and statements. </p>
+                            </div>
+                        </div>
+                        <div class="toggle">
+                            <label>Instant reports</label>
+                            <div class="toggle-content">
+                                <p>View simplified charts and graphs showing your savings and investment patterns.</p>
+                            </div>
+                        </div>
+                        <div class="toggle">
+                            <label>...and many more</label>
+                            <div class="toggle-content">
+                                <p>Access other investment opportunities.</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="section" id="section1" data-model-name="section1">
-            <div class="intro">
-                <h2>Our Mission</h2>
-                <p>
-                    Being the most trusted gateway to experiencing TZ financial markets offering Information, advise and execution capabilities across all asset classes leveraging innovating channels.
-                </p>
-            </div>
-        </div>
-        <div class="section" id="section2" data-model-name="section2">
-            <div class="container">
-                <div class="section-content">
-                    <div class="section-title">
-                        Our Vision
-                    </div>
-                    <div class="sub-header">
-                        <span>
-                            Revolutionize the approach, mentality and propensity of investment/savings by leveraging innovative platforms and enhancing financial literacy.
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="section" id="section3" data-model-name="section3">
-            <div class="slide" id="slide1">
-                <div class="container">
-                <div class="row">
-                    <div class="title">The Founders</div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="multiple-items">
-                        <div class="card-box">
-                            <div class="card card-with-border">
-                                <img class="card-img-top" src="static/img/200x250.png">
-                                <div class="card-block">
-                                    <figure class="profile profile-inline">
-                                        <img src="static/img/200x250.png" class="profile-avatar" alt="">
-                                    </figure>
-                                    <h4 class="card-title">Ivan</h4>
-                                    <div class="card-text">
-                                        Director.
-                                    </div>
-                                </div>
-                                <div class="card-footer text-center">
-                                    <a href="#" class="btn btn-danger btn-fill btn-round">Read more</a>
-                                </div>
-                                <div class="filter"></div>
-                            </div> <!-- end card -->
-                        </div>
-                        <div class="card-box">
-                            <div class="card card-with-border">
-                                <img class="card-img-top" src="static/img/200x250.png">
-                                <div class="card-block">
-                                    <figure class="profile profile-inline">
-                                        <img src="static/img/200x250.png" class="profile-avatar" alt="">
-                                    </figure>
-                                    <h4 class="card-title">Abdul</h4>
-                                    <div class="card-text">
-                                        Director.
-                                    </div>
-                                </div>
-                                <div class="card-footer text-center">
-                                    <a href="#" class="btn btn-danger btn-fill btn-round">Read more</a>
-                                </div>
-                                <div class="filter"></div>
-                            </div> <!-- end card -->
-                        </div>
-                        <div class="card-box">
-                            <div class="card card-with-border">
-                                <img class="card-img-top" src="static/img/200x250.png">
-                                <div class="card-block">
-                                    <figure class="profile profile-inline">
-                                        <img src="static/img/200x250.png" class="profile-avatar" alt="">
-                                    </figure>
-                                    <h4 class="card-title">Sarah</h4>
-                                    <div class="card-text">
-                                        Non-executive Director.
-                                    </div>
-                                </div>
-                                <div class="card-footer text-center">
-                                    <a href="#" class="btn btn-danger btn-fill btn-round">Read more</a>
-                                </div>
-                                <div class="filter"></div>
-                            </div> <!-- end card -->
-                        </div>
-                        <div class="card-box">
-                            <div class="card card-with-border">
-                                <img class="card-img-top" src="static/img/200x250.png">
-                                <div class="card-block">
-                                    <figure class="profile profile-inline">
-                                        <img src="static/img/200x250.png" class="profile-avatar" alt="">
-                                    </figure>
-                                    <h4 class="card-title">Rosario</h4>
-                                    <div class="card-text">
-                                        Non-executive Director.
-                                    </div>
-                                </div>
-                                <div class="card-footer text-center">
-                                    <a href="#" class="btn btn-danger btn-fill btn-round">Read more</a>
-                                </div>
-                                <div class="filter"></div>
-                            </div> <!-- end card -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            </div>
-            <div class="slide" id="slide2">
-                <h2>Video profile of the company</h2>
-            </div>
-            <div class="slide" id="slide3">
-                <h2>Animated videos on investing</h2>
-            </div>
-        </div>
-        <div class="section" id="section4" data-model-name="section4">
-            <div class="intro">
-                <h2>Our Investment Approach</h2>
-                <p>Sustainable client value creation from financial markets is key cornerstone of our strategy.</p>
-                <p>We wish to open our clients to opportunities they would otherwise not see or not know.</p>
-                <p>We maximize on the use of innovative technology to distribute our products in a seamless and transparent way.</p>
-            </div>
-        </div>
-    </div>
+    </section>
 {% endblock %}
 
-{% block scripts %}
-    <script type="text/javascript" src="static/js/vendors/slick.min.js"></script>
-    <script type="text/javascript" src="static/js/vendors/scrolloverflow.min.js"></script>
-	<script type="text/javascript" src="static/js/vendors/jquery.fullPage.min.js"></script>
-    <script type="text/javascript" src="static/js/about.js"></script>
-{% endblock %}
+{#{% block scripts %}#}
+{#    <script type="text/javascript" src="static/js/vendors/slick.min.js"></script>#}
+{#    <script type="text/javascript" src="static/js/vendors/scrolloverflow.min.js"></script>#}
+{#	<script type="text/javascript" src="static/js/vendors/jquery.fullPage.min.js"></script>#}
+{#    <script type="text/javascript" src="static/js/about.js"></script>#}
+{#{% endblock %}#}

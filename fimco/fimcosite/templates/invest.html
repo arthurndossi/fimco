@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block links %}
-    <link href="static/css/plugins/bootstrap-wizard.css" rel="stylesheet" />
+    <link href="static/plugins/bootstrap-wizard.css" rel="stylesheet" />
 {% endblock %}
 {% block content %}
     <div class="center">
@@ -54,7 +54,6 @@
                                                                                 <div class="picture">
                                                                                     <img src="static/img/default-avatar.jpg" class="picture-src" id="wizardPicturePreview" />
                                                                                     {{ rForm.image }}
-{#                                                                                    <input type="file" id="picture">#}
                                                                                 </div>
                                                                                 <h6>Choose Picture</h6>
                                                                             </div>
@@ -63,28 +62,20 @@
                                                                             <div class="form-group">
                                                                                 <label>First Name <small>(required)</small></label>
                                                                                 {{ rForm.fName }}
-{#                                                                                <input name="firstname" type="text" class="form-control" placeholder="Arthur...">#}
                                                                             </div>
                                                                             <div class="form-group">
                                                                                 <label>Last Name <small>(required)</small></label>
                                                                                 {{ rForm.lName }}
-{#                                                                                <input name="lastname" type="text" class="form-control" placeholder="David...">#}
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-sm-3">
                                                                             <div class="form-group">
                                                                                 <label>Date of Birth <small>(required)</small></label>
                                                                                 {{ rForm.dob }}
-{#                                                                                <input name="dob" type="date" class="form-control">#}
                                                                             </div>
                                                                             <div class="form-group">
                                                                                 <label>Gender <small>(required)</small></label>
                                                                                 {{ rForm.gender }}
-{#                                                                                <select name="gender" class="form-control">#}
-{#                                                                                    <option value="Male"> Male </option>#}
-{#                                                                                    <option value="Female"> Female </option>#}
-{#                                                                                    <option value="Other"> Other </option>#}
-{#                                                                                </select>#}
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -93,14 +84,12 @@
                                                                             <div class="form-group">
                                                                                 <label>Email </label>
                                                                                 {{ rForm.email }}
-{#                                                                                <input name="email" type="email" class="form-control" placeholder="arthur@selcom.net">#}
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-sm-4">
                                                                             <div class="form-group">
                                                                                 <label>Mobile no. <small>(required)</small></label>
                                                                                 {{ rForm.phone }}
-{#                                                                                <input name="mobile" type="number" class="form-control">#}
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -109,14 +98,12 @@
                                                                             <div class="form-group">
                                                                                 <label>Password <small>(required)</small></label>
                                                                                 {{ rForm.password }}
-{#                                                                                <input name="pass" type="password" class="form-control">#}
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-sm-4">
                                                                             <div class="form-group">
                                                                                 <label>Re-enter Password <small>(required)</small></label>
                                                                                 {{ rForm.verify }}
-{#                                                                                <input name="repass" type="password" class="form-control">#}
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -141,19 +128,12 @@
                                                                     <div class="form-group">
                                                                         <label>Select ID type <small>(required)</small></label>
                                                                         {{ rForm.id_choice }}
-{#                                                                        <select name="idtype" class="form-control">#}
-{#                                                                            <option value="national"> National ID </option>#}
-{#                                                                            <option value="voting"> Voting ID </option>#}
-{#                                                                            <option value="driving"> Driving license </option>#}
-{#                                                                            <option value="passport"> Passport </option>#}
-{#                                                                        </select>#}
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-sm-4">
                                                                     <div class="form-group">
                                                                         <label>Client ID <small>(required)</small></label>
                                                                         {{ rForm.client_id }}
-{#                                                                        <input name="identity" type="text" class="form-control">#}
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-sm-4">
@@ -161,7 +141,6 @@
                                                                         <div class="sqr-picture">
                                                                             <img src="static/img/images.png" class="picture-src" id="wizardFilePreview" />
                                                                             {{ rForm.scanned_id }}
-{#                                                                            <input type="file" id="file">#}
                                                                         </div>
                                                                         <h6>Select your ID</h6>
                                                                     </div>
@@ -367,26 +346,9 @@
                     </div>
                     <!-- end widget -->
                 </article>
-                </div>
-        </div>
-    </div>
-
-    <!-- FOOTER -->
-    <footer id="footer" class="sticky">
-        <div class="copyright">
-            <div class="container">
-                <ul class="float-right m-0 list-inline mobile-block">
-                    <li><a href="#">Terms &amp; Conditions</a></li>
-                    <li>&bull;</li>
-                    <li><a href="#">Privacy</a></li>
-                </ul>
-
-                &copy; All Rights Reserved, Company LTD
             </div>
         </div>
-
-    </footer>
-    <!-- /FOOTER -->
+    </div>
 {% endblock %}
 
 

@@ -7,7 +7,8 @@ $( document ).ready(function() {
         sectionsColor: ['#003366', '#002952', '#001f3d', '#001429', '#000a14'],
         navigation: true,
         navigationPosition: 'right',
-        navigationTooltips: ['Mission', 'Vision', 'Values', 'People', 'Investment']
+        navigationTooltips: ['Mission', 'Vision', 'Values', 'People', 'Investment'],
+        scrollBar: true
     });
     
     $('.single-item').slick();

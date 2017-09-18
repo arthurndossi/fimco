@@ -19,18 +19,20 @@ from django.template.response import TemplateResponse
 from djpjax import pjax
 
 
+@login_required
 def admin(request):
-    # if request.user is not None and request.user.is_authenticated():
-    return render(request, 'admin.html', {})
-    # else:
-    #     return redirect('login')
+    if request.user is not None and request.user.is_authenticated():
+        return render(request, 'admin.html', {})
+    else:
+        return redirect('login')
 
 
+@login_required
 def markets(request):
-    # if request.user is not None and request.user.is_authenticated():
-    return render(request, 'markets.html', {})
-    # else:
-    #     return redirect('login')
+    if request.user is not None and request.user.is_authenticated():
+        return render(request, 'markets.html', {})
+    else:
+        return redirect('login')
 
 
 def exchange_rates(request):
