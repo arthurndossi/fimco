@@ -1,7 +1,7 @@
 from django import forms
 from django.core.validators import *
 from django.contrib.auth.models import User
-from django.forms import TextInput
+from django.forms.widgets import Input
 
 alphabetic = RegexValidator(r'^[a-zA-Z\s]*$', 'Only alphabetic characters are allowed.')
 telephone = RegexValidator(r'^([+]?(\d{1,3}\s?)|[0])\s?\d+(\s?\-?\d{2,4}){1,3}?$', 'Not a valid phone number.')
@@ -20,13 +20,13 @@ ID_TYPES = (
 )
 
 
-class PhoneInput(TextInput):
+class PhoneInput(Input):
     input_type = 'tel'
 
 
 class LoginForm(forms.Form):
     phone = forms.IntegerField(
-        validators=[validate_slug],
+        validators=[validate_slug, telephone],
         widget=forms.NumberInput(attrs={
             'type': 'tel',
             'required': True
@@ -66,10 +66,10 @@ class RegisterForm(forms.Form):
         })
     )
     image = forms.ImageField(
-        widget=forms.ClearableFileInput(attrs={'id': 'picture'})
+        widget=forms.ClearableFileInput(attrs={'id': 'picture', 'required': True})
     )
     scanned_id = forms.ImageField(
-        widget=forms.ClearableFileInput(attrs={'id': 'file'})
+        widget=forms.ClearableFileInput(attrs={'id': 'file', 'required': True})
     )
     id_choice = forms.ChoiceField(choices=ID_TYPES)
     email = forms.EmailField(max_length=50,
@@ -99,6 +99,15 @@ class RegisterForm(forms.Form):
             
         })
     )
+
+    def clean(self):
+        cleaned_data = self.cleaned_data
+        password1 = cleaned_data["password"]
+        password2 = cleaned_data["verify"]
+        if password1 != password2:
+            raise forms.ValidationError("Passwords must be identical.")
+
+        return cleaned_data
 
 
 class JointAccountForm(forms.Form):

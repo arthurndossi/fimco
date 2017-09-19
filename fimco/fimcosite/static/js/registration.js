@@ -27,10 +27,10 @@ choice.on('change', function() {
 
 // Prepare the preview for profile picture
 $("#picture, #file").change(function(){
-    if (this.id == 'picture') {
+    if (this.id === 'picture') {
         readURL(this, 'wizardPicturePreview');
     }
-    else if (this.id == 'file') {
+    else if (this.id === 'file') {
         readURL(this, 'wizardFilePreview');
     }
 });
@@ -42,7 +42,26 @@ function readURL(input, id) {
 
         reader.onload = function (e) {
             $('#'+id).attr('src', e.target.result).fadeIn('slow');
-        }
+        };
         reader.readAsDataURL(input.files[0]);
     }
 }
+
+var password = $("#id_password"),
+		msg = $("#pass-message"),
+    confirm_password = $("#id_verify");
+
+function validatePassword(){
+    if(password.val() !== confirm_password.val()) {
+        if(msg.hasClass("alert-success")){
+            msg.removeClass("alert-success");
+        }
+        msg.addClass("alert-danger").html("Passwords Don't Match").show();
+    } else {
+        if(msg.hasClass("alert-danger")){
+            msg.removeClass("alert-danger");
+        }
+        msg.addClass("alert-success").html("Passwords Match").show();
+    }
+}
+$("#id_password, #id_verify").keyup(validatePassword);

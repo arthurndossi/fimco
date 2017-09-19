@@ -19,7 +19,7 @@
                         <div class="box-title mb-30">
                             <h2 class="fs-20">Don't have an account yet?</h2>
                         </div>
-                        <form class="m-0 sky-form" action="#" method="post" enctype="multipart/form-data" novalidate>
+                        <form class="m-0 sky-form" action="{% url 'register' %}" method="post" enctype="multipart/form-data" novalidate>
                             {% csrf_token %}
                             <fieldset id="one">
                                 <div class="row">
@@ -30,6 +30,13 @@
                                             {{ rForm.fName }}
                                             <b class="tooltip tooltip-bottom-right">Your First Name</b>
                                         </label>
+                                        {% if rForm.fName.errors %}
+                                            {% for error in rForm.fName.errors %}
+                                                <div class="alert alert-mini alert-danger mb-30">
+                                                    <strong>{{ error|escape }}</strong>
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}
                                     </div>
                                     <div class="col-md-6 col-sm-6">
                                         <label for="register:last_name">Last Name <small>(required)</small></label>
@@ -38,6 +45,13 @@
                                             {{ rForm.lName }}
                                             <b class="tooltip tooltip-bottom-right">Your Last Name</b>
                                         </label>
+                                        {% if rForm.lName.errors %}
+                                            {% for error in rForm.lName.errors %}
+                                                <div class="alert alert-mini alert-danger mb-30">
+                                                    <strong>{{ error|escape }}</strong>
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}
                                     </div>
                                 </div>
                                 <div class="row">
@@ -48,13 +62,27 @@
                                             {{ rForm.dob }}
                                             <b class="tooltip tooltip-bottom-right">Date of Birth</b>
                                         </label>
+                                        {% if rForm.dob.errors %}
+                                            {% for error in rForm.dob.errors %}
+                                                <div class="alert alert-mini alert-danger mb-30">
+                                                    <strong>{{ error|escape }}</strong>
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}
                                     </div>
                                     <div class="col-md-6 col-sm-6">
                                         <label for="register:gender">Gender <small>(required)</small></label>
-                                        <label class="select mb-10 mt-20">
+                                        <label class="select mb-10">
                                             {{ rForm.gender }}
                                             <i class="ico-append fa fa-venus-mars"></i>
                                         </label>
+                                        {% if rForm.gender.errors %}
+                                            {% for error in rForm.gender.errors %}
+                                                <div class="alert alert-mini alert-danger mb-30">
+                                                    <strong>{{ error|escape }}</strong>
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}
                                     </div>
                                 </div>
                                 <div class="row">
@@ -65,6 +93,13 @@
                                             {{ rForm.email }}
                                             <b class="tooltip tooltip-bottom-right">Your Email</b>
                                         </label>
+                                        {% if rForm.email.errors %}
+                                            {% for error in rForm.email.errors %}
+                                                <div class="alert alert-mini alert-danger mb-30">
+                                                    <strong>{{ error|escape }}</strong>
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}
                                     </div>
                                 </div>
                                 <div class="row">
@@ -75,6 +110,13 @@
                                             {{ rForm.phone }}
                                             <b class="tooltip tooltip-bottom-right">Your Phone (optional)</b>
                                         </label>
+                                        {% if rForm.phone.errors %}
+                                            {% for error in rForm.phone.errors %}
+                                                <div class="alert alert-mini alert-danger mb-30">
+                                                    <strong>{{ error|escape }}</strong>
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}
                                     </div>
                                     <div class="col-md-6 col-sm-6">
                                         <label for="register:dp">Profile picture <small>(required)</small></label>
@@ -85,6 +127,13 @@
                                             </div>
                                             <h6>Choose Picture</h6>
                                         </div>
+                                        {% if rForm.image.errors %}
+                                            {% for error in rForm.image.errors %}
+                                                <div class="alert alert-mini alert-danger mb-30">
+                                                    <strong>{{ error|escape }}</strong>
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}
                                     </div>
                                 </div>
                                 <div class="row">
@@ -97,12 +146,14 @@
                                         </label>
                                     </div>
                                     <div class="col-md-6 col-sm-6">
-                                        <label for="register:pass2">Password Again <small>(required)</small></label>
+                                        <label for="register:pass2">Repeat Password <small>(required)</small></label>
                                         <label class="input mb-10">
                                             <i class="ico-append fa fa-lock"></i>
                                             {{ rForm.verify }}
                                             <b class="tooltip tooltip-bottom-right">Type the password again</b>
                                         </label>
+                                        <div id="pass-message" class="alert alert-mini mb-30" style="display:none">
+                                        </div>
                                     </div>
                                 </div>
                                 <hr />
@@ -123,6 +174,13 @@
                                             {{ rForm.client_id }}
                                             <b class="tooltip tooltip-bottom-right">Enter your ID</b>
                                         </label>
+                                        {% if rForm.client_id.errors %}
+                                            {% for error in rForm.client_id.errors %}
+                                                <div class="alert alert-mini alert-danger mb-30">
+                                                    <strong>{{ error|escape }}</strong>
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}
                                     </div>
                                 </div>
                                 <div class="row">
@@ -134,6 +192,13 @@
                                             </div>
                                             <h6>Select your ID</h6>
                                         </div>
+                                        {% if rForm.scanned_id.errors %}
+                                            {% for error in rForm.scanned_id.errors %}
+                                                <div class="alert alert-mini alert-danger mb-30">
+                                                    <strong>{{ error|escape }}</strong>
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}
                                     </div>
                                 </div>
                                 <div class="row">

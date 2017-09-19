@@ -40,6 +40,18 @@ def blog_single_view(request, article):
     return render(request, 'blog-single-page.html', {})
 
 
+def info(request):
+    return render(request, 'pochi.html', {})
+
+
+def fund(request):
+    return render(request, 'fund.html', {})
+
+
+def brokerage(request):
+    return render(request, 'brokerage.html', {})
+
+
 @anonymous_required
 def account(request):
     context = {
@@ -85,11 +97,12 @@ def register(request):
             email = form.cleaned_data['email']
             phone = form.cleaned_data['phone'].strip()
             image = form.cleaned_data['image']
+            password = form.cleaned_data["password"]
             scanned_id = form.cleaned_data['scanned_id']
             id_choice = form.cleaned_data['id_choice']
             bot = form.cleaned_data['bot_cds']
             dse = form.cleaned_data['dse_cds']
-            user = User.objects.create_user(phone, email, first_name=fName, last_name=lName)
+            user = User.objects.create_user(phone, email, password, first_name=fName, last_name=lName)
             profile = user.profile
             profile.birth_date = dob
             profile.gender = gender

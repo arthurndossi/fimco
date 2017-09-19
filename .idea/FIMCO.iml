@@ -21,6 +21,7 @@
     <option name="TEMPLATE_FOLDERS">
       <list>
         <option value="$MODULE_DIR$/fimco/pochi/templates" />
+        <option value="$MODULE_DIR$/fimco/fimcosite/templates" />
       </list>
     </option>
   </component>

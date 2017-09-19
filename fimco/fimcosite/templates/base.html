@@ -65,28 +65,37 @@
                                             WHO WE ARE
                                         </a>
                                         <ul class="dropdown-menu">
-                                            <li><a href="{% url 'about' %}#section0">Our values</a></li>
-                                            <li><a href="{% url 'about' %}#section1">Our mission</a></li>
-                                            <li><a href="{% url 'about' %}#section2">Our vision</a></li>
-                                            <li><a href="{% url 'about' %}#section3">Our people</a></li>
+                                            <li><a href="{% url 'about' %}">About Us</a></li>
+                                            <li><a href="{% url 'about' %}#values">Our values</a></li>
+                                            <li><a href="{% url 'about' %}#mission">Our mission</a></li>
+                                            <li><a href="{% url 'about' %}#vision">Our vision</a></li>
+                                            <li><a href="{% url 'about' %}#founders">Our people</a></li>
                                             <li class="divider"></li>
                                             <li>
-                                                <a href="{% url 'about' %}#section4">
+                                                <a href="{% url 'about' %}#approach">
                                                     <span class="badge badge-danger float-right">new</span>
                                                     Our investment approach
                                                 </a>
                                             </li>
                                         </ul>
                                     </li>
-                                    <li>
-                                        <a href="{% url 'blog' %}">
-                                            BLOG
+                                    <li class="dropdown">
+                                        <a class="dropdown-toggle">
+                                            WHAT WE OFFER
                                         </a>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="{% url 'info' %}">POCHI</a></li>
+                                            <li><a href="{% url 'fund' %}">Fund Management</a></li>
+                                            <li><a href="{% url 'brokerage' %}">Brokerage</a></li>
+                                        </ul>
                                     </li>
-                                    <li>
-                                        <a href="{% url 'pochi' %}">
-                                            POCHI
+                                    <li class="dropdown">
+                                        <a class="dropdown-toggle">
+                                            MARKET INFORMATION
                                         </a>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="{% url 'blog' %}">BLOG</a></li>
+                                        </ul>
                                     </li>
                                 </ul>
                             </nav>
