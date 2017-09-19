@@ -20,6 +20,10 @@ a.no-text-decoration {
   border-color: #001429;
 }
 
+.tp-bgimg.defaultimg {
+    opacity: 0.95 !important;
+}
+
 #footer {
     font-size: 14px;
     color: rgba(255,255,255,0.6);
