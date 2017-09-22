@@ -22,22 +22,42 @@ from djpjax import pjax
 @login_required
 def admin(request):
     if request.user is not None and request.user.is_authenticated():
-        return render(request, 'admin.html', {})
+        return render(request, 'pochi/admin.html', {})
     else:
         return redirect('login')
+
+
+def dashboard(request):
+    return render(request, 'pochi/dashboard.html', {})
+
+
+def statements(request):
+    return render(request, 'pochi/statements.html', {})
+
+
+def pochi2pochi(request):
+    return render(request, 'pochi/pochi2pochi.html', {})
+
+
+def withdrawal(request):
+    return render(request, 'pochi/withdrawal.html', {})
+
+
+def deposit(request):
+    return render(request, 'pochi/deposit.html', {})
 
 
 @login_required
 def markets(request):
     if request.user is not None and request.user.is_authenticated():
-        return render(request, 'markets.html', {})
+        return render(request, 'pochi/markets.html', {})
     else:
         return redirect('login')
 
 
 def exchange_rates(request):
     # if request.user is not None and request.user.is_authenticated():
-    return render(request, 'exchange.html', {})
+    return render(request, 'pochi/exchange.html', {})
     # else:
     #     return redirect('login')
 
@@ -180,7 +200,7 @@ def interest_rates(request):
         "lowDate": "04/09/2017",
         "change": "200",
     }
-    return TemplateResponse(request, 'interests.html', {'interests': interests, 'overnight': overnight})
+    return TemplateResponse(request, 'pochi/interests.html', {'interests': interests, 'overnight': overnight})
     # else:
     #     return redirect('login')
 
@@ -225,7 +245,7 @@ def share_prices(request):
                 "percent": "21.2",
             }
         ]
-        return render(request, 'shares.html', {'companies': companies})
+        return render(request, 'pochi/shares.html', {'companies': companies})
     # else:
         # return redirect('login')
 
@@ -315,7 +335,7 @@ def stocks(request):
                 "change": "4.2%"
             }
         ]
-        return render(request, 'stock.html', {'markets': markets, 'currencies': currencies, 'commodities': commodities})
+        return render(request, 'pochi/stock.html', {'markets': markets, 'currencies': currencies, 'commodities': commodities})
     # else:
     #     return redirect('login')
 
@@ -359,28 +379,28 @@ def macro_data(request):
             },
         }
 
-        return render(request, 'macros.html', {"macros": macros})
+        return render(request, 'pochi/macros.html', {"macros": macros})
     # else:
     #     return redirect('login')
 
 
 def auction_data(request):
     # if request.user is not None and request.user.is_authenticated():
-        return render(request, 'auction.html', {})
+        return render(request, 'pochi/auction.html', {})
     # else:
     #     return redirect('login')
 
 
 def commodity_prices(request):
     # if request.user is not None and request.user.is_authenticated():
-        return render(request, 'commodities.html', {})
+        return render(request, 'pochi/commodities.html', {})
     # else:
     #     return redirect('login')
 
 
 def notifications(request):
     if request.user is not None and request.user.is_authenticated():
-        return render(request, 'messages.html', {})
+        return render(request, 'pochi/messages.html', {})
     else:
         return redirect('login')
 
@@ -394,10 +414,10 @@ def edit_profile(request):
 
 def lock(request):
     if request.user is not None and request.user.is_authenticated():
-        return render(request, 'lock.html', {})
+        return render(request, 'pochi/lock.html', {})
     else:
         return redirect('login')
 
 
 def rates(request):
-    return render(request, 'rate.html', {})
+    return render(request, 'pochi/rate.html', {})

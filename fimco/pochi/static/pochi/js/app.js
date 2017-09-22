@@ -287,8 +287,8 @@ var plugin_path = '/static/pochi/plugins/';
 		_hash = _hash.replace('#', '');
 
 		if(_hash == '') {
-			window.location.hash = '#dashboard.html';
-			_hash = 'dashboard.html';
+			window.location.hash = '#main.html';
+			_hash = 'main.html';
 		}
 
 		// REMOVE ON PRODUCTION: 'tpl/'

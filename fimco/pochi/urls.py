@@ -3,7 +3,12 @@ from django.conf.urls import url
 from . import views
 
 urlpatterns = [
-    url(r'^dashboard$', views.admin, name='pochi'),
+    url(r'^app$', views.admin, name='pochi'),
+    url(r'^dashboard$', views.dashboard, name='dashboard'),
+    url(r'^statements$', views.statements, name='statements'),
+    url(r'^pochi2pochi$', views.pochi2pochi, name='pochi2pochi'),
+    url(r'^withdrawal$', views.withdrawal, name='withdrawal'),
+    url(r'^deposit$', views.deposit, name='deposit'),
     url(r'^markets$', views.markets, name='markets'),
     url(r'^exchange', views.exchange_rates, name='exchange'),
     url(r'^interests$', views.interest_rates, name='interests'),

@@ -1,0 +1,31 @@
+{% extends "pochi/main.html" %}
+{% block links %}
+    <link href="/static/pochi/css/interests.css" rel="stylesheet" type="text/css" />
+{% endblock %}
+{% block content %}
+    <section id="middle">
+        <div id="content" class="dashboard padding-20">
+            <div class="row">
+                <div class="col-md-3">
+                    <ul class="rates">
+                        <li><a data-name="interests" id="interests">All Rates</a></li>
+                        <li><a data-name="overnight" id="overnight">Overnight Rates</a></li>
+                        <li><a data-name="T-Bill" id="bills">T-Bill Rates</a></li>
+                        <li><a data-name="T-Bond" id="bonds">T-Bond Rates</a></li>
+                        <li><a data-name="USD-LIBOR" id="libor">USD LIBOR Rates</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-9">
+                    <div class="content">
+                        {% include 'pochi/all_rates.html' %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block scripts %}
+     <script type="text/javascript" src="/static/pochi/js/rates.js"></script>
+     <script type="text/javascript" src="/static/pochi/js/ajax.js"></script>
+{% endblock %}
