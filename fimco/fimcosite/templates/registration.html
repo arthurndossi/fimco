@@ -9,11 +9,13 @@
             <div class="row">
                 <div class="col-md-6 col-sm-6 offset-md-3 offset-sm-3">
                     {% if rForm.errors %}
-                        <!-- ALERT -->
-                        <div class="alert alert-mini alert-danger mb-30">
-                            <strong>Oh snap!</strong> Password do not match!
-                        </div>
-                        <!-- /ALERT -->
+                        {% for error in rForm.non_field_errors %}
+                            <!-- ALERT -->
+                            <div class="alert alert-mini alert-danger mb-30">
+                                <strong>Oh snap! {{ error }}</strong>
+                            </div>
+                            <!-- /ALERT -->
+                        {% endfor %}
                     {% endif %}
                     <div class="box-static box-transparent box-bordered p-30">
                         <div class="box-title mb-30">
@@ -162,7 +164,7 @@
                                 <div class="row">
                                     <div class="col-md-6 col-sm-6">
                                         <label>Select ID type <small>(required)</small></label>
-                                        <label class="select mb-10 mt-20">
+                                        <label class="select mb-10">
                                             <i class="ico-append fa fa-id-card"></i>
                                             {{ rForm.id_choice }}
                                         </label>
@@ -214,7 +216,7 @@
                                         <label for="register:dse">DSE CDS Account <small>(optional)</small></label>
                                         <label class="input mb-10">
                                             <i class="ico-append fa fa-briefcase"></i>
-                                            {{ rForm.bot_cds }}
+                                            {{ rForm.dse_cds }}
                                             <b class="tooltip tooltip-bottom-right">Enter your account no.</b>
                                         </label>
                                     </div>
@@ -242,36 +244,10 @@
             </div>
         </div>
     </section>
-    <!-- /REGISTER -->
-
-{#            <div class="col-sm-4">#}
-{#                <label for="dob">#}
-{#                    Date of Birth#}
-{#                    <span>*</span>#}
-{#                </label>#}
-{#                <div class="input-group date"#}
-{#                     data-provide="datepicker"#}
-{#                     data-date-start-date="01/01/1900"#}
-{#                     data-date-autoclose="true"#}
-{#                     data-date-start-view="decade"#}
-{#                     data-date-format="dd/mm/yyyy">#}
-{#                    {{form.dob}}#}
-{#                    {% if form.dob.errors %}#}
-{#                      {% for error in form.dob.errors %}#}
-{#                      <div class="alert alert-danger"><strong>{{ error|escape }}</strong></div>#}
-{#                      {% endfor %}#}
-{#                    {% endif %}#}
-{#                    <div class="input-group-addon">#}
-{#                        <span class="glyphicon glyphicon-th"></span>#}
-{#                    </div>#}
-{#                </div>#}
-{#            </div>#}
-
     {% include 'modals.html' %}
 {% endblock %}
 
 {% block scripts %}
-{#    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.min.js"></script>#}
 {#    <script src="/web/static/js/jquery.caret.js"></script>#}
 {#    <script src="/web/static/js/jquery.mobilePhoneNumber.js"></script>#}
     <script src="/static/js/registration.js"></script>

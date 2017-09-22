@@ -57,6 +57,7 @@ class RegisterForm(forms.Form):
                             })
                             )
     dob = forms.DateField(widget=forms.DateInput(attrs={
+                                'type': 'date',
                                 'required': True,
                             }))
     gender = forms.ChoiceField(choices=GENDER)
@@ -83,8 +84,8 @@ class RegisterForm(forms.Form):
                                 'required': True,
                             })
                             )
-    bot_cds = forms.CharField()
-    dse_cds = forms.CharField()
+    bot_cds = forms.CharField(required=False)
+    dse_cds = forms.CharField(required=False)
     password = forms.CharField(
         validators=[validate_slug],
         widget=forms.PasswordInput(attrs={
@@ -102,6 +103,8 @@ class RegisterForm(forms.Form):
 
     def clean(self):
         cleaned_data = self.cleaned_data
+        if User.objects.filter(username=cleaned_data['phone']).exists():
+            raise forms.ValidationError("This phone number is already associated with another user!")
         password1 = cleaned_data["password"]
         password2 = cleaned_data["verify"]
         if password1 != password2:

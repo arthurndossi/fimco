@@ -22,7 +22,6 @@ class Profile(models.Model):
     )
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
-    msisdn = models.CharField(max_length=12, unique=True, db_index=True, default='NA', validators=[telephone])
     dob = models.DateField(null=True)
     gender = models.CharField(max_length=1, choices=GENDER, default='M')
     client_id = models.CharField(max_length=15, unique=True, null=True)
@@ -33,15 +32,16 @@ class Profile(models.Model):
     register_date = models.DateTimeField('date joined', auto_now_add=True)
     pochi_id = models.CharField(max_length=20, null=True)
     is_staff = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False)
 
     @receiver(post_save, sender=User)
     def create_user_profile(sender, instance, created, **kwargs):
         if created:
             Profile.objects.create(user=instance)
 
-    @receiver(post_save, sender=User)
-    def save_user_profile(sender, instance, **kwargs):
-        instance.profile.save()
+    # @receiver(post_save, sender=User)
+    # def save_user_profile(sender, instance, **kwargs):
+    #     instance.profile.save()
 
     def clean(self):
         self.status = 'DONE'
@@ -52,6 +52,8 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.pochi_id
+
+    # post_save.connect(create_user_profile, sender=User)
 
 
 def generate_client_id():

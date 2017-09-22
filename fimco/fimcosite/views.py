@@ -114,13 +114,13 @@ def register(request):
             profile.bot_account = bot
             profile.dse_account = dse
             profile.save()
-            user.save()
+            # user.save()
 
             return redirect(index)
         else:
             return render(request, 'registration.html', {'rForm': form})
 
-    return redirect(index)
+    return redirect(account)
 
 
 @login_required
