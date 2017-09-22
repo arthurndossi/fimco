@@ -150,3 +150,7 @@ def edit_profile(request):
     }
 
     return render(request, "profile.html", context)
+
+
+def terms(request):
+    return render(request, "terms_conditions.html", {})

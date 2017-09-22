@@ -14,5 +14,6 @@ urlpatterns = [
     url(r'^information/pochi', views.info, name='info'),
     url(r'^accounts/login', views.login_view, name='login'),
     url(r'^login', views.validate, name='validate'),
-    url(r'^logout', views.log_out, name='logout')
+    url(r'^logout', views.log_out, name='logout'),
+    url(r'^terms&conditions', views.terms, name='terms')
 ]
