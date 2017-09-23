@@ -21,10 +21,8 @@
 		<!-- THEME CSS -->
 		<link href="/static/pochi/css/essentials.css" rel="stylesheet" type="text/css" />
 		<link href="/static/pochi/css/layout.css" rel="stylesheet" type="text/css" />
-        <link href="/static/pochi/css/dashboard.css" rel="stylesheet" type="text/css" />
-        <link href="/static/pochi/css/navyblue.css" rel="stylesheet" type="text/css" />
-        {% block links %}{% endblock %}
 
+        {% block links %}{% endblock %}
 	</head>
 
 	<body>
@@ -187,7 +185,7 @@
 			</header>
 			<!-- /HEADER -->
 
-            {% include 'pochi/modals.html' %}
+{#            {% include 'pochi/modals.html' %}#}
 
 			<!-- MIDDLE -->
 			{% block content %}{% endblock %}
@@ -198,11 +196,6 @@
 		<script type="text/javascript" src="/static/pochi/plugins/jquery/jquery-2.2.3.min.js"></script>
 		<script type="text/javascript" src="/static/pochi/js/app.js"></script>
 
-		<!-- PAGE LEVEL SCRIPT -->
-{#        <script type="text/javascript" src="/static/pochi/plugins/salvattore.min.js"></script>#}
-        <script type="text/javascript" src="/static/pochi/js/admin.js"></script>
-{#        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>#}
-{#        <script type="text/javascript" src="/static/pochi/js/daily.js"></script>#}
         {% block scripts %}{% endblock %}
 	</body>
 </html>

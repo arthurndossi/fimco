@@ -1,4 +1,8 @@
 {% extends "pochi/main.html" %}
+{% block links %}
+    <link href="/static/pochi/css/dashboard.css" rel="stylesheet" type="text/css" />
+    <link href="/static/pochi/css/navyblue.css" rel="stylesheet" type="text/css" />
+{% endblock %}
 {% block content %}
     <section id="middle">
         <div id="content" class="dashboard padding-20">
@@ -24,50 +28,126 @@
                 <!-- /panel content -->
 
                 <!-- panel footer -->
-                <div class="panel-footer">
+{#                <div class="panel-footer">#}
 
                     <!--
                         .md-4 is used for a responsive purpose only on col-md-4 column.
                         remove .md-4 if you use on a larger column
                     -->
-                    <ul class="easypiecharts list-unstyled">
-                        <li class="clearfix">
-                            <span class="stat-number">18.125</span>
-                            <span class="stat-title">New Customers</span>
-
-                            <span class="easyPieChart" data-percent="86" data-easing="easeOutBounce" data-barColor="#F8CB00" data-trackColor="#dddddd" data-scaleColor="#dddddd" data-size="60" data-lineWidth="4">
-                                <span class="percent"></span>
-                            </span>
-                        </li>
-                        <li class="clearfix">
-                            <span class="stat-number">60%</span>
-                            <span class="stat-title">Returning Customers</span>
-
-                            <span class="easyPieChart" data-percent="59.83" data-easing="easeOutBounce" data-barColor="#F86C6B" data-trackColor="#dddddd" data-scaleColor="#dddddd" data-size="60" data-lineWidth="4">
-                                <span class="percent"></span>
-                            </span>
-                        </li>
-                        <li class="clearfix">
-                            <span class="stat-number">12%</span>
-                            <span class="stat-title">Canceled Orders</span>
-
-                            <span class="easyPieChart" data-percent="12" data-easing="easeOutBounce" data-barColor="#98AD4E" data-trackColor="#dddddd" data-scaleColor="#dddddd" data-size="60" data-lineWidth="4">
-                                <span class="percent"></span>
-                            </span>
-                        </li>
-                        <li class="clearfix">
-                            <span class="stat-number">97%</span>
-                            <span class="stat-title">Positive Feedbacks</span>
-
-                            <span class="easyPieChart" data-percent="97" data-easing="easeOutBounce" data-barColor="#0058AA" data-trackColor="#dddddd" data-scaleColor="#dddddd" data-size="60" data-lineWidth="4">
-                                <span class="percent"></span>
-                            </span>
-                        </li>
-                    </ul>
-                </div>
+{#                    <ul class="easypiecharts list-unstyled">#}
+{#                        <li class="clearfix">#}
+{#                            <span class="stat-number">18.125</span>#}
+{#                            <span class="stat-title">New Customers</span>#}
+{##}
+{#                            <span class="easyPieChart" data-percent="86" data-easing="easeOutBounce" data-barColor="#F8CB00" data-trackColor="#dddddd" data-scaleColor="#dddddd" data-size="60" data-lineWidth="4">#}
+{#                                <span class="percent"></span>#}
+{#                            </span>#}
+{#                        </li>#}
+{#                        <li class="clearfix">#}
+{#                            <span class="stat-number">60%</span>#}
+{#                            <span class="stat-title">Returning Customers</span>#}
+{##}
+{#                            <span class="easyPieChart" data-percent="59.83" data-easing="easeOutBounce" data-barColor="#F86C6B" data-trackColor="#dddddd" data-scaleColor="#dddddd" data-size="60" data-lineWidth="4">#}
+{#                                <span class="percent"></span>#}
+{#                            </span>#}
+{#                        </li>#}
+{#                        <li class="clearfix">#}
+{#                            <span class="stat-number">12%</span>#}
+{#                            <span class="stat-title">Canceled Orders</span>#}
+{##}
+{#                            <span class="easyPieChart" data-percent="12" data-easing="easeOutBounce" data-barColor="#98AD4E" data-trackColor="#dddddd" data-scaleColor="#dddddd" data-size="60" data-lineWidth="4">#}
+{#                                <span class="percent"></span>#}
+{#                            </span>#}
+{#                        </li>#}
+{#                        <li class="clearfix">#}
+{#                            <span class="stat-number">97%</span>#}
+{#                            <span class="stat-title">Positive Feedbacks</span>#}
+{##}
+{#                            <span class="easyPieChart" data-percent="97" data-easing="easeOutBounce" data-barColor="#0058AA" data-trackColor="#dddddd" data-scaleColor="#dddddd" data-size="60" data-lineWidth="4">#}
+{#                                <span class="percent"></span>#}
+{#                            </span>#}
+{#                        </li>#}
+{#                    </ul>#}
+{#                </div>#}
                 <!-- /panel footer -->
             </div>
             <!-- /PANEL -->
         </div>
+
+        <!-- BOXES -->
+        <div class="row">
+            <!-- Feedback Box -->
+            <div class="col-md-3 col-sm-6">
+                <!-- BOX -->
+                <div class="box danger"><!-- default, danger, warning, info, success -->
+                    <div class="box-title"><!-- add .noborder class if box-body is removed -->
+                        <h4><a href="#">POCHI Rates</a></h4>
+                        <small class="block">8.4%</small>
+                        <i class="fa fa-comments"></i>
+                    </div>
+                    <div class="box-body text-center">
+                        <span class="sparkline" data-plugin-options='{"type":"bar","barColor":"#ffffff","height":"35px","width":"100%","zeroAxis":"false","barSpacing":"2"}'>
+                            331,265,456,411,367,319,402,312,300,312,283,384,372,269,402,319,416,355,416,371,423,259,361,312,269,402,327
+                        </span>
+                    </div>
+                </div>
+                <!-- /BOX -->
+            </div>
+            <!-- Profit Box -->
+            <div class="col-md-3 col-sm-6">
+                <!-- BOX -->
+                <div class="box warning"><!-- default, danger, warning, info, success -->
+                    <div class="box-title"><!-- add .noborder class if box-body is removed -->
+                        <h4>Daily Earnings</h4>
+                        <small class="block">TZS 178/=</small>
+                        <i class="fa fa-bar-chart-o"></i>
+                    </div>
+                    <div class="box-body text-center">
+                        <span class="sparkline" data-plugin-options='{"type":"bar","barColor":"#ffffff","height":"35px","width":"100%","zeroAxis":"false","barSpacing":"2"}'>
+                            331,265,456,411,367,319,402,312,300,312,283,384,372,269,402,319,416,355,416,371,423,259,361,312,269,402,327
+                        </span>
+                    </div>
+                </div>
+                <!-- /BOX -->
+            </div>
+            <!-- Orders Box -->
+            <div class="col-md-3 col-sm-6">
+                <!-- BOX -->
+                <div class="box default"><!-- default, danger, warning, info, success -->
+                    <div class="box-title"><!-- add .noborder class if box-body is removed -->
+                        <h4>Monthly earnings</h4>
+                        <small class="block">TZS 8,105/=</small>
+                        <i class="fa fa-shopping-cart"></i>
+                    </div>
+                    <div class="box-body text-center">
+                        <span class="sparkline" data-plugin-options='{"type":"bar","barColor":"#ffffff","height":"35px","width":"100%","zeroAxis":"false","barSpacing":"2"}'>
+                            331,265,456,411,367,319,402,312,300,312,283,384,372,269,402,319,416,355,416,371,423,259,361,312,269,402,327
+                        </span>
+                    </div>
+                </div>
+                <!-- /BOX -->
+            </div>
+            <!-- Online Box -->
+            <div class="col-md-3 col-sm-6">
+                <!-- BOX -->
+                <div class="box success"><!-- default, danger, warning, info, success -->
+                    <div class="box-title"><!-- add .noborder class if box-body is removed -->
+                        <h4>Total Earnings</h4>
+                        <small class="block">TZS 178,185/=</small>
+                        <i class="fa fa-globe"></i>
+                    </div>
+                    <div class="box-body text-center">
+                        <span class="sparkline" data-plugin-options='{"type":"bar","barColor":"#ffffff","height":"35px","width":"100%","zeroAxis":"false","barSpacing":"2"}'>
+                            331,265,456,411,367,319,402,312,300,312,283,384,372,269,402,319,416,355,416,371,423,259,361,312,269,402,327
+                        </span>
+                    </div>
+                </div>
+                <!-- /BOX -->
+            </div>
+        </div>
+        <!-- /BOXES -->
     </section>
+{% endblock %}
+{% block scripts %}
+    <script type="text/javascript" src="/static/pochi/js/admin.js"></script>
 {% endblock %}

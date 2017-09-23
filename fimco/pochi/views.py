@@ -27,10 +27,6 @@ def admin(request):
         return redirect('login')
 
 
-def dashboard(request):
-    return render(request, 'pochi/dashboard.html', {})
-
-
 def statements(request):
     return render(request, 'pochi/statements.html', {})
 
