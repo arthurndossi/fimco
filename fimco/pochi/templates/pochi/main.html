@@ -22,6 +22,8 @@
 		<link href="/static/pochi/css/essentials.css" rel="stylesheet" type="text/css" />
 		<link href="/static/pochi/css/layout.css" rel="stylesheet" type="text/css" />
 
+        <link href="/static/css/main.css" rel="stylesheet" type="text/css" />
+
         {% block links %}{% endblock %}
 	</head>
 
@@ -107,18 +109,24 @@
                     <!-- THIRD MAIN LIST -->
 					<h3>MY GROUPS</h3>
 					<ul class="nav nav-list">
-						<li>
-							<a href="">
-								<i class="main-icon fa fa-users"></i>
-								<span class="label label-info pull-right">2</span> <span>Group 1</span>
+{#						<li>#}
+{#							<a href="">#}
+{#								<i class="main-icon fa fa-users"></i>#}
+{#								<span class="label label-info pull-right">2</span> <span>Group 1</span>#}
+{#							</a>#}
+{#						</li>#}
+{#						<li>#}
+{#							<a href="">#}
+{#								<i class="main-icon fa fa-users"></i>#}
+{#								<span class="label label-info pull-right">5</span> <span>Group 2</span>#}
+{#							</a>#}
+{#						</li>#}
+                        <li>
+                            <a href="">
+								<i class="main-icon fa fa-ban"></i>
+								<span>None</span>
 							</a>
-						</li>
-						<li>
-							<a href="">
-								<i class="main-icon fa fa-users"></i>
-								<span class="label label-info pull-right">5</span> <span>Group 2</span>
-							</a>
-						</li>
+                        </li>
 					</ul>
 				</nav>
 				<span id="asidebg"><!-- aside fixed background --></span>
@@ -166,6 +174,9 @@
 								</li>
 								<li><!-- settings -->
 									<a href="{% url 'profile' %}"><i class="fa fa-cogs"></i> Edit profile</a>
+								</li>
+                                <li><!-- settings -->
+									<a href="#"><i class="fa fa-users"></i> New group</a>
 								</li>
 
 								<li class="divider"></li>

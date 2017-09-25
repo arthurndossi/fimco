@@ -62,15 +62,15 @@
                             &ndash; <b>OR</b> &ndash;
                         </div>
                         <div class="socials m-top10 text-center">
-                            <a href="#" class="social-icon social-facebook" data-toggle="tooltip" data-placement="top" title="Facebook">
+                            <a href="{% url 'social:begin' 'facebook' %}?next={{ request.path }}" class="social-icon social-facebook" data-toggle="tooltip" data-placement="top" title="Facebook">
                                 <i class="icon-facebook"></i>
                                 <i class="icon-facebook"></i>
                             </a>
-                            <a href="#" class="social-icon social-twitter" data-toggle="tooltip" data-placement="top" title="Twitter">
+                            <a href="{% url 'social:begin' 'twitter' %}?next={{ request.path }}" class="social-icon social-twitter" data-toggle="tooltip" data-placement="top" title="Twitter">
                                 <i class="icon-twitter"></i>
                                 <i class="icon-twitter"></i>
                             </a>
-                            <a href="#" class="social-icon social-google" data-toggle="tooltip" data-placement="top" title="Google">
+                            <a href="{% url 'social:begin' 'google-oauth2' %}?next={{ request.path }}" class="social-icon social-google" data-toggle="tooltip" data-placement="top" title="Google">
                                 <i class="icon-google-plus"></i>
                                 <i class="icon-google-plus"></i>
                             </a>

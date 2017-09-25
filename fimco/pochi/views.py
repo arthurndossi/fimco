@@ -1,22 +1,10 @@
 from django.contrib.auth.decorators import login_required
-from django.core.serializers import json
-from django.http import JsonResponse
 from django.shortcuts import render, redirect
 
-
-# class RatesTable:
-#     def __init__(self, duration, current_date, previous_date, high_date, low_date, change):
-#         self.duration = duration
-#         self.currentDate = current_date
-#         self.previousDate = previous_date
-#         self.highDate = high_date
-#         self.lowDate = low_date
-#         self.change = change
-
-
-# @login_required
 from django.template.response import TemplateResponse
 from djpjax import pjax
+
+from .models import Transactions
 
 
 @login_required
@@ -28,7 +16,18 @@ def admin(request):
 
 
 def statements(request):
-    return render(request, 'pochi/statements.html', {})
+    full_name = request.user.get_full_name()
+    first_name = full_name.split()[0]
+    last_name = full_name.split()[1]
+    try:
+        trans = Transactions.objects.get(user=request.user)
+        full_name = trans.user.get_full_name()
+    except Transactions.DoesNotExist:
+        trans = None
+    context = {
+        "first": first_name, "last": last_name, "trans": trans
+    }
+    return render(request, 'pochi/statements.html', context)
 
 
 def pochi2pochi(request):

@@ -1,7 +1,12 @@
 from __future__ import unicode_literals
 
+from datetime import datetime
+
+from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 from django.db import models
+
+# from fimco.fimcosite.models import Profile
 
 telephone = RegexValidator(r'^([+]?(\d{1,3}\s?)|[0])\s?\d+(\s?\-?\d{2,4}){1,3}?$', 'Not a valid phone number.')
 
@@ -39,3 +44,28 @@ class Exchange(models.Model):
     percentage_change = models.DecimalField(max_digits=4, decimal_places=2)
     bid = models.DecimalField(max_digits=7, decimal_places=4)
     offer = models.DecimalField(max_digits=6, decimal_places=4)
+
+
+class Transactions(models.Model):
+    TYPES = (
+        ('W', 'WITHDRAW'),
+        ('D', 'DEPOSIT'),
+        ('P', 'POCHI')
+    )
+    STATUS = (
+        ('PASS', 'SUCCESSFUL'),
+        ('FAIL', 'UNSUCCESSFUL'),
+        ('DONE', 'PENDING')
+    )
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    trans_timestamp = models.DateTimeField(default=datetime.utcnow)
+    processed_timestamp = models.DateTimeField()
+    amount = models.CharField(max_length=25)
+    currency = models.CharField(max_length=3, default='TZS')
+    type = models.CharField(max_length=1, choices=TYPES)
+    status = models.CharField(max_length=4, choices=STATUS)
+    result_code = models.CharField(max_length=3, default='111', db_index=True)
+    open_bal = models.IntegerField()
+    close_bal = models.IntegerField()
+    message = models.TextField(max_length=1024, default='NA')
+    reference = models.CharField(max_length=15, db_index=True, default='NA')

@@ -5,3 +5,7 @@ div.heading-title.heading-border-bottom {
 .parallax-2 {
   background-image: url('/static/img/wall3-min.jpg');
 }
+
+a .WebProduct-Button, .tp-caption.WebProduct-Button {
+  padding: 12px 35px;
+}
