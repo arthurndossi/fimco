@@ -2,28 +2,31 @@
 {% block content %}
     <section id="middle" style="background-color: #ebebeb">
         <div id="content" class="padding-20">
-            <div class="panel panel-default">
-                <div class="panel-heading panel-heading-transparent">
-                    <strong>Withdraw Funds</strong>
+            <form class="payment" method="post" action="{% url 'withdraw' %}">
+                {% csrf_token %}
+                <div class="panel panel-default">
+                    <div class="panel-heading panel-heading-transparent">
+                        <strong>Withdraw Funds</strong>
+                    </div>
+                    <div class="panel-body">
+                        <label>Enter Phone Number </label>
+                        <div class="fancy-form"><!-- input -->
+                            <i class="fa fa-phone-square"></i>
+                            <input type="text" class="form-control masked" name="phone" data-format="0999 999999" data-placeholder="X" placeholder="">
+                            <span class="fancy-tooltip top-left"> <!-- positions: .top-left | .top-right -->
+                                <em>Type recipient's phone number</em>
+                            </span>
+                        </div><!-- /input -->
+                        <br />
+                        <label>Enter Amount</label>
+                        <input type="number" class="form-control" name="amount" placeholder="TZS">
+                        <br />
+                    </div>
+                    <div class="panel-footer transfer">
+                        <button class="btn btn-primary" type="submit"><i class="fa fa-check"></i> CONFIRM MONEY TRANSFER</button>
+                    </div>
                 </div>
-                <div class="panel-body">
-                    <label>Enter Phone Number </label>
-                    <div class="fancy-form"><!-- input -->
-                        <i class="fa fa-phone-square"></i>
-                        <input type="text" class="form-control masked" data-format="0999 999999" data-placeholder="X" placeholder="">
-                        <span class="fancy-tooltip top-left"> <!-- positions: .top-left | .top-right -->
-                            <em>Type recipient's phone number</em>
-                        </span>
-                    </div><!-- /input -->
-                    <br />
-                    <label>Enter Amount</label>
-                    <input type="number" class="form-control" placeholder="TZS">
-                    <br />
-                </div>
-                <div class="panel-footer">
-                    <a class="btn btn-primary float-right" href="#"><i class="fa fa-check"></i> CONFIRM MONEY TRANSFER</a>
-                </div>
-            </div>
+            </form>
         </div>
     </section>
 {% endblock %}

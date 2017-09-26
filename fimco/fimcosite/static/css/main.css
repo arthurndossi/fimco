@@ -10,6 +10,11 @@ a.no-text-decoration {
   color: #002A54;
 }
 
+#aside .nav-list li a[disabled] {
+    background-color: #001429;
+    pointer-events: none;
+}
+
 .btn-primary {
   background-color: #002A54;
   border-color: #001f3d;
@@ -36,4 +41,8 @@ a.no-text-decoration {
     background: -ms-linear-gradient(top, #003366 0%, #002A54 100%);
     background: linear-gradient(to bottom, #003366 0%,#002A54 100%);
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#003366', endColorstr='#002A54',GradientType=0 );
+}
+
+.transfer {
+    text-align: -webkit-right;
 }

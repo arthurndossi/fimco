@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 
 from django.template.response import TemplateResponse
@@ -22,6 +23,8 @@ def statements(request):
     try:
         trans = Transactions.objects.get(user=request.user)
         full_name = trans.user.get_full_name()
+        first_name = full_name.split()[0]
+        last_name = full_name.split()[1]
     except Transactions.DoesNotExist:
         trans = None
     context = {
@@ -30,16 +33,63 @@ def statements(request):
     return render(request, 'pochi/statements.html', context)
 
 
-def pochi2pochi(request):
-    return render(request, 'pochi/pochi2pochi.html', {})
+def p2p(request):
+    try:
+        bal = Transactions.objects.filter(user=request.user).latest('trans_timestamp').open_bal
+    except Transactions.DoesNotExist:
+        bal = 0
+    if request.method == "POST":
+        phone = request.POST['phone']
+        amount = request.POST['amount']
+        trans = Transactions(user=request.user, msisdn=phone, amount=amount, type='P', open_bal=bal)
+        trans.save()
+        # TODO
+        # Call API
+        resp = {
+            'status': 'success',
+            'msg': 'TZS' + amount + ' has been transferred to ' + phone + '.'
+        }
+        return JsonResponse(resp)
+    else:
+        return JsonResponse({'status': 'fail'})
 
 
-def withdrawal(request):
-    return render(request, 'pochi/withdrawal.html', {})
+def withdraw(request):
+    try:
+        bal = Transactions.objects.filter(user=request.user).latest('trans_timestamp').open_bal
+    except Transactions.DoesNotExist:
+        bal = 0
+    if request.method == "POST":
+        phone = request.POST['phone']
+        amount = request.POST['amount']
+        trans = Transactions(user=request.user, msisdn=phone, amount=amount, type='W', open_bal=bal)
+        trans.save()
+        resp = {
+            'status': 'success',
+            'msg': 'TZS' + amount + ' has been deducted from your account.'
+        }
+        return JsonResponse(resp)
+    else:
+        return JsonResponse({'status': 'fail'})
 
 
-def deposit(request):
-    return render(request, 'pochi/deposit.html', {})
+def add_funds(request):
+    try:
+        bal = Transactions.objects.filter(user=request.user).latest('trans_timestamp').open_bal
+    except Transactions.DoesNotExist:
+        bal = 0
+    if request.method == "POST":
+        phone = request.POST['phone']
+        amount = request.POST['amount']
+        trans = Transactions(user=request.user, msisdn=phone, amount=amount, type='D', open_bal=bal)
+        trans.save()
+        resp = {
+            'status': 'success',
+            'msg': 'TZS' + amount + ' has been added to your account.'
+        }
+        return JsonResponse(resp)
+    else:
+        return JsonResponse({'status': 'fail'})
 
 
 @login_required
@@ -247,90 +297,90 @@ def share_prices(request):
 
 def stocks(request):
     # if request.user is not None and request.user.is_authenticated():
-        markets = [
-            {
-                "name": "Acacia Mining Plc.",
-                "sector": "Mining",
-                "change": "-18.3%"
-            },
-            {
-                "name": "IPP Media",
-                "sector": "Media",
-                "change": "13%"
-            },
-            {
-                "name": "Tanzania Cigarette Co.",
-                "sector": "Manufacturing",
-                "change": "2.2%"
-            },
-            {
-                "name": "Tanzania Breweries Ltd.",
-                "sector": "Manufacturing",
-                "change": "21.2%"
-            },
-            {
-                "name": "Vodacom Tanzania Ltd.",
-                "sector": "Telecommunications",
-                "change": "18.2%"
-            }
-        ]
+    markets = [
+        {
+            "name": "Acacia Mining Plc.",
+            "sector": "Mining",
+            "change": "-18.3%"
+        },
+        {
+            "name": "IPP Media",
+            "sector": "Media",
+            "change": "13%"
+        },
+        {
+            "name": "Tanzania Cigarette Co.",
+            "sector": "Manufacturing",
+            "change": "2.2%"
+        },
+        {
+            "name": "Tanzania Breweries Ltd.",
+            "sector": "Manufacturing",
+            "change": "21.2%"
+        },
+        {
+            "name": "Vodacom Tanzania Ltd.",
+            "sector": "Telecommunications",
+            "change": "18.2%"
+        }
+    ]
 
-        currencies = [
-            {
-                "name": "USD/TZS",
-                "exchange": "2242",
-                "change": "1.7%"
-            },
-            {
-                "name": "GBP/TZS",
-                "exchange": "2971.86",
-                "change": "3.1%"
-            },
-            {
-                "name": "EUR/TZS",
-                "exchange": "2676.61",
-                "change": "1.4%"
-            },
-            {
-                "name": "ZAR/TZS",
-                "exchange": "172.24",
-                "change": "-2.8%"
-            },
-            {
-                "name": "KES/TZS",
-                "exchange": "21.77",
-                "change": "1.3%"
-            }
-        ]
+    currencies = [
+        {
+            "name": "USD/TZS",
+            "exchange": "2242",
+            "change": "1.7%"
+        },
+        {
+            "name": "GBP/TZS",
+            "exchange": "2971.86",
+            "change": "3.1%"
+        },
+        {
+            "name": "EUR/TZS",
+            "exchange": "2676.61",
+            "change": "1.4%"
+        },
+        {
+            "name": "ZAR/TZS",
+            "exchange": "172.24",
+            "change": "-2.8%"
+        },
+        {
+            "name": "KES/TZS",
+            "exchange": "21.77",
+            "change": "1.3%"
+        }
+    ]
 
-        commodities = [
-            {
-                "name": "GOLD",
-                "price": "1554",
-                "change": "1.3%"
-            },
-            {
-                "name": "OIL",
-                "price": "54",
-                "change": "2.1%"
-            },
-            {
-                "name": "DIAMOND",
-                "price": "2104",
-                "change": "3.4%"
-            },
-            {
-                "name": "TANZANITE",
-                "price": "2372",
-                "change": "4.8%"
-            },
-            {
-                "name": "GAS",
-                "price": "30",
-                "change": "4.2%"
-            }
-        ]
-        return render(request, 'pochi/stock.html', {'markets': markets, 'currencies': currencies, 'commodities': commodities})
+    commodities = [
+        {
+            "name": "GOLD",
+            "price": "1554",
+            "change": "1.3%"
+        },
+        {
+            "name": "OIL",
+            "price": "54",
+            "change": "2.1%"
+        },
+        {
+            "name": "DIAMOND",
+            "price": "2104",
+            "change": "3.4%"
+        },
+        {
+            "name": "TANZANITE",
+            "price": "2372",
+            "change": "4.8%"
+        },
+        {
+            "name": "GAS",
+            "price": "30",
+            "change": "4.2%"
+        }
+    ]
+    return render(request, 'pochi/stock.html', {'markets': markets, 'currencies': currencies, 'commodities': commodities})
     # else:
     #     return redirect('login')
 
