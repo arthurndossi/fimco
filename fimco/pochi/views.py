@@ -92,6 +92,10 @@ def add_funds(request):
         return JsonResponse({'status': 'fail'})
 
 
+def new_group(request):
+    return render(request, 'pochi/group.html', {})
+
+
 @login_required
 def markets(request):
     if request.user is not None and request.user.is_authenticated():

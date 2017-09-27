@@ -7,16 +7,16 @@ alphabetic = RegexValidator(r'^[a-zA-Z\s]*$', 'Only alphabetic characters are al
 telephone = RegexValidator(r'^([+]?(\d{1,3}\s?)|[0])\s?\d+(\s?\-?\d{2,4}){1,3}?$', 'Not a valid phone number.')
 words = RegexValidator(r'((?:[^A-Za-z\s]|\s)+)', 'Please enter your full name!')
 GENDER = (
-        ('M', 'MALE'),
-        ('F', 'FEMALE'),
-        ('O', 'OTHER')
+    ('M', 'MALE'),
+    ('F', 'FEMALE'),
+    ('O', 'OTHER')
 )
 
 ID_TYPES = (
-        ('national', 'National ID'),
-        ('voting', 'Voting ID'),
-        ('driving', 'Driving license'),
-        ('passport', 'Passport')
+    ('national', 'National ID'),
+    ('voting', 'Voting ID'),
+    ('driving', 'Driving license'),
+    ('passport', 'Passport')
 )
 
 
@@ -57,9 +57,9 @@ class RegisterForm(forms.Form):
                             })
                             )
     dob = forms.DateField(widget=forms.DateInput(attrs={
-                                'type': 'date',
-                                'required': True,
-                            }))
+        'type': 'date',
+        'required': True,
+    }))
     gender = forms.ChoiceField(choices=GENDER)
     client_id = forms.CharField(
         widget=forms.TextInput(attrs={
@@ -75,7 +75,7 @@ class RegisterForm(forms.Form):
     id_choice = forms.ChoiceField(choices=ID_TYPES)
     email = forms.EmailField(max_length=50,
                              widget=forms.TextInput(attrs={
-                                'required': True,
+                                 'required': True,
                              })
                              )
     phone = forms.CharField(validators=[telephone],
@@ -90,14 +90,14 @@ class RegisterForm(forms.Form):
         validators=[validate_slug],
         widget=forms.PasswordInput(attrs={
             'required': True,
-            
+
         })
     )
     verify = forms.CharField(
         validators=[validate_slug],
         widget=forms.PasswordInput(attrs={
             'required': True,
-            
+
         })
     )
 
@@ -145,42 +145,87 @@ class EditProfileForm(forms.Form):
     fName = forms.CharField(
         min_length=2,
         max_length=20,
-        validators=[alphabetic]
-    )
-    mName = forms.CharField(
-        min_length=2,
-        max_length=20,
-        validators=[alphabetic]
+        validators=[alphabetic],
+        widget=forms.TextInput(attrs={
+            'name': 'contact[first_name]',
+            'class': 'form-control required'
+        })
     )
     lName = forms.CharField(
         min_length=2,
         max_length=20,
-        validators=[alphabetic]
-    )
-    dob = forms.DateField()
-    gender = forms.ChoiceField(choices=GENDER)
-    id = forms.CharField(
+        validators=[alphabetic],
         widget=forms.TextInput(attrs={
-            'id': 'client',
-            'required': True
+            'name': 'contact[last_name]',
+            'class': 'form-control required'
         })
     )
-    email = forms.EmailField(max_length=50)
+    email = forms.EmailField(
+        max_length=50,
+        widget=forms.TextInput(attrs={
+            'name': 'contact[email]',
+            'class': 'form-control required'
+        })
+    )
     phone = forms.CharField(
         validators=[telephone],
         widget=PhoneInput(attrs={
-            'x-autocompletetype': 'tel',
-            'required': True,
+            'name': 'contact[phone]',
+            'class': 'form-control required'
         })
     )
-    image = forms.ImageField(
+    dob = forms.DateField(
+        widget=forms.DateInput(attrs={
+            'type': 'date',
+            'name': 'contact[start_date]',
+            'class': 'form-control datepicker required',
+            'data-format': 'yyyy-mm-dd',
+            'data-lang': 'en',
+            'data-RTL': 'false'
+        })
+    )
+    gender = forms.ChoiceField(
+        choices=GENDER,
+        widget=forms.TextInput(attrs={
+           'name': 'contact[position]',
+           'class': 'form-control pointer required'
+        })
+    )
+    avatar = forms.ImageField(
         widget=forms.ClearableFileInput(attrs={
+            'type': 'file',
+            'name': 'contact[attachment]',
             'class': 'form-control',
-            'placeholder': 'Upload scanned copy of ID'
+            'onchange': 'jQuery(this).next("input").val(this.value)'
         })
     )
-    bot_account = forms.CharField()
-    dse_account = forms.CharField()
+    id_choice = forms.ChoiceField(choices=ID_TYPES)
+    id = forms.ImageField(
+        widget=forms.ClearableFileInput(attrs={
+            'type': 'file',
+            'name': 'contact[id_attachment]',
+            'class': 'form-control',
+            'onchange': 'jQuery(this).next("input").val(this.value)'
+        })
+    )
+    id_number = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'name': 'contact[file]',
+            'class': 'form-control',
+        })
+    )
+    bot_account = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'name': 'contact[bot]',
+            'class': 'form-control',
+        })
+    )
+    dse_account = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'name': 'contact[dse]',
+            'class': 'form-control',
+        })
+    )
 
     def clean_email(self):
         username = self.cleaned_data.get('username')

@@ -136,13 +136,14 @@ def edit_profile(request):
     form = EditProfileForm(request.POST or None, request.FILES, initial={
         'fName': user.first_name,
         'lName': user.last_name,
+        'phone': user.username,
+        'email': user.email,
         'dob': user.profile.dob,
         'gender': user.profile.gender,
-        'id': user.profile.client_id,
-        'email': user.email,
+        'avatar': user.profile.avatar,
+        'id_number': user.profile.client_id,
         'bot_account': user.profile.bot_cds,
-        'dse_account': user.profile.dse_cds,
-        'image': user.profile.avatar
+        'dse_account': user.profile.dse_cds
     })
     context = {
         'pForm': form
