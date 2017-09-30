@@ -7,7 +7,7 @@
 {% block content %}
     <!-- EDIT PROFILE -->
     <section>
-        <form class="validate" action="" method="post" enctype="multipart/form-data"
+        <form class="validate" action="{% url 'profile' %} " method="post" enctype="multipart/form-data"
               data-success="Profile updated!" data-toastr-position="top-right">
             <div class="container">
                 <div id="content" class="padding-20">
@@ -22,6 +22,7 @@
                                     <fieldset>
                                         <!-- required [php action request] -->
                                         <input type="hidden" name="action" value="contact_send"/>
+                                        <p>{{ pForm.initial }}</p>
                                         <div class="row">
                                             <div class="col-md-6 col-sm-6">
                                                 <label>First Name *</label>
@@ -74,8 +75,6 @@
                                     </fieldset>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-4">
                             <div class="panel panel-default">
                                 <div class="panel-body">
                                     <fieldset>
@@ -143,6 +142,194 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <div class="col-md-4 offset-md-1">
+                            <div class="box-light">
+                                <!-- .box-light OR .box-dark -->
+                                <div class="row">
+									<!-- GROUPS -->
+									<div class="col-md-12 col-sm-12">
+										<div class="box-inner">
+											<h3>
+												<a class="float-right fs-11 text-warning" href="#">VIEW ALL</a>
+												GROUPS
+											</h3>
+											<div class="h-250 slimscroll" data-always-visible="true" data-size="5px" data-position="right" data-opacity="0.4">
+
+												<div class="clearfix mb-10">
+													<img class="thumbnail float-left rounded" src="" width="40" height="40" alt="" />
+													<h4 class="fs-14 m-0 b-0 p-0 bold"><a href="#">Group 1</a></h4>
+													<span class="fs-12 text-muted">Lorem ipsum dolor sit amet.</span>
+												</div>
+
+												<div class="clearfix mb-10">
+													<img class="thumbnail float-left rounded" src="" width="40" height="40" alt="" />
+													<h4 class="fs-14 m-0 b-0 p-0 bold"><a href="#">Group 2</a></h4>
+													<span class="fs-12 text-muted">Lorem ipsum dolor sit amet.</span>
+												</div>
+
+												<div class="clearfix mb-10">
+													<img class="thumbnail float-left rounded" src="" width="40" height="40" alt="" />
+													<h4 class="fs-14 m-0 b-0 p-0 bold"><a href="#">Group 3</a></h4>
+													<span class="fs-12 text-muted">Lorem ipsum dolor sit amet.</span>
+												</div>
+
+												<div class="clearfix mb-10">
+													<img class="thumbnail float-left rounded" src="" width="40" height="40" alt="" />
+													<h4 class="fs-14 m-0 b-0 p-0 bold"><a href="#">Group 4</a></h4>
+													<span class="fs-12 text-muted">Lorem ipsum dolor sit amet.</span>
+												</div>
+
+												<div class="clearfix mb-10">
+													<img class="thumbnail float-left rounded" src="" width="40" height="40" alt="" />
+													<h4 class="fs-14 m-0 b-0 p-0 bold"><a href="#">Group 5</a></h4>
+													<span class="fs-12 text-muted">Lorem ipsum dolor sit amet.</span>
+												</div>
+											</div>
+										</div>
+									</div>
+									<!-- /GROUPS -->
+								</div>
+
+
+								<div class="row mt-30">
+									<!-- ACTIVITIES -->
+									<div class="col-md-12 col-sm-12">
+										<div class="box-inner">
+											<h3>
+												<a class="float-right fs-11 text-warning" href="#">VIEW ALL</a>
+												ACTIVITIES
+											</h3>
+											<div class="h-250 slimscroll" data-always-visible="true" data-size="5px" data-position="right" data-opacity="0.4" >
+
+												<div class="timeline clearfix mb-20">
+													<div class="timeline-item timeline-item-bordered">
+                                                        <!-- timeline entry -->
+                                                        <div class="timeline-entry rounded"><!-- .rounded = entry -->
+                                                            1<span>Dec</span>
+                                                            <div class="timeline-vline"><!-- vertical line --></div>
+                                                        </div>
+                                                        <!-- /timeline entry -->
+                                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                                    </div>
+												</div>
+
+												<div class="timeline clearfix mb-20">
+													<div class="timeline-item timeline-item-bordered">
+                                                        <!-- timeline entry -->
+                                                        <div class="timeline-entry rounded"><!-- .rounded = entry -->
+                                                            7<span>Dec</span>
+                                                            <div class="timeline-vline"><!-- vertical line --></div>
+                                                        </div>
+                                                        <!-- /timeline entry -->
+                                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                                    </div>
+												</div>
+
+												<div class="timeline clearfix mb-20">
+													<div class="timeline-item timeline-item-bordered">
+                                                        <!-- timeline entry -->
+                                                        <div class="timeline-entry rounded"><!-- .rounded = entry -->
+                                                            14<span>Dec</span>
+                                                            <div class="timeline-vline"><!-- vertical line --></div>
+                                                        </div>
+                                                        <!-- /timeline entry -->
+                                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                                    </div>
+												</div>
+
+												<div class="timeline clearfix mb-20">
+													<div class="timeline-item timeline-item-bordered">
+                                                        <!-- timeline entry -->
+                                                        <div class="timeline-entry rounded"><!-- .rounded = entry -->
+                                                            21<span>Dec</span>
+                                                            <div class="timeline-vline"><!-- vertical line --></div>
+                                                        </div>
+                                                        <!-- /timeline entry -->
+                                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                                    </div>
+												</div>
+
+												<div class="timeline clearfix mb-20">
+													<div class="timeline-item timeline-item-bordered">
+                                                        <!-- timeline entry -->
+                                                        <div class="timeline-entry rounded"><!-- .rounded = entry -->
+                                                            28<span>Dec</span>
+                                                            <div class="timeline-vline"><!-- vertical line --></div>
+                                                        </div>
+                                                        <!-- /timeline entry -->
+                                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                                    </div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<!-- /ACTIVITIES -->
+                                </div>
+                                <div class="row mt-30">
+									<!-- NOTIFICATIONS -->
+									<div class="col-md-12 col-sm-12">
+										<div class="box-inner">
+											<h3>
+												<a class="float-right fs-11 text-warning" href="#">VIEW ALL</a>
+												NOTIFICATIONS
+											</h3>
+											<div class="h-250 slimscroll" data-always-visible="true" data-size="5px" data-position="right" data-opacity="0.4">
+
+												<div class="clearfix mb-20"><!-- notification item -->
+													<span class="badge badge-success badge-square float-left">
+														<i class="fa fa-comment"></i>
+													</span>
+													<span class="fs-14 text-muted"><b>New Comment</b>: <a href="">Lorem ipsum Dolor</a></span>
+												</div><!-- /notification item -->
+
+												<div class="clearfix mb-20"><!-- notification item -->
+													<span class="badge badge-danger badge-square float-left">
+														<i class="fa fa-remove"></i>
+													</span>
+													<span class="fs-14 text-muted"><b>Rejected</b>: <a href="#">Joana Doe</a> rejected friendship</span>
+												</div><!-- /notification item -->
+
+												<div class="clearfix mb-20"><!-- notification item -->
+													<span class="badge badge-warning badge-square float-left">
+														<i class="fa fa-warning"></i>
+													</span>
+													<span class="fs-14 text-muted"><b>Warning</b>: Lorem ipsum Dolor</span>
+												</div><!-- /notification item -->
+
+												<div class="clearfix mb-20"><!-- notification item -->
+													<span class="badge badge-info badge-square float-left">
+														<i class="fa fa-info-circle"></i>
+													</span>
+													<span class="fs-14 text-muted"><b>Info</b>: Lorem ipsum Dolor</span>
+												</div><!-- /notification item -->
+
+												<div class="clearfix mb-20"><!-- notification item -->
+													<span class="badge badge-primary badge-square float-left">
+														<i class="fa fa-check"></i>
+													</span>
+													<span class="fs-14 text-muted"><b>Primary</b>: Lorem ipsum Dolor</span>
+												</div><!-- /notification item -->
+
+												<div class="clearfix mb-20"><!-- notification item -->
+													<span class="badge badge-default badge-square float-left">
+														<i class="fa fa-heart-o"></i>
+													</span>
+													<span class="fs-14 text-muted"><b>Default</b>: Lorem ipsum Dolor</span>
+												</div><!-- /notification item -->
+
+												<div class="clearfix mb-20"><!-- notification item -->
+													<span class="badge badge-purple badge-square float-left">
+														<i class="fa fa-clock-o"></i>
+													</span>
+													<span class="fs-14 text-muted"><b>Various</b>: Lorem ipsum Dolor</span>
+												</div><!-- /notification item -->
+											</div>
+										</div>
+									</div>
+									<!-- /NOTIFICATIONS -->
+								</div>
+							</div>
                         </div>
                         <hr/>
                     </div>

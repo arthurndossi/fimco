@@ -131,10 +131,10 @@ def log_out(request):
 
 
 @login_required
-def edit_profile(request):
+def view_profile(request):
     user = request.user
-    form = EditProfileForm(request.POST or None, request.FILES, initial={
-        'fName': user.first_name,
+    form = EditProfileForm(None, request.FILES, initial={
+        'fName': 'First',
         'lName': user.last_name,
         'phone': user.username,
         'email': user.email,
@@ -150,6 +150,30 @@ def edit_profile(request):
     }
 
     return render(request, "profile.html", context)
+
+
+@login_required
+def edit_profile(request):
+    user = request.user
+    form = EditProfileForm(request.POST, request.FILES)
+    if request.method == 'POST':
+        if form.is_valid():
+            user.first_name = request.POST['fName']
+            user.last_name = request.POST['lName']
+            user.email = request.POST['email']
+            user.username = request.POST['phone']
+            user.profile.dob = request.POST['dob']
+            user.profile.gender = request.POST['gender']
+            user.profile.avatar = request.FILES['avatar']
+            user.profile.client_id = request.POST['id_number']
+            user.profile.bot_cds = request.POST['bot_account']
+            user.profile.dse_cds = request.POST['dse_account']
+            user.save()
+            user.profile.save()
+
+            return redirect(view_profile)
+    else:
+        return redirect(edit_profile)
 
 
 def terms(request):

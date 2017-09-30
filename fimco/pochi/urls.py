@@ -15,6 +15,7 @@ urlpatterns = [
     url(r'^withdraw$', views.withdraw, name='withdraw'),
     url(r'^add$', views.add_funds, name='add'),
     url(r'^create/group$', views.new_group, name='group'),
+    url(r'^edit/group$', views.edit_group, name='grp_edt'),
     url(r'^markets$', views.markets, name='markets'),
     url(r'^exchange', views.exchange_rates, name='exchange'),
     url(r'^interests$', views.interest_rates, name='interests'),

@@ -1,14 +1,118 @@
 {% extends "pochi/main.html" %}
 {% block links %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/formvalidation@0.6.2-dev/dist/css/formValidation.min.css">
 {#    <link href="/static/pochi/css/group.css" rel="stylesheet" type="text/css" />#}
 {% endblock %}
 {% block content %}
     <section id="middle">
         <div id="content" class="dashboard padding-20">
+            <div class="page-profile">
+                <div class="row">
+                    <!-- COL 1 -->
+                    <div class="col-md-8 col-lg-8">
+                        <div class="tabs white nomargin-top">
+                            <ul class="nav nav-tabs tabs-primary">
+                                <li class="active">
+                                    <a href="#overview" data-toggle="tab">Create group</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <!-- Overview -->
+                                <div id="overview" class="tab-pane active">
+                                    <form class="form-horizontal" method="get">
+                                        <h4>Group Information</h4>
+                                        <fieldset>
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label" for="profileGroupName">Group Name</label>
+                                                <div class="col-md-8">
+                                                    <input type="text" class="form-control" id="profileGroupName">
+                                                </div>
+                                            </div>
+                                        </fieldset>
 
+                                        <hr />
+
+                                        <h4>Add Members</h4>
+                                        <fieldset>
+                                            <div class="form-group">
+                                                <label class="col-xs-3 control-label">Member</label>
+                                                <div class="col-xs-5">
+                                                    <input type="text" class="form-control" name="option[]"  title=""/>
+                                                </div>
+                                                <div class="col-xs-4">
+                                                    <button type="button" class="btn btn-default addButton"><i class="fa fa-plus"></i></button>
+                                                </div>
+                                            </div>
+
+                                            <!-- The option field template containing an option field and a Remove button -->
+                                            <div class="form-group hide" id="optionTemplate">
+                                                <div class="col-xs-offset-3 col-xs-5">
+                                                    <input class="form-control" type="text" name="option[]" title=""/>
+                                                </div>
+                                                <div class="col-xs-4">
+                                                    <button type="button" class="btn btn-default removeButton"><i class="fa fa-minus"></i></button>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+
+                                        <hr />
+
+                                        <h4>About</h4>
+                                        <fieldset>
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label" for="groupPurpose">Purpose Info</label>
+                                                <div class="col-md-8">
+                                                    <textarea class="form-control" rows="3" id="groupPurpose"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="sky-form">
+                                                    <label class="col-xs-3 control-label">Group Image</label>
+                                                    <div class="col-md-8">
+                                                        <label for="file" class="input input-file">
+                                                            <input type="file" id="file">
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+
+                                        <hr />
+
+                                        <h4>Password</h4>
+                                        <fieldset class="mb-xl">
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label" for="newPassword">Password</label>
+                                                <div class="col-md-8">
+                                                    <input type="text" class="form-control" id="newPassword">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label" for="newPasswordRepeat">Verify</label>
+                                                <div class="col-md-8">
+                                                    <input type="text" class="form-control" id="newPasswordRepeat">
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                        <div class="row">
+                                            <div class="col-md-9 col-md-offset-3">
+                                                <button type="submit" class="btn btn-primary">Submit</button>
+                                                <button type="reset" class="btn btn-default">Reset</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /COL 1 -->
+                </div>
+            </div>
         </div>
     </section>
 {% endblock %}
 {% block scripts %}
-{#    <script type="text/javascript" src="/static/pochi/js/group.js"></script>#}
+    <script src="https://cdn.jsdelivr.net/npm/formvalidation@0.6.2-dev/dist/js/formValidation.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/formvalidation@0.6.2-dev/dist/js/framework/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/static/pochi/js/group.js"></script>
 {% endblock %}

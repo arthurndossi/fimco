@@ -96,6 +96,10 @@ def new_group(request):
     return render(request, 'pochi/group.html', {})
 
 
+def edit_group(request):
+    return render(request, 'pochi/edit_group.html', {})
+
+
 @login_required
 def markets(request):
     if request.user is not None and request.user.is_authenticated():

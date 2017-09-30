@@ -1,0 +1,214 @@
+{% extends "pochi/main.html" %}
+{% block links %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/formvalidation@0.6.2-dev/dist/css/formValidation.min.css">
+{#    <link href="/static/pochi/css/group.css" rel="stylesheet" type="text/css" />#}
+{% endblock %}
+{% block content %}
+    <section id="middle">
+        <div id="content" class="dashboard padding-20">
+            <div class="page-profile">
+                <div class="row">
+                    <!-- COL 1 -->
+                    <div class="col-md-8 col-lg-8">
+                        <section class="panel panel-default">
+                            <header class="panel-heading">
+                                <h2 class="panel-title elipsis">
+                                    Edit group
+                                </h2>
+                            </header>
+                            <div class="panel-body">
+                                <!-- Edit -->
+                                <div id="edit">
+                                    <form class="form-horizontal" method="get">
+                                        <h4>Change Group Information</h4>
+                                        <fieldset>
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label" for="changeGroupName">Group Name</label>
+                                                <div class="col-md-8">
+                                                    <input type="text" class="form-control" id="changeGroupName">
+                                                </div>
+                                            </div>
+                                        </fieldset>
+
+                                        <hr />
+
+                                        <h4>Add Members</h4>
+                                        <fieldset>
+                                            <div class="form-group">
+                                                <label class="col-xs-3 control-label">Member</label>
+                                                <div class="col-xs-5">
+                                                    <input type="text" class="form-control" name="option[]"  title=""/>
+                                                </div>
+                                                <div class="col-xs-4">
+                                                    <button type="button" class="btn btn-default addButton"><i class="fa fa-plus"></i></button>
+                                                </div>
+                                            </div>
+
+                                            <!-- The option field template containing an option field and a Remove button -->
+                                            <div class="form-group hide" id="optionTemplate">
+                                                <div class="col-xs-offset-3 col-xs-5">
+                                                    <input class="form-control" type="text" name="option[]" title=""/>
+                                                </div>
+                                                <div class="col-xs-4">
+                                                    <button type="button" class="btn btn-default removeButton"><i class="fa fa-minus"></i></button>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+
+                                        <hr />
+
+                                        <h4>Remove Members</h4>
+                                        <fieldset>
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label" for="removeMember">Member</label>
+                                                <div class="col-md-8">
+                                                    <input type="text" class="form-control" id="removeMember">
+                                                </div>
+                                            </div>
+                                        </fieldset>
+
+                                        <hr />
+
+                                        <h4>About</h4>
+                                        <fieldset>
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label" for="profileBio">Purpose Info</label>
+                                                <div class="col-md-8">
+                                                    <textarea class="form-control" rows="3" id="profileBio"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="sky-form">
+                                                    <label class="col-xs-3 control-label">Group Image</label>
+                                                    <div class="col-md-8">
+                                                        <label for="file" class="input input-file">
+                                                            <div class="button">
+                                                                <input type="file" id="file" onchange="this.parentNode.nextSibling.value = this.value">Browse
+                                                            </div>
+                                                            <input type="text" readonly>
+                                                        </label>
+                                                        <a href="#" class="btn btn-danger btn-xs nomargin"><i class="fa fa-times"></i> Remove Current Image</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+
+                                        <hr />
+
+                                        <h4>Change Password</h4>
+                                        <fieldset class="mb-xl">
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label" for="changePassword">New Password</label>
+                                                <div class="col-md-8">
+                                                    <input type="text" class="form-control" id="changePassword">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label" for="changePasswordRepeat">Repeat New Password</label>
+                                                <div class="col-md-8">
+                                                    <input type="text" class="form-control" id="changePasswordRepeat">
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                        <div class="row">
+                                            <div class="col-md-9 col-md-offset-3">
+                                                <button type="submit" class="btn btn-primary">Submit</button>
+                                                <button type="reset" class="btn btn-default">Reset</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                    <!-- /COL 1 -->
+
+                    <!-- COL 2 -->
+                    <div class="col-md-4 col-lg-4">
+                        <!-- activity -->
+                        <section class="panel panel-default">
+                            <header class="panel-heading">
+                                <h2 class="panel-title elipsis">
+                                    <i class="fa fa-rss"></i> Activity
+                                </h2>
+                            </header>
+
+                            <div class="panel-body noradius padding-10">
+                                <!-- activity list -->
+                                <div class="row profile-activity">
+                                    <!-- activity item -->
+                                    <div class="col-xs-2 col-sm-1">
+                                        <time datetime="2014-06-29" class="datebox">
+                                            <strong>Jun</strong>
+                                            <span>29</span>
+                                        </time>
+                                    </div>
+
+                                    <div class="col-xs-10 col-sm-11">
+                                        <h6><a href="">Lorem ipsum dolor sit amet</a></h6>
+                                        <p>
+                                            Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod
+                                            tincidunt laoreet dolore magna aliquam tincidunt erat volutpat laoreet dolore magna aliquam
+                                            tincidunt erat volutpat.
+                                        </p>
+                                    </div>
+                                    <!-- /activity item -->
+
+                                    <div class="col-sm-12">
+                                        <hr class="half-margins" />
+                                    </div><!-- /activity separator -->
+
+                                    <!-- activity item -->
+                                    <div class="col-xs-2 col-sm-1">
+                                        <time datetime="2014-06-29" class="datebox">
+                                            <strong>Jun</strong>
+                                            <span>29</span>
+                                        </time>
+                                    </div>
+
+                                    <div class="col-xs-10 col-sm-11">
+                                        <h6><a href="">Sed diam nonummy nibh euismod</a></h6>
+                                        <p>
+                                            Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod
+                                            tincidunt laoreet dolore magna aliquam tincidunt erat volutpat laoreet dolore magna aliquam
+                                            tincidunt erat volutpat.
+                                        </p>
+                                    </div>
+                                    <!-- /activity item -->
+
+                                    <div class="col-sm-12">
+                                        <hr class="half-margins" />
+                                    </div><!-- /activity separator -->
+
+
+                                </div>
+                                <!-- /activity list -->
+                            </div>
+                            <div class="panel-footer">
+                                <!-- pagination -->
+                                <div class="text-center">
+                                    <ul class="pagination pagination-sm">
+                                        <li class="disabled"><a href="#">Prev</a></li>
+                                        <li class="active"><a href="#">1</a></li>
+                                        <li><a href="#">2</a></li>
+                                        <li><a href="#">3</a></li>
+                                        <li><a href="#">4</a></li>
+                                        <li><a href="#">Next</a></li>
+                                    </ul>
+                                </div>
+                                <!-- /pagination -->
+                            </div>
+                        </section>
+                        <!-- /activity -->
+                    </div>
+                    <!-- /COL 3 -->
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+{% block scripts %}
+    <script src="https://cdn.jsdelivr.net/npm/formvalidation@0.6.2-dev/dist/js/formValidation.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/formvalidation@0.6.2-dev/dist/js/framework/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/static/pochi/js/group.js"></script>
+{% endblock %}
