@@ -3,9 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="2bb6a40e-3dd1-4683-a1ae-6832ed7492de" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fimco/fimcosite/templates/index.html" afterPath="$PROJECT_DIR$/fimco/fimcosite/templates/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fimco/pochi/templates/pochi/deposit.html" afterPath="$PROJECT_DIR$/fimco/pochi/templates/pochi/deposit.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fimco/pochi/templates/pochi/main.html" afterPath="$PROJECT_DIR$/fimco/pochi/templates/pochi/main.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fimco/fimcosite/urls.py" afterPath="$PROJECT_DIR$/fimco/fimcosite/urls.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -66,7 +64,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/fimco/fimcosite/templates/index.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="278">
@@ -87,6 +85,38 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/fimco/fimcosite/views.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="17">
+              <caret line="26" column="19" lean-forward="true" selection-start-line="26" selection-start-column="19" selection-end-line="26" selection-end-column="19" />
+              <folding>
+                <element signature="e#0#51#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="urls.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/fimco/fimcosite/urls.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="238">
+              <caret line="16" column="25" lean-forward="true" selection-start-line="16" selection-start-column="25" selection-end-line="16" selection-end-column="25" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="urls.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/fimco/pochi/urls.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="319">
+              <caret line="31" column="0" lean-forward="true" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
     </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
@@ -101,7 +131,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>pict</find>
       <find>login(</find>
       <find>macb</find>
       <find>rev-bu</find>
@@ -131,6 +160,7 @@
       <find>process</find>
       <find>rs-230</find>
       <find>rs-228</find>
+      <find>acco</find>
     </findStrings>
     <replaceStrings>
       <replace>static</replace>
@@ -205,7 +235,6 @@
         <option value="$PROJECT_DIR$/fimco/pochi/static/pochi/js/ajax.js" />
         <option value="$PROJECT_DIR$/fimco/fimcosite/templates/edit_profile.html" />
         <option value="$PROJECT_DIR$/fimco/fimcosite/forms.py" />
-        <option value="$PROJECT_DIR$/fimco/fimcosite/urls.py" />
         <option value="$PROJECT_DIR$/fimco/fimcosite/views.py" />
         <option value="$PROJECT_DIR$/fimco/fimcosite/static/js/profile.js" />
         <option value="$PROJECT_DIR$/fimco/pochi/static/pochi/js/group.js" />
@@ -218,6 +247,7 @@
         <option value="$PROJECT_DIR$/fimco/pochi/templates/pochi/main.html" />
         <option value="$PROJECT_DIR$/fimco/pochi/templates/pochi/deposit.html" />
         <option value="$PROJECT_DIR$/fimco/fimcosite/templates/index.html" />
+        <option value="$PROJECT_DIR$/fimco/fimcosite/urls.py" />
       </list>
     </option>
   </component>
@@ -273,6 +303,24 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="fimco" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="FIMCO" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="FIMCO" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="fimco" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="pochi" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -721,7 +769,14 @@
       <option name="project" value="LOCAL" />
       <updated>1506828471239</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="made changes to home page">
+      <created>1506955985291</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1506955985291</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="TodoView">
@@ -785,7 +840,8 @@
     <MESSAGE value="added create and edit group" />
     <MESSAGE value="added static root to settings" />
     <MESSAGE value="changed allowed hosts in settings" />
-    <option name="LAST_COMMIT_MESSAGE" value="changed allowed hosts in settings" />
+    <MESSAGE value="made changes to home page" />
+    <option name="LAST_COMMIT_MESSAGE" value="made changes to home page" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -981,21 +1037,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fimco/fimcosite/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="172">
-          <caret line="171" column="31" lean-forward="true" selection-start-line="171" selection-start-column="31" selection-end-line="171" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fimco/fimcosite/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="5" column="42" lean-forward="true" selection-start-line="5" selection-start-column="42" selection-end-line="5" selection-end-column="42" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://D:/DOWNLOADS/Smarty - Website + Admin + RTL Template/Admin/Admin_BS3/page-user-profile.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="243">
@@ -1123,14 +1164,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fimco/pochi/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="169">
-          <caret line="19" column="61" lean-forward="true" selection-start-line="19" selection-start-column="61" selection-end-line="19" selection-end-column="61" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://D:/DOWNLOADS/Smarty - Website + Admin + RTL Template/HTML_BS4/shortcode-process-steps.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="204">
@@ -1171,6 +1204,32 @@
             <marker date="1506955927042" expanded="false" signature="59731:59758" ph="..." />
             <marker date="1506955927042" expanded="false" signature="60215:60242" ph="..." />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fimco/fimcosite/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="26" column="19" lean-forward="true" selection-start-line="26" selection-start-column="19" selection-end-line="26" selection-end-column="19" />
+          <folding>
+            <element signature="e#0#51#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fimco/pochi/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="319">
+          <caret line="31" column="0" lean-forward="true" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fimco/fimcosite/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="16" column="25" lean-forward="true" selection-start-line="16" selection-start-column="25" selection-end-line="16" selection-end-column="25" />
+          <folding />
         </state>
       </provider>
     </entry>
