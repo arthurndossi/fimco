@@ -24,7 +24,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 SECRET_KEY = '+_yzro^08snp%$_640dl1aqk#zm+%+2)ckj5#bhbid#_k&bbx8'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['54.172.71.184', 'www.fimco.co.tz', '127.0.0.1']
 
@@ -78,14 +78,11 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'fimco',
-        'USER': 'fimcouser',
-        'PASSWORD': 'pochi111',
-        'HOST': 'fimcocluster-1.cluster-coakgirdcjlf.us-east-1.rds.amazonaws.com',
-        'PORT': '3306',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
