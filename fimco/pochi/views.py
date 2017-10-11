@@ -66,7 +66,7 @@ def withdraw(request):
         trans.save()
         resp = {
             'status': 'success',
-            'msg': 'TZS' + amount + ' has been deducted from your account.'
+            'msg': 'TZS ' + amount + ' has been deducted from your account.'
         }
         return JsonResponse(resp)
     else:
