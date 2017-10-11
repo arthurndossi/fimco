@@ -105,9 +105,7 @@ class RegisterForm(forms.Form):
         cleaned_data = self.cleaned_data
         if User.objects.filter(username=cleaned_data['phone']).exists():
             raise forms.ValidationError("This phone number is already associated with another user!")
-        password1 = cleaned_data["password"]
-        password2 = cleaned_data["verify"]
-        if password1 != password2:
+        if 'password' in cleaned_data and 'verify' in cleaned_data and cleaned_data['password'] != cleaned_data['verify']:
             raise forms.ValidationError("Passwords must be identical.")
 
         return cleaned_data
