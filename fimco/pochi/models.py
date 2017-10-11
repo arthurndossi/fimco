@@ -1,12 +1,11 @@
 from __future__ import unicode_literals
 
-from datetime import datetime
-
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 from django.db import models
 
 # from fimco.fimcosite.models import Profile
+from django.utils import timezone
 
 telephone = RegexValidator(r'^([+]?(\d{1,3}\s?)|[0])\s?\d+(\s?\-?\d{2,4}){1,3}?$', 'Not a valid phone number.')
 
@@ -59,7 +58,7 @@ class Transactions(models.Model):
     )
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     msisdn = models.CharField(max_length=10, db_index=True, default='NA')
-    trans_timestamp = models.DateTimeField(default=datetime.utcnow)
+    trans_timestamp = models.DateTimeField(default=timezone.now)
     processed_timestamp = models.DateTimeField(null=True)
     amount = models.CharField(max_length=25)
     currency = models.CharField(max_length=3, default='TZS')
