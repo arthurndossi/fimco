@@ -39,7 +39,7 @@ def p2p(request):
     except Transactions.DoesNotExist:
         bal = 0
     if request.method == "POST":
-        phone = request.POST['phone']
+        phone = request.POST['phone'].strip()
         amount = request.POST['amount']
         trans = Transactions(user=request.user, msisdn=phone, amount=amount, type='P', open_bal=bal)
         trans.save()
@@ -47,7 +47,7 @@ def p2p(request):
         # Call API
         resp = {
             'status': 'success',
-            'msg': 'TZS' + amount + ' has been transferred to ' + phone + '.'
+            'msg': 'TZS ' + amount + ' has been transferred to ' + phone + '.'
         }
         return JsonResponse(resp)
     else:
@@ -60,7 +60,7 @@ def withdraw(request):
     except Transactions.DoesNotExist:
         bal = 0
     if request.method == "POST":
-        phone = request.POST['phone']
+        phone = request.POST['phone'].strip()
         amount = request.POST['amount']
         trans = Transactions(user=request.user, msisdn=phone, amount=amount, type='W', open_bal=bal)
         trans.save()
@@ -85,7 +85,7 @@ def add_funds(request):
         trans.save()
         resp = {
             'status': 'success',
-            'msg': 'TZS' + amount + ' has been added to your account.'
+            'msg': 'TZS ' + amount + ' has been added to your account.'
         }
         return JsonResponse(resp)
     else:
