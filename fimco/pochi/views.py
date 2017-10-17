@@ -1,9 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
-
 from django.template.response import TemplateResponse
-from djpjax import pjax
 
 from .models import Transactions
 
@@ -109,12 +107,13 @@ def create_group(request):
         first_admin = request.POST['first']
         sec_admin = request.POST['second']
         import json
-        item_list = json.loads(member_list)
-        print (item_list)
-        from fimco.fimcosite.models import JointAccount
+        members = json.loads(member_list)
+        print (members)
+        from .models import JointAccount
         group = JointAccount.objects.create(
             group_name=groupName,
             purpose=purpose,
+            members=members,
             first_admin=first_admin,
             sec_admin=sec_admin
         )

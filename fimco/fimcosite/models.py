@@ -22,7 +22,7 @@ class MemberProfile(models.Model):
         ('FAIL', 'UNSUCCESSFUL'),
         ('DONE', 'PENDING')
     )
-    user = models.OneToOneField(User, related_name='member', on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
     dob = models.DateField(null=True)
     gender = models.CharField(max_length=1, choices=GENDER, default='M')
@@ -55,22 +55,4 @@ class MemberProfile(models.Model):
     def __str__(self):
         return self.pochi_id
 
-    # post_save.connect(create_user_profile, sender=User)
-
-
-class JointAccount(models.Model):
-    group_name = models.CharField(max_length=30, unique=True)
-    purpose = models.CharField(max_length=30, null=True)
-    first_admin = models.CharField(max_length=30)
-    sec_admin = models.CharField(max_length=30, null=True)
-    pochi_id = models.CharField(max_length=20, null=True)
-    members = models.CharField(max_length=100, null=True)
-    created_at = models.DateTimeField()
-
-    def __str__(self):
-        return self.group_name
-
-
-class JointAccountMembers(models.Model):
-    member = models.ForeignKey('MemberProfile', on_delete=models.CASCADE)
-    group = models.ForeignKey('JointAccount', related_name='group_members', on_delete=models.CASCADE)
+    post_save.connect(create_user_profile, sender=User)

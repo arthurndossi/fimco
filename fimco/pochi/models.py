@@ -1,5 +1,7 @@
 from __future__ import unicode_literals
 
+import uuid
+
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 from django.db import models
@@ -43,6 +45,27 @@ class Exchange(models.Model):
     percentage_change = models.DecimalField(max_digits=4, decimal_places=2)
     bid = models.DecimalField(max_digits=7, decimal_places=4)
     offer = models.DecimalField(max_digits=6, decimal_places=4)
+
+
+class JointAccount(models.Model):
+    group_name = models.CharField(max_length=30, unique=True)
+    purpose = models.CharField(max_length=30, null=True)
+    first_admin = models.CharField(max_length=30)
+    sec_admin = models.CharField(max_length=30, null=True)
+    pochi_id = models.CharField(max_length=20, null=True)
+    members = models.CharField(max_length=100, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.group_name
+
+    def save(self, *args, **kwargs):
+        if not self.pochi_id:
+            # This code only happens if the objects is
+            # not in the database yet. Otherwise it would
+            # have pk
+            self.pochi_id = uuid.uuid4().hex[:6].upper()
+        super(JointAccount, self).save(args, kwargs)
 
 
 class Transactions(models.Model):
