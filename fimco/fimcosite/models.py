@@ -59,14 +59,12 @@ class MemberProfile(models.Model):
 
 
 class JointAccount(models.Model):
-    # Group ID
     group_name = models.CharField(max_length=30, unique=True)
     purpose = models.CharField(max_length=30, null=True)
     first_admin = models.CharField(max_length=30)
     sec_admin = models.CharField(max_length=30, null=True)
     pochi_id = models.CharField(max_length=20, null=True)
-    members = models.ManyToManyField(MemberProfile)
-    # members_count = models.IntegerField()
+    members = models.CharField(max_length=100, null=True)
     created_at = models.DateTimeField()
 
     def __str__(self):

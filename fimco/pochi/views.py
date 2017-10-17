@@ -141,7 +141,6 @@ def exchange_rates(request):
     #     return redirect('login')
 
 
-@pjax("all_rates")
 def interest_rates(request):
     # if request.user is not None and request.user.is_authenticated():
     interests = {
