@@ -43,11 +43,10 @@ class MemberProfile(models.Model):
 
     @receiver(post_save, sender=User)
     def save_user_profile(sender, instance, **kwargs):
-        instance.member.save()
+        instance.memberprofile.save()
 
     def clean(self):
         self.status = 'DONE'
-        # self.register_date = datetime.date
         if self.get_status_display() == 'SUCCESSFUL':
             self.client_id = uuid.uuid4().hex[:6].upper()
             self.pin = uuid.uuid4().hex[:4].upper()

@@ -107,7 +107,7 @@ def register(request):
             bot = form.cleaned_data['bot_cds']
             dse = form.cleaned_data['dse_cds']
             user = User.objects.create_user(phone, email, password, first_name=fName, last_name=lName)
-            profile = user.member
+            profile = user.memberprofile
             profile.birth_date = dob
             profile.gender = gender
             profile.identity = client_id

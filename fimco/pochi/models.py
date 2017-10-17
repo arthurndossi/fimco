@@ -59,14 +59,6 @@ class JointAccount(models.Model):
     def __str__(self):
         return self.group_name
 
-    def save(self, *args, **kwargs):
-        if not self.pochi_id:
-            # This code only happens if the objects is
-            # not in the database yet. Otherwise it would
-            # have pk
-            self.pochi_id = uuid.uuid4().hex[:6].upper()
-        super(JointAccount, self).save(args, kwargs)
-
 
 class Transactions(models.Model):
     TYPES = (

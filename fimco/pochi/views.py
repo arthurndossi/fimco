@@ -1,3 +1,5 @@
+import uuid
+
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
@@ -111,6 +113,7 @@ def create_group(request):
         print (members)
         from .models import JointAccount
         group = JointAccount.objects.create(
+            pochi_id=uuid.uuid4().hex[:6].upper(),
             group_name=groupName,
             purpose=purpose,
             members=members,
