@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -37,7 +38,7 @@ def blog_view(request):
 
 
 def blog_single_view(request, article):
-    return render(request, 'blog-single-page.html', {})
+    return render(request, 'blog-single-page.html', {'article': article})
 
 
 def info(request):
@@ -71,18 +72,21 @@ def login_view(request):
 
 def validate(request):
     if request.method == 'POST':
-        form = LoginForm(request.POST)
+        form = LoginForm(request.POST or None)
         if form.is_valid():
-            phone = request.POST['phone']
-            password = request.POST['password']
-            user = authenticate(username=phone, password=password)
-            if user is not None:
+            username = request.POST["phone"]
+            password = request.POST["password"]
+            user = authenticate(username=username, password=password)
+            if user:
                 login(request, user)
                 return redirect(request.GET.get('next', 'index'))
+            else:
+                messages.add_message(request, messages.ERROR, 'Incorrect credentials!')
+                return render(request, 'login.html', {'lForm': form})
         else:
             return render(request, 'login.html', {'lForm': form})
     else:
-        return redirect(login)
+        return redirect(login_view)
 
 
 def register(request):
@@ -103,7 +107,7 @@ def register(request):
             bot = form.cleaned_data['bot_cds']
             dse = form.cleaned_data['dse_cds']
             user = User.objects.create_user(phone, email, password, first_name=fName, last_name=lName)
-            profile = user.profile
+            profile = user.member
             profile.birth_date = dob
             profile.gender = gender
             profile.identity = client_id
@@ -114,7 +118,6 @@ def register(request):
             profile.bot_account = bot
             profile.dse_account = dse
             profile.save()
-            # user.save()
 
             return redirect(index)
         else:

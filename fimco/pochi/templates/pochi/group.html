@@ -19,13 +19,17 @@
                             <div class="tab-content">
                                 <!-- Overview -->
                                 <div id="overview" class="tab-pane active">
-                                    <form class="form-horizontal" method="get">
+                                    <form class="form-horizontal" method="post" action="{% url 'create_group' %}">
+                                        {% csrf_token %}
                                         <h4>Group Information</h4>
                                         <fieldset>
                                             <div class="form-group">
                                                 <label class="col-md-3 control-label" for="profileGroupName">Group Name</label>
                                                 <div class="col-md-8">
-                                                    <input type="text" class="form-control" id="profileGroupName">
+                                                    <input type="text"
+                                                           class="form-control"
+                                                           id="profileGroupName"
+                                                           name="profileGroupName">
                                                 </div>
                                             </div>
                                         </fieldset>
@@ -37,7 +41,7 @@
                                             <div class="form-group">
                                                 <label class="col-xs-3 control-label">Member</label>
                                                 <div class="col-xs-5">
-                                                    <input type="text" class="form-control" name="option[]"  title=""/>
+                                                    <input type="text" class="form-control" name="option[]" title=""/>
                                                 </div>
                                                 <div class="col-xs-4">
                                                     <button type="button" class="btn btn-default addButton"><i class="fa fa-plus"></i></button>
@@ -53,6 +57,33 @@
                                                     <button type="button" class="btn btn-default removeButton"><i class="fa fa-minus"></i></button>
                                                 </div>
                                             </div>
+
+                                            <div class="row">
+                                                <div class="col-xs-4 mid-align">
+                                                    <button type="button" id="done" class="btn btn-primary">
+                                                        <i class="fa fa-check"></i>Choose an admin
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div id="first-admin" class="fancy-form fancy-form-select" style="display: none">
+                                                        <select class="form-control" id="first" name="first" title="admin">
+                                                            <option value="">Select first admin</option>
+                                                        </select>
+                                                        <i class="fancy-arrow"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div id="second-admin" class="fancy-form fancy-form-select" style="display: none">
+                                                        <select class="form-control" id="second" name="second" title="admin">
+                                                            <option value="">Select second admin</option>
+                                                        </select>
+                                                        <i class="fancy-arrow"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </fieldset>
 
                                         <hr />
@@ -62,41 +93,25 @@
                                             <div class="form-group">
                                                 <label class="col-md-3 control-label" for="groupPurpose">Purpose Info</label>
                                                 <div class="col-md-8">
-                                                    <textarea class="form-control" rows="3" id="groupPurpose"></textarea>
+                                                    <textarea class="form-control" rows="3" id="groupPurpose" name="groupPurpose"></textarea>
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <div class="sky-form">
-                                                    <label class="col-xs-3 control-label">Group Image</label>
+                                                    <label class="col-xs-3 control-label">Group Image <small>(Optional)</small></label>
                                                     <div class="col-md-8">
                                                         <label for="file" class="input input-file">
-                                                            <input type="file" id="file">
+                                                            <input type="file" id="file" name="image">
                                                         </label>
                                                     </div>
                                                 </div>
                                             </div>
                                         </fieldset>
 
-                                        <hr />
-
-                                        <h4>Password</h4>
-                                        <fieldset class="mb-xl">
-                                            <div class="form-group">
-                                                <label class="col-md-3 control-label" for="newPassword">Password</label>
-                                                <div class="col-md-8">
-                                                    <input type="text" class="form-control" id="newPassword">
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="col-md-3 control-label" for="newPasswordRepeat">Verify</label>
-                                                <div class="col-md-8">
-                                                    <input type="text" class="form-control" id="newPasswordRepeat">
-                                                </div>
-                                            </div>
-                                        </fieldset>
                                         <div class="row">
                                             <div class="col-md-9 col-md-offset-3">
-                                                <button type="submit" class="btn btn-primary">Submit</button>
+                                                <input type="hidden" id="members" name="members" value=""/>
+                                                <button type="submit" class="btn btn-primary">Form Group</button>
                                                 <button type="reset" class="btn btn-default">Reset</button>
                                             </div>
                                         </div>

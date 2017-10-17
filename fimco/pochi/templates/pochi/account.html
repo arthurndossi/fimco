@@ -1,0 +1,85 @@
+{% extends "pochi/main.html" %}
+{% block links %}
+    <link href="/static/pochi/css/dashboard.css" rel="stylesheet" type="text/css" />
+    <link href="/static/pochi/css/navyblue.css" rel="stylesheet" type="text/css" />
+{% endblock %}
+{% block content %}
+    <section id="middle">
+        <div id="content" class="dashboard padding-20">
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading panel-heading-transparent">
+                        <strong>Mobile Money</strong>
+                    </div>
+                    <div class="panel-body">
+                        <div class="fancy-form fancy-form-select">
+                            <select class="form-control">
+                                <option value="none">None</option>
+                                <option value="tigopesa">TIGO-PESA</option>
+                                <option value="airtelmoney">AIRTEL-MONEY</option>
+                                <option value="mpesa">M-PESA</option>
+                            </select>
+                            <i class="fancy-arrow"></i>
+                        </div>
+
+                        <br />
+
+                        <label>Add account Phone Number</label>
+                        <div class="fancy-form"><!-- input -->
+                            <i class="fa fa-phone-square"></i>
+
+                            <input type="text" class="form-control masked" data-format="0999 999999" placeholder="Enter telephone">
+
+                            <span class="fancy-tooltip top-left">
+                                <em>Type Your Phone Number</em>
+                            </span>
+                        </div><!-- /input -->
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading panel-heading-transparent">
+                        <strong>Bank Account</strong>
+                    </div>
+                    <div class="panel-body">
+                        <div class="fancy-form fancy-form-select">
+                            <select class="form-control">
+                                <option value="">Select bank</option>
+                                <option value="1">CRDB</option>
+                                <option value="2">NMB</option>
+                                <option value="3">AMANA BANK</option>
+                            </select>
+                            <i class="fancy-arrow"></i>
+                        </div>
+
+                        <br />
+
+                        <div class="row">
+                            <div class="col-md-8">
+                                <label>Card number</label>
+                                <input type="text" class="form-control masked" data-format="9999-9999-9999-9999"
+                                       data-placeholder="_" placeholder="999-99-999-9999-9">
+                            </div>
+                            <div class="col-md-4">
+                                <label>CVV2 number</label>
+                                <input type="text" class="form-control masked" data-format="999"
+                                       data-placeholder="_" placeholder="999">
+                            </div>
+                        </div>
+
+                        <br />
+
+                        <label>Account number</label>
+                        <input type="text" class="form-control masked" data-format="999999999999999">
+
+                        <br />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+{% block scripts %}
+    <script type="text/javascript" src="/static/pochi/js/"></script>
+{% endblock %}

@@ -9,7 +9,7 @@
             <div class="row">
                 <div class="col-md-6 col-sm-6 offset-md-3 offset-sm-3">
                     {% if rForm.errors %}
-                        {% for error in rForm.non_field_errors %}
+                        {% for error in rForm.errors %}
                             <!-- ALERT -->
                             <div class="alert alert-mini alert-danger mb-30">
                                 <strong>Oh snap! {{ error }}</strong>

@@ -1,5 +1,7 @@
 from __future__ import unicode_literals
 
+import uuid
+
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 from django.db import models
@@ -9,7 +11,7 @@ from django.dispatch import receiver
 telephone = RegexValidator(r'^([+]?(\d{1,3}\s?)|[0])\s?\d+(\s?\-?\d{2,4}){1,3}?$', 'Not a valid phone number.')
 
 
-class Profile(models.Model):
+class MemberProfile(models.Model):
     GENDER = (
         ('M', 'MALE'),
         ('F', 'FEMALE'),
@@ -20,7 +22,7 @@ class Profile(models.Model):
         ('FAIL', 'UNSUCCESSFUL'),
         ('DONE', 'PENDING')
     )
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, related_name='member', on_delete=models.CASCADE)
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
     dob = models.DateField(null=True)
     gender = models.CharField(max_length=1, choices=GENDER, default='M')
@@ -37,31 +39,23 @@ class Profile(models.Model):
     @receiver(post_save, sender=User)
     def create_user_profile(sender, instance, created, **kwargs):
         if created:
-            Profile.objects.create(user=instance)
+            MemberProfile.objects.create(user=instance)
 
-    # @receiver(post_save, sender=User)
-    # def save_user_profile(sender, instance, **kwargs):
-    #     instance.profile.save()
+    @receiver(post_save, sender=User)
+    def save_user_profile(sender, instance, **kwargs):
+        instance.member.save()
 
     def clean(self):
         self.status = 'DONE'
         # self.register_date = datetime.date
         if self.get_status_display() == 'SUCCESSFUL':
-            self.client_id = generate_client_id()
-            self.pin = generate_pin()
+            self.client_id = uuid.uuid4().hex[:6].upper()
+            self.pin = uuid.uuid4().hex[:4].upper()
 
     def __str__(self):
         return self.pochi_id
 
     # post_save.connect(create_user_profile, sender=User)
-
-
-def generate_client_id():
-    pass
-
-
-def generate_pin():
-    pass
 
 
 class JointAccount(models.Model):
@@ -71,7 +65,7 @@ class JointAccount(models.Model):
     first_admin = models.CharField(max_length=30)
     sec_admin = models.CharField(max_length=30, null=True)
     pochi_id = models.CharField(max_length=20, null=True)
-    members = models.ManyToManyField('Profile', through='JointAccountMembers')
+    members = models.ManyToManyField(MemberProfile)
     # members_count = models.IntegerField()
     created_at = models.DateTimeField()
 
@@ -80,5 +74,5 @@ class JointAccount(models.Model):
 
 
 class JointAccountMembers(models.Model):
-    member = models.ForeignKey('Profile', on_delete=models.CASCADE)
+    member = models.ForeignKey('MemberProfile', on_delete=models.CASCADE)
     group = models.ForeignKey('JointAccount', related_name='group_members', on_delete=models.CASCADE)

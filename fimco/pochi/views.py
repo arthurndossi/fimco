@@ -17,20 +17,25 @@ def admin(request):
 
 
 def statements(request):
-    full_name = request.user.get_full_name()
-    first_name = full_name.split()[0]
-    last_name = full_name.split()[1]
+    first_name = 'Anonymous'
+    last_name = None
     try:
         trans = Transactions.objects.get(user=request.user)
         full_name = trans.user.get_full_name()
-        first_name = full_name.split()[0]
-        last_name = full_name.split()[1]
+        if full_name:
+            first_name = full_name.split()[0]
+            last_name = full_name.split()[1]
     except Transactions.DoesNotExist:
         trans = None
+
     context = {
         "first": first_name, "last": last_name, "trans": trans
     }
     return render(request, 'pochi/statements.html', context)
+
+
+def account(request):
+    return render(request, 'pochi/account.html', {})
 
 
 def p2p(request):
@@ -93,6 +98,27 @@ def add_funds(request):
 
 
 def new_group(request):
+    return render(request, 'pochi/group.html', {})
+
+
+def create_group(request):
+    if request.method == 'POST':
+        groupName = request.POST['profileGroupName'].capitalize()
+        purpose = request.POST['groupPurpose']
+        member_list = request.POST['members']
+        first_admin = request.POST['first']
+        sec_admin = request.POST['second']
+        import json
+        item_list = json.loads(member_list)
+        print (item_list)
+        from fimco.fimcosite.models import JointAccount
+        group = JointAccount.objects.create(
+            group_name=groupName,
+            purpose=purpose,
+            first_admin=first_admin,
+            sec_admin=sec_admin
+        )
+        group.save()
     return render(request, 'pochi/group.html', {})
 
 
