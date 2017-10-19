@@ -1,0 +1,97 @@
+{% extends "backend/base.html" %}
+{% block links %}
+    <link href="/static/backend/css/register.css" rel="stylesheet" type="text/css" />
+{% endblock %}
+{% block content %}
+    <div class="padding-15">
+        <div class="login-box">
+        <!-- registration form -->
+            {% if rForm.errors %}
+                {% for error in rForm.errors %}
+                    <!-- ALERT -->
+                    <div class="alert alert-danger">
+                        <strong>{{ error }}</strong>
+                    </div>
+                    <!-- /ALERT -->
+                {% endfor %}
+            {% endif %}
+            <form action="{% url 'admin_register' %}" method="post" class="sky-form boxed" novalidate="novalidate">
+                <header><i class="fa fa-icon-user-secret"></i> Create an Admin Account </header>
+                {% csrf_token %}
+                <fieldset>
+                    <label class="input">
+                        <i class="icon-append fa fa-envelope"></i>
+                        {{ rForm.email }}
+                        <b class="tooltip tooltip-bottom-right">Needed to verify your account</b>
+                    </label>
+                    {% if rForm.email.errors %}
+                        {% for error in rForm.email.errors %}
+                            <div class="alert alert-mini alert-danger mb-30">
+                                <strong>{{ error|escape }}</strong>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <label class="input">
+                        <i class="icon-append fa fa-lock"></i>
+                        {{ rForm.password }}
+                        <b class="tooltip tooltip-bottom-right">Only latin characters and numbers</b>
+                    </label>
+
+                    <label class="input">
+                        <i class="icon-append fa fa-lock"></i>
+                        {{ rForm.verify }}
+                        <b class="tooltip tooltip-bottom-right">Only latin characters and numbers</b>
+                    </label>
+                </fieldset>
+
+                <fieldset>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="input">
+                                {{ rForm.fName }}
+                            </label>
+                            {% if rForm.fName.errors %}
+                                {% for error in rForm.fName.errors %}
+                                    <div class="alert alert-mini alert-danger mb-30">
+                                        <strong>{{ error|escape }}</strong>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                        <div class="col col-md-6">
+                            <label class="input">
+                                {{ rForm.lName }}
+                            </label>
+                            {% if rForm.lName.errors %}
+                                {% for error in rForm.lName.errors %}
+                                    <div class="alert alert-mini alert-danger mb-30">
+                                        <strong>{{ error|escape }}</strong>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="input">
+                                {{ rForm.category }}
+                            </label>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <footer>
+                    <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-check"></i> Create Account</button>
+                </footer>
+            </form>
+            <!-- /registration form -->
+        </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script type="text/javascript" src="/static/backend/js/"></script>
+{% endblock %}

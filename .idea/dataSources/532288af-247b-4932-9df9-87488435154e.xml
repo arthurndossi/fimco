@@ -16,7 +16,7 @@
     <table id="10" parent="2" name="django_content_type"/>
     <table id="11" parent="2" name="django_migrations"/>
     <table id="12" parent="2" name="django_session"/>
-    <table id="13" parent="2" name="fimcosite_memberprofile"/>
+    <table id="13" parent="2" name="fimcosite_profile"/>
     <table id="14" parent="2" name="pochi_bonds"/>
     <table id="15" parent="2" name="pochi_commodities"/>
     <table id="16" parent="2" name="pochi_currencies"/>
@@ -470,15 +470,15 @@ model</ColNames>
       <DataType>integer|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="124" parent="13" name="sqlite_autoindex_fimcosite_memberprofile_1">
+    <index id="124" parent="13" name="sqlite_autoindex_fimcosite_profile_1">
       <ColNames>client_id</ColNames>
       <Unique>1</Unique>
     </index>
-    <index id="125" parent="13" name="sqlite_autoindex_fimcosite_memberprofile_2">
+    <index id="125" parent="13" name="sqlite_autoindex_fimcosite_profile_2">
       <ColNames>pin</ColNames>
       <Unique>1</Unique>
     </index>
-    <index id="126" parent="13" name="sqlite_autoindex_fimcosite_memberprofile_3">
+    <index id="126" parent="13" name="sqlite_autoindex_fimcosite_profile_3">
       <ColNames>user_id</ColNames>
       <Unique>1</Unique>
     </index>
@@ -488,15 +488,15 @@ model</ColNames>
     </key>
     <key id="128" parent="13">
       <ColNames>client_id</ColNames>
-      <UnderlyingIndexName>sqlite_autoindex_fimcosite_memberprofile_1</UnderlyingIndexName>
+      <UnderlyingIndexName>sqlite_autoindex_fimcosite_profile_1</UnderlyingIndexName>
     </key>
     <key id="129" parent="13">
       <ColNames>pin</ColNames>
-      <UnderlyingIndexName>sqlite_autoindex_fimcosite_memberprofile_2</UnderlyingIndexName>
+      <UnderlyingIndexName>sqlite_autoindex_fimcosite_profile_2</UnderlyingIndexName>
     </key>
     <key id="130" parent="13">
       <ColNames>user_id</ColNames>
-      <UnderlyingIndexName>sqlite_autoindex_fimcosite_memberprofile_3</UnderlyingIndexName>
+      <UnderlyingIndexName>sqlite_autoindex_fimcosite_profile_3</UnderlyingIndexName>
     </key>
     <foreign-key id="131" parent="13">
       <ColNames>user_id</ColNames>

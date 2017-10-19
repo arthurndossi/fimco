@@ -11,7 +11,7 @@ from django.dispatch import receiver
 telephone = RegexValidator(r'^([+]?(\d{1,3}\s?)|[0])\s?\d+(\s?\-?\d{2,4}){1,3}?$', 'Not a valid phone number.')
 
 
-class MemberProfile(models.Model):
+class Profile(models.Model):
     GENDER = (
         ('M', 'MALE'),
         ('F', 'FEMALE'),
@@ -23,14 +23,13 @@ class MemberProfile(models.Model):
         ('DONE', 'PENDING')
     )
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
     dob = models.DateField(null=True)
     gender = models.CharField(max_length=1, choices=GENDER, default='M')
     client_id = models.CharField(max_length=15, unique=True, null=True)
     pin = models.CharField(max_length=4, unique=True, null=True)
     bot_cds = models.CharField(max_length=15, null=True)
     dse_cds = models.CharField(max_length=15, null=True)
-    status = models.CharField(max_length=4, choices=STATUS)
+    status = models.CharField(max_length=4, choices=STATUS, default='DONE')
     register_date = models.DateTimeField('date joined', auto_now_add=True)
     pochi_id = models.CharField(max_length=20, null=True)
     is_staff = models.BooleanField(default=False)
@@ -39,19 +38,14 @@ class MemberProfile(models.Model):
     @receiver(post_save, sender=User)
     def create_user_profile(sender, instance, created, **kwargs):
         if created:
-            MemberProfile.objects.create(user=instance)
+            Profile.objects.create(user=instance)
 
     @receiver(post_save, sender=User)
     def save_user_profile(sender, instance, **kwargs):
-        instance.memberprofile.save()
+        instance.profile.save()
 
     def clean(self):
-        self.status = 'DONE'
-        if self.get_status_display() == 'SUCCESSFUL':
-            self.client_id = uuid.uuid4().hex[:6].upper()
-            self.pin = uuid.uuid4().hex[:4].upper()
-
-    def __str__(self):
-        return self.pochi_id
+        self.pochi_id = uuid.uuid4().hex[:6].upper()
+        self.pin = uuid.uuid4().hex[:4].upper()
 
     post_save.connect(create_user_profile, sender=User)

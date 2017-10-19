@@ -1,0 +1,101 @@
+{% extends "backend/base.html" %}
+{% block links %}
+    <link href="/static/backend/css/home.css" rel="stylesheet" type="text/css" />
+{% endblock %}
+{% block content %}
+    <!-- WRAPPER -->
+    <div id="wrapper" class="clearfix">
+        <aside id="aside">
+            <nav id="sideNav"><!-- MAIN MENU -->
+                <ul class="nav nav-list">
+                    <li><!-- dashboard -->
+                        <a class="dashboard" href="{% url 'user_profiles' %}">
+                            <span>Profile view</span>
+                        </a>
+                    </li>
+                    <li><!-- accounts -->
+                        <a href="{% url 'user_statements' %}">
+                            <span>Statement view</span>
+                        </a>
+                    </li>
+                    <li><!-- statement -->
+                        <a href="{% url 'transactions' %}">
+                            <span>Transactions</span>
+                        </a>
+                    </li>
+                    <li><!-- pochi2pochi -->
+                        <a href="{% url 'credit_wallet' %}">
+                            <span>Credit customer wallet</span>
+                        </a>
+                    </li>
+                    <li><!-- withdrawal -->
+                        <a href="{% url 'bulk_credit' %}">
+                            <span>Bulk credit</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <span id="asidebg"><!-- aside fixed background --></span>
+        </aside>
+        <!-- /ASIDE -->
+
+        <!-- HEADER -->
+        <header id="header">
+            <!-- Mobile Button -->
+            <button id="mobileMenuBtn"></button>
+
+            <!-- Logo -->
+            <a class="logo pull-left" href="{% url 'index' %}">
+                <img src="/static/pochi/img/fimco.png" alt="admin panel" height="35" />
+            </a>
+            <!-- Logo -->
+
+            <nav>
+                <!-- OPTIONS LIST -->
+                <ul class="nav pull-right">
+                    <!-- USER OPTIONS -->
+                    <li class="dropdown pull-left">
+                        <a href="#"
+                           class="dropdown-toggle"
+                           data-toggle="dropdown"
+                           data-hover="dropdown"
+                           data-close-others="true">
+                            <img class="user-avatar" alt="" src="/static/pochi/img/noavatar.jpg" height="34" />
+                            <span class="user-name">
+                                <span class="hidden-xs">
+                                    {{ user.get_short_name }} <i class="fa fa-angle-down"></i>
+                                </span>
+                            </span>
+                        </a>
+                        <ul class="dropdown-menu hold-on-click">
+                            <li><!-- my inbox -->
+                                <a href="{% url 'messages' %}"><i class="fa fa-envelope"></i> Notifications
+                                    <span class="pull-right label label-default">0</span>
+                                </a>
+                            </li>
+                            <li><!-- settings -->
+                                <a href="{% url 'edit' %}"><i class="fa fa-cogs"></i> Edit profile</a>
+                            </li>
+
+                            <li class="divider"></li>
+
+                            <li><!-- logout -->
+                                <a href="{% url 'logout' %}"><i class="fa fa-power-off"></i> Log Out</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- /USER OPTIONS -->
+                </ul>
+                <!-- /OPTIONS LIST -->
+            </nav>
+        </header>
+        <!-- /HEADER -->
+
+        <!-- MIDDLE -->
+        {% block middle %}{% endblock %}
+        <!-- /MIDDLE -->
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script type="text/javascript" src="/static/backend/js/"></script>
+{% endblock %}

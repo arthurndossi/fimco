@@ -114,3 +114,10 @@
         <button type="button" class="btn btn-primary" id="terms-agree"><i class="fa fa-arrow-left"></i> Back to Home</button>
     </div>
 {% endblock %}
+{% block scripts %}
+    <script type="text/javascript">
+        $('#terms-agree').click(function () {
+            window.location.href= '/'
+        });
+    </script>
+{% endblock %}

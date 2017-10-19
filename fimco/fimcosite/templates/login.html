@@ -28,7 +28,11 @@
                         <div class="box-title mb-30">
                             <h2 class="fs-20">I'm already a member</h2>
                         </div>
+                        {% if next %}
+                        <form class="sky-form" method="post" action="/login/?next={{next}}" autocomplete="off">
+                        {% else %}
                         <form class="sky-form" method="post" action="{% url 'validate' %}" autocomplete="off">
+                        {% endif %}
                             <div class="clearfix">
                                 <!-- Phone -->
                                 <label>Phone</label>
@@ -59,30 +63,12 @@
                             </div>
                             {% csrf_token %}
                         </form>
-                        <hr />
-                        <div class="mb-20 text-center">
-                            &ndash; <b>OR</b> &ndash;
-                        </div>
-                        <div class="socials m-top10 text-center">
-                            <a href="{% url 'social:begin' 'facebook' %}?next={{ request.path }}" class="social-icon social-facebook" data-toggle="tooltip" data-placement="top" title="Facebook">
-                                <i class="icon-facebook"></i>
-                                <i class="icon-facebook"></i>
-                            </a>
-                            <a href="{% url 'social:begin' 'twitter' %}?next={{ request.path }}" class="social-icon social-twitter" data-toggle="tooltip" data-placement="top" title="Twitter">
-                                <i class="icon-twitter"></i>
-                                <i class="icon-twitter"></i>
-                            </a>
-                            <a href="{% url 'social:begin' 'google-oauth2' %}?next={{ request.path }}" class="social-icon social-google" data-toggle="tooltip" data-placement="top" title="Google">
-                                <i class="icon-google-plus"></i>
-                                <i class="icon-google-plus"></i>
-                            </a>
-                        </div>
                     </div>
                     <p>By signing in to FIMCO you are confirming that you have read and understood our
                         <a id="terms" data-toggle="modal" data-target="#termsModal">terms and conditions</a>.
                     </p>
                     <div class="mt-30 text-center">
-                        <a href="{% url 'account' %}"><strong>Create Account</strong></a>
+                        <a href="{% url 'account' %}"><strong>Create Account{{ next }}</strong></a>
                     </div>
                 </div>
             </div>

@@ -2,6 +2,11 @@
     display: none;
 }
 
+.sky-form fieldset {
+    padding: 0;
+    margin-bottom: 0;
+}
+
 .sky-form fieldset+fieldset {
     border: none;
 }

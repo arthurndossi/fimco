@@ -43,11 +43,6 @@
 								<i class="main-icon fa fa-dashboard"></i> <span>Dashboard</span>
 							</a>
 						</li>
-                        <li><!-- accounts -->
-							<a href="{% url 'accounts' %}">
-								<i class="main-icon fa fa-credit-card"></i> <span>Add account</span>
-							</a>
-						</li>
                         <li><!-- statement -->
 							<a href="{% url 'statements' %}">
 								<i class="main-icon fa fa-file-text-o"></i> <span>Statement</span>
@@ -114,24 +109,23 @@
                     <!-- THIRD MAIN LIST -->
 					<h3>MY GROUPS</h3>
 					<ul class="nav nav-list">
-{#						<li>#}
-{#							<a href="">#}
-{#								<i class="main-icon fa fa-users"></i>#}
-{#								<span class="label label-info pull-right">2</span> <span>Group 1</span>#}
-{#							</a>#}
-{#						</li>#}
-{#						<li>#}
-{#							<a href="">#}
-{#								<i class="main-icon fa fa-users"></i>#}
-{#								<span class="label label-info pull-right">5</span> <span>Group 2</span>#}
-{#							</a>#}
-{#						</li>#}
-                        <li>
-                            <a disabled tabindex="-1">
-								<i class="main-icon fa fa-ban"></i>
-								<span>None</span>
-							</a>
-                        </li>
+                        {% if groups %}
+                            {% for group in groups %}
+                                <li>
+                                    <a href="">
+                                        <i class="main-icon fa fa-users"></i>
+                                        <span class="label label-info pull-right"></span> <span>{{ group }}</span>
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        {% else %}
+                            <li>
+                                <a disabled tabindex="-1">
+                                    <i class="main-icon fa fa-ban"></i>
+                                    <span>None</span>
+                                </a>
+                            </li>
+                        {% endif %}
 					</ul>
 				</nav>
 				<span id="asidebg"><!-- aside fixed background --></span>
@@ -178,7 +172,7 @@
 									</a>
 								</li>
 								<li><!-- settings -->
-									<a href="{% url 'edit' %}"><i class="fa fa-cogs"></i> Edit profile</a>
+									<a href="{% url 'profile_view' %}"><i class="fa fa-cogs"></i> View/Edit profile</a>
 								</li>
                                 <li><!-- settings -->
 									<a href="{% url 'group' %}"><i class="fa fa-users"></i> New group</a>

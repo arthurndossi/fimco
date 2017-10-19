@@ -2,9 +2,10 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+
 from django.shortcuts import render, redirect
 
-from .forms import RegisterForm, EditProfileForm, LoginForm
+from .forms import RegisterForm, LoginForm
 
 
 class AnonymousRequired(object):
@@ -53,6 +54,10 @@ def brokerage(request):
     return render(request, 'brokerage.html', {})
 
 
+def terms(request):
+    return render(request, "terms_conditions.html", {})
+
+
 @anonymous_required
 def account(request):
     context = {
@@ -65,7 +70,8 @@ def account(request):
 def login_view(request):
     from .forms import LoginForm
     context = {
-        'lForm': LoginForm()
+        'lForm': LoginForm(),
+        'next': request.GET['next'] if request.GET and 'next' in request.GET else ''
     }
     return render(request, 'login.html', context)
 
@@ -76,10 +82,14 @@ def validate(request):
         if form.is_valid():
             username = request.POST["phone"]
             password = request.POST["password"]
+            get_param = request.POST['next']
             user = authenticate(username=username, password=password)
             if user:
                 login(request, user)
-                return redirect(request.GET.get('next', 'index'))
+                if get_param == "":
+                    return redirect(index)
+                else:
+                    return redirect(get_param)
             else:
                 messages.add_message(request, messages.ERROR, 'Incorrect credentials!')
                 return render(request, 'login.html', {'lForm': form})
@@ -102,21 +112,16 @@ def register(request):
             phone = form.cleaned_data['phone'].strip()
             image = form.cleaned_data['image']
             password = form.cleaned_data["password"]
-            scanned_id = form.cleaned_data['scanned_id']
-            id_choice = form.cleaned_data['id_choice']
             bot = form.cleaned_data['bot_cds']
             dse = form.cleaned_data['dse_cds']
             user = User.objects.create_user(phone, email, password, first_name=fName, last_name=lName)
-            profile = user.memberprofile
-            profile.birth_date = dob
+            profile = user.profile
+            profile.dob = dob
             profile.gender = gender
-            profile.identity = client_id
-            profile.phone = phone
-            profile.image = image
-            profile.scanned_id = scanned_id
-            profile.identity_type = id_choice
-            profile.bot_account = bot
-            profile.dse_account = dse
+            profile.client_id = client_id
+            profile.avatar = image
+            profile.bot_cds = bot
+            profile.dse_cds = dse
             profile.save()
 
             return redirect(index)
@@ -131,53 +136,3 @@ def log_out(request):
     from django.contrib.auth import logout
     logout(request)
     return redirect(index)
-
-
-@login_required
-def view_profile(request):
-    user = request.user
-    form = EditProfileForm(None, request.FILES, initial={
-        'fName': 'First',
-        'lName': user.last_name,
-        'phone': user.username,
-        'email': user.email,
-        'dob': user.profile.dob,
-        'gender': user.profile.gender,
-        'avatar': user.profile.avatar,
-        'id_number': user.profile.client_id,
-        'bot_account': user.profile.bot_cds,
-        'dse_account': user.profile.dse_cds
-    })
-    context = {
-        'pForm': form
-    }
-
-    return render(request, "profile.html", context)
-
-
-@login_required
-def edit_profile(request):
-    user = request.user
-    form = EditProfileForm(request.POST, request.FILES)
-    if request.method == 'POST':
-        if form.is_valid():
-            user.first_name = request.POST['fName']
-            user.last_name = request.POST['lName']
-            user.email = request.POST['email']
-            user.username = request.POST['phone']
-            user.profile.dob = request.POST['dob']
-            user.profile.gender = request.POST['gender']
-            user.profile.avatar = request.FILES['avatar']
-            user.profile.client_id = request.POST['id_number']
-            user.profile.bot_cds = request.POST['bot_account']
-            user.profile.dse_cds = request.POST['dse_account']
-            user.save()
-            user.profile.save()
-
-            return redirect(view_profile)
-    else:
-        return redirect(edit_profile)
-
-
-def terms(request):
-    return render(request, "terms_conditions.html", {})

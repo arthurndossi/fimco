@@ -120,23 +120,6 @@
                                             {% endfor %}
                                         {% endif %}
                                     </div>
-                                    <div class="col-md-6 col-sm-6">
-                                        <label for="register:dp">Profile picture <small>(required)</small></label>
-                                        <div class="picture-container">
-                                            <div class="picture">
-                                                <img src="/static/img/default-avatar.jpg" class="picture-src" id="wizardPicturePreview" />
-                                                {{ rForm.image }}
-                                            </div>
-                                            <h6>Choose Picture</h6>
-                                        </div>
-                                        {% if rForm.image.errors %}
-                                            {% for error in rForm.image.errors %}
-                                                <div class="alert alert-mini alert-danger mb-30">
-                                                    <strong>{{ error|escape }}</strong>
-                                                </div>
-                                            {% endfor %}
-                                        {% endif %}
-                                    </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 col-sm-6">
@@ -189,7 +172,7 @@
                                     <div class="col-md-6 col-sm-6">
                                         <div class="picture-container">
                                             <div class="sqr-picture">
-                                                <img src="/static/img/images.png" class="picture-src" id="wizardFilePreview" />
+                                                <img src="/static/img/id-card.png" class="picture-src" id="wizardFilePreview" />
                                                 {{ rForm.scanned_id }}
                                             </div>
                                             <h6>Select your ID</h6>
@@ -221,16 +204,20 @@
                                         </label>
                                     </div>
                                 </div>
+                                <label class="checkbox m-0">
+                                    <input class="checked-agree" type="checkbox" name="checkbox">
+                                    <i></i>I agree to the <a href="#" data-toggle="modal" data-target="#termsModal">Terms of Service</a>
+                                </label>
+
                                 <hr />
-                                <label class="checkbox m-0"><input class="checked-agree" type="checkbox" name="checkbox"><i></i>I agree to the <a href="#" data-toggle="modal" data-target="#termsModal">Terms of Service</a></label>
-                                <label class="checkbox m-0"><input type="checkbox" name="checkbox"><i></i>Subscribe to newsletter</label>
+
                             </fieldset>
                             <div class="row">
                                 <div class="col-md-12">
                                     <button id="prev" class="btn btn-primary float-left">
                                         <i class="fa fa-arrow-left"></i> PREVIOUS
                                     </button>
-                                    <button id="next" class="btn btn-primary float-left">
+                                    <button id="next" class="btn btn-primary float-right">
                                         <i class="fa fa-arrow-right float-right"></i> NEXT
                                     </button>
                                     <button type="submit" id="finish" class="btn btn-primary float-right">

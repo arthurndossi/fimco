@@ -66,9 +66,6 @@ class RegisterForm(forms.Form):
             'required': True
         })
     )
-    image = forms.ImageField(
-        widget=forms.ClearableFileInput(attrs={'id': 'picture', 'required': True})
-    )
     scanned_id = forms.ImageField(
         widget=forms.ClearableFileInput(attrs={'id': 'file', 'required': True})
     )
@@ -145,82 +142,54 @@ class EditProfileForm(forms.Form):
         max_length=20,
         validators=[alphabetic],
         widget=forms.TextInput(attrs={
-            'name': 'contact[first_name]',
-            'class': 'form-control required'
+            'required': True,
         })
     )
-    lName = forms.CharField(
-        min_length=2,
-        max_length=20,
-        validators=[alphabetic],
+    lName = forms.CharField(min_length=2,
+                            max_length=20,
+                            validators=[alphabetic],
+                            widget=forms.TextInput(attrs={
+                                'required': True,
+                            })
+                            )
+    dob = forms.DateField(widget=forms.DateInput(attrs={
+        'type': 'date',
+        'required': True,
+    }))
+    gender = forms.ChoiceField(choices=GENDER)
+    client_id = forms.CharField(
         widget=forms.TextInput(attrs={
-            'name': 'contact[last_name]',
-            'class': 'form-control required'
+            'required': True
         })
     )
-    email = forms.EmailField(
-        max_length=50,
-        widget=forms.TextInput(attrs={
-            'name': 'contact[email]',
-            'class': 'form-control required'
-        })
-    )
-    phone = forms.CharField(
-        validators=[telephone],
-        widget=PhoneInput(attrs={
-            'name': 'contact[phone]',
-            'class': 'form-control required'
-        })
-    )
-    dob = forms.DateField(
-        widget=forms.DateInput(attrs={
-            'type': 'date',
-            'name': 'contact[start_date]',
-            'class': 'form-control datepicker required',
-            'data-format': 'yyyy-mm-dd',
-            'data-lang': 'en',
-            'data-RTL': 'false'
-        })
-    )
-    gender = forms.ChoiceField(
-        choices=GENDER,
-        widget=forms.TextInput(attrs={
-           'name': 'contact[position]',
-           'class': 'form-control pointer required'
-        })
-    )
-    avatar = forms.ImageField(
-        widget=forms.ClearableFileInput(attrs={
-            'type': 'file',
-            'name': 'contact[attachment]',
-            'class': 'form-control',
-            'onchange': 'jQuery(this).next("input").val(this.value)'
-        })
+    scanned_id = forms.ImageField(
+        widget=forms.ClearableFileInput(attrs={'id': 'file', 'required': True})
     )
     id_choice = forms.ChoiceField(choices=ID_TYPES)
-    id = forms.ImageField(
-        widget=forms.ClearableFileInput(attrs={
-            'type': 'file',
-            'name': 'contact[id_attachment]',
-            'class': 'form-control',
-            'onchange': 'jQuery(this).next("input").val(this.value)'
+    email = forms.EmailField(max_length=50,
+                             widget=forms.TextInput(attrs={
+                                 'required': True,
+                             })
+                             )
+    phone = forms.CharField(validators=[telephone],
+                            widget=PhoneInput(attrs={
+                                'x-autocompletetype': 'tel',
+                                'required': True,
+                            })
+                            )
+    bot_cds = forms.CharField(required=False)
+    dse_cds = forms.CharField(required=False)
+    password = forms.CharField(
+        validators=[validate_slug],
+        widget=forms.PasswordInput(attrs={
+            'required': True,
+
         })
     )
-    id_number = forms.CharField(
-        widget=forms.TextInput(attrs={
-            'name': 'contact[file]',
-            'class': 'form-control',
-        })
-    )
-    bot_account = forms.CharField(
-        widget=forms.TextInput(attrs={
-            'name': 'contact[bot]',
-            'class': 'form-control',
-        })
-    )
-    dse_account = forms.CharField(
-        widget=forms.TextInput(attrs={
-            'name': 'contact[dse]',
-            'class': 'form-control',
+    verify = forms.CharField(
+        validators=[validate_slug],
+        widget=forms.PasswordInput(attrs={
+            'required': True,
+
         })
     )

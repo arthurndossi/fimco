@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en-US">
+	<head>
+		<meta charset="utf-8" />
+		<title>FIMCO</title>
+
+        <meta name="description" content="" />
+        <meta name="fimco" content="FIMCO [www.fimco.co.tz]" />
+
+        <!-- mobile settings -->
+        <meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1, user-scalable=0" />
+        <!--[if IE]><meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'><![endif]-->
+
+		<!-- WEB FONTS -->
+		<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700,800&amp;subset=latin,latin-ext,cyrillic,cyrillic-ext" rel="stylesheet" type="text/css" />
+
+		<!-- CORE CSS -->
+		<link href="../../../pochi/static/pochi/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+
+		<!-- THEME CSS -->
+		<link href="../pochi/static/pochi/css/essentials.css" rel="stylesheet" type="text/css" />
+		<link href="../pochi/static/pochi/css/layout.css" rel="stylesheet" type="text/css" />
+	</head>
+	<!--
+		.boxed = boxed version
+	-->
+	<body>
+
+        {% block content %}
+        {% endblock %}
+
+        {% include 'modals.html' %}
+
+		<!-- JAVASCRIPT FILES -->
+		<script type="text/javascript" src="../pochi/static/pochi/plugins/jquery/jquery-2.2.3.min.js"></script>
+		<script type="text/javascript" src="../pochi/static/pochi/js/app.js"></script>
+
+		<!-- PAGE LEVEL SCRIPTS -->
+		<script type="text/javascript">
+
+			/**
+				Checkbox on "I agree" modal Clicked!
+			**/
+			jQuery("#terms-agree").click(function(){
+				jQuery('#termsModal').modal('toggle');
+
+				// Check Terms and Conditions checkbox if not already checked!
+				if(!jQuery("#checked-agree").checked) {
+					jQuery("input.checked-agree").prop('checked', true);
+				}
+
+			});
+		</script>
+
+	</body>
+</html>

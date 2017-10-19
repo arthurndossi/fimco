@@ -1,14 +1,17 @@
-// var input = $('[type=tel]');
-// input.mobilePhoneNumber({allowPhoneWithoutPrefix: '+255'});
-// input.bind('country.mobilePhoneNumber', function(e, country) {
-//   $('.country').text(country || '')
-// });
 var id = $('#id_client_id'), choice = $("#id_id_choice");
 $('#client_input').hide();
 
 $('#next, #prev').click(function (e) {
     e.preventDefault();
-   $('#one, #two, #next, #prev, #finish').toggle()
+   $('#one, #two, #next, #prev').toggle()
+});
+
+$(":checkbox").change(function() {
+    if(this.checked) {
+        $("#finish").show()
+    }else{
+        $("#finish").hide()
+    }
 });
 
 choice.on('change', function() {
