@@ -66,6 +66,8 @@ class Transaction(models.Model):
     external_walletid = models.CharField(max_length=25)
     trans_type = models.CharField(max_length=10, choices=TYPES)
     service = models.CharField(max_length=25, db_index=True)  # DEPOSIT, WITHDRAW, BONUS
+    channel = models.CharField(max_length=25, db_index=True)
+    dest_account = models.CharField(max_length=25, db_index=True)
     amount = models.CharField(max_length=25)
     charge = models.CharField(max_length=25, default='0')
     currency = models.CharField(max_length=3, default='TZS')
