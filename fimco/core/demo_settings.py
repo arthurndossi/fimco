@@ -35,7 +35,7 @@ INSTALLED_APPS = [
     'fimcosite.apps.FimcositeConfig',
     'pochi.apps.PochiConfig',
     'backend.apps.BackendConfig',
-    'market.apps.MarketConfig',
+    'fimcoplatform.apps.MarketConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

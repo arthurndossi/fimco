@@ -21,6 +21,6 @@ urlpatterns = [
     url(r'^', include('pin_passcode.urls')),
     url(r'^pochi/', include('pochi.urls')),
     url(r'^backend/', include('backend.urls')),
-    url(r'^market/', include('market.urls')),
+    url(r'^fimcoplatform/', include('fimcoplatform.urls')),
     url(r'^admin/', admin.site.urls),
 ]
