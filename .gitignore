@@ -1,0 +1,10 @@
+*.pyc
+/venv
+/env27
+.Python
+*.iml
+.idea
+.DS_Store
+core/settings.py
+wsgi.py
+fimco/pip-selfcheck.json
