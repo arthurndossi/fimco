@@ -19,14 +19,6 @@ telephone = RegexValidator(r'^([+]?(\d{1,3}\s?)|[0])\s?\d+(\s?\-?\d{2,4}){1,3}?$
 #         return self.group_name
 
 
-class KYC(models.Model):
-    profile_id = models.CharField(max_length=10, db_index=True)
-    created_on = models.DateTimeField(auto_now_add=True)
-    kyc_type = models.CharField(max_length=15)
-    id_type = models.CharField(max_length=15)
-    id_number = models.CharField(max_length=35)
-
-
 class Group(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     name = models.CharField(max_length=100)

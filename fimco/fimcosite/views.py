@@ -59,7 +59,7 @@ def terms(request):
 
 
 def corporate(request):
-    return render(request, 'corporate.html', {'cForm': CorporateForm})
+    return render(request, 'corporate.html', {'cForm': CorporateForm, 'rForm': RegisterForm})
 
 
 @anonymous_required
@@ -111,10 +111,11 @@ def register(request):
             lName = form.cleaned_data['lName'].capitalize()
             dob = form.cleaned_data['dob']
             gender = form.cleaned_data['gender']
+            id_choice = form.cleaned_data['id_choice']
             client_id = form.cleaned_data['client_id']
+            scanned_id = form.cleaned_data['scanned_id']
             email = form.cleaned_data['email']
             phone = form.cleaned_data['phone'].strip()
-            image = form.cleaned_data['image']
             password = form.cleaned_data["password"]
             bot = form.cleaned_data['bot_cds']
             dse = form.cleaned_data['dse_cds']
@@ -123,7 +124,8 @@ def register(request):
             profile.dob = dob
             profile.gender = gender
             profile.client_id = client_id
-            profile.avatar = image
+            profile.client_id = client_id
+            profile.client_id = client_id
             profile.bot_cds = bot
             profile.dse_cds = dse
             profile.save()

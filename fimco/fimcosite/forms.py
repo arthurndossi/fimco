@@ -77,7 +77,7 @@ class RegisterForm(forms.Form):
     )
     id_choice = forms.ChoiceField(choices=ID_TYPES)
     email = forms.EmailField(
-        validators=EmailValidator,
+        validators=[EmailValidator],
         widget=forms.EmailInput(attrs={
             'required': True,
         })
@@ -135,7 +135,7 @@ class CorporateForm(forms.Form):
         })
     )
     email = forms.EmailField(
-        validators=EmailValidator,
+        validators=[EmailValidator],
         widget=forms.EmailInput(attrs={
             'required': True,
         })
