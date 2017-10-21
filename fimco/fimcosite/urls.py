@@ -7,7 +7,7 @@ urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^about$', views.about, name='about'),
     url(r'^new/account$', views.account, name='account'),
-    url(r'^corporate/account$', TemplateView.as_view(template_name='corporate.html'), name='corporate'),
+    url(r'^corporate/account$', views.corporate, name='corporate'),
     url(r'^register$', views.register, name='register'),
     url(r'^blog$', views.blog_view, name='blog'),
     url(r'^fund$', views.fund, name='fund'),

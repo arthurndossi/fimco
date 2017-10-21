@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 from django.shortcuts import render, redirect
 
-from .forms import RegisterForm, LoginForm
+from .forms import RegisterForm, LoginForm, CorporateForm
 
 
 class AnonymousRequired(object):
@@ -56,6 +56,10 @@ def brokerage(request):
 
 def terms(request):
     return render(request, "terms_conditions.html", {})
+
+
+def corporate(request):
+    return render(request, 'corporate.html', {'cForm': CorporateForm})
 
 
 @anonymous_required
