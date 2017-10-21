@@ -17,23 +17,36 @@ class Profile(models.Model):
         ('F', 'FEMALE'),
         ('O', 'OTHER')
     )
-    STATUS = (
-        ('PASS', 'SUCCESSFUL'),
-        ('FAIL', 'UNSUCCESSFUL'),
-        ('DONE', 'PENDING')
+
+    TYPE = (
+        ('I', 'INDIVIDUAL'),
+        ('C', 'CORPORATE')
     )
+    STATUS = (
+        ('APPROVED', 'APPROVED'),
+        ('REJECTED', 'REJECTED'),
+        ('PENDING', 'PENDING')
+    )
+
+    ACTIVE_STATUS = (
+        (0, 'ACTIVE'),
+        (1, 'INACTIVE')
+    )
+
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
     dob = models.DateField(null=True)
     gender = models.CharField(max_length=1, choices=GENDER, default='M')
-    client_id = models.CharField(max_length=15, unique=True, null=True)
     pin = models.CharField(max_length=4, unique=True, null=True)
     bot_cds = models.CharField(max_length=15, null=True)
     dse_cds = models.CharField(max_length=15, null=True)
-    status = models.CharField(max_length=4, choices=STATUS, default='DONE')
     register_date = models.DateTimeField('date joined', auto_now_add=True)
-    pochi_id = models.CharField(max_length=20, null=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
+    profile_type = models.CharField(max_length=1, choices=TYPE)
+    profile_id = models.CharField(max_length=10)
+    status = models.IntegerField(max_length=1, choices=ACTIVE_STATUS)
+    approval_status = models.CharField(max_length=10, choices=STATUS)
 
     @receiver(post_save, sender=User)
     def create_user_profile(sender, instance, created, **kwargs):
@@ -45,7 +58,7 @@ class Profile(models.Model):
         instance.profile.save()
 
     def clean(self):
-        self.pochi_id = uuid.uuid4().hex[:6].upper()
+        self.profile_id = uuid.uuid4().hex[:6].upper()
         self.pin = uuid.uuid4().hex[:4].upper()
 
     post_save.connect(create_user_profile, sender=User)

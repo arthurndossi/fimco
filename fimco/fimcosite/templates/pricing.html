@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block links %}
+{#    <link href="/static/css/about.css" rel="stylesheet" type="text/css"/>#}
+{% endblock %}
+
+{% block content %}
+    <section>
+        <div class="container">
+            <div class="row">
+                <div class="heading-title heading-line-single text-center">
+                    <h3>3 Columns</h3>
+                </div>
+                <div class="row pricetable-container">
+                    <div class="col-md-4 col-sm-4 price-table">
+                        <h3>START</h3>
+                        <p>
+                            $5.9
+                            <span>Per month</span>
+                        </p>
+                        <ul>
+                            <li>22GB Bandwidth</li>
+                            <li>3Tb Storage</li>
+                            <li>Unlimited Domains</li>
+                            <li>Free Setup</li>
+                        </ul>
+                        <a href="#" class="btn btn-primary">SIGN UP</a>
+                    </div>
+
+                    <div class="col-md-4 col-sm-4 price-table popular">
+                        <h3>PREMIUM</h3>
+                        <p>
+                            $9.9
+                            <span>Per month</span>
+                        </p>
+                        <ul>
+                            <li>22GB Bandwidth</li>
+                            <li>3Tb Storage</li>
+                            <li>Unlimited Domains</li>
+                            <li>Free Setup</li>
+                        </ul>
+                        <a href="#" class="btn btn-default">SIGN UP</a>
+                    </div>
+
+                    <div class="col-md-4 col-sm-4 price-table">
+                        <h3>PROFESSIONAL</h3>
+                        <p>
+                            $14.9
+                            <span>Per month</span>
+                        </p>
+                        <ul class="pricetable-items">
+                            <li>22GB Bandwidth</li>
+                            <li>3Tb Storage</li>
+                            <li>Unlimited Domains</li>
+                            <li>Free Setup</li>
+                        </ul>
+                        <a href="#" class="btn btn-primary">SIGN UP</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

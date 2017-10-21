@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 
-from .models import Transactions, JointAccount
+from .models import Transaction, Group, GroupMembers, ExternalAccount
 from fimcosite.forms import EditProfileForm
 
 
@@ -14,8 +14,8 @@ def home(request):
     json_data = open('C:/Users/MADS/PycharmProjects/FIMCO/fimco/pochi/static/pochi/statements.json', 'r')
     data = json.load(json_data)
     try:
-        group_set = JointAccount.objects.filter(pochi_id=request.user.profile.pochi_id)
-    except JointAccount.DoesNotExist:
+        group_set = GroupMembers.objects.filter(profile_id=request.user.profile.profile_id)
+    except GroupMembers.DoesNotExist:
         group_set = ''
     return render(request, 'pochi/home.html', {'statements': data, 'groups': group_set})
 
@@ -30,19 +30,21 @@ def admin(request):
 
 @login_required
 def statements(request):
-    first_name = 'Anonymous'
-    last_name = None
+    user_accounts = account_trans = trans = None
+    if request.GET.get('account'):
+        selected_account = request.GET.get('account')
+        account_trans = Transaction.objects.filter(query__icontains=selected_account)
+
     try:
-        trans = Transactions.objects.get(user=request.user)
-        full_name = trans.user.get_full_name()
-        if full_name:
-            first_name = full_name.split()[0]
-            last_name = full_name.split()[1]
-    except Transactions.DoesNotExist:
-        trans = None
+        user_accounts = ExternalAccount.objects.filter(profile_id=request.user.profile.profile_id)
+        trans = Transaction.objects.filter(profile_id=request.user.profile.profile_id)
+    except ExternalAccount.DoesNotExist:
+        user_accounts = user_accounts
+    except Transaction.DoesNotExist:
+        trans = trans
 
     context = {
-        "first": first_name, "last": last_name, "trans": trans
+        "accounts": user_accounts, "trans": trans, "single": account_trans
     }
     return render(request, 'pochi/statements.html', context)
 
@@ -77,7 +79,7 @@ def view_profile(request):
         'bot_cds': user.profile.bot_cds,
         'dse_cds': user.profile.dse_cds
     }
-    obj = JointAccount.objects.filter(pochi_id=user.profile.pochi_id)
+    obj = GroupMembers.objects.filter(profile_id=user.profile.profile_id)
     context = {
         'pForm': form,
         'data': form_data,
@@ -114,13 +116,13 @@ def edit_profile(request):
 @login_required
 def p2p(request):
     try:
-        bal = Transactions.objects.filter(user=request.user).latest('trans_timestamp').open_bal
-    except Transactions.DoesNotExist:
+        bal = Transaction.objects.filter(user=request.user).latest('trans_timestamp').open_bal
+    except Transaction.DoesNotExist:
         bal = 0
     if request.method == "POST":
         phone = request.POST['phone'].strip()
         amount = request.POST['amount']
-        trans = Transactions(user=request.user, msisdn=phone, amount=amount, type='P', open_bal=bal)
+        trans = Transaction(user=request.user, msisdn=phone, amount=amount, type='P', open_bal=bal)
         trans.save()
         # TODO
         # Call API
@@ -136,13 +138,13 @@ def p2p(request):
 @login_required
 def withdraw(request):
     try:
-        bal = Transactions.objects.filter(user=request.user).latest('trans_timestamp').open_bal
-    except Transactions.DoesNotExist:
+        bal = Transaction.objects.filter(user=request.user).latest('trans_timestamp').open_bal
+    except Transaction.DoesNotExist:
         bal = 0
     if request.method == "POST":
         phone = request.POST['phone'].strip()
         amount = request.POST['amount']
-        trans = Transactions(user=request.user, msisdn=phone, amount=amount, type='W', open_bal=bal)
+        trans = Transaction(user=request.user, msisdn=phone, amount=amount, type='W', open_bal=bal)
         trans.save()
         resp = {
             'status': 'success',
@@ -156,13 +158,13 @@ def withdraw(request):
 @login_required
 def add_funds(request):
     try:
-        bal = Transactions.objects.filter(user=request.user).latest('trans_timestamp').open_bal
-    except Transactions.DoesNotExist:
+        bal = Transaction.objects.filter(profile_id=request.user.profile.profile_id).latest('trans_timestamp').open_bal
+    except Transaction.DoesNotExist:
         bal = 0
     if request.method == "POST":
         phone = request.POST['phone']
         amount = request.POST['amount']
-        trans = Transactions(user=request.user, msisdn=phone, amount=amount, type='D', open_bal=bal)
+        trans = Transaction(user=request.user, msisdn=phone, amount=amount, type='D', open_bal=bal)
         trans.save()
         resp = {
             'status': 'success',
@@ -180,25 +182,27 @@ def new_group(request):
 
 @login_required
 def create_group(request):
+    import json
     if request.method == 'POST':
         groupName = request.POST['profileGroupName'].capitalize()
-        purpose = request.POST['groupPurpose']
         member_list = request.POST['members']
         first_admin = request.POST['first']
         sec_admin = request.POST['second']
-        import json
         members = json.loads(member_list)
-        print (members)
-        from .models import JointAccount
-        group = JointAccount.objects.create(
-            pochi_id=uuid.uuid4().hex[:6].upper(),
-            group_name=groupName,
-            purpose=purpose,
-            members=members,
-            first_admin=first_admin,
-            sec_admin=sec_admin
+        grp_acc = uuid.uuid4().hex[:6].upper()
+        Group.objects.create(
+            group_account=grp_acc,
+            name=groupName,
         )
-        group.save()
+        for member in members:
+            is_admin = 0
+            if member == first_admin or member == sec_admin:
+                is_admin = 1
+            GroupMembers.objects.create(
+                group_account=grp_acc,
+                profile_id=member,
+                admin=is_admin
+            )
     return render(request, 'pochi/group.html', {})
 
 

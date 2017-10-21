@@ -1,4 +1,4 @@
-<!-- MODAL -->
+<!-- TERMS MODAL -->
 <div class="modal fade" id="termsModal" tabindex="-1" role="dialog" aria-labelledby="myModal" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -122,4 +122,51 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div>
-<!-- /MODAL -->
+<!-- /TERMS MODAL -->
+
+<!-- ACCOUNTS MODAL -->
+    <div id="accountTypeModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Select the account type</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                </div>
+
+                <!-- Modal Body -->
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <a href="{% url 'account' %}">
+                            <div class="box-icon box-icon-center box-icon-round box-icon-transparent box-icon-large box-icon-content">
+                                <div class="box-icon-title">
+                                    <i class="fa fa-user"></i>
+                                    <h2>Individual Account</h2>
+                                </div>
+                                <p>Open a single user account. </p>
+                            </div>
+                            </a>
+                        </div>
+
+                        <div class="col-md-6">
+                            <a href="{% url 'corporate' %}">
+                            <div class="box-icon box-icon-center box-icon-round box-icon-transparent box-icon-large box-icon-content">
+                                <div class="box-icon-title">
+                                    <i class="ico-rounded ico-hover icon-briefcase"></i>
+                                    <h2>Corporate Account</h2>
+                                </div>
+                                <p>Open an account for a company.</p>
+                            </div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- /ACCOUNTS MODAL -->

@@ -19,6 +19,11 @@ ID_TYPES = (
     ('passport', 'Passport')
 )
 
+CORPORATE_IDS = (
+    ('tin', 'TIN Number'),
+    ('licence', 'Business Licence')
+)
+
 
 class PhoneInput(Input):
     input_type = 'tel'
@@ -49,13 +54,14 @@ class RegisterForm(forms.Form):
             'required': True,
         })
     )
-    lName = forms.CharField(min_length=2,
-                            max_length=20,
-                            validators=[alphabetic],
-                            widget=forms.TextInput(attrs={
-                                'required': True,
-                            })
-                            )
+    lName = forms.CharField(
+        min_length=2,
+        max_length=20,
+        validators=[alphabetic],
+        widget=forms.TextInput(attrs={
+            'required': True,
+        })
+    )
     dob = forms.DateField(widget=forms.DateInput(attrs={
         'type': 'date',
         'required': True,
@@ -70,17 +76,19 @@ class RegisterForm(forms.Form):
         widget=forms.ClearableFileInput(attrs={'id': 'file', 'required': True})
     )
     id_choice = forms.ChoiceField(choices=ID_TYPES)
-    email = forms.EmailField(max_length=50,
-                             widget=forms.TextInput(attrs={
-                                 'required': True,
-                             })
-                             )
-    phone = forms.CharField(validators=[telephone],
-                            widget=PhoneInput(attrs={
-                                'x-autocompletetype': 'tel',
-                                'required': True,
-                            })
-                            )
+    email = forms.EmailField(
+        validators=EmailValidator,
+        widget=forms.EmailInput(attrs={
+            'required': True,
+        })
+    )
+    phone = forms.CharField(
+        validators=[telephone],
+        widget=PhoneInput(attrs={
+            'x-autocompletetype': 'tel',
+            'required': True,
+        })
+    )
     bot_cds = forms.CharField(required=False)
     dse_cds = forms.CharField(required=False)
     password = forms.CharField(
@@ -108,6 +116,60 @@ class RegisterForm(forms.Form):
         return cleaned_data
 
 
+class CorporateForm(forms.Form):
+    name = forms.CharField(
+        min_length=2,
+        max_length=20,
+        validators=[alphabetic],
+        widget=forms.TextInput(attrs={
+            'required': True,
+        })
+    )
+    contact = forms.CharField(
+        min_length=10,
+        max_length=13,
+        validators=[telephone],
+        widget=forms.TextInput(attrs={
+            'type': 'tel',
+            'required': True,
+        })
+    )
+    email = forms.EmailField(
+        validators=EmailValidator,
+        widget=forms.EmailInput(attrs={
+            'required': True,
+        })
+    )
+    address = forms.SlugField(
+        max_length=100,
+        widget=forms.TextInput(attrs={
+            'required': True,
+        })
+    )
+    website = forms.URLField(
+        max_length=100,
+        widget=forms.URLInput(attrs={
+            'required': True,
+        })
+    )
+    id_type = forms.ChoiceField(choices=CORPORATE_IDS)
+    id_number = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'required': True
+        })
+    )
+    scanned_id = forms.ImageField(
+        widget=forms.ClearableFileInput(attrs={'id': 'file', 'required': True})
+    )
+
+    def clean(self):
+        cleaned_data = self.cleaned_data
+        if User.objects.filter(username=cleaned_data['name']).exists():
+            raise forms.ValidationError("This company already exists!")
+
+        return cleaned_data
+
+
 class JointAccountForm(forms.Form):
     PURPOSE = ('SCHOOL FEES', 'TRAVEL', 'CONDOLENCE', 'WEDDING', 'OTHERS')
     groupName = forms.CharField(
@@ -131,9 +193,6 @@ class JointAccountForm(forms.Form):
             'required': True
         })
     )
-    # Not sure about group accounts not specified in the doc
-    bot_cds = forms.CharField()
-    dse_cds = forms.CharField()
 
 
 class EditProfileForm(forms.Form):
