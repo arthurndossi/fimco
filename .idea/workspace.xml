@@ -2,8 +2,73 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2bb6a40e-3dd1-4683-a1ae-6832ed7492de" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.gitignore.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/select2/css/select2.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/select2/css/select2.min.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/select2/js/i18n/az.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/select2/js/i18n/bg.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/select2/js/i18n/ca.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/select2/js/i18n/cs.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/select2/js/i18n/da.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/select2/js/i18n/de.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/select2/js/i18n/en.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/select2/js/i18n/es.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/select2/js/i18n/et.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/select2/js/i18n/eu.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/select2/js/i18n/fa.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/select2/js/i18n/fi.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/select2/js/i18n/fr.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/select2/js/i18n/gl.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/select2/js/i18n/hi.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/select2/js/i18n/hr.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/select2/js/i18n/hu.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/select2/js/i18n/id.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/select2/js/i18n/is.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/select2/js/i18n/it.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/select2/js/i18n/ko.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/select2/js/i18n/lt.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/select2/js/i18n/lv.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/select2/js/i18n/mk.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/select2/js/i18n/nb.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/select2/js/i18n/nl.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/select2/js/i18n/pl.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/select2/js/i18n/pt-BR.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/select2/js/i18n/pt.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/select2/js/i18n/ro.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/select2/js/i18n/ru.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/select2/js/i18n/sk.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/select2/js/i18n/sr.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/select2/js/i18n/sv.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/select2/js/i18n/th.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/select2/js/i18n/tr.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/select2/js/i18n/uk.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/select2/js/i18n/vi.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/select2/js/i18n/zh-CN.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/select2/js/i18n/zh-TW.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/select2/js/select2.full.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/select2/js/select2.full.min.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/select2/js/select2.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/select2/js/select2.min.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/fimco/pochi/tables.py" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.gitignore.txt" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fimco/db.sqlite3" afterPath="$PROJECT_DIR$/fimco/db.sqlite3" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dataSources/532288af-247b-4932-9df9-87488435154e.xml" afterPath="$PROJECT_DIR$/.idea/dataSources/532288af-247b-4932-9df9-87488435154e.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fimco/core/demo_settings.py" afterPath="$PROJECT_DIR$/fimco/core/demo_settings.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fimco/core/settings.py" afterPath="$PROJECT_DIR$/fimco/core/settings.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fimco/core/urls.py" afterPath="$PROJECT_DIR$/fimco/core/urls.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fimco/fimcosite/forms.py" afterPath="$PROJECT_DIR$/fimco/fimcosite/forms.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fimco/fimcosite/models.py" afterPath="$PROJECT_DIR$/fimco/fimcosite/models.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fimco/fimcosite/static/js/registration.js" afterPath="$PROJECT_DIR$/fimco/fimcosite/static/js/registration.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fimco/fimcosite/templates/base.html" afterPath="$PROJECT_DIR$/fimco/fimcosite/templates/base.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fimco/fimcosite/templates/corporate.html" afterPath="$PROJECT_DIR$/fimco/fimcosite/templates/corporate.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fimco/fimcosite/templates/registration.html" afterPath="$PROJECT_DIR$/fimco/fimcosite/templates/registration.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fimco/fimcosite/templates/top-bar.html" afterPath="$PROJECT_DIR$/fimco/fimcosite/templates/top-bar.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fimco/fimcosite/urls.py" afterPath="$PROJECT_DIR$/fimco/fimcosite/urls.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fimco/fimcosite/views.py" afterPath="$PROJECT_DIR$/fimco/fimcosite/views.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fimco/pochi/models.py" afterPath="$PROJECT_DIR$/fimco/pochi/models.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fimco/pochi/templates/pochi/main.html" afterPath="$PROJECT_DIR$/fimco/pochi/templates/pochi/main.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fimco/pochi/templates/pochi/statements.html" afterPath="$PROJECT_DIR$/fimco/pochi/templates/pochi/statements.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fimco/pochi/views.py" afterPath="$PROJECT_DIR$/fimco/pochi/views.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -57,83 +122,43 @@
       <file leaf-file-name="models.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/fimco/pochi/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="258">
-              <caret line="19" column="0" lean-forward="false" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+            <state relative-caret-position="562">
+              <caret line="79" column="51" lean-forward="false" selection-start-line="79" selection-start-column="51" selection-end-line="79" selection-end-column="51" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/fimco/pochi/views.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="127">
+              <caret line="40" column="0" lean-forward="false" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
               <folding>
-                <element signature="e#0#39#0" expanded="true" />
+                <element signature="e#0#11#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="forms.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/fimco/fimcosite/forms.py">
+      <file leaf-file-name="statements.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/fimco/pochi/templates/pochi/statements.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="95">
-              <caret line="66" column="25" lean-forward="false" selection-start-line="66" selection-start-column="25" selection-end-line="66" selection-end-column="25" />
+            <state relative-caret-position="309">
+              <caret line="38" column="35" lean-forward="false" selection-start-line="38" selection-start-column="35" selection-end-line="38" selection-end-column="35" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="models.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/fimco/fimcosite/models.py">
+      <file leaf-file-name="tables.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/fimco/pochi/tables.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="264">
-              <caret line="71" column="55" lean-forward="false" selection-start-line="71" selection-start-column="55" selection-end-line="71" selection-end-column="55" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name=".gitignore.txt" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/.gitignore.txt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="2" lean-forward="false" selection-start-line="0" selection-start-column="2" selection-end-line="0" selection-end-column="2" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="demo_settings.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/fimco/core/demo_settings.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="376">
-              <caret line="131" column="0" lean-forward="false" selection-start-line="131" selection-start-column="0" selection-end-line="131" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/fimco/fimcosite/views.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="126" column="29" lean-forward="false" selection-start-line="126" selection-start-column="20" selection-end-line="126" selection-end-column="29" />
+            <state relative-caret-position="136">
+              <caret line="8" column="66" lean-forward="false" selection-start-line="8" selection-start-column="66" selection-end-line="8" selection-end-column="66" />
               <folding>
-                <element signature="e#0#35#0" expanded="true" />
+                <element signature="e#0#31#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="registration.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/fimco/fimcosite/templates/registration.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-927">
-              <caret line="10" column="41" lean-forward="false" selection-start-line="10" selection-start-column="41" selection-end-line="10" selection-end-column="41" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="main.css" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/fimco/fimcosite/static/css/main.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="152">
-              <caret line="54" column="16" lean-forward="false" selection-start-line="54" selection-start-column="16" selection-end-line="54" selection-end-column="16" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -144,15 +169,14 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="JavaScript File" />
-        <option value="Python Script" />
         <option value="CSS File" />
         <option value="HTML File" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>msisdn</find>
       <find>f</find>
       <find>fimco</find>
       <find>fimco.</find>
@@ -182,6 +206,7 @@
       <find>tooltip</find>
       <find>tooltips</find>
       <find>Transaction</find>
+      <find>fancy se</find>
     </findStrings>
     <replaceStrings>
       <replace>static</replace>
@@ -221,10 +246,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/fimco/pochi/templates/pochi/group.html" />
-        <option value="dbtable:/8b680642/532288af-247b-4932-9df9-87488435154e/main.auth_user" />
-        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/532288af-247b-4932-9df9-87488435154e/console.sql" />
-        <option value="$PROJECT_DIR$/fimco/backend/templates/login.html" />
         <option value="$PROJECT_DIR$/fimco/backend/templates/backend/modals.html" />
         <option value="$PROJECT_DIR$/fimco/backend/static/backend/js/app.js" />
         <option value="$PROJECT_DIR$/fimco/backend/forms.py" />
@@ -238,7 +259,6 @@
         <option value="$PROJECT_DIR$/requirements.txt" />
         <option value="$PROJECT_DIR$/fimco/fimcosite/templates/terms_conditions.html" />
         <option value="$PROJECT_DIR$/fimco/fimcosite/static/css/reg.css" />
-        <option value="$PROJECT_DIR$/fimco/fimcosite/static/js/registration.js" />
         <option value="$PROJECT_DIR$/fimco/backend/templates/backend/login.html" />
         <option value="$PROJECT_DIR$/fimco/backend/models.py" />
         <option value="$PROJECT_DIR$/fimco/market/views.py" />
@@ -248,30 +268,35 @@
         <option value="$PROJECT_DIR$/fimco/market/models.py" />
         <option value="$PROJECT_DIR$/fimco/pochi/templates/pochi/home.html" />
         <option value="$PROJECT_DIR$/fimco/fimcosite/templates/profile.html" />
-        <option value="$PROJECT_DIR$/fimco/pochi/templates/pochi/main.html" />
         <option value="$PROJECT_DIR$/fimco/pochi/urls.py" />
         <option value="D:/DOWNLOADS/Smarty - Website + Admin + RTL Template/Admin/Admin_BS3/page-user-profile.html" />
         <option value="$PROJECT_DIR$/fimco/pochi/templates/pochi/profile.html" />
         <option value="$PROJECT_DIR$/fimco/fimcosite/static/css/profile.css" />
         <option value="$PROJECT_DIR$/fimco/fimcosite/static/js/profile.js" />
         <option value="$PROJECT_DIR$/fimco/fimcosite/templates/pricing.html" />
-        <option value="$PROJECT_DIR$/fimco/fimcosite/templates/base.html" />
-        <option value="$PROJECT_DIR$/fimco/fimcosite/templates/top-bar.html" />
         <option value="$PROJECT_DIR$/fimco/fimcosite/templates/modals.html" />
         <option value="$PROJECT_DIR$/fimco/fimcosite/static/css/main.css" />
-        <option value="$PROJECT_DIR$/fimco/fimcosite/templates/corporate.html" />
-        <option value="$PROJECT_DIR$/fimco/pochi/views.py" />
-        <option value="$PROJECT_DIR$/fimco/fimcosite/urls.py" />
-        <option value="$PROJECT_DIR$/fimco/fimcosite/templates/registration.html" />
-        <option value="$PROJECT_DIR$/fimco/core/settings.py" />
-        <option value="$PROJECT_DIR$/fimco/core/urls.py" />
-        <option value="$PROJECT_DIR$/fimco/fimcosite/forms.py" />
-        <option value="$PROJECT_DIR$/fimco/fimcosite/views.py" />
-        <option value="$PROJECT_DIR$/fimco/pochi/models.py" />
-        <option value="$PROJECT_DIR$/fimco/core/demo_settings.py" />
-        <option value="$PROJECT_DIR$/fimco/fimcosite/models.py" />
         <option value="$PROJECT_DIR$/.gitignore.txt" />
         <option value="H:/Galus/test/app/app/templates/index.html" />
+        <option value="$PROJECT_DIR$/fimco/fimcoplatform/apps.py" />
+        <option value="$PROJECT_DIR$/fimco/core/settings.py" />
+        <option value="$PROJECT_DIR$/fimco/core/urls.py" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/532288af-247b-4932-9df9-87488435154e/console.sql" />
+        <option value="$PROJECT_DIR$/fimco/fimcosite/static/js/registration.js" />
+        <option value="$PROJECT_DIR$/fimco/fimcosite/templates/registration.html" />
+        <option value="$PROJECT_DIR$/fimco/pochi/models.py" />
+        <option value="$PROJECT_DIR$/fimco/fimcosite/urls.py" />
+        <option value="$PROJECT_DIR$/fimco/fimcosite/templates/corporate.html" />
+        <option value="$PROJECT_DIR$/fimco/fimcosite/forms.py" />
+        <option value="$PROJECT_DIR$/fimco/fimcosite/models.py" />
+        <option value="$PROJECT_DIR$/fimco/fimcosite/views.py" />
+        <option value="$PROJECT_DIR$/fimco/pochi/templates/pochi/main.html" />
+        <option value="$PROJECT_DIR$/fimco/core/demo_settings.py" />
+        <option value="$PROJECT_DIR$/fimco/pochi/tables.py" />
+        <option value="$PROJECT_DIR$/fimco/fimcosite/templates/base.html" />
+        <option value="$PROJECT_DIR$/fimco/fimcosite/templates/top-bar.html" />
+        <option value="$PROJECT_DIR$/fimco/pochi/views.py" />
+        <option value="$PROJECT_DIR$/fimco/pochi/templates/pochi/statements.html" />
       </list>
     </option>
   </component>
@@ -305,7 +330,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
@@ -365,7 +389,11 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="fimcosite" />
+              <option name="myItemId" value="pochi" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="static" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -383,7 +411,15 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="fimcoplatform" />
+              <option name="myItemId" value="pochi" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="static" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="pochi" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -401,12 +437,25 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="core" />
+              <option name="myItemId" value="pochi" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="static" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="pochi" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="plugins" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -423,19 +472,19 @@
     <property name="list.type.of.created.stylesheet" value="CSS" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\MADS\PycharmProjects\FIMCO\fimco\pochi\templates\pochi" />
-      <recent name="C:\Users\MADS\PycharmProjects\FIMCO\fimco\fimcosite\static\img" />
-      <recent name="C:\Users\MADS\PycharmProjects\FIMCO\fimco\backend\static\backend\plugins" />
-      <recent name="C:\Users\MADS\PycharmProjects\FIMCO\fimco\backend\static\backend\css" />
-      <recent name="C:\Users\MADS\PycharmProjects\FIMCO\fimco\backend\static\backend\js" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\MADS\PycharmProjects\FIMCO\fimco\backend\templates\backend" />
       <recent name="C:\Users\MADS\PycharmProjects\FIMCO\fimco\pochi\templates\pochi" />
       <recent name="C:\Users\MADS\PycharmProjects\FIMCO\fimco\fimcosite\templates" />
       <recent name="C:\Users\MADS\PycharmProjects\FIMCO\fimco\pochi\templates" />
       <recent name="C:\Users\MADS\PycharmProjects\FIMCO\fimco\fimcosite\static" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\MADS\PycharmProjects\FIMCO\fimco\pochi\static\pochi\plugins" />
+      <recent name="C:\Users\MADS\PycharmProjects\FIMCO\fimco\pochi\templates\pochi" />
+      <recent name="C:\Users\MADS\PycharmProjects\FIMCO\fimco\fimcosite\static\img" />
+      <recent name="C:\Users\MADS\PycharmProjects\FIMCO\fimco\backend\static\backend\plugins" />
+      <recent name="C:\Users\MADS\PycharmProjects\FIMCO\fimco\backend\static\backend\css" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -927,7 +976,14 @@
       <option name="project" value="LOCAL" />
       <updated>1508580089063</updated>
     </task>
-    <option name="localTasksCounter" value="39" />
+    <task id="LOCAL-00039" summary="changes">
+      <created>1508582097791</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1508582097791</updated>
+    </task>
+    <option name="localTasksCounter" value="40" />
     <servers />
   </component>
   <component name="TodoView">
@@ -941,17 +997,17 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1370" height="744" extended-state="0" />
+    <editor active="true" />
     <layout>
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22824427" sideWeight="0.5" order="1" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.28968903" sideWeight="0.510687" order="1" side_tool="true" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17175573" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289689" sideWeight="0.49312976" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289689" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.27168575" sideWeight="0.4969743" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.28968903" sideWeight="0.48931298" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22519083" sideWeight="0.5" order="1" side_tool="false" content_ui="combo" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17175573" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289689" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.28968903" sideWeight="0.48931298" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31587562" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32900763" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -964,6 +1020,7 @@
       <window_info id="Database Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289689" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Remote Host" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3290469" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289689" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -1028,7 +1085,7 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="23" />
+      <option name="time" value="25" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="Python.DjangoServer">
@@ -1037,100 +1094,6 @@
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/fimco/fimcosite/templates/profile.html" />
-    <entry file="file://$PROJECT_DIR$/fimco/pochi/templates/pochi/rate.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fimco/pochi/templates/pochi/home.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="14" column="53" lean-forward="true" selection-start-line="14" selection-start-column="53" selection-end-line="14" selection-end-column="53" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://D:/DOWNLOADS/Smarty - Website + Admin + RTL Template/Admin/Admin_BS3/page-user-profile.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="243">
-          <caret line="774" column="80" lean-forward="false" selection-start-line="774" selection-start-column="48" selection-end-line="774" selection-end-column="80" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://D:/DOWNLOADS/Smarty - Website + Admin + RTL Template/Admin/Admin_BS3/form-elements.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="241">
-          <caret line="757" column="0" lean-forward="true" selection-start-line="757" selection-start-column="0" selection-end-line="757" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fimco/fimcosite/static/js/registration.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="34" lean-forward="true" selection-start-line="8" selection-start-column="34" selection-end-line="8" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fimco/pochi/templates/pochi/account.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="69" column="0" lean-forward="true" selection-start-line="69" selection-start-column="0" selection-end-line="69" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fimco/fimcosite/static/css/profile.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="22" lean-forward="false" selection-start-line="3" selection-start-column="22" selection-end-line="3" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fimco/pochi/templates/pochi/deposit.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fimco/fimcosite/static/js/profile.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="18" column="24" lean-forward="true" selection-start-line="18" selection-start-column="24" selection-end-line="18" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fimco/pochi/templates/pochi/profile.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="280">
-          <caret line="19" column="27" lean-forward="false" selection-start-line="19" selection-start-column="27" selection-end-line="19" selection-end-column="27" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fimco/pochi/templates/pochi/main.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="174" column="0" lean-forward="false" selection-start-line="174" selection-start-column="0" selection-end-line="174" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fimco/fimcosite/templates/clients.html" />
-    <entry file="file://$PROJECT_DIR$/fimco/fimcosite/templates/services.html" />
-    <entry file="file://$PROJECT_DIR$/fimco/fimcosite/templates/fund.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fimco/fimcosite/templates/contact-us.html" />
     <entry file="file://$PROJECT_DIR$/fimco/fimcosite/templates/blog.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1170,14 +1133,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fimco/fimcosite/templates/base.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="115">
-          <caret line="163" column="14" lean-forward="true" selection-start-line="163" selection-start-column="14" selection-end-line="163" selection-end-column="14" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/fimco/pochi/urls.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="68">
@@ -1190,14 +1145,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="122">
           <caret line="1241" column="85" lean-forward="false" selection-start-line="1241" selection-start-column="77" selection-end-line="1241" selection-end-column="85" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fimco/fimcosite/templates/top-bar.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="14" column="20" lean-forward="true" selection-start-line="14" selection-start-column="20" selection-end-line="14" selection-end-column="20" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1240,89 +1187,13 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fimco/fimcosite/templates/invest.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="307">
-          <caret line="113" column="73" lean-forward="false" selection-start-line="113" selection-start-column="73" selection-end-line="113" selection-end-column="73" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://H:/others/app/app/templates/base.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="117">
-          <caret line="11" column="32" lean-forward="true" selection-start-line="11" selection-start-column="32" selection-end-line="11" selection-end-column="32" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://H:/others/app/app/templates/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" column="6" lean-forward="true" selection-start-line="15" selection-start-column="6" selection-end-line="15" selection-end-column="6" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fimco/fimcosite/templates/corporate.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="83">
-          <caret line="182" column="0" lean-forward="false" selection-start-line="182" selection-start-column="0" selection-end-line="182" selection-end-column="0" />
-          <folding>
-            <marker date="1508574206789" expanded="true" signature="171:26057" ph="..." />
-            <marker date="1508574206789" expanded="true" signature="203:26042" ph="..." />
-            <marker date="1508574206789" expanded="true" signature="1241:26027" ph="..." />
-            <marker date="1508574206789" expanded="true" signature="1289:26007" ph="..." />
-            <marker date="1508574206789" expanded="true" signature="1366:9446" ph="..." />
-            <marker date="1508574206789" expanded="true" signature="1442:9419" ph="..." />
-            <marker date="1508574206789" expanded="true" signature="1502:9388" ph="..." />
-            <marker date="1508574206789" expanded="true" signature="1566:9353" ph="..." />
-            <marker date="1508574206789" expanded="true" signature="1843:9314" ph="..." />
-            <marker date="1508574206789" expanded="true" signature="1894:8809" ph="..." />
-            <marker date="1508574206789" expanded="true" signature="9517:14981" ph="..." />
-            <marker date="1508574206789" expanded="true" signature="9593:14954" ph="..." />
-            <marker date="1508574206789" expanded="true" signature="9653:14923" ph="..." />
-            <marker date="1508574206789" expanded="true" signature="9717:14888" ph="..." />
-            <marker date="1508574206789" expanded="true" signature="9994:14849" ph="..." />
-            <marker date="1508574206789" expanded="true" signature="10046:14344" ph="..." />
-            <marker date="1508574206789" expanded="true" signature="10108:12750" ph="..." />
-            <marker date="1508574206789" expanded="true" signature="10188:11398" ph="..." />
-            <marker date="1508574206789" expanded="true" signature="10398:10755" ph="..." />
-            <marker date="1508574206789" expanded="true" signature="11478:12699" ph="..." />
-            <marker date="1508574206789" expanded="true" signature="11694:12052" ph="..." />
-            <marker date="1508574206789" expanded="true" signature="12813:14292" ph="..." />
-            <marker date="1508574206789" expanded="true" signature="12885:14241" ph="..." />
-            <marker date="1508574206789" expanded="true" signature="13101:13462" ph="..." />
-            <marker date="1508574206789" expanded="true" signature="15052:25984" ph="..." />
-            <marker date="1508574206789" expanded="true" signature="15128:25957" ph="..." />
-            <marker date="1508574206789" expanded="true" signature="15188:25926" ph="..." />
-            <marker date="1508574206789" expanded="true" signature="15252:25891" ph="..." />
-            <marker date="1508574206789" expanded="true" signature="15526:25852" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fimco/fimcosite/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="9" column="47" lean-forward="false" selection-start-line="9" selection-start-column="47" selection-end-line="9" selection-end-column="47" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/fimco/fimcosite/templates/invest.html" />
+    <entry file="file://H:/others/app/app/templates/base.html" />
+    <entry file="file://H:/others/app/app/templates/index.html" />
     <entry file="file://$PROJECT_DIR$/fimco/fimcoplatform/migrations/0001_initial.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-546">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fimco/fimcosite/static/css/main.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="152">
-          <caret line="54" column="16" lean-forward="false" selection-start-line="54" selection-start-column="16" selection-end-line="54" selection-end-column="16" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1330,121 +1201,286 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="68">
           <caret line="4" column="0" lean-forward="true" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://H:/Galus/test/app/app/templates/index.html" />
+    <entry file="file://H:/Galus/test/app/app/templates/base.html" />
+    <entry file="file://$PROJECT_DIR$/.gitignore.txt" />
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" column="6" lean-forward="true" selection-start-line="2" selection-start-column="6" selection-end-line="2" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fimco/fimcosite/static/css/main.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="911">
+          <caret line="54" column="16" lean-forward="false" selection-start-line="54" selection-start-column="16" selection-end-line="54" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fimco/core/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="38" column="34" lean-forward="true" selection-start-line="38" selection-start-column="34" selection-end-line="38" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fimco/fimcoplatform/apps.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="5" column="25" lean-forward="false" selection-start-line="5" selection-start-column="6" selection-end-line="5" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fimco/fimcoplatform/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="14" column="46" lean-forward="true" selection-start-line="14" selection-start-column="46" selection-end-line="14" selection-end-column="46" />
           <folding>
-            <element signature="e#0#39#0" expanded="false" />
+            <element signature="e#0#32#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/fimco/core/urls.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="12" column="53" lean-forward="true" selection-start-line="12" selection-start-column="53" selection-end-line="12" selection-end-column="53" />
+        <state relative-caret-position="306">
+          <caret line="19" column="41" lean-forward="false" selection-start-line="19" selection-start-column="41" selection-end-line="19" selection-end-column="41" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fimco/pochi/views.py">
+    <entry file="file://C:/Python27/Lib/site-packages/django/core/handlers/base.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2592">
-          <caret line="19" column="88" lean-forward="false" selection-start-line="19" selection-start-column="88" selection-end-line="19" selection-end-column="88" />
-          <folding>
-            <element signature="e#0#11#0" expanded="false" />
-          </folding>
+        <state relative-caret-position="148">
+          <caret line="185" column="0" lean-forward="false" selection-start-line="185" selection-start-column="0" selection-end-line="185" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="dbDummy://dbtable:/8b680642/532288af-247b-4932-9df9-87488435154e/main.sqlite_sequence">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/532288af-247b-4932-9df9-87488435154e/console.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="30" lean-forward="false" selection-start-line="0" selection-start-column="30" selection-end-line="0" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fimco/fimcosite/static/js/registration.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="375">
+          <caret line="67" column="54" lean-forward="true" selection-start-line="67" selection-start-column="54" selection-end-line="67" selection-end-column="54" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="dbDummy://dbtable:/8b680642/532288af-247b-4932-9df9-87488435154e/main.auth_user">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="dbDummy://dbtable:/8b680642/532288af-247b-4932-9df9-87488435154e/main.fimcosite_kyc">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/fimco/fimcosite/templates/registration.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-927">
-          <caret line="10" column="41" lean-forward="false" selection-start-line="10" selection-start-column="41" selection-end-line="10" selection-end-column="41" />
+        <state relative-caret-position="101">
+          <caret line="14" column="74" lean-forward="false" selection-start-line="14" selection-start-column="74" selection-end-line="14" selection-end-column="74" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="dbDummy://dbtable:/8b680642/532288af-247b-4932-9df9-87488435154e/main.fimcosite_corporateprofile">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/fimco/fimcosite/forms.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="95">
-          <caret line="66" column="25" lean-forward="false" selection-start-line="66" selection-start-column="25" selection-end-line="66" selection-end-column="25" />
+        <state relative-caret-position="173">
+          <caret line="165" column="40" lean-forward="false" selection-start-line="165" selection-start-column="40" selection-end-line="165" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fimco/fimcosite/templates/corporate.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="131">
+          <caret line="31" column="51" lean-forward="false" selection-start-line="31" selection-start-column="51" selection-end-line="31" selection-end-column="51" />
+          <folding>
+            <marker date="1508657210631" expanded="false" signature="27458:27470" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fimco/fimcosite/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="9" column="57" lean-forward="true" selection-start-line="9" selection-start-column="57" selection-end-line="9" selection-end-column="57" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="dbDummy://dbtable:/8b680642/532288af-247b-4932-9df9-87488435154e/main.fimcosite_profile">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/fimco/fimcosite/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="126" column="29" lean-forward="false" selection-start-line="126" selection-start-column="20" selection-end-line="126" selection-end-column="29" />
+        <state relative-caret-position="32">
+          <caret line="49" column="26" lean-forward="true" selection-start-line="49" selection-start-column="26" selection-end-line="49" selection-end-column="26" />
           <folding>
-            <element signature="e#0#35#0" expanded="true" />
+            <element signature="e#0#9#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fimco/pochi/models.py">
+    <entry file="file://$PROJECT_DIR$/fimco/fimcosite/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="258">
-          <caret line="19" column="0" lean-forward="false" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#39#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fimco/fimcoplatform/apps.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        <state relative-caret-position="1412">
+          <caret line="87" column="47" lean-forward="true" selection-start-line="87" selection-start-column="47" selection-end-line="87" selection-end-column="47" />
           <folding>
             <element signature="e#0#39#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fimco/core/settings.py">
+    <entry file="file://D:/DOWNLOADS/Smarty - Website + Admin + RTL Template/Admin/Admin_BS3/ui-icons-fontawsome.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1368">
-          <caret line="35" column="38" lean-forward="false" selection-start-line="35" selection-start-column="38" selection-end-line="35" selection-end-column="38" />
+        <state relative-caret-position="305">
+          <caret line="126" column="37" lean-forward="true" selection-start-line="126" selection-start-column="37" selection-end-line="126" selection-end-column="37" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/fimco/core/demo_settings.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="376">
-          <caret line="131" column="0" lean-forward="false" selection-start-line="131" selection-start-column="0" selection-end-line="131" selection-end-column="0" />
+        <state relative-caret-position="-171">
+          <caret line="41" column="29" lean-forward="false" selection-start-line="41" selection-start-column="29" selection-end-line="41" selection-end-column="29" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fimco/fimcosite/models.py">
+    <entry file="file://$PROJECT_DIR$/fimco/fimcosite/templates/base.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="264">
-          <caret line="71" column="55" lean-forward="false" selection-start-line="71" selection-start-column="55" selection-end-line="71" selection-end-column="55" />
+        <state relative-caret-position="296">
+          <caret line="81" column="66" lean-forward="false" selection-start-line="81" selection-start-column="66" selection-end-line="81" selection-end-column="66" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://H:/Galus/test/app/app/templates/index.html">
+    <entry file="file://$PROJECT_DIR$/fimco/fimcosite/templates/top-bar.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="16">
-          <caret line="8" column="6" lean-forward="true" selection-start-line="8" selection-start-column="6" selection-end-line="8" selection-end-column="6" />
+        <state relative-caret-position="204">
+          <caret line="12" column="103" lean-forward="false" selection-start-line="12" selection-start-column="103" selection-end-line="12" selection-end-column="103" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://H:/Galus/test/app/app/templates/base.html">
+    <entry file="file://$PROJECT_DIR$/fimco/pochi/templates/pochi/main.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-353">
-          <caret line="4" column="45" lean-forward="true" selection-start-line="4" selection-start-column="45" selection-end-line="4" selection-end-column="45" />
+        <state relative-caret-position="140">
+          <caret line="26" column="39" lean-forward="true" selection-start-line="26" selection-start-column="8" selection-end-line="26" selection-end-column="39" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore.txt">
+    <entry file="file://$PROJECT_DIR$/fimco/pochi/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="562">
+          <caret line="79" column="51" lean-forward="false" selection-start-line="79" selection-start-column="51" selection-end-line="79" selection-end-column="51" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/select2/js/i18n/az.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
-          <caret line="0" column="2" lean-forward="false" selection-start-line="0" selection-start-column="2" selection-end-line="0" selection-end-column="2" />
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://D:/DOWNLOADS/Smarty - Website + Admin + RTL Template/Admin/Admin_BS3/form-elements.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="309">
+          <caret line="743" column="70" lean-forward="true" selection-start-line="743" selection-start-column="70" selection-end-line="743" selection-end-column="70" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fimco/pochi/tables.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" column="66" lean-forward="false" selection-start-line="8" selection-start-column="66" selection-end-line="8" selection-end-column="66" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fimco/pochi/templates/pochi/statements.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="309">
+          <caret line="38" column="35" lean-forward="false" selection-start-line="38" selection-start-column="35" selection-end-line="38" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fimco/pochi/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="127">
+          <caret line="40" column="0" lean-forward="false" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

@@ -60,6 +60,11 @@
 						<div class="navbar-collapse collapse nav-main-collapse">
                             <nav class="nav-main">
                                 <ul id="topMain" class="nav nav-pills nav-main">
+                                    <li>
+                                        <a href="{% url 'index' %}">
+                                            HOME
+                                        </a>
+                                    </li>
                                     <li class="dropdown">
                                         <a class="dropdown-toggle">
                                             WHO WE ARE
@@ -74,7 +79,7 @@
                                             <li>
                                                 <a href="{% url 'about' %}#approach">
                                                     <span class="badge badge-danger float-right">new</span>
-                                                    Our investment approach
+                                                    Our Philosophy
                                                 </a>
                                             </li>
                                         </ul>
@@ -85,13 +90,14 @@
                                         </a>
                                         <ul class="dropdown-menu">
                                             <li><a href="{% url 'info' %}">POCHI</a></li>
-                                            <li><a href="{% url 'fund' %}">Fund Management</a></li>
                                             <li><a href="{% url 'brokerage' %}">Brokerage</a></li>
+                                            <li><a href="{% url 'fund' %}">Fund Management</a></li>
+                                            <li><a href="{% url 'markets' %}">Market Information</a></li>
                                         </ul>
                                     </li>
                                     <li class="dropdown">
                                         <a class="dropdown-toggle">
-                                            MARKET INFORMATION
+                                            News & Insights
                                         </a>
                                         <ul class="dropdown-menu">
                                             <li><a href="{% url 'blog' %}">BLOG</a></li>

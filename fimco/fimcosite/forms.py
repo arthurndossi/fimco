@@ -116,7 +116,7 @@ class RegisterForm(forms.Form):
         return cleaned_data
 
 
-class CorporateForm(forms.Form):
+class CorporateForm1(forms.Form):
     name = forms.CharField(
         min_length=2,
         max_length=20,
@@ -134,15 +134,9 @@ class CorporateForm(forms.Form):
             'required': True,
         })
     )
-    email = forms.EmailField(
-        validators=[EmailValidator],
-        widget=forms.EmailInput(attrs={
-            'required': True,
-        })
-    )
-    address = forms.SlugField(
-        max_length=100,
-        widget=forms.TextInput(attrs={
+    address = forms.CharField(
+        max_length=500,
+        widget=forms.Textarea(attrs={
             'required': True,
         })
     )
@@ -151,15 +145,6 @@ class CorporateForm(forms.Form):
         widget=forms.URLInput(attrs={
             'required': True,
         })
-    )
-    id_type = forms.ChoiceField(choices=CORPORATE_IDS)
-    id_number = forms.CharField(
-        widget=forms.TextInput(attrs={
-            'required': True
-        })
-    )
-    scanned_id = forms.ImageField(
-        widget=forms.ClearableFileInput(attrs={'id': 'file', 'required': True})
     )
 
     def clean(self):
@@ -170,9 +155,20 @@ class CorporateForm(forms.Form):
         return cleaned_data
 
 
-class JointAccountForm(forms.Form):
-    PURPOSE = ('SCHOOL FEES', 'TRAVEL', 'CONDOLENCE', 'WEDDING', 'OTHERS')
-    groupName = forms.CharField(
+class CorporateForm2(forms.Form):
+    id_type = forms.ChoiceField(choices=CORPORATE_IDS)
+    id_number = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'required': True
+        })
+    )
+    scanned_id = forms.FileField(
+        widget=forms.ClearableFileInput(attrs={'id': 'file', 'required': True})
+    )
+
+
+class CorporateForm3(forms.Form):
+    fName = forms.CharField(
         min_length=2,
         max_length=20,
         validators=[alphabetic],
@@ -180,19 +176,55 @@ class JointAccountForm(forms.Form):
             'required': True,
         })
     )
-    purpose = forms.ChoiceField(choices=PURPOSE, widget=forms.TextInput(attrs={}))
-    admin_id_one = forms.CharField(
+    lName = forms.CharField(
+        min_length=2,
+        max_length=20,
+        validators=[alphabetic],
         widget=forms.TextInput(attrs={
-            'class': 'form-control',
-            'required': True
+            'required': True,
         })
     )
-    admin_id_two = forms.CharField(
-        widget=forms.TextInput(attrs={
-            'class': 'form-control',
-            'required': True
+    dob = forms.DateField(widget=forms.DateInput(attrs={
+        'type': 'date',
+        'required': True,
+    }))
+    gender = forms.ChoiceField(choices=GENDER)
+    email = forms.EmailField(
+        validators=[EmailValidator],
+        widget=forms.EmailInput(attrs={
+            'required': True,
         })
     )
+    phone = forms.CharField(
+        validators=[telephone],
+        widget=PhoneInput(attrs={
+            'x-autocompletetype': 'tel',
+            'required': True,
+        })
+    )
+    password = forms.CharField(
+        validators=[validate_slug],
+        widget=forms.PasswordInput(attrs={
+            'required': True,
+
+        })
+    )
+    verify = forms.CharField(
+        validators=[validate_slug],
+        widget=forms.PasswordInput(attrs={
+            'required': True,
+
+        })
+    )
+
+    def clean(self):
+        cleaned_data = self.cleaned_data
+        if User.objects.filter(username=cleaned_data['phone']).exists():
+            raise forms.ValidationError("This phone number is already associated with another user!")
+        if 'password' in cleaned_data and 'verify' in cleaned_data and cleaned_data['password'] != cleaned_data['verify']:
+            raise forms.ValidationError("Passwords must be identical.")
+
+        return cleaned_data
 
 
 class EditProfileForm(forms.Form):
