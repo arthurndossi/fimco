@@ -1,4 +1,9 @@
 {% extends "pochi/main.html" %}
+{% load render_table from django_tables2 %}
+{% load static %}
+{% block links %}
+    <link rel="stylesheet" href="{% static 'django_tables2/themes/paleblue/css/screen.css' %}" />
+{% endblock %}
 {% block content %}
     <section id="middle" style="background-color: #ebebeb">
         <!-- page title -->
@@ -14,84 +19,35 @@
                         <div class="col-md-6 col-sm-6 text-left">
                             <h4><strong>Client</strong> Details</h4>
                             <ul class="list-unstyled">
-                                <li><strong>First Name:</strong> {{ first }}</li>
-                                <li><strong>Last Name:</strong> {{ last }}</li>
-                                <li><strong>Country:</strong> DAR ES SALAAM</li>
-                                <li><strong>DOB:</strong> YYYY/MM/DD</li>
+                                <li><strong> Name:</strong> {{ user.get_full_name }}</li>
+                                <li><strong> POCHI ID:</strong> {{ profile }}</li>
                             </ul>
                         </div>
-                        <div class="col-md-6 col-sm-6 text-right">
-                            <h4><strong>Payment</strong> Details</h4>
-                            <ul class="list-unstyled">
-                                <li><strong>Phone Number:</strong> 07XX XXX XXX</li>
-                                <li><strong>Account Number:</strong> 012345678901</li>
-                                <li><strong>SWIFT Code:</strong> SWITCH012345678CODE</li>
-                                <li><strong>V.A.T Reg #:</strong> VAT5678901CODE</li>
-                            </ul>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-md-offset-2 col-lg-offset-3 text-right">
+                            <h4>Select <strong>Account</strong></h4>
+                            <form method="get">
+                                <div class="fancy-form fancy-form-select">
+                                    <select class="form-control select2" title="">
+                                        {% for account in accounts %}
+                                            <option value="{{ account.institution_name }}">
+                                                {{ account.institution_name }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                    <i class="fancy-arrow-double"></i>
+                                </div>
+                            </form>
                         </div>
                     </div>
                     <div class="table-responsive">
-                        <table class="table table-condensed nomargin">
-                            <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Description</th>
-                                    <th>Opening balance</th>
-                                    <th>Amount</th>
-                                    <th>Closing balance</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% if trans is not None %}
-                                    {% for each in trans %}
-                                    <tr>
-                                        <td>{{ each.processed_timestamp|date:"SHORT_DATE_FORMAT" }}</td>
-                                        <td>
-                                            <div><strong>{{ each.message }}</strong></div>
-                                            <small>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</small>
-                                        </td>
-                                        <td>{{ each.currency }}{{ each.open_bal }}</td>
-                                        <td>{{ each.currency }}{{ each.amount }}</td>
-                                        <td>{{ each.currency }}{{ each.close_bal }}</td>
-                                    </tr>
-                                    {% endfor %}
-                                {% else %}
-                                    <tr><td class="text-center">No data found for this user!</td></tr>
-                                {% endif %}
-                            </tbody>
-                        </table>
+                        {% render_table table %}
                     </div>
                     <hr class="nomargin-top" />
-                    <div class="row">
-                        <div class="col-sm-6 text-left">
-                            <h4><strong>Contact</strong> Details</h4>
-                            <p class="nomargin nopadding">
-                                <strong>Note:</strong>
-                                Lid est laborum dolo rumes fugats.
-                            </p><br>
-                            <address>
-                                P.O Box 21132 <br>
-                                FIMCO 2355 DAR ES SALAAM<br>
-                                Phone: 255 784 555 555 <br>
-                                Fax: 255 784 555 555 <br>
-                                Email:support@fimco.co.tz
-                            </address>
-                        </div>
-                        <div class="col-sm-6 text-right">
-                            <ul class="list-unstyled">
-                                <li><strong>Sub - Total Amount:</strong></li>
-                                <li><strong>Discount:</strong></li>
-                                <li><strong>VAT ($6):</strong></li>
-                                <li><strong>Grand Total:</strong></li>
-                            </ul>
-                        </div>
-                    </div>
                 </div>
             </div>
             <div class="panel panel-default text-right">
                 <div class="panel-body">
-                    <a class="btn btn-primary" href="#"><i class="fa fa-check"></i> SAVE</a>
-                    <a class="btn btn-success" href="{% url 'printout' %}" target="_blank"><i class="fa fa-print"></i> PRINT STATEMENT</a>
+                    <a class="btn btn-primary" href="{% url 'printout' %}" target="_blank"><i class="fa fa-print"></i> PRINT STATEMENT</a>
                 </div>
             </div>
         </div>

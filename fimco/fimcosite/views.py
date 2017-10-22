@@ -1,11 +1,69 @@
+import os
+
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.core.files.storage import FileSystemStorage
+from django.http import JsonResponse
 
 from django.shortcuts import render, redirect
+from formtools.wizard.views import SessionWizardView
 
-from .forms import RegisterForm, LoginForm, CorporateForm
+from .models import KYC, CorporateProfile, PROFILE_ROOT
+from .forms import RegisterForm, LoginForm
+
+
+def process_form_data(form_list):
+    form_data = [form.cleaned_data for form in form_list]
+    name = form_data[0]['name']
+    contact = form_data[0]['contact']
+    address = form_data[0]['address']
+    website = form_data[0]['website']
+    id_type = form_data[1]['id_type']
+    id_number = form_data[1]['id_number']
+    scanned_id = form_data[1]['scanned_id']
+    fName = form_data[2]['fName'].capitalize()
+    lName = form_data[2]['lName'].capitalize()
+    dob = form_data[2]['dob']
+    gender = form_data[2]['gender']
+    email = form_data[2]['email']
+    phone = form_data[2]['phone'].strip()
+    password = form_data[2]["password"]
+    CorporateProfile.objects.create(
+        company_name=name,
+        address=address,
+        phone_number=contact,
+        website=website
+    )
+    KYC.objects.create(
+        profile_id=CorporateProfile.profile_id,
+        kyc_type=id_type,
+        id_number=id_number,
+        document=scanned_id
+    )
+    user = User.objects.create_user(phone, email, password, first_name=fName, last_name=lName)
+    profile = user.profile
+    profile.dob = dob
+    profile.gender = gender
+    profile.bot_cds = 'NA'
+    profile.dse_cds = 'NA'
+    profile.save()
+
+    pass
+
+
+class CorporateWizard(SessionWizardView):
+    template_name = 'corporate.html'
+    file_storage = FileSystemStorage(location=os.path.join(PROFILE_ROOT, 'companies'))
+    
+    def done(self, form_list, **kwargs):
+        process_form_data(form_list)
+        resp = {
+            'status': 'success',
+            'msg': 'Your corporate account has been created successfully!'
+        }
+        return JsonResponse(resp)
 
 
 class AnonymousRequired(object):
@@ -56,10 +114,6 @@ def brokerage(request):
 
 def terms(request):
     return render(request, "terms_conditions.html", {})
-
-
-def corporate(request):
-    return render(request, 'corporate.html', {'cForm': CorporateForm, 'rForm': RegisterForm})
 
 
 @anonymous_required
@@ -123,12 +177,11 @@ def register(request):
             profile = user.profile
             profile.dob = dob
             profile.gender = gender
-            profile.client_id = client_id
-            profile.client_id = client_id
-            profile.client_id = client_id
             profile.bot_cds = bot
             profile.dse_cds = dse
+            profile.profile_type = 'C'
             profile.save()
+            KYC.objects.create(profile_id=profile.profile_id, kyc_type=id_choice, id_number=client_id, document=scanned_id)
 
             return redirect(index)
         else:

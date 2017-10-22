@@ -6,19 +6,6 @@ from django.db import models
 telephone = RegexValidator(r'^([+]?(\d{1,3}\s?)|[0])\s?\d+(\s?\-?\d{2,4}){1,3}?$', 'Not a valid phone number.')
 
 
-# class JointAccount(models.Model):
-#     group_name = models.CharField(max_length=30, unique=True)
-#     purpose = models.CharField(max_length=30, null=True)
-#     first_admin = models.CharField(max_length=30)
-#     sec_admin = models.CharField(max_length=30, null=True)
-#     pochi_id = models.CharField(max_length=20, null=True)
-#     members = models.CharField(max_length=100, null=True)
-#     created_at = models.DateTimeField(auto_now_add=True)
-#
-#     def __str__(self):
-#         return self.group_name
-
-
 class Group(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     name = models.CharField(max_length=100)
@@ -97,13 +84,6 @@ class ExternalAccount(models.Model):
     institution_branchcode = models.CharField(max_length=30, default='NA')
     institution_code = models.CharField(max_length=30, default='NA')
     account_type = models.CharField(max_length=3)  # MOBILE MONEY, BANK ACCOUNT
-
-
-class CorporateProfile(models.Model):
-    company_name = models.CharField(max_length=100)
-    address = models.TextField(max_length=500)
-    phone_number = models.CharField(max_length=20)
-    profile_id = models.CharField(max_length=20)
 
 
 class Notification(models.Model):

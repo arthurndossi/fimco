@@ -33,7 +33,7 @@ ALLOWED_HOSTS = ['54.172.71.184', 'www.fimco.co.tz', '127.0.0.1']
 INSTALLED_APPS = [
     'fimcosite.apps.FimcositeConfig',
     'pochi.apps.PochiConfig',
-    'fimcoplatform.apps.MarketConfig',
+    'fimcoplatform.apps.FimcoPlatformConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

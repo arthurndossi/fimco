@@ -1,13 +1,17 @@
 from django.conf.urls import url
-from django.views.generic import TemplateView
 
+from .forms import CorporateForm1, CorporateForm2, CorporateForm3
+from .views import CorporateWizard
 from . import views
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^about$', views.about, name='about'),
     url(r'^new/account$', views.account, name='account'),
-    url(r'^corporate/account$', views.corporate, name='corporate'),
+    url(r'^corporate/account$',
+        CorporateWizard.as_view([CorporateForm1, CorporateForm2, CorporateForm3]),
+        name='corporate'
+        ),
     url(r'^register$', views.register, name='register'),
     url(r'^blog$', views.blog_view, name='blog'),
     url(r'^fund$', views.fund, name='fund'),

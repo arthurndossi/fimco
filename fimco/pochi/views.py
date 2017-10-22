@@ -4,7 +4,9 @@ import uuid
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
+from django_tables2 import RequestConfig
 
+from .tables import TransactionTable
 from .models import Transaction, Group, GroupMembers, ExternalAccount
 from fimcosite.forms import EditProfileForm
 
@@ -31,20 +33,30 @@ def admin(request):
 @login_required
 def statements(request):
     user_accounts = account_trans = trans = None
-    if request.GET.get('account'):
-        selected_account = request.GET.get('account')
-        account_trans = Transaction.objects.filter(query__icontains=selected_account)
-
+    profile = request.user.profile
     try:
-        user_accounts = ExternalAccount.objects.filter(profile_id=request.user.profile.profile_id)
-        trans = Transaction.objects.filter(profile_id=request.user.profile.profile_id)
+        user_accounts = ExternalAccount.objects.filter(profile_id=profile.profile_id)
     except ExternalAccount.DoesNotExist:
         user_accounts = user_accounts
-    except Transaction.DoesNotExist:
-        trans = trans
+    if request.GET.get('channel'):
+        selected_account = request.GET.get('channel')
+        account_trans = Transaction.objects.filter(profile_id=profile.profile_id, channel=selected_account).values(
+            'account', 'trans_type', 'service', 'channel', 'dest_account', 'currency', 'amount', 'charge', 'status'
+        )
+    else:
+        try:
+            trans = Transaction.objects.filter(profile_id=request.user.profile.profile_id)
+        except Transaction.DoesNotExist:
+            trans = trans
+
+    table = TransactionTable(trans)
+    RequestConfig(request, paginate={'per_page': 25}).configure(table)
 
     context = {
-        "accounts": user_accounts, "trans": trans, "single": account_trans
+        "profile": profile,
+        "accounts": user_accounts,
+        "table": table,
+        "single": account_trans
     }
     return render(request, 'pochi/statements.html', context)
 

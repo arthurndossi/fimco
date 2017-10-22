@@ -7,359 +7,380 @@
 {% block content %}
     <section>
         <div class="container">
+
             <div class="heading-title text-center mb-80">
                 <h3>Corporate Account</h3>
             </div>
-            <ul class="process-steps nav nav-justified text-center">
-                <li class="nav-item">
-                    <a class="nav-link active" href="#step1" data-toggle="tab"><i class="icon-building"></i></a>
-                    <h5>Company Information</h5>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#step2" data-toggle="tab"><i class="icon-edit-sign"></i></a>
-                    <h5>Company KYC</h5>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#step3" data-toggle="tab"><i class="icon-guest"></i> </a>
-                    <h5>User Profile <small>(Company representative)</small></h5>
-                </li>
-            </ul>
-            <form class="validate" action="" method="post" enctype="multipart/form-data" data-success="Sent! Thank you!" data-toastr-position="top-right">
-                <div class="tab-content mt-60">
-                    <div role="tabpanel" class="tab-pane active" id="step1">
-                        <h4></h4>
-                        <div class="row">
-                            <div class="col-md-9 col-sm-9">
-                                <div class="card card-default">
-                                    <div class="card-heading card-heading-transparent">
-                                        <h2 class="card-title">Company details</h2>
-                                    </div>
-
-                                    <div class="card-block">
-                                        <fieldset>
-                                            <div class="row">
-                                                <div class="col-md-6 col-sm-6">
-                                                    <label for="corporate:name">Company Name <small>(required)</small></label>
-                                                    <label class="input mb-10">
-                                                        <i class="ico-append fa fa-building"></i>
-                                                        {{ cForm.name }}
-                                                        <b class="tooltip tooltip-bottom-right">Your Company's Name</b>
-                                                    </label>
-                                                    {% if cForm.name.errors %}
-                                                        {% for error in cForm.name.errors %}
-                                                            <div class="alert alert-mini alert-danger mb-30">
-                                                                <strong>{{ error|escape }}</strong>
-                                                            </div>
-                                                        {% endfor %}
-                                                    {% endif %}
-                                                </div>
-                                                <div class="col-md-6 col-sm-6">
-                                                    <label for="corporate:address">Address <small>(required)</small></label>
-                                                    <label class="input mb-10">
-                                                        <i class="ico-append fa fa-address-card"></i>
-                                                        {{ cForm.address }}
-                                                        <b class="tooltip tooltip-bottom-right">Company Address</b>
-                                                    </label>
-                                                    {% if cForm.address.errors %}
-                                                        {% for error in cForm.address.errors %}
-                                                            <div class="alert alert-mini alert-danger mb-30">
-                                                                <strong>{{ error|escape }}</strong>
-                                                            </div>
-                                                        {% endfor %}
-                                                    {% endif %}
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <label for="corporate:email">Email <small>(required)</small></label>
-                                                    <label class="input mb-10">
-                                                        <i class="ico-append fa fa-envelope"></i>
-                                                        {{ cForm.email }}
-                                                        <b class="tooltip tooltip-bottom-right">Company Email</b>
-                                                    </label>
-                                                    {% if cForm.email.errors %}
-                                                        {% for error in cForm.email.errors %}
-                                                            <div class="alert alert-mini alert-danger mb-30">
-                                                                <strong>{{ error|escape }}</strong>
-                                                            </div>
-                                                        {% endfor %}
-                                                    {% endif %}
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-6 col-sm-6">
-                                                    <label for="corporate:phone">Contact <small>(required)</small></label>
-                                                    <label class="input mb-10">
-                                                        <i class="ico-append fa fa-phone"></i>
-                                                        {{ cForm.contact }}
-                                                        <b class="tooltip tooltip-bottom-right">Company contact</b>
-                                                    </label>
-                                                    {% if cForm.contact.errors %}
-                                                        {% for error in cForm.contact.errors %}
-                                                            <div class="alert alert-mini alert-danger mb-30">
-                                                                <strong>{{ error|escape }}</strong>
-                                                            </div>
-                                                        {% endfor %}
-                                                    {% endif %}
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <label for="corporate:website">Website <small>(optional)</small></label>
-                                                    <label class="input mb-10">
-                                                        <i class="ico-append fa fa-globe"></i>
-                                                        {{ cForm.website }}
-                                                        <b class="tooltip tooltip-bottom-right">Company website</b>
-                                                    </label>
-                                                    {% if cForm.website.errors %}
-                                                        {% for error in cForm.website.errors %}
-                                                            <div class="alert alert-mini alert-danger mb-30">
-                                                                <strong>{{ error|escape }}</strong>
-                                                            </div>
-                                                        {% endfor %}
-                                                    {% endif %}
-                                                </div>
-                                            </div>
-                                            <hr />
-                                        </fieldset>
-
-                                        <div class="row">
-                                            <div class="col-md-12 float-right">
-                                                <button type="submit" class="btn btn-primary btn-teal mt-30">
-                                                    Next
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div role="tabpanel" class="tab-pane" id="step2">
-                        <h4></h4>
-                        <div class="row">
-                            <div class="col-md-9 col-sm-9">
-                                <div class="card card-default">
-                                    <div class="card-heading card-heading-transparent">
-                                        <h2 class="card-title">Company details</h2>
-                                    </div>
-
-                                    <div class="card-block">
-
-                                        <fieldset>
-                                            <div class="row">
-                                                <div class="col-md-6 col-sm-6">
-                                                    <label for="corporate:id">KYC document type <small>(required)</small></label>
-                                                    <label class="input mb-10">
-                                                        <i class="ico-append fa fa-id-card-o"></i>
-                                                        {{ cForm.id_type }}
-                                                        <b class="tooltip tooltip-bottom-right">Type of KYC document</b>
-                                                    </label>
-                                                    {% if cForm.id_type.errors %}
-                                                        {% for error in cForm.id_type.errors %}
-                                                            <div class="alert alert-mini alert-danger mb-30">
-                                                                <strong>{{ error|escape }}</strong>
-                                                            </div>
-                                                        {% endfor %}
-                                                    {% endif %}
-                                                </div>
-                                                <div class="col-md-6 col-sm-6">
-                                                    <label for="corporate:number">KYC document number <small>(required)</small></label>
-                                                    <label class="input mb-10">
-                                                        <i class="ico-append fa fa-id-card-o"></i>
-                                                        {{ cForm.id_number }}
-                                                        <b class="tooltip tooltip-bottom-right">KYC document number</b>
-                                                    </label>
-                                                    {% if cForm.id_number.errors %}
-                                                        {% for error in cForm.id_number.errors %}
-                                                            <div class="alert alert-mini alert-danger mb-30">
-                                                                <strong>{{ error|escape }}</strong>
-                                                            </div>
-                                                        {% endfor %}
-                                                    {% endif %}
-                                                </div>
-                                            </div>
-
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <label for="corporate:number">Upload KYC document <small>(required)</small></label>
-                                                    <label class="input mb-10">
-                                                        <i class="ico-append fa fa-file-text-o"></i>
-                                                        {{ cForm.scanned_id }}
-                                                        <b class="tooltip tooltip-bottom-right">Attach KYC document</b>
-                                                    </label>
-                                                    {% if cForm.scanned_id.errors %}
-                                                        {% for error in cForm.scanned_id.errors %}
-                                                            <div class="alert alert-mini alert-danger mb-30">
-                                                                <strong>{{ error|escape }}</strong>
-                                                            </div>
-                                                        {% endfor %}
-                                                    {% endif %}
-                                                    <small class="text-muted block">Max file size: 10Mb (zip/pdf/jpg/png)</small>
-                                                </div>
-                                            </div>
-                                        </fieldset>
-
-                                        <div class="row">
-                                            <div class="col-md-12 float-right">
-                                                <button type="submit" class="btn btn-primary btn-teal mt-30">
-                                                    Next
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div role="tabpanel" class="tab-pane" id="step3">
-                        <h4></h4>
-                        <div class="row">
-                            <div class="col-md-9 col-sm-9">
-                                <div class="card card-default">
-                                    <div class="card-heading card-heading-transparent">
-                                        <h2 class="card-title">User details</h2>
-                                    </div>
-
-                                    <div class="card-block">
-                                        {% csrf_token %}
-                                        <fieldset>
-                                            <div class="row">
-                                                <div class="col-md-6 col-sm-6">
-                                                    <label>First Name <small>(required)</small></label>
-                                                    <label class="input mb-10">
-                                                        <i class="ico-append fa fa-user"></i>
-                                                        {{ rForm.fName }}
-                                                        <b class="tooltip tooltip-bottom-right">Your First Name</b>
-                                                    </label>
-                                                    {% if rForm.fName.errors %}
-                                                        {% for error in rForm.fName.errors %}
-                                                            <div class="alert alert-mini alert-danger mb-30">
-                                                                <strong>{{ error|escape }}</strong>
-                                                            </div>
-                                                        {% endfor %}
-                                                    {% endif %}
-                                                </div>
-                                                <div class="col-md-6 col-sm-6">
-                                                    <label for="register:last_name">Last Name <small>(required)</small></label>
-                                                    <label class="input mb-10">
-                                                        <i class="ico-append fa fa-user"></i>
-                                                        {{ rForm.lName }}
-                                                        <b class="tooltip tooltip-bottom-right">Your Last Name</b>
-                                                    </label>
-                                                    {% if rForm.lName.errors %}
-                                                        {% for error in rForm.lName.errors %}
-                                                            <div class="alert alert-mini alert-danger mb-30">
-                                                                <strong>{{ error|escape }}</strong>
-                                                            </div>
-                                                        {% endfor %}
-                                                    {% endif %}
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-6 col-sm-6">
-                                                    <label for="register:dob">Date of Birth <small>(required)</small></label>
-                                                    <label class="input mb-10">
-                                                        <i class="ico-append fa fa-calendar"></i>
-                                                        {{ rForm.dob }}
-                                                        <b class="tooltip tooltip-bottom-right">Date of Birth</b>
-                                                    </label>
-                                                    {% if rForm.dob.errors %}
-                                                        {% for error in rForm.dob.errors %}
-                                                            <div class="alert alert-mini alert-danger mb-30">
-                                                                <strong>{{ error|escape }}</strong>
-                                                            </div>
-                                                        {% endfor %}
-                                                    {% endif %}
-                                                </div>
-                                                <div class="col-md-6 col-sm-6">
-                                                    <label for="register:gender">Gender <small>(required)</small></label>
-                                                    <label class="select mb-10">
-                                                        {{ rForm.gender }}
-                                                        <i class="ico-append fa fa-venus-mars"></i>
-                                                    </label>
-                                                    {% if rForm.gender.errors %}
-                                                        {% for error in rForm.gender.errors %}
-                                                            <div class="alert alert-mini alert-danger mb-30">
-                                                                <strong>{{ error|escape }}</strong>
-                                                            </div>
-                                                        {% endfor %}
-                                                    {% endif %}
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <label for="register:email">Email <small>(required)</small></label>
-                                                    <label class="input mb-10">
-                                                        <i class="ico-append fa fa-envelope"></i>
-                                                        {{ rForm.email }}
-                                                        <b class="tooltip tooltip-bottom-right">Your Email</b>
-                                                    </label>
-                                                    {% if rForm.email.errors %}
-                                                        {% for error in rForm.email.errors %}
-                                                            <div class="alert alert-mini alert-danger mb-30">
-                                                                <strong>{{ error|escape }}</strong>
-                                                            </div>
-                                                        {% endfor %}
-                                                    {% endif %}
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-6 col-sm-6">
-                                                    <label for="register:phone">Phone <small>(required)</small></label>
-                                                    <label class="input mb-10">
-                                                        <i class="ico-append fa fa-phone"></i>
-                                                        {{ rForm.phone }}
-                                                        <b class="tooltip tooltip-bottom-right">Your Phone (optional)</b>
-                                                    </label>
-                                                    {% if rForm.phone.errors %}
-                                                        {% for error in rForm.phone.errors %}
-                                                            <div class="alert alert-mini alert-danger mb-30">
-                                                                <strong>{{ error|escape }}</strong>
-                                                            </div>
-                                                        {% endfor %}
-                                                    {% endif %}
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-6 col-sm-6">
-                                                    <label for="register:pass1">Password <small>(required)</small></label>
-                                                    <label class="input mb-10">
-                                                        <i class="ico-append fa fa-lock"></i>
-                                                        {{ rForm.password }}
-                                                        <b class="tooltip tooltip-bottom-right">Min. 6 characters</b>
-                                                    </label>
-                                                </div>
-                                                <div class="col-md-6 col-sm-6">
-                                                    <label for="register:pass2">Repeat Password <small>(required)</small></label>
-                                                    <label class="input mb-10">
-                                                        <i class="ico-append fa fa-lock"></i>
-                                                        {{ rForm.verify }}
-                                                        <b class="tooltip tooltip-bottom-right">Type the password again</b>
-                                                    </label>
-                                                    <div id="pass-message" class="alert alert-mini mb-30" style="display:none">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <hr />
-                                        </fieldset>
-
-                                        <div class="row">
-                                            <div class="col-md-12 float-right">
-                                                <button type="submit" class="btn btn-primary btn-teal mt-30">
-                                                    Next
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <p>Step {{ wizard.steps.step1 }} of {{ wizard.steps.count }}</p>
+            <form class="validate" action="{% url 'corporate' %}" method="post" enctype="multipart/form-data" data-success="Sent! Thank you!" data-toastr-position="top-right">
+                {% csrf_token %}
+                <table>
+                {{ wizard.management_form }}
+                {% if wizard.form.forms %}
+                    {{ wizard.form.management_form }}
+                    {% for form in wizard.form.forms %}
+                        {{ form }}
+                    {% endfor %}
+                {% else %}
+                    {{ wizard.form }}
+                {% endif %}
+                </table>
+                {% if wizard.steps.prev %}
+                    <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.first }}">first step</button>
+                    <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}">prev step</button>
+                {% endif %}
+                <input type="submit" value="Next"/>
             </form>
+{#            <ul class="process-steps nav nav-justified text-center">#}
+{#                <li class="nav-item">#}
+{#                    <a class="nav-link active" href="#step1" data-toggle="tab"><i class="icon-building"></i></a>#}
+{#                    <h5>Company Information</h5>#}
+{#                </li>#}
+{#                <li class="nav-item">#}
+{#                    <a class="nav-link" href="#step2" data-toggle="tab"><i class="icon-edit-sign"></i></a>#}
+{#                    <h5>Company KYC</h5>#}
+{#                </li>#}
+{#                <li class="nav-item">#}
+{#                    <a class="nav-link" href="#step3" data-toggle="tab"><i class="icon-guest"></i> </a>#}
+{#                    <h5>User Profile <small>(Company representative)</small></h5>#}
+{#                </li>#}
+{#            </ul>#}
+{#            <form class="validate" action="" method="post" enctype="multipart/form-data" data-success="Sent! Thank you!" data-toastr-position="top-right">#}
+{#                <div class="tab-content mt-60">#}
+{#                    <div role="tabpanel" class="tab-pane active" id="step1">#}
+{#                        <h4></h4>#}
+{#                        <div class="row">#}
+{#                            <div class="col-md-9 col-sm-9">#}
+{#                                <div class="card card-default">#}
+{#                                    <div class="card-heading card-heading-transparent">#}
+{#                                        <h2 class="card-title">Company details</h2>#}
+{#                                    </div>#}
+{##}
+{#                                    <div class="card-block">#}
+{#                                        <fieldset>#}
+{#                                            <div class="row">#}
+{#                                                <div class="col-md-6 col-sm-6">#}
+{#                                                    <label for="corporate:name">Company Name <small>(required)</small></label>#}
+{#                                                    <label class="input mb-10">#}
+{#                                                        <i class="ico-append fa fa-building"></i>#}
+{#                                                        {{ cForm.name }}#}
+{#                                                        <b class="tooltip tooltip-bottom-right">Your Company's Name</b>#}
+{#                                                    </label>#}
+{#                                                    {% if cForm.name.errors %}#}
+{#                                                        {% for error in cForm.name.errors %}#}
+{#                                                            <div class="alert alert-mini alert-danger mb-30">#}
+{#                                                                <strong>{{ error|escape }}</strong>#}
+{#                                                            </div>#}
+{#                                                        {% endfor %}#}
+{#                                                    {% endif %}#}
+{#                                                </div>#}
+{#                                                <div class="col-md-6 col-sm-6">#}
+{#                                                    <label for="corporate:address">Address <small>(required)</small></label>#}
+{#                                                    <label class="input mb-10">#}
+{#                                                        <i class="ico-append fa fa-address-card"></i>#}
+{#                                                        {{ cForm.address }}#}
+{#                                                        <b class="tooltip tooltip-bottom-right">Company Address</b>#}
+{#                                                    </label>#}
+{#                                                    {% if cForm.address.errors %}#}
+{#                                                        {% for error in cForm.address.errors %}#}
+{#                                                            <div class="alert alert-mini alert-danger mb-30">#}
+{#                                                                <strong>{{ error|escape }}</strong>#}
+{#                                                            </div>#}
+{#                                                        {% endfor %}#}
+{#                                                    {% endif %}#}
+{#                                                </div>#}
+{#                                            </div>#}
+{#                                            <div class="row">#}
+{#                                                <div class="col-md-12">#}
+{#                                                    <label for="corporate:email">Email <small>(required)</small></label>#}
+{#                                                    <label class="input mb-10">#}
+{#                                                        <i class="ico-append fa fa-envelope"></i>#}
+{#                                                        {{ cForm.email }}#}
+{#                                                        <b class="tooltip tooltip-bottom-right">Company Email</b>#}
+{#                                                    </label>#}
+{#                                                    {% if cForm.email.errors %}#}
+{#                                                        {% for error in cForm.email.errors %}#}
+{#                                                            <div class="alert alert-mini alert-danger mb-30">#}
+{#                                                                <strong>{{ error|escape }}</strong>#}
+{#                                                            </div>#}
+{#                                                        {% endfor %}#}
+{#                                                    {% endif %}#}
+{#                                                </div>#}
+{#                                            </div>#}
+{#                                            <div class="row">#}
+{#                                                <div class="col-md-6 col-sm-6">#}
+{#                                                    <label for="corporate:phone">Contact <small>(required)</small></label>#}
+{#                                                    <label class="input mb-10">#}
+{#                                                        <i class="ico-append fa fa-phone"></i>#}
+{#                                                        {{ cForm.contact }}#}
+{#                                                        <b class="tooltip tooltip-bottom-right">Company contact</b>#}
+{#                                                    </label>#}
+{#                                                    {% if cForm.contact.errors %}#}
+{#                                                        {% for error in cForm.contact.errors %}#}
+{#                                                            <div class="alert alert-mini alert-danger mb-30">#}
+{#                                                                <strong>{{ error|escape }}</strong>#}
+{#                                                            </div>#}
+{#                                                        {% endfor %}#}
+{#                                                    {% endif %}#}
+{#                                                </div>#}
+{#                                            </div>#}
+{#                                            <div class="row">#}
+{#                                                <div class="col-md-12">#}
+{#                                                    <label for="corporate:website">Website <small>(optional)</small></label>#}
+{#                                                    <label class="input mb-10">#}
+{#                                                        <i class="ico-append fa fa-globe"></i>#}
+{#                                                        {{ cForm.website }}#}
+{#                                                        <b class="tooltip tooltip-bottom-right">Company website</b>#}
+{#                                                    </label>#}
+{#                                                    {% if cForm.website.errors %}#}
+{#                                                        {% for error in cForm.website.errors %}#}
+{#                                                            <div class="alert alert-mini alert-danger mb-30">#}
+{#                                                                <strong>{{ error|escape }}</strong>#}
+{#                                                            </div>#}
+{#                                                        {% endfor %}#}
+{#                                                    {% endif %}#}
+{#                                                </div>#}
+{#                                            </div>#}
+{#                                            <hr />#}
+{#                                        </fieldset>#}
+{##}
+{#                                        <div class="row">#}
+{#                                            <div class="col-md-12 float-right">#}
+{#                                                <button type="submit" class="btn btn-primary btn-teal mt-30">#}
+{#                                                    Next#}
+{#                                                </button>#}
+{#                                            </div>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{##}
+{#                    <div role="tabpanel" class="tab-pane" id="step2">#}
+{#                        <h4></h4>#}
+{#                        <div class="row">#}
+{#                            <div class="col-md-9 col-sm-9">#}
+{#                                <div class="card card-default">#}
+{#                                    <div class="card-heading card-heading-transparent">#}
+{#                                        <h2 class="card-title">Company details</h2>#}
+{#                                    </div>#}
+{##}
+{#                                    <div class="card-block">#}
+{##}
+{#                                        <fieldset>#}
+{#                                            <div class="row">#}
+{#                                                <div class="col-md-6 col-sm-6">#}
+{#                                                    <label for="corporate:id">KYC document type <small>(required)</small></label>#}
+{#                                                    <label class="input mb-10">#}
+{#                                                        <i class="ico-append fa fa-id-card-o"></i>#}
+{#                                                        {{ cForm.id_type }}#}
+{#                                                        <b class="tooltip tooltip-bottom-right">Type of KYC document</b>#}
+{#                                                    </label>#}
+{#                                                    {% if cForm.id_type.errors %}#}
+{#                                                        {% for error in cForm.id_type.errors %}#}
+{#                                                            <div class="alert alert-mini alert-danger mb-30">#}
+{#                                                                <strong>{{ error|escape }}</strong>#}
+{#                                                            </div>#}
+{#                                                        {% endfor %}#}
+{#                                                    {% endif %}#}
+{#                                                </div>#}
+{#                                                <div class="col-md-6 col-sm-6">#}
+{#                                                    <label for="corporate:number">KYC document number <small>(required)</small></label>#}
+{#                                                    <label class="input mb-10">#}
+{#                                                        <i class="ico-append fa fa-id-card-o"></i>#}
+{#                                                        {{ cForm.id_number }}#}
+{#                                                        <b class="tooltip tooltip-bottom-right">KYC document number</b>#}
+{#                                                    </label>#}
+{#                                                    {% if cForm.id_number.errors %}#}
+{#                                                        {% for error in cForm.id_number.errors %}#}
+{#                                                            <div class="alert alert-mini alert-danger mb-30">#}
+{#                                                                <strong>{{ error|escape }}</strong>#}
+{#                                                            </div>#}
+{#                                                        {% endfor %}#}
+{#                                                    {% endif %}#}
+{#                                                </div>#}
+{#                                            </div>#}
+{##}
+{#                                            <div class="row">#}
+{#                                                <div class="col-md-12">#}
+{#                                                    <label for="corporate:number">Upload KYC document <small>(required)</small></label>#}
+{#                                                    <label class="input mb-10">#}
+{#                                                        <i class="ico-append fa fa-file-text-o"></i>#}
+{#                                                        {{ cForm.scanned_id }}#}
+{#                                                        <b class="tooltip tooltip-bottom-right">Attach KYC document</b>#}
+{#                                                    </label>#}
+{#                                                    {% if cForm.scanned_id.errors %}#}
+{#                                                        {% for error in cForm.scanned_id.errors %}#}
+{#                                                            <div class="alert alert-mini alert-danger mb-30">#}
+{#                                                                <strong>{{ error|escape }}</strong>#}
+{#                                                            </div>#}
+{#                                                        {% endfor %}#}
+{#                                                    {% endif %}#}
+{#                                                    <small class="text-muted block">Max file size: 10Mb (zip/pdf/jpg/png)</small>#}
+{#                                                </div>#}
+{#                                            </div>#}
+{#                                        </fieldset>#}
+{##}
+{#                                        <div class="row">#}
+{#                                            <div class="col-md-12 float-right">#}
+{#                                                <button type="submit" class="btn btn-primary btn-teal mt-30">#}
+{#                                                    Next#}
+{#                                                </button>#}
+{#                                            </div>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{##}
+{#                    <div role="tabpanel" class="tab-pane" id="step3">#}
+{#                        <h4></h4>#}
+{#                        <div class="row">#}
+{#                            <div class="col-md-9 col-sm-9">#}
+{#                                <div class="card card-default">#}
+{#                                    <div class="card-heading card-heading-transparent">#}
+{#                                        <h2 class="card-title">User details</h2>#}
+{#                                    </div>#}
+{##}
+{#                                    <div class="card-block">#}
+{#                                        {% csrf_token %}#}
+{#                                        <fieldset>#}
+{#                                            <div class="row">#}
+{#                                                <div class="col-md-6 col-sm-6">#}
+{#                                                    <label>First Name <small>(required)</small></label>#}
+{#                                                    <label class="input mb-10">#}
+{#                                                        <i class="ico-append fa fa-user"></i>#}
+{#                                                        {{ rForm.fName }}#}
+{#                                                        <b class="tooltip tooltip-bottom-right">Your First Name</b>#}
+{#                                                    </label>#}
+{#                                                    {% if rForm.fName.errors %}#}
+{#                                                        {% for error in rForm.fName.errors %}#}
+{#                                                            <div class="alert alert-mini alert-danger mb-30">#}
+{#                                                                <strong>{{ error|escape }}</strong>#}
+{#                                                            </div>#}
+{#                                                        {% endfor %}#}
+{#                                                    {% endif %}#}
+{#                                                </div>#}
+{#                                                <div class="col-md-6 col-sm-6">#}
+{#                                                    <label for="register:last_name">Last Name <small>(required)</small></label>#}
+{#                                                    <label class="input mb-10">#}
+{#                                                        <i class="ico-append fa fa-user"></i>#}
+{#                                                        {{ rForm.lName }}#}
+{#                                                        <b class="tooltip tooltip-bottom-right">Your Last Name</b>#}
+{#                                                    </label>#}
+{#                                                    {% if rForm.lName.errors %}#}
+{#                                                        {% for error in rForm.lName.errors %}#}
+{#                                                            <div class="alert alert-mini alert-danger mb-30">#}
+{#                                                                <strong>{{ error|escape }}</strong>#}
+{#                                                            </div>#}
+{#                                                        {% endfor %}#}
+{#                                                    {% endif %}#}
+{#                                                </div>#}
+{#                                            </div>#}
+{#                                            <div class="row">#}
+{#                                                <div class="col-md-6 col-sm-6">#}
+{#                                                    <label for="register:dob">Date of Birth <small>(required)</small></label>#}
+{#                                                    <label class="input mb-10">#}
+{#                                                        <i class="ico-append fa fa-calendar"></i>#}
+{#                                                        {{ rForm.dob }}#}
+{#                                                        <b class="tooltip tooltip-bottom-right">Date of Birth</b>#}
+{#                                                    </label>#}
+{#                                                    {% if rForm.dob.errors %}#}
+{#                                                        {% for error in rForm.dob.errors %}#}
+{#                                                            <div class="alert alert-mini alert-danger mb-30">#}
+{#                                                                <strong>{{ error|escape }}</strong>#}
+{#                                                            </div>#}
+{#                                                        {% endfor %}#}
+{#                                                    {% endif %}#}
+{#                                                </div>#}
+{#                                                <div class="col-md-6 col-sm-6">#}
+{#                                                    <label for="register:gender">Gender <small>(required)</small></label>#}
+{#                                                    <label class="select mb-10">#}
+{#                                                        {{ rForm.gender }}#}
+{#                                                        <i class="ico-append fa fa-venus-mars"></i>#}
+{#                                                    </label>#}
+{#                                                    {% if rForm.gender.errors %}#}
+{#                                                        {% for error in rForm.gender.errors %}#}
+{#                                                            <div class="alert alert-mini alert-danger mb-30">#}
+{#                                                                <strong>{{ error|escape }}</strong>#}
+{#                                                            </div>#}
+{#                                                        {% endfor %}#}
+{#                                                    {% endif %}#}
+{#                                                </div>#}
+{#                                            </div>#}
+{#                                            <div class="row">#}
+{#                                                <div class="col-md-12">#}
+{#                                                    <label for="register:email">Email <small>(required)</small></label>#}
+{#                                                    <label class="input mb-10">#}
+{#                                                        <i class="ico-append fa fa-envelope"></i>#}
+{#                                                        {{ rForm.email }}#}
+{#                                                        <b class="tooltip tooltip-bottom-right">Your Email</b>#}
+{#                                                    </label>#}
+{#                                                    {% if rForm.email.errors %}#}
+{#                                                        {% for error in rForm.email.errors %}#}
+{#                                                            <div class="alert alert-mini alert-danger mb-30">#}
+{#                                                                <strong>{{ error|escape }}</strong>#}
+{#                                                            </div>#}
+{#                                                        {% endfor %}#}
+{#                                                    {% endif %}#}
+{#                                                </div>#}
+{#                                            </div>#}
+{#                                            <div class="row">#}
+{#                                                <div class="col-md-6 col-sm-6">#}
+{#                                                    <label for="register:phone">Phone <small>(required)</small></label>#}
+{#                                                    <label class="input mb-10">#}
+{#                                                        <i class="ico-append fa fa-phone"></i>#}
+{#                                                        {{ rForm.phone }}#}
+{#                                                        <b class="tooltip tooltip-bottom-right">Your Phone (optional)</b>#}
+{#                                                    </label>#}
+{#                                                    {% if rForm.phone.errors %}#}
+{#                                                        {% for error in rForm.phone.errors %}#}
+{#                                                            <div class="alert alert-mini alert-danger mb-30">#}
+{#                                                                <strong>{{ error|escape }}</strong>#}
+{#                                                            </div>#}
+{#                                                        {% endfor %}#}
+{#                                                    {% endif %}#}
+{#                                                </div>#}
+{#                                            </div>#}
+{#                                            <div class="row">#}
+{#                                                <div class="col-md-6 col-sm-6">#}
+{#                                                    <label for="register:pass1">Password <small>(required)</small></label>#}
+{#                                                    <label class="input mb-10">#}
+{#                                                        <i class="ico-append fa fa-lock"></i>#}
+{#                                                        {{ rForm.password }}#}
+{#                                                        <b class="tooltip tooltip-bottom-right">Min. 6 characters</b>#}
+{#                                                    </label>#}
+{#                                                </div>#}
+{#                                                <div class="col-md-6 col-sm-6">#}
+{#                                                    <label for="register:pass2">Repeat Password <small>(required)</small></label>#}
+{#                                                    <label class="input mb-10">#}
+{#                                                        <i class="ico-append fa fa-lock"></i>#}
+{#                                                        {{ rForm.verify }}#}
+{#                                                        <b class="tooltip tooltip-bottom-right">Type the password again</b>#}
+{#                                                    </label>#}
+{#                                                    <div id="pass-message" class="alert alert-mini mb-30" style="display:none">#}
+{#                                                    </div>#}
+{#                                                </div>#}
+{#                                            </div>#}
+{#                                            <hr />#}
+{#                                        </fieldset>#}
+{##}
+{#                                        <div class="row">#}
+{#                                            <div class="col-md-12 float-right">#}
+{#                                                <button type="submit" class="btn btn-primary btn-teal mt-30">#}
+{#                                                    Next#}
+{#                                                </button>#}
+{#                                            </div>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </form>#}
         </div>
     </section>
 {% endblock %}

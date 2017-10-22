@@ -1,5 +1,4 @@
 var id = $('#id_client_id'), choice = $("#id_id_choice");
-$('#client_input').hide();
 
 $('#next, #prev').click(function (e) {
     e.preventDefault();
@@ -25,7 +24,6 @@ choice.on('change', function() {
     }else if (id_choice === 'driving'){
         id.attr('pattern', '^\\d{10}$')
     }
-    $('#client_input').show();
 });
 
 // Prepare the preview for profile picture
