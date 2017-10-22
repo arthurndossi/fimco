@@ -18,7 +18,6 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^', include('fimcosite.urls')),
-    url(r'^', include('pin_passcode.urls')),
     url(r'^pochi/', include('pochi.urls')),
     url(r'^fimcoplatform/', include('fimcoplatform.urls')),
     url(r'^admin/', admin.site.urls),

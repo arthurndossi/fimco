@@ -44,7 +44,7 @@ class Profile(models.Model):
     is_superuser = models.BooleanField(default=False)
     profile_type = models.CharField(max_length=1, choices=TYPE)
     profile_id = models.CharField(max_length=10)
-    status = models.IntegerField(max_length=1, choices=ACTIVE_STATUS)
+    status = models.IntegerField(choices=ACTIVE_STATUS)
     approval_status = models.CharField(max_length=10, choices=STATUS)
 
     @receiver(post_save, sender=User)
