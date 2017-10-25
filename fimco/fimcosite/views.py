@@ -1,4 +1,6 @@
 import os
+import uuid
+from random import randint
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
@@ -10,7 +12,7 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from formtools.wizard.views import SessionWizardView
 
-from .models import KYC, CorporateProfile, PROFILE_ROOT
+from .models import KYC, CorporateProfile, PROFILE_ROOT, Account, Profile
 from .forms import RegisterForm, LoginForm
 
 
@@ -30,6 +32,8 @@ def process_form_data(form_list):
     email = form_data[2]['email']
     phone = form_data[2]['phone'].strip()
     password = form_data[2]["password"]
+    profile_id = "POC%s" % uuid.uuid4().hex[:6].upper()
+    pin = uuid.uuid4().hex[:4].upper()
     CorporateProfile.objects.create(
         company_name=name,
         address=address,
@@ -43,12 +47,15 @@ def process_form_data(form_list):
         document=scanned_id
     )
     user = User.objects.create_user(phone, email, password, first_name=fName, last_name=lName)
-    profile = user.profile
-    profile.dob = dob
-    profile.gender = gender
-    profile.bot_cds = 'NA'
-    profile.dse_cds = 'NA'
-    profile.save()
+    Profile.objects.create(
+        user=user,
+        dob=dob,
+        gender=gender,
+        bot_cds='NA',
+        dse_cds='NA',
+        profile_id=profile_id,
+        pin=pin
+    )
 
     pass
 
@@ -157,6 +164,33 @@ def validate(request):
         return redirect(login_view)
 
 
+def create_account(profile_id):
+    max_count = len(profile_id) - 1
+    no1 = randint(0, max_count)
+    no2 = randint(0, max_count)
+    letter_one = profile_id[no1]
+    letter_two = profile_id[no2]
+    from datetime import datetime
+    now = datetime.now()
+    number_one_str = str(now.hour)
+    number_two_str = str(now.microsecond)
+    if len(number_one_str) != 2:
+        str_one = '0'+number_one_str
+    else:
+        str_one = number_one_str
+    if len(number_two_str) != 6:
+        pads = 6 - len(number_two_str)
+        pad_string = '0'
+        for i in range(1, pads):
+            pad_string += pad_string
+        str_two = pad_string + number_two_str
+    else:
+        str_two = number_two_str
+    account_no = str_one+letter_one+str_two+letter_two
+
+    return account_no
+
+
 def register(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST, request.FILES)
@@ -173,15 +207,31 @@ def register(request):
             password = form.cleaned_data["password"]
             bot = form.cleaned_data['bot_cds']
             dse = form.cleaned_data['dse_cds']
+            user_account = form.cleaned_data['user_acc_name']
+            profile_id = "POC%s" % uuid.uuid4().hex[:6].upper()
+            pin = uuid.uuid4().hex[:4].upper()
             user = User.objects.create_user(phone, email, password, first_name=fName, last_name=lName)
-            profile = user.profile
-            profile.dob = dob
-            profile.gender = gender
-            profile.bot_cds = bot
-            profile.dse_cds = dse
-            profile.profile_type = 'C'
-            profile.save()
-            KYC.objects.create(profile_id=profile.profile_id, kyc_type=id_choice, id_number=client_id, document=scanned_id)
+            profile = Profile.objects.create(
+                user=user,
+                dob=dob,
+                gender=gender,
+                bot_cds=bot,
+                dse_cds=dse,
+                profile_id=profile_id,
+                pin=pin
+            )
+            account_no = create_account(profile.profile_id)
+            KYC.objects.create(
+                profile_id=profile.profile_id,
+                kyc_type=id_choice,
+                id_number=client_id,
+                document=scanned_id
+            )
+            Account.objects.create(
+                profile_id=profile.profile_id,
+                account=account_no,
+                nickname=user_account
+            )
 
             return redirect(index)
         else:

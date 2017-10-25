@@ -1,25 +1,37 @@
 import json
 import uuid
 
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django_tables2 import RequestConfig
-
-from .tables import TransactionTable
-from .models import Transaction, Group, GroupMembers, ExternalAccount
 from fimcosite.forms import EditProfileForm
+from fimcosite.models import Account, Profile
+
+from .models import Transaction, Group, GroupMembers, ExternalAccount, Ledger
+from .tables import TransactionTable
 
 
 @login_required
 def home(request):
+    profile = request.user.profile
     json_data = open('C:/Users/MADS/PycharmProjects/FIMCO/fimco/pochi/static/pochi/statements.json', 'r')
     data = json.load(json_data)
+    group_members_obj = []
     try:
-        group_set = GroupMembers.objects.filter(profile_id=request.user.profile.profile_id)
+        group_account_obj = GroupMembers.objects.filter(profile_id=profile.profile_id).values('group_account')
+        for group_account in group_account_obj:
+            try:
+                grp_name = Group.objects.get(group_account=group_account).name
+                group_members_obj.append(grp_name)
+            except Group.DoesNotExist:
+                pass
+
     except GroupMembers.DoesNotExist:
-        group_set = ''
-    return render(request, 'pochi/home.html', {'statements': data, 'groups': group_set})
+        pass
+    return render(request, 'pochi/home.html', {'statements': data, 'groups': group_members_obj})
 
 
 @login_required
@@ -63,6 +75,22 @@ def statements(request):
 
 @login_required
 def account(request):
+    if request.method == 'POST':
+        user = request.user.profile
+        institution = request.POST['institution']
+        name = request.POST['name']
+        nickname = request.POST['nickname']
+        account_num = request.POST['account']
+        account_type = request.POST['type']
+        ExternalAccount.objects.create(
+            profile_id=user.profile_id,
+            account_name=name,
+            account_number=account_num,
+            nickname=nickname,
+            institution_name=institution,
+            account_type=account_type
+        )
+
     return render(request, 'pochi/account.html', {})
 
 
@@ -126,65 +154,225 @@ def edit_profile(request):
 
 
 @login_required
-def p2p(request):
+def pochi2pochi(request):
+    profile = request.user.profile
+    extras = None
     try:
-        bal = Transaction.objects.filter(user=request.user).latest('trans_timestamp').open_bal
-    except Transaction.DoesNotExist:
+        acc = Account.objects.get(profile_id=profile.profile_id)
+        bal = acc.balance
+    except Account.DoesNotExist:
+        acc = None
         bal = 0
+
     if request.method == "POST":
-        phone = request.POST['phone'].strip()
+        user_obj = user_name = dest_account = dest_profile_id = None
+        if request.POST['dest_mobile']:
+            phone = request.POST['dest_mobile']
+            try:
+                user_obj = User.objects.select_related('profile').get(username=phone)
+                dest_profile_id = user_obj.profile.profile_id
+                user_name = user_obj.get_full_name()
+            except Profile.DoesNotExist:
+                user_name = None
+
+            try:
+                dest_account = Account.objects.get(profile_id=dest_profile_id).account
+            except Account.DoesNotExist:
+                dest_account = None
+
+        elif request.POST['dest_account']:
+            dest_account = request.POST['dest_account']
+
+            try:
+                dest_profile_id = Account.objects.get(account=dest_account).profile_id
+            except Account.DoesNotExist:
+                dest_profile_id = None
+
+            try:
+                user_obj = User.objects.select_related('profile').filter(profile_id=dest_profile_id)
+                user_name = user_obj.get_full_name()
+            except Profile.DoesNotExist:
+                user_name = None
+
         amount = request.POST['amount']
-        trans = Transaction(user=request.user, msisdn=phone, amount=amount, type='P', open_bal=bal)
-        trans.save()
-        # TODO
-        # Call API
+
+        if amount < bal and user_name is not None:
+            messages.info(
+                request,
+                'You are about to transfer TZS' + str(
+                    amount) + ' to ' + user_name + '.\r Proceed with the transfer?'
+            )
+            extras = {
+                'dest_account': dest_account,
+                'dest_profile_id': dest_profile_id,
+                'user_object': user_obj,
+                'amount': amount,
+                'open_bal': bal
+            }
+        elif amount > bal:
+            messages.error(
+                request,
+                'You do not have enough balance to make to transfer TZS'+str(amount)+' to '+user_name+'.'
+            )
+        elif user_name is None:
+            messages.error(
+                request,
+                'This user is not registered with a pochi account!'
+            )
+
+    context = {
+        'extra': extras,
+        'account': acc
+    }
+    return render(request, 'pochi/pochi2pochi.html', context)
+
+
+def process_p2p(request):
+    if request.POST:
+        account_no = request.POST['account_no']
+        name = request.POST['name']
+        msisdn = request.POST['msisdn']
+        ext_wallet = request.POST['ext_wallet']
+        dest_account = request.POST['dest_acc']
+        dest_profile_id = request.POST['dest_profile_id']
+        amount = request.POST['amount']
+        open_bal = request.POST['open_bal']
+        profile = request.user.profile
+        Transaction.objects.create(
+            profile_id=profile.profile_id,
+            account=account_no,
+            msisdn=msisdn,
+            external_walletid=ext_wallet,
+            service='P2P',
+            dest_account=dest_account,
+            amount=amount
+        )
+        Ledger.objects.create(
+            profile_id=profile.profile_id,
+            account=account_no,
+            trans_type='DEBIT',
+            service='P2P',
+            amount=amount,
+            obal=open_bal,
+            cbal=int(open_bal-amount)
+        )
+        Ledger.objects.create(
+            profile_id=dest_profile_id,
+            account=dest_account,
+            trans_type='CREDIT',
+            service='P2P',
+            amount=amount,
+            obal=open_bal,
+            cbal=int(open_bal + amount)
+        )
+        src_account = Account.objects.get(profile_id=profile.profile_id)
+        src_account.balance -= amount
+        src_account.save()
+        dest_account = Account.objects.get(profile_id=dest_profile_id)
+        dest_account.balance += amount
+        dest_account.save()
         resp = {
             'status': 'success',
-            'msg': 'TZS ' + amount + ' has been transferred to ' + phone + '.'
+            'msg': 'TZS ' + amount + ' has been transferred from your account to ' + name + '.'
         }
         return JsonResponse(resp)
-    else:
-        return JsonResponse({'status': 'fail'})
 
 
 @login_required
 def withdraw(request):
+    profile = request.user.profile
     try:
-        bal = Transaction.objects.filter(user=request.user).latest('trans_timestamp').open_bal
-    except Transaction.DoesNotExist:
-        bal = 0
+        external_account = ExternalAccount.objects.filter(profile_id=profile.profile_id)
+        ext_acc_obj = external_account.values('nickname')
+    except ExternalAccount.DoesNotExist:
+        ext_acc_obj = None
+
     if request.method == "POST":
-        phone = request.POST['phone'].strip()
+        selected_ext_account = request.POST['ext_account']
         amount = request.POST['amount']
-        trans = Transaction(user=request.user, msisdn=phone, amount=amount, type='W', open_bal=bal)
-        trans.save()
-        resp = {
-            'status': 'success',
-            'msg': 'TZS ' + amount + ' has been deducted from your account.'
-        }
-        return JsonResponse(resp)
-    else:
-        return JsonResponse({'status': 'fail'})
+
+        selected_ext_acc_obj = ExternalAccount.objects.get(nickname=selected_ext_account)
+        institution_name = selected_ext_acc_obj.institution_name
+        dest_acc_num = selected_ext_acc_obj.account_number
+
+        try:
+            _account = Account.objects.get(profile_id=profile.profile_id)
+            user_balance = _account.balance
+
+            if amount <= user_balance:
+                Transaction.objects.create(
+                    profile_id=profile.profile_id,
+                    account=_account.account,
+                    msisdn=request.user.username,
+                    external_walletid=_account.external_walletid,
+                    service='WITHDRAW',
+                    channel=institution_name,
+                    dest_account=dest_acc_num,
+                    amount=amount
+                )
+                Ledger.objects.create(
+                    profile_id=profile.profile_id,
+                    account=_account.account,
+                    trans_type='DEBIT',
+                    service='WITHDRAW',
+                    amount=amount,
+                    obal=user_balance,
+                    cbal=int(user_balance - amount)
+                )
+                _account.balance -= amount
+                _account.save()
+                messages.info(
+                    request,
+                    'You have successfully withdrawn ' + str(amount) + ' to your ' + selected_ext_account + ' account'
+                )
+            else:
+                messages.error(request, 'You have insufficient funds to withdraw money to your account!')
+
+        except Account.DoesNotExist:
+            pass
+
+    context = {
+        'external_accounts': ext_acc_obj,
+    }
+    return render(request, 'pochi/withdrawal.html', context)
 
 
-@login_required
-def add_funds(request):
-    try:
-        bal = Transaction.objects.filter(profile_id=request.user.profile.profile_id).latest('trans_timestamp').open_bal
-    except Transaction.DoesNotExist:
-        bal = 0
+def deposit(request):
+    profile = request.user.profile
     if request.method == "POST":
-        phone = request.POST['phone']
         amount = request.POST['amount']
-        trans = Transaction(user=request.user, msisdn=phone, amount=amount, type='D', open_bal=bal)
-        trans.save()
-        resp = {
-            'status': 'success',
-            'msg': 'TZS ' + amount + ' has been added to your account.'
-        }
-        return JsonResponse(resp)
-    else:
-        return JsonResponse({'status': 'fail'})
+
+        try:
+            _account = Account.objects.get(profile_id=profile.profile_id)
+            user_balance = _account.balance
+            user_account = _account.account
+
+            Transaction.objects.create(
+                profile_id=profile.profile_id,
+                account=user_account,
+                msisdn=request.user.username,
+                external_walletid=_account.external_walletid,
+                service='DEPOSIT',
+                amount=amount
+            )
+            Ledger.objects.create(
+                profile_id=profile.profile_id,
+                account=_account.account,
+                trans_type='CREDIT',
+                service='DEPOSIT',
+                amount=amount,
+                obal=user_balance,
+                cbal=int(user_balance + amount)
+            )
+            _account.balance += amount
+            _account.save()
+            messages.info(
+                request,
+                'You have successfully deposited ' + str(amount) + ' to your account'
+            )
+        except Account.DoesNotExist:
+            pass
+    return render(request, 'pochi/deposit.html', {})
 
 
 @login_required
@@ -194,21 +382,32 @@ def new_group(request):
 
 @login_required
 def create_group(request):
+    profile = request.user.profile
     import json
     if request.method == 'POST':
         groupName = request.POST['profileGroupName'].capitalize()
         member_list = request.POST['members']
-        first_admin = request.POST['first']
-        sec_admin = request.POST['second']
+        first_admin = profile.profile_id
+        sec_admin = request.POST['admin']
         members = json.loads(member_list)
-        grp_acc = uuid.uuid4().hex[:6].upper()
+        grp_acc = uuid.uuid4().hex[:10].upper()
         Group.objects.create(
             group_account=grp_acc,
             name=groupName,
         )
+        Account.objects.create(
+            profile_id=grp_acc,
+            account=grp_acc,
+            nickname=groupName,
+        )
+        GroupMembers.objects.create(
+            group_account=grp_acc,
+            profile_id=first_admin,
+            admin=1
+        )
         for member in members:
             is_admin = 0
-            if member == first_admin or member == sec_admin:
+            if member == sec_admin:
                 is_admin = 1
             GroupMembers.objects.create(
                 group_account=grp_acc,
@@ -224,10 +423,31 @@ def edit_group(request):
 
 
 @login_required
-def notifications(request):
-    return render(request, 'pochi/messages.html', {})
-
-
-@login_required
 def lock(request):
     return render(request, 'pochi/lock.html', {})
+
+
+def group_settings(request):
+    return render(request, 'pochi/group_settings.html', {})
+
+
+def add_member(request, name=None):
+    return render(request, 'pochi/add_member.html', {})
+
+
+def group_statement(request, name=None):
+    return render(request, 'pochi/group_statement.html', {})
+
+
+def group_profile(request, name=None):
+    try:
+        this_group = Group.objects.get(name=name)
+        grp_acc = this_group.group_account
+    except Account.DoesNotExist:
+        grp_acc = None
+    if grp_acc:
+        try:
+            this_account = Account.objects.get(group_account=grp_acc)
+        except Account.DoesNotExist:
+            this_account = None
+    return render(request, 'pochi/group_profile.html', {'account': this_account})

@@ -1,13 +1,10 @@
 from __future__ import unicode_literals
 
 import os
-import uuid
 
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 from django.db import models
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -58,20 +55,6 @@ class Profile(models.Model):
     status = models.IntegerField(choices=ACTIVE_STATUS, default=0)
     approval_status = models.CharField(max_length=10, choices=STATUS, default='PENDING')
 
-    @receiver(post_save, sender=User)
-    def create_user_profile(sender, instance, created, **kwargs):
-        if created:
-            Profile.objects.create(user=instance)
-
-    @receiver(post_save, sender=User)
-    def save_user_profile(sender, instance, **kwargs):
-        instance.profile.save()
-
-    def __init__(self, *args, **kwargs):
-        super(Profile, self).__init__(*args, **kwargs)
-        self.profile_id = "POC%s" % uuid.uuid4().hex[:6].upper()
-        self.pin = uuid.uuid4().hex[:4].upper()
-
 
 class CorporateProfile(models.Model):
     company_name = models.CharField(max_length=100)
@@ -87,3 +70,19 @@ class KYC(models.Model):
     kyc_type = models.CharField(max_length=15)
     id_number = models.CharField(max_length=35)
     document = models.FileField(max_length=255, upload_to=avatar_path)
+
+
+class Account(models.Model):
+    ACTIVE_STATUS = (
+        (0, 'ACTIVE'),
+        (1, 'INACTIVE')
+    )
+    profile_id = models.CharField(max_length=10, db_index=True)
+    created_on = models.DateTimeField(auto_now_add=True)
+    account = models.CharField(max_length=15, db_index=True)
+    currency = models.CharField(max_length=3, default='TZS')
+    nickname = models.CharField(max_length=25)
+    balance = models.FloatField(default=0)
+    ts_balance = models.DateTimeField(null=True)
+    status = models.IntegerField(choices=ACTIVE_STATUS, default=0)
+    external_walletid = models.CharField(max_length=25, default='NA')

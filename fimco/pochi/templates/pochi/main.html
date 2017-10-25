@@ -36,62 +36,72 @@
 			-->
 			<aside id="aside">
 				<nav id="sideNav"><!-- MAIN MENU -->
-
-					<h3>MARKET INFORMATION</h3>
 					<ul class="nav nav-list">
-						<li>
-							<a href="{% url 'markets' %}">
-								<i class="main-icon fa fa-cart-arrow-down"></i>
-								<span class="label label-success pull-right">2</span> <span>Market Home</span>
-							</a>
-						</li>
-						<li>
-							<a href="{% url 'exchange' %}">
-								<i class="main-icon fa fa-exchange"></i> <span>Exchange Rates</span>
-							</a>
-						</li>
-                        <li>
-							<a href="{% url 'interests' %}">
-								<i class="main-icon fa fa-bar-chart-o"></i> <span>Interests Rates</span>
-							</a>
-						</li>
-						<li>
-							<a href="{% url 'share' %}">
-								<i class="main-icon fa fa-table"></i> <span>Share Prices</span>
-							</a>
-						</li>
-						<li>
-							<a href="{% url 'macro' %}">
-								<i class="main-icon fa fa-pencil-square-o"></i> <span>Macro Data</span>
-							</a>
-						</li>
-						<li>
-							<a href="{% url 'auction' %}">
-								<i class="main-icon fa fa-gift"></i> <span>Auction Data</span>
-							</a>
-						</li>
-						<li>
-							<a href="{% url 'commodities' %}">
-								<i class="main-icon fa fa-money"></i> <span>Commodity Prices</span>
-							</a>
-						</li>
+                        <li><!-- dashboard -->
+                            <a class="dashboard" href="{% url 'dashboard' %}">
+                                <i class="main-icon fa fa-dashboard"></i> <span>Dashboard</span>
+                            </a>
+                        </li>
+                        <li><!-- dashboard -->
+                            <a href="#">
+                                <i class="fa fa-menu-arrow pull-right"></i>
+                                <i class="main-icon fa fa-money"></i> <span>Market Information</span>
+                            </a>
+                            <ul>
+                                <li>
+                                    <a href="{% url 'markets' %}">
+                                        <i class="main-icon fa fa-cart-arrow-down"></i> <span>Market Home</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'exchange' %}">
+                                        <i class="main-icon fa fa-exchange"></i> <span>Exchange Rates</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'interests' %}">
+                                        <i class="main-icon fa fa-bar-chart-o"></i> <span>Interests Rates</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'share' %}">
+                                        <i class="main-icon fa fa-table"></i> <span>Share Prices</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'macro' %}">
+                                        <i class="main-icon fa fa-pencil-square-o"></i> <span>Macro Data</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'auction' %}">
+                                        <i class="main-icon fa fa-gift"></i> <span>Auction Data</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'commodities' %}">
+                                        <i class="main-icon fa fa-money"></i> <span>Commodity Prices</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
 					</ul>
 
                     <h3 style="margin: 10px">POCHI</h3>
 					<ul class="nav nav-list">
-                        <li><!-- dashboard -->
-							<a class="dashboard" href="{% url 'dashboard' %}">
-								<i class="main-icon fa fa-dashboard"></i> <span>Home</span>
-							</a>
-						</li>
-                        <li class="active"><!-- my pochi -->
-							<a href="">
-								<i class="main-icon fa fa-user"></i>
-                                <i class="fa fa-menu-arrow pull-right"></i><span>My POCHI</span>
+{#                        <li><!-- dashboard -->#}
+{#							<a class="dashboard" href="{% url 'dashboard' %}">#}
+{#								<i class="main-icon fa fa-dashboard"></i> <span>Home</span>#}
+{#							</a>#}
+{#						</li>#}
+                        <li><!-- my pochi -->
+							<a href="#">
+                                <i class="fa fa-menu-arrow pull-right"></i>
+								<i class="main-icon fa fa-user"></i> <span>My POCHI</span>
 							</a>
                             <ul>
                                 <li><a href="">Link accounts</a></li>
-                                <li><a href="">Add accounts</a></li>
+                                <li><a href="{% url 'accounts' %}">Add accounts</a></li>
                             </ul>
 						</li>
                         <li><!-- statement -->
@@ -118,6 +128,12 @@
 
 					<h3>POCHI GROUPS</h3>
 					<ul class="nav nav-list">
+                         <li>
+                            <a href="{% url 'group' %}">
+                                <i class="main-icon fa fa-plus"></i>
+                                <span class="label label-info pull-right"></span> <span>New Group</span>
+                            </a>
+                        </li>
                         {% if groups %}
                             {% for group in groups %}
                                 <li class="active">
@@ -126,10 +142,10 @@
                                         <span class="label label-info pull-right"></span> <span>{{ group }}</span>
                                     </a>
                                     <ul>
-                                        <li class="active"><a href="">Dashboard</a></li>
-                                        <li><a href="">Statement</a></li>
-                                        <li><a href="">Add member</a></li>
-                                        <li><a href="">Settings</a></li>
+                                        <li class="active"><a href="{% url 'group_profile' group %}">Dashboard</a></li>
+                                        <li><a href="{% url 'group_statement' group %}">Statement</a></li>
+                                        <li><a href="{% url 'add_member' group %}">Add member</a></li>
+                                        <li><a href="{% url 'group_settings' %}">Settings</a></li>
                                     </ul>
                                 </li>
                             {% endfor %}
@@ -188,9 +204,6 @@
 								</li>
 								<li><!-- settings -->
 									<a href="{% url 'profile_view' %}"><i class="fa fa-cogs"></i> View/Edit profile</a>
-								</li>
-                                <li><!-- settings -->
-									<a href="{% url 'group' %}"><i class="fa fa-users"></i> New group</a>
 								</li>
 
 								<li class="divider"></li>

@@ -124,7 +124,7 @@ $(document).ready(function() {
 
     $('#done').click(function () {
         var inputs  = $("[name='option[]']"),
-            admin   = $('#first, #second'),
+            admin   = $('#admin'),
             uniqueItems = [],
             options = [];
 
@@ -145,7 +145,7 @@ $(document).ready(function() {
 
         $("#members").val(JSON.stringify(uniqueItems));
 
-        $('#first-admin, #second-admin').show();
+        $('#second-admin').show();
     })
 
 });

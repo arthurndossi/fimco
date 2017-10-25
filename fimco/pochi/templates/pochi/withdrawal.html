@@ -2,34 +2,76 @@
 {% block content %}
     <section id="middle" style="background-color: #ebebeb">
         <div id="content" class="padding-20">
-            <div class="col-lg-6">
-                <form class="payment" method="post" action="{% url 'withdraw' %}">
-                    {% csrf_token %}
-                    <div class="panel panel-default">
-                        <div class="panel-heading panel-heading-transparent">
-                            <strong>Withdraw Funds</strong>
-                        </div>
-                        <div class="panel-body">
-                            <div class="fancy-form fancy-form-select">
-                                <select class="form-control">
-                                    <option value="">Select your account</option>
-                                    <option value="1">CRDB</option>
-                                    <option value="2">M-PESA</option>
-                                    <option value="3">AIRTEL MONEY</option>
-                                </select>
-                                <i class="fancy-arrow"></i>
-                            </div>
-                            <br />
-                            <label>Enter Amount</label>
-                            <input type="number" class="form-control" name="amount" placeholder="TZS">
-                            <br />
-                        </div>
-                        <div class="panel-footer transfer">
-                            <button class="btn btn-primary" type="submit"><i class="fa fa-check"></i> CONFIRM MONEY TRANSFER</button>
-                        </div>
-                    </div>
-                </form>
+            {% if not external_accounts %}
+            <div class="col-xs-8">
+                <div class="alert alert-warning margin-bottom-30">
+                    <h4>You have <strong>No</strong> External Account!</h4>
+                    <p>You do not have any external account associated with you POCHI account.</p>
+                    <p>You can go to the link below to create/add your external account!</p><br/>
+                    <button class="btn btn-primary">Add External Account</button>
+                </div>
             </div>
+            {% else %}
+            <div class="row">
+                <div class="col-lg-6">
+                    <form class="payment" method="post" action="{% url 'withdraw' %}">
+                        {% csrf_token %}
+                        <div class="panel panel-default">
+                            <div class="panel-heading panel-heading-transparent">
+                                <strong>Withdraw Funds</strong>
+                            </div>
+                            <div class="panel-body">
+                                <div class="fancy-form fancy-form-select">
+                                    <select class="form-control" title="">
+                                        <option disabled>Select your account</option>
+                                        {% for account in external_accounts %}
+                                            <option value="{{ account }}">{{ account }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <i class="fancy-arrow"></i>
+                                </div>
+                                <br />
+                                <label>Enter Amount</label>
+                                <input type="number" class="form-control" name="amount" placeholder="TZS" required>
+                                <br />
+                            </div>
+                            <div class="panel-footer transfer">
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="fa fa-check"></i> CONFIRM MONEY TRANSFER
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="row">
+            {% if messages %}
+                {% for message in messages %}
+                    {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                        <div class="col-xs-12">
+                            <div class="alert alert-danger margin-bottom-30">
+                                <button type="button" class="close" data-dismiss="alert">
+                                    <span aria-hidden="true">×</span>
+                                    <span class="sr-only">Close</span>
+                                </button>
+                                <strong>{{ message }}</strong>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="col-xs-12">
+                            <div class="alert alert-danger margin-bottom-30">
+                                <button type="button" class="close" data-dismiss="alert">
+                                    <span aria-hidden="true">×</span>
+                                    <span class="sr-only">Close</span>
+                                </button>
+                                <strong>{{ message }}</strong>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            </div>
+            {% endif %}
         </div>
     </section>
 {% endblock %}

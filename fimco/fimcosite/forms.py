@@ -91,6 +91,15 @@ class RegisterForm(forms.Form):
     )
     bot_cds = forms.CharField(required=False)
     dse_cds = forms.CharField(required=False)
+    user_acc_name = forms.CharField(
+        min_length=2,
+        max_length=20,
+        validators=[validate_slug],
+        widget=forms.TextInput(attrs={
+            'required': True,
+
+        })
+    )
     password = forms.CharField(
         validators=[validate_slug],
         widget=forms.PasswordInput(attrs={
@@ -144,6 +153,15 @@ class CorporateForm1(forms.Form):
         max_length=100,
         widget=forms.URLInput(attrs={
             'required': True,
+        })
+    )
+    company_acc_name = forms.CharField(
+        min_length=2,
+        max_length=20,
+        validators=[validate_slug],
+        widget=forms.TextInput(attrs={
+            'required': True,
+
         })
     )
 

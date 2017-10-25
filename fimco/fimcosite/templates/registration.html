@@ -126,6 +126,21 @@
                                             {% endfor %}
                                         {% endif %}
                                     </div>
+                                    <div class="col-md-6 col-sm-6">
+                                        <label for="register:user_account">User Account Name <small>(required)</small></label>
+                                        <label class="input mb-10">
+                                            <i class="ico-append fa fa-id-badge"></i>
+                                            {{ rForm.user_acc_name }}
+                                            <b class="tooltip tooltip-bottom-right">Enter your user account name </b>
+                                        </label>
+                                        {% if rForm.user_acc_name.errors %}
+                                            {% for error in rForm.user_acc_name.errors %}
+                                                <div class="alert alert-mini alert-danger mb-30">
+                                                    <strong>{{ error|escape }}</strong>
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 col-sm-6">

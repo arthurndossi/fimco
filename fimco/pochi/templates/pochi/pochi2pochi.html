@@ -2,38 +2,92 @@
 {% block content %}
     <section id="middle" style="background-color: #ebebeb">
         <div id="content" class="padding-20">
-            <div class="col-lg-6">
-                <form class="payment" method="post" action="{% url 'p2p' %}">
-                    {% csrf_token %}
-                    <div class="panel panel-default">
-                        <div class="panel-heading panel-heading-transparent">
-                            <strong>POCHI TO POCHI Funds Transfer</strong>
-                        </div>
-                        <div class="panel-body">
-                            <div class="fancy-form fancy-form-select">
-                                <select class="form-control">
-                                    <option value="">Select your account</option>
-                                    <option value="1">CRDB</option>
-                                    <option value="2">M-PESA</option>
-                                    <option value="3">AIRTEL MONEY</option>
-                                </select>
-                                <i class="fancy-arrow"></i>
+            <div class="row">
+                <div class="col-lg-6">
+                    <form class="payment" method="post" action="{% url 'pochi2pochi' %}">
+                        {% csrf_token %}
+                        <div class="panel panel-default">
+                            <div class="panel-heading panel-heading-transparent">
+                                <strong>POCHI TO POCHI Funds Transfer</strong>
                             </div>
-                            <br />
-                            <label>Enter Amount</label>
-                            <input type="number" class="form-control" name="amount" placeholder="TZS">
-                            <br />
+                            <div class="panel-body">
+                                <div class="fancy-form fancy-form-select">
+                                    <select id="account_choice" class="form-control" title="">
+                                        <option disabled="disabled">Select destination choice</option>
+                                        <option value="mobile">Phone number</option>
+                                        <option value="account">Account number</option>
+                                    </select>
+                                </div>
+                                <div id="mobile-section">
+                                    <label>Enter destination phone number</label>
+                                    <input type="tel" class="form-control" name="dest_mobile" placeholder="Mobile number">
+                                </div>
+                                <div id="account-section">
+                                    <label>Enter destination account</label>
+                                    <input type="text" class="form-control" name="dest_account" placeholder="Account">
+                                </div>
+                                <div id="amount-section">
+                                    <label>Enter Amount</label>
+                                    <input type="number" class="form-control" name="amount" placeholder="TZS" required>
+                                </div>
+                            </div>
+                            <div class="panel-footer transfer">
+                                <button class="btn btn-primary" type="submit"><i class="fa fa-check"></i> CONFIRM MONEY TRANSFER</button>
+                            </div>
                         </div>
-                        <div class="panel-footer transfer">
-                            <button class="btn btn-primary" type="submit"><i class="fa fa-check"></i> CONFIRM MONEY TRANSFER</button>
-                        </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
-
+            {% if messages %}
+                {% for message in messages %}
+                    {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                        <div class="alert alert-danger margin-bottom-30">
+                            <button type="button" class="close" data-dismiss="alert">
+                                <span aria-hidden="true">×</span>
+                                <span class="sr-only">Close</span>
+                            </button>
+                            <strong>{{ message }}</strong>
+                        </div>
+                    {% else %}
+                        <form method="post" action="{% url 'process_p2p' %}">
+                            <div class="alert alert-info margin-bottom-30">
+                                <button type="button" class="close" data-dismiss="alert">
+                                    <span aria-hidden="true">×</span>
+                                    <span class="sr-only">Close</span>
+                                </button>
+                                <strong>{{ message }}</strong>
+                                <input type="submit" class="btn btn-info btn-sm margin-top-10" value="Proceed checkout">
+                                <a href="" class="btn btn-default btn-sm margin-top-10">Cancel</a>
+    {#                            <input type="hidden" name="account_no" value="{{ account.account }}">#}
+    {#                            <input type="hidden" name="msisdn" value="{{ user_obj.username }}">#}
+    {#                            <input type="hidden" name="name" value="{{ user_obj.get_full_name }}">#}
+    {#                            <input type="hidden" name="ext_wallet" value="{{ account.external_walletid }}">#}
+    {#                            <input type="hidden" name="dest_acc" value="{{ dest_account }}">#}
+    {#                            <input type="hidden" name="dest_profile_id" value="{{ dest_profile_id }}">#}
+    {#                            <input type="hidden" name="amount" value="{{ amount }}">#}
+    {#                            <input type="hidden" name="open_bal" value="{{ open_bal }}">#}
+                            </div>
+                        </form>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
         </div>
     </section>
 {% endblock %}
 {% block scripts %}
-    <script type="text/javascript" src="/static/pochi/js/ajax.js"></script>
+{#    <script type="text/javascript" src="/static/pochi/js/ajax.js"></script>#}
+    <script type="text/javascript">
+        $('#account-section').hide();
+        var choice = $("#account_choice");
+        choice.on('change', function() {
+            var id_choice = choice.find(":selected").val();
+            if (id_choice === 'mobile'){
+                $('#mobile-section').show();
+                $('#account-section').hide();
+            }else if (id_choice === 'account'){
+                $('#account-section').show();
+                $('#mobile-section').hide();
+            }
+        });
+    </script>
 {% endblock %}
