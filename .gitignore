@@ -8,3 +8,4 @@
 core/settings.py
 wsgi.py
 fimco/pip-selfcheck.json
+*.sqlite3
