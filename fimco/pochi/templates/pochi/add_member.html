@@ -1,0 +1,50 @@
+{% extends "pochi/main.html" %}
+{% block content %}
+    <section id="middle">
+        <div id="content" class="dashboard padding-20">
+            <div class="row">
+                <div class="col-lg-6">
+                    <form class="payment" method="post" action="{% url 'add_member' group %}">
+                        {% csrf_token %}
+                        <div class="panel panel-default">
+                            <div class="panel-heading panel-heading-transparent">
+                                <strong>Add Members</strong>
+                            </div>
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-xs-3 control-label">Member</label>
+                                    <div class="col-xs-5">
+                                        <input type="text" class="form-control" name="option[]" title=""/>
+                                    </div>
+                                    <div class="col-xs-4">
+                                        <button type="button" class="btn btn-default addButton"><i class="fa fa-plus"></i></button>
+                                    </div>
+                                </div>
+
+                                <!-- The option field template containing an option field and a Remove button -->
+                                <div class="form-group hide" id="optionTemplate">
+                                    <div class="col-xs-offset-3 col-xs-5">
+                                        <input class="form-control" type="text" name="option[]" title=""/>
+                                    </div>
+                                    <div class="col-xs-4">
+                                        <button type="button" class="btn btn-default removeButton"><i class="fa fa-minus"></i></button>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <div class="panel-footer transfer">
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="fa fa-check"></i> ADD MEMBER
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block scripts %}
+    <script src="https://cdn.jsdelivr.net/npm/formvalidation@0.6.2-dev/dist/js/formValidation.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/formvalidation@0.6.2-dev/dist/js/framework/bootstrap.min.js"></script>
+{% endblock %}

@@ -432,17 +432,42 @@ def group_settings(request):
 
 
 def add_member(request, name=None):
-    return render(request, 'pochi/add_member.html', {})
+    if request.POST:
+        members = request.POST['option[]']
+        try:
+            this_group = Group.objects.get(name=name)
+            grp_acc = this_group.group_account
+            GroupMembers.objects.create(group_account=grp_acc, profile_id=members)
+        except Account.DoesNotExist:
+            pass
+    return render(request, 'pochi/add_member.html', {'group': name})
 
 
 def group_statement(request, name=None):
-    return render(request, 'pochi/group_statement.html', {})
-
-
-def group_profile(request, name=None):
+    group_transactions = None
     try:
         this_group = Group.objects.get(name=name)
         grp_acc = this_group.group_account
+        try:
+            group_transactions = Transaction.objects.filter(account=grp_acc) \
+                .values('service', 'channel', 'dest_account', 'currency', 'amount', 'charge', 'status', 'message')
+        except Transaction.DoesNotExist:
+            group_transactions = None
+    except Account.DoesNotExist:
+        pass
+    return render(request, 'pochi/group_statement.html', {'statement': group_transactions})
+
+
+def group_profile(request, name=None):
+    this_account = group_transactions = None
+    try:
+        this_group = Group.objects.get(name=name)
+        grp_acc = this_group.group_account
+        try:
+            group_transactions = Transaction.objects.filter(account=grp_acc)\
+                .values('service', 'channel', 'dest_account', 'currency', 'amount', 'charge', 'status', 'message')
+        except Transaction.DoesNotExist:
+            group_transactions = None
     except Account.DoesNotExist:
         grp_acc = None
     if grp_acc:
@@ -450,4 +475,9 @@ def group_profile(request, name=None):
             this_account = Account.objects.get(group_account=grp_acc)
         except Account.DoesNotExist:
             this_account = None
-    return render(request, 'pochi/group_profile.html', {'account': this_account})
+    context = {
+        'group': name,
+        'account': this_account,
+        'statement': group_transactions
+    }
+    return render(request, 'pochi/group_profile.html', context)

@@ -145,7 +145,7 @@
                                         <li class="active"><a href="{% url 'group_profile' group %}">Dashboard</a></li>
                                         <li><a href="{% url 'group_statement' group %}">Statement</a></li>
                                         <li><a href="{% url 'add_member' group %}">Add member</a></li>
-                                        <li><a href="{% url 'group_settings' %}">Settings</a></li>
+                                        <li><a href="{% url 'group_settings' group %}">Settings</a></li>
                                     </ul>
                                 </li>
                             {% endfor %}

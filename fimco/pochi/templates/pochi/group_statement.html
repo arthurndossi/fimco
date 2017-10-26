@@ -2,6 +2,40 @@
 {% block content %}
     <section id="middle">
         <div id="content" class="dashboard padding-20">
+        {% if statement %}
+            <div class="statements">
+                {% for statement in statements %}
+                    <div class="row statement">
+                        <div class="col-xs-3">
+                            <div class="row">
+                                <div class="col-xs-6 col-md-2 col-lg-2 text-center"
+                                     style="padding: 15px">
+                                    <i class="et-wallet"></i>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="row">{{ statement.service }}</div>
+                                    <div class="row">{{ statement.channel }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-3">
+                            <div class="row">{{ statement.currency }} {{ statement.amount }}</div>
+                            <div class="row">{{ statement.currency }} {{ statement.charges }}</div>
+                        </div>
+                        <div class="col-xs-3">
+                            {{ statement.dest_account }}
+                        </div>
+                        <div class="col-xs-3">
+                            {{ statement.status }}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-default margin-bottom-30">
+                <strong>This group has no transactions yet!</strong>
+            </div>
+        {% endif %}
 
         </div>
     </section>
