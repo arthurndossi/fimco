@@ -24,22 +24,24 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 SECRET_KEY = '+_yzro^08snp%$_640dl1aqk#zm+%+2)ckj5#bhbid#_k&bbx8'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['54.172.71.184', 'www.fimco.co.tz', '127.0.0.1']
 
 # Application definition
 
 INSTALLED_APPS = [
-    'fimcosite.apps.FimcositeConfig',
-    'pochi.apps.PochiConfig',
-    'fimcoplatform.apps.FimcoPlatformConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles'
+    'django.contrib.staticfiles',
+    'fimcosite.apps.FimcositeConfig',
+    'pochi.apps.PochiConfig',
+    'fimcoplatform.apps.FimcoPlatformConfig',
+    'formtools',
+    'django_tables2'
 ]
 
 MIDDLEWARE = [
@@ -72,7 +74,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'core.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 DATABASES = {
@@ -86,7 +87,7 @@ DATABASES = {
     }
 }
 
-SESSION_COOKIE_AGE = 120
+SESSION_COOKIE_AGE = 600
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
