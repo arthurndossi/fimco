@@ -20,10 +20,10 @@
                             <h4><strong>Client</strong> Details</h4>
                             <ul class="list-unstyled">
                                 <li><strong> Name:</strong> {{ user.get_full_name }}</li>
-                                <li><strong> POCHI ID:</strong> {{ profile }}</li>
+                                <li><strong> POCHI ID:</strong> {{ profile.profile_id }}</li>
                             </ul>
                         </div>
-                        <div class="col-lg-3 col-md-4 col-sm-6 col-md-offset-2 col-lg-offset-3 text-right">
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-md-offset-2 col-lg-offset-3">
                             <h4>Select <strong>Account</strong></h4>
                             <form method="get">
                                 <div class="fancy-form fancy-form-select">
@@ -39,17 +39,25 @@
                             </form>
                         </div>
                     </div>
-                    <div class="table-responsive">
-                        {% render_table table %}
-                    </div>
+                    {% if trans %}
+                        <div class="table-responsive">
+                            {% render_table table %}
+                        </div>
+                    {% else %}
+                        <div class="alert alert-default margin-bottom-30">
+                            <strong>You have no transactions yet!</strong>
+                        </div>
+                    {% endif %}
                     <hr class="nomargin-top" />
                 </div>
             </div>
+            {% if trans %}
             <div class="panel panel-default text-right">
                 <div class="panel-body">
                     <a class="btn btn-primary" href="{% url 'printout' %}" target="_blank"><i class="fa fa-print"></i> PRINT STATEMENT</a>
                 </div>
             </div>
+            {% endif %}
         </div>
     </section>
 {% endblock %}

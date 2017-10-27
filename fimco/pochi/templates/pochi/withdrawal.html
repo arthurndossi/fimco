@@ -8,7 +8,7 @@
                     <h4>You have <strong>No</strong> External Account!</h4>
                     <p>You do not have any external account associated with you POCHI account.</p>
                     <p>You can go to the link below to create/add your external account!</p><br/>
-                    <button class="btn btn-primary">Add External Account</button>
+                    <a href="{% url 'accounts' %}" class="btn btn-primary">Add External Account</a>
                 </div>
             </div>
             {% else %}
@@ -22,10 +22,10 @@
                             </div>
                             <div class="panel-body">
                                 <div class="fancy-form fancy-form-select">
-                                    <select class="form-control" title="">
+                                    <select class="form-control" name="ext_account" title="">
                                         <option disabled>Select your account</option>
                                         {% for account in external_accounts %}
-                                            <option value="{{ account }}">{{ account }}</option>
+                                            <option value="{{ account.nickname }}">{{ account.nickname }}</option>
                                         {% endfor %}
                                     </select>
                                     <i class="fancy-arrow"></i>

@@ -50,22 +50,23 @@
                         </div>
                     {% else %}
                         <form method="post" action="{% url 'process_p2p' %}">
+                            {% csrf_token %}
                             <div class="alert alert-info margin-bottom-30">
                                 <button type="button" class="close" data-dismiss="alert">
                                     <span aria-hidden="true">×</span>
                                     <span class="sr-only">Close</span>
                                 </button>
                                 <strong>{{ message }}</strong>
-                                <input type="submit" class="btn btn-info btn-sm margin-top-10" value="Proceed checkout">
+                                <input type="submit" class="btn btn-primary btn-sm margin-top-10" value="Proceed checkout">
                                 <a href="" class="btn btn-default btn-sm margin-top-10">Cancel</a>
-    {#                            <input type="hidden" name="account_no" value="{{ account.account }}">#}
-    {#                            <input type="hidden" name="msisdn" value="{{ user_obj.username }}">#}
-    {#                            <input type="hidden" name="name" value="{{ user_obj.get_full_name }}">#}
-    {#                            <input type="hidden" name="ext_wallet" value="{{ account.external_walletid }}">#}
-    {#                            <input type="hidden" name="dest_acc" value="{{ dest_account }}">#}
-    {#                            <input type="hidden" name="dest_profile_id" value="{{ dest_profile_id }}">#}
-    {#                            <input type="hidden" name="amount" value="{{ amount }}">#}
-    {#                            <input type="hidden" name="open_bal" value="{{ open_bal }}">#}
+                                <input type="hidden" name="account_no" value="{{ account.account }}">
+                                <input type="hidden" name="msisdn" value="{{ extra.user_object.username }}">
+                                <input type="hidden" name="name" value="{{ extra.user_object.get_full_name }}">
+                                <input type="hidden" name="ext_wallet" value="{{ account.external_walletid }}">
+                                <input type="hidden" name="dest_acc" value="{{ extra.dest_account }}">
+                                <input type="hidden" name="dest_profile_id" value="{{ extra.dest_profile_id }}">
+                                <input type="hidden" name="amount" value="{{ extra.amount }}">
+                                <input type="hidden" name="open_bal" value="{{ extra.open_bal }}">
                             </div>
                         </form>
                     {% endif %}

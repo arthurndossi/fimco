@@ -1,4 +1,3 @@
-import json
 import uuid
 
 from django.contrib import messages
@@ -10,6 +9,7 @@ from django_tables2 import RequestConfig
 from fimcosite.forms import EditProfileForm
 from fimcosite.models import Account, Profile
 
+from core.utils import render_with_global_data
 from .models import Transaction, Group, GroupMembers, ExternalAccount, Ledger
 from .tables import TransactionTable
 
@@ -17,33 +17,28 @@ from .tables import TransactionTable
 @login_required
 def home(request):
     profile = request.user.profile
-    json_data = open('C:/Users/MADS/PycharmProjects/FIMCO/fimco/pochi/static/pochi/statements.json', 'r')
-    data = json.load(json_data)
     group_members_obj = []
     try:
-        group_account_obj = GroupMembers.objects.filter(profile_id=profile.profile_id).values('group_account')
-        for group_account in group_account_obj:
+        group_account_obj = GroupMembers.objects.filter(profile_id=profile.profile_id).only('group_account')
+        for group in group_account_obj:
             try:
-                grp_name = Group.objects.get(group_account=group_account).name
+                grp_name = Group.objects.get(group_account=group.group_account).name
                 group_members_obj.append(grp_name)
             except Group.DoesNotExist:
                 pass
 
     except GroupMembers.DoesNotExist:
         pass
-    return render(request, 'pochi/home.html', {'statements': data, 'groups': group_members_obj})
+    return render_with_global_data(request, 'pochi/home.html', {'groups': group_members_obj})
 
 
 @login_required
 def admin(request):
-    if request.user is not None and request.user.is_authenticated():
-        return render(request, 'pochi/admin.html', {})
-    else:
-        return redirect('login')
+    return render_with_global_data(request, 'pochi/admin.html', {})
 
 
 @login_required
-def statements(request):
+def statement(request):
     user_accounts = account_trans = trans = None
     profile = request.user.profile
     try:
@@ -68,9 +63,10 @@ def statements(request):
         "profile": profile,
         "accounts": user_accounts,
         "table": table,
+        'trans': trans,
         "single": account_trans
     }
-    return render(request, 'pochi/statements.html', context)
+    return render_with_global_data(request, 'pochi/statement.html', context)
 
 
 @login_required
@@ -78,7 +74,7 @@ def account(request):
     if request.method == 'POST':
         user = request.user.profile
         institution = request.POST['institution']
-        name = request.POST['name']
+        name = request.POST['name'].upper()
         nickname = request.POST['nickname']
         account_num = request.POST['account']
         account_type = request.POST['type']
@@ -90,8 +86,11 @@ def account(request):
             institution_name=institution,
             account_type=account_type
         )
-
-    return render(request, 'pochi/account.html', {})
+        messages.success(
+            request,
+            'You have successfully added '+nickname+' account!'
+        )
+    return render_with_global_data(request, 'pochi/account.html', {})
 
 
 @login_required
@@ -126,7 +125,7 @@ def view_profile(request):
         'groups': obj
     }
 
-    return render(request, "pochi/profile.html", context)
+    return render_with_global_data(request, "pochi/profile.html", context)
 
 
 @login_required
@@ -195,8 +194,9 @@ def pochi2pochi(request):
                 user_name = None
 
         amount = request.POST['amount']
+        amount = float(amount)
 
-        if amount < bal and user_name is not None:
+        if amount <= bal and user_name is not None:
             messages.info(
                 request,
                 'You are about to transfer TZS' + str(
@@ -224,7 +224,7 @@ def pochi2pochi(request):
         'extra': extras,
         'account': acc
     }
-    return render(request, 'pochi/pochi2pochi.html', context)
+    return render_with_global_data(request, 'pochi/pochi2pochi.html', context)
 
 
 def process_p2p(request):
@@ -236,7 +236,9 @@ def process_p2p(request):
         dest_account = request.POST['dest_acc']
         dest_profile_id = request.POST['dest_profile_id']
         amount = request.POST['amount']
+        amount = float(amount)
         open_bal = request.POST['open_bal']
+        open_bal = float(open_bal)
         profile = request.user.profile
         Transaction.objects.create(
             profile_id=profile.profile_id,
@@ -254,7 +256,7 @@ def process_p2p(request):
             service='P2P',
             amount=amount,
             obal=open_bal,
-            cbal=int(open_bal-amount)
+            cbal=open_bal - amount
         )
         Ledger.objects.create(
             profile_id=dest_profile_id,
@@ -263,17 +265,17 @@ def process_p2p(request):
             service='P2P',
             amount=amount,
             obal=open_bal,
-            cbal=int(open_bal + amount)
+            cbal=open_bal + amount
         )
         src_account = Account.objects.get(profile_id=profile.profile_id)
-        src_account.balance -= amount
+        src_account.balance -= float(amount)
         src_account.save()
         dest_account = Account.objects.get(profile_id=dest_profile_id)
-        dest_account.balance += amount
+        dest_account.balance += float(amount)
         dest_account.save()
         resp = {
             'status': 'success',
-            'msg': 'TZS ' + amount + ' has been transferred from your account to ' + name + '.'
+            'msg': 'TZS ' + str(amount) + ' has been transferred from your account to ' + name + '.'
         }
         return JsonResponse(resp)
 
@@ -289,7 +291,7 @@ def withdraw(request):
 
     if request.method == "POST":
         selected_ext_account = request.POST['ext_account']
-        amount = request.POST['amount']
+        amount = float(request.POST['amount'])
 
         selected_ext_acc_obj = ExternalAccount.objects.get(nickname=selected_ext_account)
         institution_name = selected_ext_acc_obj.institution_name
@@ -317,7 +319,7 @@ def withdraw(request):
                     service='WITHDRAW',
                     amount=amount,
                     obal=user_balance,
-                    cbal=int(user_balance - amount)
+                    cbal=user_balance - amount
                 )
                 _account.balance -= amount
                 _account.save()
@@ -334,13 +336,14 @@ def withdraw(request):
     context = {
         'external_accounts': ext_acc_obj,
     }
-    return render(request, 'pochi/withdrawal.html', context)
+    return render_with_global_data(request, 'pochi/withdrawal.html', context)
 
 
+@login_required
 def deposit(request):
     profile = request.user.profile
     if request.method == "POST":
-        amount = request.POST['amount']
+        amount = float(request.POST['amount'])
 
         try:
             _account = Account.objects.get(profile_id=profile.profile_id)
@@ -362,7 +365,7 @@ def deposit(request):
                 service='DEPOSIT',
                 amount=amount,
                 obal=user_balance,
-                cbal=int(user_balance + amount)
+                cbal=user_balance + amount
             )
             _account.balance += amount
             _account.save()
@@ -372,12 +375,12 @@ def deposit(request):
             )
         except Account.DoesNotExist:
             pass
-    return render(request, 'pochi/deposit.html', {})
+    return render_with_global_data(request, 'pochi/deposit.html', {})
 
 
 @login_required
 def new_group(request):
-    return render(request, 'pochi/group.html', {})
+    return render_with_global_data(request, 'pochi/group.html', {})
 
 
 @login_required
@@ -414,23 +417,25 @@ def create_group(request):
                 profile_id=member,
                 admin=is_admin
             )
-    return render(request, 'pochi/group.html', {})
+    return render_with_global_data(request, 'pochi/group.html', {})
 
 
 @login_required
 def edit_group(request):
-    return render(request, 'pochi/edit_group.html', {})
+    return render_with_global_data(request, 'pochi/edit_group.html', {})
 
 
 @login_required
 def lock(request):
-    return render(request, 'pochi/lock.html', {})
+    return render_with_global_data(request, 'pochi/lock.html', {})
 
 
+@login_required
 def group_settings(request):
-    return render(request, 'pochi/group_settings.html', {})
+    return render_with_global_data(request, 'pochi/group_settings.html', {})
 
 
+@login_required
 def add_member(request, name=None):
     if request.POST:
         members = request.POST['option[]']
@@ -440,9 +445,10 @@ def add_member(request, name=None):
             GroupMembers.objects.create(group_account=grp_acc, profile_id=members)
         except Account.DoesNotExist:
             pass
-    return render(request, 'pochi/add_member.html', {'group': name})
+    return render_with_global_data(request, 'pochi/add_member.html', {'group': name})
 
 
+@login_required
 def group_statement(request, name=None):
     group_transactions = None
     try:
@@ -455,9 +461,10 @@ def group_statement(request, name=None):
             group_transactions = None
     except Account.DoesNotExist:
         pass
-    return render(request, 'pochi/group_statement.html', {'statement': group_transactions})
+    return render_with_global_data(request, 'pochi/group_statement.html', {'statement': group_transactions})
 
 
+@login_required
 def group_profile(request, name=None):
     this_account = group_transactions = None
     try:
@@ -472,7 +479,7 @@ def group_profile(request, name=None):
         grp_acc = None
     if grp_acc:
         try:
-            this_account = Account.objects.get(group_account=grp_acc)
+            this_account = Account.objects.get(account=grp_acc)
         except Account.DoesNotExist:
             this_account = None
     context = {
@@ -480,4 +487,4 @@ def group_profile(request, name=None):
         'account': this_account,
         'statement': group_transactions
     }
-    return render(request, 'pochi/group_profile.html', context)
+    return render_with_global_data(request, 'pochi/group_profile.html', context)

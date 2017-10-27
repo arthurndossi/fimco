@@ -49,37 +49,37 @@
                             </a>
                             <ul>
                                 <li>
-                                    <a href="{% url 'markets' %}">
+                                    <a href="">
                                         <i class="main-icon fa fa-cart-arrow-down"></i> <span>Market Home</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{% url 'exchange' %}">
+                                    <a href="">
                                         <i class="main-icon fa fa-exchange"></i> <span>Exchange Rates</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{% url 'interests' %}">
+                                    <a href="">
                                         <i class="main-icon fa fa-bar-chart-o"></i> <span>Interests Rates</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{% url 'share' %}">
+                                    <a href="">
                                         <i class="main-icon fa fa-table"></i> <span>Share Prices</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{% url 'macro' %}">
+                                    <a href="">
                                         <i class="main-icon fa fa-pencil-square-o"></i> <span>Macro Data</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{% url 'auction' %}">
+                                    <a href="">
                                         <i class="main-icon fa fa-gift"></i> <span>Auction Data</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{% url 'commodities' %}">
+                                    <a href="">
                                         <i class="main-icon fa fa-money"></i> <span>Commodity Prices</span>
                                     </a>
                                 </li>
@@ -89,11 +89,6 @@
 
                     <h3 style="margin: 10px">POCHI</h3>
 					<ul class="nav nav-list">
-{#                        <li><!-- dashboard -->#}
-{#							<a class="dashboard" href="{% url 'dashboard' %}">#}
-{#								<i class="main-icon fa fa-dashboard"></i> <span>Home</span>#}
-{#							</a>#}
-{#						</li>#}
                         <li><!-- my pochi -->
 							<a href="#">
                                 <i class="fa fa-menu-arrow pull-right"></i>
@@ -136,13 +131,13 @@
                         </li>
                         {% if groups %}
                             {% for group in groups %}
-                                <li class="active">
-                                    <a href="">
+                                <li>
+                                    <a href="#">
                                         <i class="main-icon fa fa-users"></i>
                                         <span class="label label-info pull-right"></span> <span>{{ group }}</span>
                                     </a>
                                     <ul>
-                                        <li class="active"><a href="{% url 'group_profile' group %}">Dashboard</a></li>
+                                        <li><a href="{% url 'group_profile' group %}">Dashboard</a></li>
                                         <li><a href="{% url 'group_statement' group %}">Statement</a></li>
                                         <li><a href="{% url 'add_member' group %}">Add member</a></li>
                                         <li><a href="{% url 'group_settings' group %}">Settings</a></li>
@@ -198,7 +193,7 @@
 							</a>
 							<ul class="dropdown-menu hold-on-click">
 								<li><!-- my inbox -->
-									<a href="{% url 'messages' %}"><i class="fa fa-envelope"></i> Notifications
+									<a href=""><i class="fa fa-envelope"></i> Notifications
 										<span class="pull-right label label-default">0</span>
 									</a>
 								</li>

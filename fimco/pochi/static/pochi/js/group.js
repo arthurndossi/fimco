@@ -148,4 +148,6 @@ $(document).ready(function() {
         $('#second-admin').show();
     })
 
+    if($('.member').val()) $('.addButton').show(); else $('.addButton').hide();
+
 });

@@ -10,31 +10,35 @@
                             <div class="panel-heading panel-heading-transparent">
                                 <strong>Add Members</strong>
                             </div>
-                            <fieldset>
-                                <div class="form-group">
-                                    <label class="col-xs-3 control-label">Member</label>
-                                    <div class="col-xs-5">
-                                        <input type="text" class="form-control" name="option[]" title=""/>
+                            <div class="panel panel-body">
+                                <fieldset>
+                                    <div class="form-group">
+                                        <label class="col-xs-3 control-label">Member</label>
+                                        <div class="col-xs-5">
+                                            <input type="text" class="form-control" name="option[]" title=""/>
+                                        </div>
+                                        <div class="col-xs-4">
+                                            <button type="button" class="btn btn-default addButton"><i class="fa fa-plus"></i></button>
+                                        </div>
                                     </div>
-                                    <div class="col-xs-4">
-                                        <button type="button" class="btn btn-default addButton"><i class="fa fa-plus"></i></button>
-                                    </div>
-                                </div>
 
-                                <!-- The option field template containing an option field and a Remove button -->
-                                <div class="form-group hide" id="optionTemplate">
-                                    <div class="col-xs-offset-3 col-xs-5">
-                                        <input class="form-control" type="text" name="option[]" title=""/>
+                                    <!-- The option field template containing an option field and a Remove button -->
+                                    <div class="form-group hide" id="optionTemplate">
+                                        <div class="col-xs-offset-3 col-xs-5">
+                                            <input class="form-control" type="text" name="option[]" title=""/>
+                                        </div>
+                                        <div class="col-xs-4">
+                                            <button type="button" class="btn btn-default removeButton"><i class="fa fa-minus"></i></button>
+                                        </div>
                                     </div>
-                                    <div class="col-xs-4">
-                                        <button type="button" class="btn btn-default removeButton"><i class="fa fa-minus"></i></button>
+                                </fieldset>
+                                <div class="row">
+                                    <div class="col-md-9 col-md-offset-3">
+                                        <button class="btn btn-primary" type="submit">
+                                            <i class="fa fa-check"></i> ADD MEMBER
+                                        </button>
                                     </div>
                                 </div>
-                            </fieldset>
-                            <div class="panel-footer transfer">
-                                <button class="btn btn-primary" type="submit">
-                                    <i class="fa fa-check"></i> ADD MEMBER
-                                </button>
                             </div>
                         </div>
                     </form>

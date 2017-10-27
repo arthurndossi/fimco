@@ -8,55 +8,65 @@
             <div class="sheet">
                 <div class="row">
                     <p class="lead">Current balance</p>
-                    <p class="balance">{{ account.balance }} TZS</p>
+                    <p class="balance">TZS {{ account.balance }}</p>
                 </div>
                 <div class="row">
                     <div class="col-xs-6 headerDivider">
                         <p class="lead">Available</p>
-                        <p class="lead">{{ account.balance }} TZS</p>
+                        <p class="lead">TZS {{ account.balance }}</p>
                     </div>
                     <div class="col-xs-6">
                         <p class="lead">Reserved</p>
-                        <p class="lead">0 TZS</p>
+                        <p class="lead">TZS 0</p>
                     </div>
                 </div>
             </div>
-            <div class="statements">
-                {% for statement in statements|slice:":3" %}
-                    <div class="row statement">
-                        <div class="col-xs-3">
-                            <div class="row">
-                                <div class="col-xs-6 col-md-2 col-lg-2 text-center"
-                                     style="padding: 15px">
-                                    <i class="et-wallet"></i>
-                                </div>
-                                <div class="col-xs-6">
-                                    <div class="row">{{ statement.service }}</div>
-                                    <div class="row">{{ statement.channel }}</div>
+            {% if statement %}
+                <div class="statements">
+                    {% for statement in statements|slice:":3" %}
+                        <div class="row statement">
+                            <div class="col-xs-3">
+                                <div class="row">
+                                    <div class="col-xs-6 col-md-2 col-lg-2 text-center"
+                                         style="padding: 15px">
+                                        <i class="et-wallet"></i>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="row">{{ statement.service }}</div>
+                                        <div class="row">{{ statement.channel }}</div>
+                                    </div>
                                 </div>
                             </div>
+                            <div class="col-xs-3">
+                                <div class="row">{{ statement.currency }} {{ statement.amount }}</div>
+                                <div class="row">{{ statement.currency }} {{ statement.charges }}</div>
+                            </div>
+                            <div class="col-xs-3">
+                                {{ statement.dest_account }}
+                            </div>
+                            <div class="col-xs-3">
+                                {{ statement.status }}
+                            </div>
                         </div>
-                        <div class="col-xs-3">
-                            <div class="row">{{ statement.currency }} {{ statement.amount }}</div>
-                            <div class="row">{{ statement.currency }} {{ statement.charges }}</div>
-                        </div>
-                        <div class="col-xs-3">
-                            {{ statement.dest_account }}
-                        </div>
-                        <div class="col-xs-3">
-                            {{ statement.status }}
+                    {% endfor %}
+                </div>
+                <div class="row margin-top-20 mid-align">
+                    <div class="col-xs-12 col-md-4 col-lg-3 col-lg-offset-4">
+                        <a href="{% url 'group_statement' group %}" class="btn btn-featured btn-primary">
+                            <span>View full statement</span>
+                            <i class="et-document"></i>
+                        </a>
+                    </div>
+                </div>
+            {% else %}
+                <div class="row margin-top-20 mid-align">
+                    <div class="col-xs-12 col-md-4 col-lg-3 col-lg-offset-4">
+                        <div class="alert alert-default margin-bottom-30">
+                            <strong>{{ group }} has no transactions!</strong>
                         </div>
                     </div>
-                {% endfor %}
-            </div>
-            <div class="row margin-top-20 mid-align">
-                <div class="col-xs-12 col-md-4 col-lg-3 col-lg-offset-4">
-                    <a href="{% url 'group_statement' group %}" class="btn btn-featured btn-primary">
-                        <span>View full statement</span>
-                        <i class="et-document"></i>
-                    </a>
                 </div>
-            </div>
+            {% endif %}
         </div>
     </section>
 {% endblock %}
