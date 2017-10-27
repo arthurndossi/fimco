@@ -25,16 +25,14 @@ CORPORATE_IDS = (
 )
 
 
-class PhoneInput(Input):
-    input_type = 'tel'
-
-
 class LoginForm(forms.Form):
     phone = forms.IntegerField(
         validators=[validate_slug, telephone],
-        widget=forms.NumberInput(attrs={
-            'type': 'tel',
-            'required': True
+        widget=forms.TextInput(attrs={
+            'class': 'form-control masked',
+            'data-format': '0999999999',
+            'placeholder': 'Enter telephone',
+            'required': True,
         })
     )
     password = forms.CharField(
@@ -62,10 +60,12 @@ class RegisterForm(forms.Form):
             'required': True,
         })
     )
-    dob = forms.DateField(widget=forms.DateInput(attrs={
-        'type': 'date',
-        'required': True,
-    }))
+    dob = forms.DateField(
+            widget=forms.DateInput(attrs={
+                'type': 'date',
+                'required': True,
+            })
+    )
     gender = forms.ChoiceField(choices=GENDER)
     client_id = forms.CharField(
         widget=forms.TextInput(attrs={
@@ -84,8 +84,10 @@ class RegisterForm(forms.Form):
     )
     phone = forms.CharField(
         validators=[telephone],
-        widget=PhoneInput(attrs={
-            'x-autocompletetype': 'tel',
+        widget=forms.TextInput(attrs={
+            'class': 'form-control masked',
+            'data-format': '0999999999',
+            'placeholder': 'Enter telephone',
             'required': True,
         })
     )
@@ -215,8 +217,10 @@ class CorporateForm3(forms.Form):
     )
     phone = forms.CharField(
         validators=[telephone],
-        widget=PhoneInput(attrs={
-            'x-autocompletetype': 'tel',
+        widget=forms.TextInput(attrs={
+            'class': 'form-control masked',
+            'data-format': '0999999999',
+            'placeholder': 'Enter telephone',
             'required': True,
         })
     )
@@ -254,17 +258,20 @@ class EditProfileForm(forms.Form):
             'required': True,
         })
     )
-    lName = forms.CharField(min_length=2,
-                            max_length=20,
-                            validators=[alphabetic],
-                            widget=forms.TextInput(attrs={
-                                'required': True,
-                            })
-                            )
-    dob = forms.DateField(widget=forms.DateInput(attrs={
-        'type': 'date',
-        'required': True,
-    }))
+    lName = forms.CharField(
+        min_length=2,
+        max_length=20,
+        validators=[alphabetic],
+        widget=forms.TextInput(attrs={
+            'required': True,
+        })
+    )
+    dob = forms.DateField(
+        widget=forms.DateInput(attrs={
+            'type': 'date',
+            'required': True,
+        })
+    )
     gender = forms.ChoiceField(choices=GENDER)
     client_id = forms.CharField(
         widget=forms.TextInput(attrs={
@@ -275,17 +282,21 @@ class EditProfileForm(forms.Form):
         widget=forms.ClearableFileInput(attrs={'id': 'file', 'required': True})
     )
     id_choice = forms.ChoiceField(choices=ID_TYPES)
-    email = forms.EmailField(max_length=50,
-                             widget=forms.TextInput(attrs={
-                                 'required': True,
-                             })
-                             )
-    phone = forms.CharField(validators=[telephone],
-                            widget=PhoneInput(attrs={
-                                'x-autocompletetype': 'tel',
-                                'required': True,
-                            })
-                            )
+    email = forms.EmailField(
+        max_length=50,
+        widget=forms.TextInput(attrs={
+         'required': True,
+        })
+    )
+    phone = forms.CharField(
+        validators=[telephone],
+        widget=forms.TextInput(attrs={
+            'class': 'form-control masked',
+            'data-format': '0999999999',
+            'placeholder': 'Enter telephone',
+            'required': True,
+        })
+    )
     bot_cds = forms.CharField(required=False)
     dse_cds = forms.CharField(required=False)
     password = forms.CharField(
