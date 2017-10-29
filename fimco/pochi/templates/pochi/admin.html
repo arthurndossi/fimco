@@ -26,50 +26,6 @@
                     <div id="bal-interest" class="fullwidth height-250"></div>
                 </div>
                 <!-- /panel content -->
-
-                <!-- panel footer -->
-{#                <div class="panel-footer">#}
-
-                    <!--
-                        .md-4 is used for a responsive purpose only on col-md-4 column.
-                        remove .md-4 if you use on a larger column
-                    -->
-{#                    <ul class="easypiecharts list-unstyled">#}
-{#                        <li class="clearfix">#}
-{#                            <span class="stat-number">18.125</span>#}
-{#                            <span class="stat-title">New Customers</span>#}
-{##}
-{#                            <span class="easyPieChart" data-percent="86" data-easing="easeOutBounce" data-barColor="#F8CB00" data-trackColor="#dddddd" data-scaleColor="#dddddd" data-size="60" data-lineWidth="4">#}
-{#                                <span class="percent"></span>#}
-{#                            </span>#}
-{#                        </li>#}
-{#                        <li class="clearfix">#}
-{#                            <span class="stat-number">60%</span>#}
-{#                            <span class="stat-title">Returning Customers</span>#}
-{##}
-{#                            <span class="easyPieChart" data-percent="59.83" data-easing="easeOutBounce" data-barColor="#F86C6B" data-trackColor="#dddddd" data-scaleColor="#dddddd" data-size="60" data-lineWidth="4">#}
-{#                                <span class="percent"></span>#}
-{#                            </span>#}
-{#                        </li>#}
-{#                        <li class="clearfix">#}
-{#                            <span class="stat-number">12%</span>#}
-{#                            <span class="stat-title">Canceled Orders</span>#}
-{##}
-{#                            <span class="easyPieChart" data-percent="12" data-easing="easeOutBounce" data-barColor="#98AD4E" data-trackColor="#dddddd" data-scaleColor="#dddddd" data-size="60" data-lineWidth="4">#}
-{#                                <span class="percent"></span>#}
-{#                            </span>#}
-{#                        </li>#}
-{#                        <li class="clearfix">#}
-{#                            <span class="stat-number">97%</span>#}
-{#                            <span class="stat-title">Positive Feedbacks</span>#}
-{##}
-{#                            <span class="easyPieChart" data-percent="97" data-easing="easeOutBounce" data-barColor="#0058AA" data-trackColor="#dddddd" data-scaleColor="#dddddd" data-size="60" data-lineWidth="4">#}
-{#                                <span class="percent"></span>#}
-{#                            </span>#}
-{#                        </li>#}
-{#                    </ul>#}
-{#                </div>#}
-                <!-- /panel footer -->
             </div>
             <!-- /PANEL -->
         </div>
@@ -137,7 +93,7 @@
                         <i class="fa fa-globe"></i>
                     </div>
                     <div class="box-body text-center">
-                        <span class="sparkline" data-plugin-options='{"type":"bar","barColor":"#ffffff","height":"35px","width":"100%","zeroAxis":"false","barSpacing":"2"}'>
+                       <span class="sparkline" data-plugin-options='{"type":"bar","barColor":"#ffffff","height":"35px","width":"100%","zeroAxis":"false","barSpacing":"2"}'>
                             331,265,456,411,367,319,402,312,300,312,283,384,372,269,402,319,416,355,416,371,423,259,361,312,269,402,327
                         </span>
                     </div>
@@ -149,5 +105,7 @@
     </section>
 {% endblock %}
 {% block scripts %}
-    <script type="text/javascript" src="/static/pochi/js/admin.js"></script>
+    <script type="text/javascript" src="/static/pochi/plugins/highcharts.js"></script>
+    {% load chartit %}
+    {{ balanceChart|load_charts:"bal-interest" }}
 {% endblock %}

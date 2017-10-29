@@ -1,5 +1,6 @@
 import uuid
 
+from chartit import DataPool, Chart
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -10,7 +11,7 @@ from fimcosite.forms import EditProfileForm
 from fimcosite.models import Account, Profile
 
 from core.utils import render_with_global_data
-from .models import Transaction, Group, GroupMembers, ExternalAccount, Ledger
+from .models import Transaction, Group, GroupMembers, ExternalAccount, Ledger, BalanceSnapshot
 from .tables import TransactionTable
 
 
@@ -34,7 +35,45 @@ def home(request):
 
 @login_required
 def admin(request):
-    return render_with_global_data(request, 'pochi/admin.html', {})
+    balancedata = DataPool(
+        series=[{
+            'options': {
+                'source': BalanceSnapshot.objects.all()
+            },
+            'terms': [
+                {'Date': 'fulltimestamp'},
+                {'Balance': 'closing_balance'},
+                {'Interest': 'bonus_closing_balance'}
+            ]
+        }]
+    )
+
+    chart = Chart(
+        datasource=balancedata,
+        series_options=[{
+            'options': {
+                'type': 'line',
+                'stacking': False
+            },
+            'terms': {
+                'Date': [
+                    'Balance',
+                    'Interest'
+                ]
+            }
+        }],
+        chart_options={
+            'title': {
+                'text': 'BALANCE & INTEREST SUMMARY'
+            },
+            'xAxis': {
+                'title': {
+                    'text': 'Date'
+                }
+            }
+        }
+    )
+    return render_with_global_data(request, 'pochi/admin.html', {'balanceChart': chart})
 
 
 @login_required
@@ -380,7 +419,7 @@ def deposit(request):
 
 @login_required
 def new_group(request):
-    return render_with_global_data(request, 'pochi/group.html', {})
+    return render_with_global_data(request, 'pochi/create_group.html', {})
 
 
 @login_required
@@ -417,7 +456,7 @@ def create_group(request):
                 profile_id=member,
                 admin=is_admin
             )
-    return render_with_global_data(request, 'pochi/group.html', {})
+    return render_with_global_data(request, 'pochi/create_group.html', {})
 
 
 @login_required

@@ -146,7 +146,7 @@ $(document).ready(function() {
         $("#members").val(JSON.stringify(uniqueItems));
 
         $('#second-admin').show();
-    })
+    });
 
     if($('.member').val()) $('.addButton').show(); else $('.addButton').hide();
 

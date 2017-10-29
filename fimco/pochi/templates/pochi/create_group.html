@@ -1,15 +1,125 @@
 {% extends "pochi/main.html" %}
 {% block links %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/formvalidation@0.6.2-dev/dist/css/formValidation.min.css">
 {% endblock %}
 {% block content %}
     <section id="middle">
         <div id="content" class="dashboard padding-20">
             <div class="page-profile">
                 <div class="row">
+                    <!-- COL 1 -->
+                    <div class="col-md-8 col-lg-8">
+                        <div class="tabs white nomargin-top">
+                            <ul class="nav nav-tabs tabs-primary">
+                                <li class="active">
+                                    <a href="#overview" data-toggle="tab">Create group</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <!-- Overview -->
+                                <div id="overview" class="tab-pane active">
+                                    <form class="form-horizontal" method="post" action="{% url 'create_group' %}">
+                                        {% csrf_token %}
+                                        <h4>Group Information</h4>
+                                        <fieldset>
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label" for="profileGroupName">Group Name</label>
+                                                <div class="col-md-8">
+                                                    <input type="text"
+                                                           class="form-control"
+                                                           id="profileGroupName"
+                                                           name="profileGroupName">
+                                                </div>
+                                            </div>
+                                        </fieldset>
+
+                                        <hr />
+
+                                        <h4>Add Members</h4>
+                                        <fieldset>
+                                            <div class="form-group">
+                                                <label class="col-xs-3 control-label">Member</label>
+                                                <div class="col-xs-5">
+                                                    <input type="text" class="form-control member" name="option[]" title=""/>
+                                                </div>
+                                                <div class="col-xs-4">
+                                                    <button type="button" class="btn btn-default addButton"><i class="fa fa-plus"></i></button>
+                                                </div>
+                                            </div>
+
+                                            <!-- The option field template containing an option field and a Remove button -->
+                                            <div class="form-group hide" id="optionTemplate">
+                                                <div class="col-xs-offset-3 col-xs-5">
+                                                    <input class="form-control" type="text" name="option[]" title=""/>
+                                                </div>
+                                                <div class="col-xs-4">
+                                                    <button type="button" class="btn btn-default removeButton"><i class="fa fa-minus"></i></button>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-xs-4 mid-align">
+                                                    <button type="button" id="done" class="btn btn-primary">
+                                                        <i class="fa fa-check"></i>Choose a second admin
+                                                        <small>(optional)</small>
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div id="second-admin" class="fancy-form fancy-form-select" style="display: none">
+                                                        <select class="form-control" id="admin" name="admin" title="admin">
+                                                            <option value="">Select second admin</option>
+                                                        </select>
+                                                        <i class="fancy-arrow"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+
+                                        <hr />
+
+{#                                        <h4>About</h4>#}
+{#                                        <fieldset>#}
+{#                                            <div class="form-group">#}
+{#                                                <label class="col-md-3 control-label" for="groupPurpose">Purpose Info</label>#}
+{#                                                <div class="col-md-8">#}
+{#                                                    <textarea class="form-control" rows="3" id="groupPurpose" name="groupPurpose"></textarea>#}
+{#                                                </div>#}
+{#                                            </div>#}
+{#                                            <div class="form-group">#}
+{#                                                <div class="sky-form">#}
+{#                                                    <label class="col-xs-3 control-label">Group Image <small>(Optional)</small></label>#}
+{#                                                    <div class="col-md-8">#}
+{#                                                        <label for="file" class="input input-file">#}
+{#                                                            <input type="file" id="file" name="image">#}
+{#                                                        </label>#}
+{#                                                    </div>#}
+{#                                                </div>#}
+{#                                            </div>#}
+{#                                        </fieldset>#}
+
+                                        <div class="row">
+                                            <div class="col-md-9 col-md-offset-3">
+                                                <input type="hidden" id="members" name="members" value=""/>
+                                                <button type="submit" class="btn btn-primary">Form Group</button>
+                                                <button type="reset" class="btn btn-default">Reset</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /COL 1 -->
                 </div>
             </div>
         </div>
     </section>
 {% endblock %}
 {% block scripts %}
+    <script src="https://cdn.jsdelivr.net/npm/formvalidation@0.6.2-dev/dist/js/formValidation.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/formvalidation@0.6.2-dev/dist/js/framework/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/static/pochi/js/group.js"></script>
 {% endblock %}

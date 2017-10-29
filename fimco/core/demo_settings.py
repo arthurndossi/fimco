@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'fimcosite.apps.FimcositeConfig',
     'pochi.apps.PochiConfig',
     'fimcoplatform.apps.FimcoPlatformConfig',
+    'chartit',
     'formtools',
     'django_tables2'
 ]
