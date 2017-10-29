@@ -2,543 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2bb6a40e-3dd1-4683-a1ae-6832ed7492de" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/highcharts.js" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/css/exchange.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/css/shares.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/css/stocks.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/img/city-1.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/js/admin.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/js/ajax.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/js/daily.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/js/forex-ticker.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/js/rates.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/css/bootstrap-datepicker.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/css/bootstrap-datepicker.min.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/css/bootstrap-datepicker.standalone.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/css/bootstrap-datepicker.standalone.min.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/css/bootstrap-datepicker3.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/css/bootstrap-datepicker3.min.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/css/bootstrap-datepicker3.standalone.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/css/bootstrap-datepicker3.standalone.min.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/js/bootstrap-datepicker.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/js/bootstrap-datepicker.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.ar.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.az.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.bg.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.bs.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.ca.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.cs.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.cy.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.da.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.de.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.el.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.en-GB.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.es.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.et.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.eu.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.fa.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.fi.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.fo.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.fr-CH.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.fr.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.gl.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.he.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.hr.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.hu.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.hy.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.id.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.is.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.it-CH.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.it.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.ja.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.ka.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.kh.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.kk.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.kr.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.lt.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.lv.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.me.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.mk.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.ms.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.nb.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.nl-BE.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.nl.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.no.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.pl.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.pt-BR.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.pt.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.ro.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.rs-latin.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.rs.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.ru.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.sk.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.sl.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.sq.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.sr-latin.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.sr.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.sv.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.sw.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.th.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.tr.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.uk.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.vi.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.zh-CN.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.datepicker/locales/bootstrap-datepicker.zh-TW.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.dialog/.eslintignore" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.dialog/.eslintrc" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.dialog/README.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.dialog/bower.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.dialog/changelog.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.dialog/composer.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.dialog/dist/css/bootstrap-dialog (1).css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.dialog/dist/css/bootstrap-dialog.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.dialog/dist/css/bootstrap-dialog.min (1).css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.dialog/dist/css/bootstrap-dialog.min.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.dialog/dist/js/bootstrap-dialog.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.dialog/dist/js/bootstrap-dialog.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.dialog/dist/less/bootstrap-dialog.less" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.dialog/examples/assets/bootstrap-dialog/css/bootstrap-dialog.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.dialog/examples/assets/bootstrap-dialog/css/bootstrap-dialog.min.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.dialog/examples/assets/bootstrap-dialog/js/bootstrap-dialog.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.dialog/examples/assets/bootstrap-dialog/js/bootstrap-dialog.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.dialog/examples/assets/bootstrap-dialog/less/bootstrap-dialog.less" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.dialog/examples/assets/bootstrap/css/bootstrap-theme.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.dialog/examples/assets/bootstrap/css/bootstrap-theme.css.map" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.dialog/examples/assets/bootstrap/css/bootstrap-theme.min.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.dialog/examples/assets/bootstrap/css/bootstrap.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.dialog/examples/assets/bootstrap/css/bootstrap.css.map" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.dialog/examples/assets/bootstrap/css/bootstrap.min.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.dialog/examples/assets/bootstrap/fonts/glyphicons-halflings-regular.eot" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.dialog/examples/assets/bootstrap/fonts/glyphicons-halflings-regular.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.dialog/examples/assets/bootstrap/fonts/glyphicons-halflings-regular.ttf" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.dialog/examples/assets/bootstrap/fonts/glyphicons-halflings-regular.woff" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.dialog/examples/assets/bootstrap/fonts/glyphicons-halflings-regular.woff2" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.dialog/examples/assets/bootstrap/js/bootstrap.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.dialog/examples/assets/bootstrap/js/bootstrap.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.dialog/examples/assets/bootstrap/js/npm.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.dialog/examples/assets/jquery/jquery-1.10.2.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.dialog/examples/assets/prettify/prettify.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.dialog/examples/assets/prettify/run_prettify.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.dialog/examples/images/pig.ico" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.dialog/examples/index.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.dialog/examples/play/append-to-div.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.dialog/examples/play/button-event.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.dialog/examples/play/custom-dialog-id.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.dialog/examples/play/only-one-dialog.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.dialog/examples/play/reopen-dialog.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.dialog/examples/play/spinning-icon.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.dialog/examples/play/tabindex.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.dialog/examples/remote.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.dialog/gulpfile.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.dialog/package.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.dialog/src/css/bootstrap-dialog.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.dialog/src/js/bootstrap-dialog.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/bootstrap.dialog/src/less/bootstrap-dialog.less" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.chartjs/.travis.yml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.chartjs/CONTRIBUTING.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.chartjs/Chart.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.chartjs/Chart.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.chartjs/LICENSE.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.chartjs/README.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.chartjs/bower.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.chartjs/docs/00-Getting-Started.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.chartjs/docs/01-Line-Chart.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.chartjs/docs/02-Bar-Chart.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.chartjs/docs/03-Radar-Chart.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.chartjs/docs/04-Polar-Area-Chart.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.chartjs/docs/05-Pie-Doughnut-Chart.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.chartjs/docs/06-Advanced.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.chartjs/docs/07-Notes.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.chartjs/gulpfile.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.chartjs/package.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.chartjs/samples/bar.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.chartjs/samples/doughnut.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.chartjs/samples/line-customTooltips.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.chartjs/samples/line.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.chartjs/samples/pie-customTooltips.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.chartjs/samples/pie.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.chartjs/samples/polar-area.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.chartjs/samples/radar.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.chartjs/src/Chart.Bar.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.chartjs/src/Chart.Core.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.chartjs/src/Chart.Doughnut.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.chartjs/src/Chart.Line.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.chartjs/src/Chart.PolarArea.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.chartjs/src/Chart.Radar.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.easypiechart/angular.easypiechart.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.easypiechart/angular.easypiechart.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.easypiechart/easypiechart.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.easypiechart/easypiechart.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.easypiechart/jquery.easypiechart.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.easypiechart/jquery.easypiechart.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.flot/jquery.colorhelpers.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.flot/jquery.colorhelpers.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.flot/jquery.flot.animator.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.flot/jquery.flot.canvas.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.flot/jquery.flot.canvas.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.flot/jquery.flot.categories.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.flot/jquery.flot.categories.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.flot/jquery.flot.crosshair.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.flot/jquery.flot.crosshair.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.flot/jquery.flot.errorbars.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.flot/jquery.flot.errorbars.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.flot/jquery.flot.fillbetween.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.flot/jquery.flot.fillbetween.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.flot/jquery.flot.growraf.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.flot/jquery.flot.image.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.flot/jquery.flot.image.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.flot/jquery.flot.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.flot/jquery.flot.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.flot/jquery.flot.navigate.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.flot/jquery.flot.navigate.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.flot/jquery.flot.orderBars.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.flot/jquery.flot.orderBars.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.flot/jquery.flot.pie.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.flot/jquery.flot.pie.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.flot/jquery.flot.resize.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.flot/jquery.flot.resize.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.flot/jquery.flot.selection.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.flot/jquery.flot.selection.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.flot/jquery.flot.stack.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.flot/jquery.flot.stack.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.flot/jquery.flot.symbol.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.flot/jquery.flot.symbol.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.flot/jquery.flot.threshold.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.flot/jquery.flot.threshold.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.flot/jquery.flot.time.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.flot/jquery.flot.time.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.flot/jquery.flot.tooltip.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.knob/LICENSE" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.knob/README.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.knob/bower.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.knob/dist/jquery.knob.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.knob/excanvas.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.knob/index.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.knob/js/jquery.knob.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.knob/knob.jquery.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.knob/package.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.knob/secretplan.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.morris/morris.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.morris/morris.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/chart.morris/morris.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/css/jquery.dataTables.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/css/jquery.dataTables.min.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/css/jquery.dataTables_themeroller.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/dataTables.bootstrap.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/AutoFill/Readme.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/AutoFill/css/dataTables.autoFill.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/AutoFill/css/dataTables.autoFill.min.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/AutoFill/examples/columns.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/AutoFill/examples/complete-callback.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/AutoFill/examples/fill-both.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/AutoFill/examples/fill-horizontal.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/AutoFill/examples/index.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/AutoFill/examples/scrolling.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/AutoFill/examples/simple.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/AutoFill/examples/step-callback.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/AutoFill/images/filler.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/AutoFill/js/dataTables.autoFill.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/AutoFill/js/dataTables.autoFill.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/ColReorder/Readme.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/ColReorder/css/dataTables.colReorder.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/ColReorder/css/dataTables.colReorder.min.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/ColReorder/examples/alt_insert.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/ColReorder/examples/col_filter.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/ColReorder/examples/colvis.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/ColReorder/examples/fixedcolumns.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/ColReorder/examples/fixedheader.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/ColReorder/examples/index.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/ColReorder/examples/jqueryui.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/ColReorder/examples/new_init.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/ColReorder/examples/predefined.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/ColReorder/examples/realtime.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/ColReorder/examples/reset.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/ColReorder/examples/scrolling.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/ColReorder/examples/server_side.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/ColReorder/examples/simple.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/ColReorder/examples/state_save.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/ColReorder/images/insert.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/ColReorder/js/dataTables.colReorder.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/ColReorder/js/dataTables.colReorder.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/ColVis/Readme.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/ColVis/css/dataTables.colVis.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/ColVis/css/dataTables.colVis.min.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/ColVis/css/dataTables.colvis.jqueryui.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/ColVis/examples/button_order.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/ColVis/examples/exclude_columns.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/ColVis/examples/group_columns.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/ColVis/examples/index.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/ColVis/examples/jqueryui.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/ColVis/examples/mouseover.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/ColVis/examples/new_init.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/ColVis/examples/restore.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/ColVis/examples/simple.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/ColVis/examples/text.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/ColVis/examples/title_callback.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/ColVis/examples/two_tables.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/ColVis/examples/two_tables_identical.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/ColVis/js/dataTables.colVis.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/ColVis/js/dataTables.colVis.min (1).js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/ColVis/js/dataTables.colVis.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/FixedColumns/Readme.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/FixedColumns/css/dataTables.fixedColumns.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/FixedColumns/css/dataTables.fixedColumns.min.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/FixedColumns/examples/bootstrap (1).html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/FixedColumns/examples/bootstrap.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/FixedColumns/examples/col_filter (1).html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/FixedColumns/examples/col_filter.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/FixedColumns/examples/colvis.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/FixedColumns/examples/css_size.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/FixedColumns/examples/index.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/FixedColumns/examples/index_column.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/FixedColumns/examples/left_right_columns (1).html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/FixedColumns/examples/left_right_columns.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/FixedColumns/examples/right_column.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/FixedColumns/examples/rowspan.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/FixedColumns/examples/server-side-processing.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/FixedColumns/examples/simple.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/FixedColumns/examples/size_fixed.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/FixedColumns/examples/size_fluid.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/FixedColumns/examples/two_columns.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/FixedColumns/js/dataTables.fixedColumns.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/FixedColumns/js/dataTables.fixedColumns.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/FixedHeader/Readme.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/FixedHeader/css/dataTables.fixedHeader.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/FixedHeader/css/dataTables.fixedHeader.min.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/FixedHeader/examples/header_footer.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/FixedHeader/examples/index.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/FixedHeader/examples/simple.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/FixedHeader/examples/top_left_right.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/FixedHeader/examples/two_tables.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/FixedHeader/examples/zIndexes.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/FixedHeader/js/dataTables.fixedHeader.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/FixedHeader/js/dataTables.fixedHeader.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/KeyTable/Readme.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/KeyTable/css/dataTables.keyTable.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/KeyTable/css/dataTables.keyTable.min.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/KeyTable/examples/events.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/KeyTable/examples/html.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/KeyTable/examples/index.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/KeyTable/examples/scrolling.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/KeyTable/examples/simple.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/KeyTable/js/dataTables.keyTable.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/KeyTable/js/dataTables.keyTable.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/Responsive/Readme.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/Responsive/css/dataTables.responsive.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/Responsive/css/dataTables.responsive.scss" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/Responsive/examples/child-rows/column-control.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/Responsive/examples/child-rows/custom-renderer.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/Responsive/examples/child-rows/disable-child-rows.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/Responsive/examples/child-rows/index.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/Responsive/examples/child-rows/right-column.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/Responsive/examples/child-rows/whole-row-control.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/Responsive/examples/display-control/auto.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/Responsive/examples/display-control/classes.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/Responsive/examples/display-control/index.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/Responsive/examples/display-control/init-classes.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/Responsive/examples/index.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/Responsive/examples/initialisation/ajax.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/Responsive/examples/initialisation/className.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/Responsive/examples/initialisation/index.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/Responsive/examples/initialisation/new.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/Responsive/examples/initialisation/option.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/Responsive/examples/styling/bootstrap.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/Responsive/examples/styling/foundation.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/Responsive/examples/styling/index.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/Responsive/js/dataTables.responsive.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/Responsive/js/dataTables.responsive.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/Scroller/Readme.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/Scroller/css/dataTables.scroller.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/Scroller/css/dataTables.scroller.min.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/Scroller/examples/api_scrolling.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/Scroller/examples/data/2500.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/Scroller/examples/data/ssp.php" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/Scroller/examples/index.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/Scroller/examples/large_js_source.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/Scroller/examples/server-side_processing.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/Scroller/examples/simple.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/Scroller/examples/state_saving.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/Scroller/images/loading-background.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/Scroller/js/dataTables.scroller.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/Scroller/js/dataTables.scroller.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/TableTools/Readme.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/TableTools/css/dataTables.tableTools.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/TableTools/css/dataTables.tableTools.min.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/TableTools/examples/ajax.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/TableTools/examples/alter_buttons.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/TableTools/examples/bootstrap.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/TableTools/examples/button_text.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/TableTools/examples/collection.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/TableTools/examples/defaults.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/TableTools/examples/index.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/TableTools/examples/jqueryui.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/TableTools/examples/multi_instance.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/TableTools/examples/multiple_tables.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/TableTools/examples/new_init.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/TableTools/examples/pdf_message.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/TableTools/examples/plug-in.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/TableTools/examples/select_column.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/TableTools/examples/select_multi.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/TableTools/examples/select_os.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/TableTools/examples/select_single.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/TableTools/examples/simple.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/TableTools/examples/swf_path.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/TableTools/images/background.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/TableTools/images/collection.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/TableTools/images/collection_hover.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/TableTools/images/copy.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/TableTools/images/copy_hover.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/TableTools/images/csv.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/TableTools/images/csv_hover.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/TableTools/images/pdf.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/TableTools/images/pdf_hover.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/TableTools/images/print.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/TableTools/images/print_hover.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/TableTools/images/psd/collection.psd" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/TableTools/images/psd/copy document (1).psd" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/TableTools/images/psd/copy document.psd" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/TableTools/images/psd/file_types.psd" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/TableTools/images/psd/printer (1).psd" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/TableTools/images/psd/printer.psd" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/TableTools/images/xls.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/TableTools/images/xls_hover.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/TableTools/js/dataTables.tableTools.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/TableTools/js/dataTables.tableTools.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/TableTools/swf/copy_csv_xls.swf" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/extensions/TableTools/swf/copy_csv_xls_pdf.swf" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/images/Sorting icons.psd" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/images/back_disabled.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/images/back_enabled.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/images/back_enabled_hover.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/images/favicon.ico" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/images/forward_disabled.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/images/forward_enabled.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/images/forward_enabled_hover.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/images/sort_asc.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/images/sort_asc_disabled.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/images/sort_both.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/images/sort_desc.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/images/sort_desc_disabled.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/js/dataTables.bootstrap.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/js/dataTables.bootstrap.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/js/dataTables.colReorder.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/js/dataTables.foundation.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/js/dataTables.foundation.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/js/dataTables.jqueryui.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/js/dataTables.jqueryui.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/js/dataTables.scroller.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/js/dataTables.tableTools.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/js/jquery.dataTables.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/datatables/js/jquery.dataTables.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/gmaps.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/css/ui.jqgrid.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/JsonXml.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/grid.base.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/grid.celledit.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/grid.common.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/grid.custom.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/grid.filter.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/grid.formedit.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/grid.grouping.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/grid.import.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/grid.inlinedit.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/grid.jqueryui.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/grid.pivot.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/grid.subgrid.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/grid.tbltogrid.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/grid.treegrid.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/i18n/grid.locale-ar.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/i18n/grid.locale-bg.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/i18n/grid.locale-bg1251.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/i18n/grid.locale-cat.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/i18n/grid.locale-cn.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/i18n/grid.locale-cs.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/i18n/grid.locale-da.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/i18n/grid.locale-de.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/i18n/grid.locale-dk.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/i18n/grid.locale-el.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/i18n/grid.locale-en.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/i18n/grid.locale-es.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/i18n/grid.locale-fa.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/i18n/grid.locale-fi.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/i18n/grid.locale-fr.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/i18n/grid.locale-gl.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/i18n/grid.locale-he.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/i18n/grid.locale-hr.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/i18n/grid.locale-hr1250.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/i18n/grid.locale-hu.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/i18n/grid.locale-id.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/i18n/grid.locale-is.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/i18n/grid.locale-it.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/i18n/grid.locale-ja.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/i18n/grid.locale-kr.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/i18n/grid.locale-lt.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/i18n/grid.locale-mne.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/i18n/grid.locale-nl.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/i18n/grid.locale-no.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/i18n/grid.locale-pl.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/i18n/grid.locale-pt-br.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/i18n/grid.locale-pt.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/i18n/grid.locale-ro.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/i18n/grid.locale-ru.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/i18n/grid.locale-sk.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/i18n/grid.locale-sr-latin.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/i18n/grid.locale-sr.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/i18n/grid.locale-sv.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/i18n/grid.locale-th.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/i18n/grid.locale-tr.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/i18n/grid.locale-tw.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/i18n/grid.locale-ua.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/i18n/grid.locale-vi.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/jqDnR.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/jqModal.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/jquery.fmatter.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/jquery.jqGrid.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/js/minified/jquery.jqGrid.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/plugins/grid.addons.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/plugins/grid.postext.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/plugins/grid.setcolumns.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/plugins/jquery.contextmenu.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/plugins/jquery.searchFilter.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/plugins/jquery.tablednd.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/plugins/searchFilter.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/plugins/ui.multiselect.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/plugins/ui.multiselect.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jqgrid/update.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jquery-vectormap/gdp-data.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jquery-vectormap/jquery-jvectormap-1.2.2.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jquery-vectormap/jquery-jvectormap-1.2.2.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/jquery-vectormap/jquery-jvectormap-world-mill-en.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/knob/LICENSE" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/knob/README.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/knob/bower.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/knob/dist/jquery.knob.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/knob/excanvas.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/knob/index.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/knob/js/jquery.knob.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/knob/knob.jquery.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/knob/secretplan.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/magnific-popup/jquery.magnific-popup.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/magnific-popup/jquery.magnific-popup.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/magnific-popup/magnific-popup.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/readme.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/salvattore.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/toastr/WARNING!.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/toastr/toastr.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/toastr/toastr.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/plugins/typeahead.bundle.js" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/fimco/pochi/templates/pochi/group.html" afterPath="$PROJECT_DIR$/fimco/pochi/templates/pochi/create_group.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dataSources/532288af-247b-4932-9df9-87488435154e/_metadata_/metadata" afterPath="$PROJECT_DIR$/.idea/dataSources/532288af-247b-4932-9df9-87488435154e/_metadata_/metadata" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dataSources/532288af-247b-4932-9df9-87488435154e/_metadata_/metadata.values.at" afterPath="$PROJECT_DIR$/.idea/dataSources/532288af-247b-4932-9df9-87488435154e/_metadata_/metadata.values.at" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fimco/core/demo_settings.py" afterPath="$PROJECT_DIR$/fimco/core/demo_settings.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fimco/core/settings.py" afterPath="$PROJECT_DIR$/fimco/core/settings.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fimco/pochi/static/pochi/js/group.js" afterPath="$PROJECT_DIR$/fimco/pochi/static/pochi/js/group.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fimco/pochi/templates/pochi/admin.html" afterPath="$PROJECT_DIR$/fimco/pochi/templates/pochi/admin.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fimco/pochi/templates/pochi/edit_group.html" afterPath="$PROJECT_DIR$/fimco/pochi/templates/pochi/edit_group.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fimco/pochi/templates/pochi/pochi2pochi.html" afterPath="$PROJECT_DIR$/fimco/pochi/templates/pochi/pochi2pochi.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fimco/pochi/templates/pochi/profile.html" afterPath="$PROJECT_DIR$/fimco/pochi/templates/pochi/profile.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fimco/pochi/views.py" afterPath="$PROJECT_DIR$/fimco/pochi/views.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -600,52 +64,7 @@
     <favorites_list name="FIMCO" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="models.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/fimco/fimcosite/models.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1394">
-              <caret line="88" column="0" lean-forward="false" selection-start-line="88" selection-start-column="0" selection-end-line="88" selection-end-column="0" />
-              <folding>
-                <element signature="e#0#39#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="models.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/fimco/pochi/models.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="901">
-              <caret line="56" column="44" lean-forward="false" selection-start-line="56" selection-start-column="44" selection-end-line="56" selection-end-column="44" />
-              <folding>
-                <element signature="e#0#39#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/fimco/pochi/views.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="75" column="88" lean-forward="false" selection-start-line="75" selection-start-column="88" selection-end-line="75" selection-end-column="88" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="admin.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/fimco/pochi/templates/pochi/admin.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1734">
-              <caret line="102" column="14" lean-forward="false" selection-start-line="102" selection-start-column="14" selection-end-line="102" selection-end-column="14" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -1538,7 +957,14 @@
       <option name="project" value="LOCAL" />
       <updated>1509094884007</updated>
     </task>
-    <option name="localTasksCounter" value="49" />
+    <task id="LOCAL-00049" summary="added charts">
+      <created>1509245540609</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1509245540609</updated>
+    </task>
+    <option name="localTasksCounter" value="50" />
     <servers />
   </component>
   <component name="TodoView">
@@ -1552,7 +978,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1370" height="744" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3289689" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.28968903" sideWeight="0.5137405" order="1" side_tool="true" content_ui="tabs" />
@@ -1604,7 +1029,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="added edit profile" />
     <MESSAGE value="added create and edit group" />
     <MESSAGE value="added static root to settings" />
     <MESSAGE value="changed allowed hosts in settings" />
@@ -1629,7 +1053,8 @@
     <MESSAGE value="removed migrations" />
     <MESSAGE value="added admin file in fimcoplatform" />
     <MESSAGE value="changed the forms file" />
-    <option name="LAST_COMMIT_MESSAGE" value="changed the forms file" />
+    <MESSAGE value="added charts" />
+    <option name="LAST_COMMIT_MESSAGE" value="added charts" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1660,6 +1085,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="26">
           <caret line="98" column="62" lean-forward="true" selection-start-line="98" selection-start-column="62" selection-end-line="98" selection-end-column="62" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1693,6 +1119,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="189">
           <caret line="133" column="53" lean-forward="true" selection-start-line="133" selection-start-column="53" selection-end-line="133" selection-end-column="53" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1770,6 +1197,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="269">
           <caret line="124" column="14" lean-forward="true" selection-start-line="124" selection-start-column="14" selection-end-line="124" selection-end-column="14" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1784,6 +1212,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="34">
           <caret line="2" column="120" lean-forward="false" selection-start-line="2" selection-start-column="120" selection-end-line="2" selection-end-column="120" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1826,6 +1255,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1309">
           <caret line="77" column="19" lean-forward="false" selection-start-line="77" selection-start-column="19" selection-end-line="77" selection-end-column="19" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1847,6 +1277,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="51">
           <caret line="3" column="14" lean-forward="true" selection-start-line="3" selection-start-column="14" selection-end-line="3" selection-end-column="14" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1861,6 +1292,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="125">
           <caret line="33" column="27" lean-forward="true" selection-start-line="33" selection-start-column="27" selection-end-line="33" selection-end-column="27" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1868,6 +1300,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="351">
           <caret line="241" column="199" lean-forward="false" selection-start-line="241" selection-start-column="199" selection-end-line="241" selection-end-column="199" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1875,16 +1308,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="92">
           <caret line="16" column="45" lean-forward="true" selection-start-line="16" selection-start-column="45" selection-end-line="16" selection-end-column="45" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fimco/fimcosite/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1394">
-          <caret line="88" column="0" lean-forward="false" selection-start-line="88" selection-start-column="0" selection-end-line="88" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#39#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1939,9 +1363,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/fimco/pochi/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="80" column="48" lean-forward="true" selection-start-line="80" selection-start-column="48" selection-end-line="80" selection-end-column="48" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/fimco/pochi/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="901">
+        <state relative-caret-position="17">
           <caret line="56" column="44" lean-forward="false" selection-start-line="56" selection-start-column="44" selection-end-line="56" selection-end-column="44" />
           <folding>
             <element signature="e#0#39#0" expanded="true" />
@@ -1949,11 +1381,13 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fimco/pochi/views.py">
+    <entry file="file://$PROJECT_DIR$/fimco/fimcosite/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="75" column="88" lean-forward="false" selection-start-line="75" selection-start-column="88" selection-end-line="75" selection-end-column="88" />
-          <folding />
+        <state relative-caret-position="243">
+          <caret line="88" column="0" lean-forward="false" selection-start-line="88" selection-start-column="0" selection-end-line="88" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
