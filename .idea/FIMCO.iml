@@ -22,6 +22,7 @@
       <list>
         <option value="$MODULE_DIR$/fimco/pochi/templates" />
         <option value="$MODULE_DIR$/fimco/fimcosite/templates" />
+        <option value="$MODULE_DIR$/fimco/fimcoplatform/templates" />
       </list>
     </option>
   </component>

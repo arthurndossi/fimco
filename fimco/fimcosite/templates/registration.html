@@ -8,20 +8,16 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-6 col-sm-6 offset-md-3 offset-sm-3">
-                    {% if rForm.errors %}
-                        {% for error in rForm.errors %}
-                            {% if error == '__all__' %}
-                                {% for general_error in rForm.non_field_errors %}
-                                    <div class="alert alert-mini alert-danger mb-30">
-                                        <strong>{{ general_error }}</strong>
-                                    </div>
-                                {% endfor %}
-                            {% else %}
-                                <div class="alert alert-mini alert-danger mb-30">
-                                    <strong>Oh snap! There is an error in field {{ error }}</strong>
-                                </div>
-                            {% endif %}
+                    {% if rForm.non_field_errors %}
+                        {% for general_error in rForm.non_field_errors %}
+                            <div class="alert alert-mini alert-danger mb-30">
+                                <strong>{{ general_error }}</strong>
+                            </div>
                         {% endfor %}
+                    {% else %}
+                        <div class="alert alert-mini alert-danger mb-30">
+                            <strong>Please fill all required fields in the form!</strong>
+                        </div>
                     {% endif %}
                     <div class="box-static box-transparent box-bordered p-30">
                         <div class="box-title mb-30">
@@ -120,21 +116,6 @@
                                         </label>
                                         {% if rForm.phone.errors %}
                                             {% for error in rForm.phone.errors %}
-                                                <div class="alert alert-mini alert-danger mb-30">
-                                                    <strong>{{ error|escape }}</strong>
-                                                </div>
-                                            {% endfor %}
-                                        {% endif %}
-                                    </div>
-                                    <div class="col-md-6 col-sm-6">
-                                        <label for="register:user_account">User Account Name <small>(required)</small></label>
-                                        <label class="input mb-10">
-                                            <i class="ico-append fa fa-id-badge"></i>
-                                            {{ rForm.user_acc_name }}
-                                            <b class="tooltip tooltip-bottom-right">Enter your user account name </b>
-                                        </label>
-                                        {% if rForm.user_acc_name.errors %}
-                                            {% for error in rForm.user_acc_name.errors %}
                                                 <div class="alert alert-mini alert-danger mb-30">
                                                     <strong>{{ error|escape }}</strong>
                                                 </div>

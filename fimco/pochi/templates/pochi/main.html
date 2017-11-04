@@ -42,7 +42,8 @@
                                 <i class="main-icon fa fa-dashboard"></i> <span>Dashboard</span>
                             </a>
                         </li>
-                        <li><!-- dashboard -->
+                        {% if paid %}
+                        <li><!-- market -->
                             <a href="#">
                                 <i class="fa fa-menu-arrow pull-right"></i>
                                 <i class="main-icon fa fa-money"></i> <span>Market Information</span>
@@ -85,6 +86,14 @@
                                 </li>
                             </ul>
                         </li>
+                        {% else %}
+                            <li>
+                                <a disabled tabindex="-1">
+                                    <i class="main-icon fa fa-money"></i>
+                                    <span>Market Information</span>
+                                </a>
+                            </li>
+                        {% endif %}
 					</ul>
 
                     <h3 style="margin: 10px">POCHI</h3>
@@ -139,7 +148,6 @@
                                     <ul>
                                         <li><a href="{% url 'group_profile' group %}">Dashboard</a></li>
                                         <li><a href="{% url 'group_statement' group %}">Statement</a></li>
-                                        <li><a href="{% url 'add_member' group %}">Add member</a></li>
                                         <li><a href="{% url 'group_settings' group %}">Settings</a></li>
                                     </ul>
                                 </li>

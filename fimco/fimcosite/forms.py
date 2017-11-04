@@ -1,7 +1,6 @@
 from django import forms
-from django.core.validators import *
 from django.contrib.auth.models import User
-from django.forms.widgets import Input
+from django.core.validators import *
 
 alphabetic = RegexValidator(r'^[a-zA-Z\s]*$', 'Only alphabetic characters are allowed.')
 telephone = RegexValidator(r'^([+]?(\d{1,3}\s?)|[0])\s?\d+(\s?\-?\d{2,4}){1,3}?$', 'Not a valid phone number.')
@@ -26,13 +25,12 @@ CORPORATE_IDS = (
 
 
 class LoginForm(forms.Form):
-    phone = forms.IntegerField(
-        validators=[validate_slug, telephone],
+    username = forms.CharField(
+        validators=[validate_slug],
         widget=forms.TextInput(attrs={
-            'class': 'form-control masked',
-            'data-format': '0999999999',
-            'placeholder': 'Enter telephone',
-            'required': True,
+            'class': 'form-control',
+            'placeholder': 'Enter phone number/email address',
+            'required': True
         })
     )
     password = forms.CharField(
@@ -49,7 +47,7 @@ class RegisterForm(forms.Form):
         max_length=20,
         validators=[alphabetic],
         widget=forms.TextInput(attrs={
-            'required': True,
+            'required': True
         })
     )
     lName = forms.CharField(
@@ -57,13 +55,13 @@ class RegisterForm(forms.Form):
         max_length=20,
         validators=[alphabetic],
         widget=forms.TextInput(attrs={
-            'required': True,
+            'required': True
         })
     )
     dob = forms.DateField(
             widget=forms.DateInput(attrs={
                 'type': 'date',
-                'required': True,
+                'required': True
             })
     )
     gender = forms.ChoiceField(choices=GENDER)
@@ -79,7 +77,7 @@ class RegisterForm(forms.Form):
     email = forms.EmailField(
         validators=[EmailValidator],
         widget=forms.EmailInput(attrs={
-            'required': True,
+            'required': False
         })
     )
     phone = forms.CharField(
@@ -88,38 +86,29 @@ class RegisterForm(forms.Form):
             'class': 'form-control masked',
             'data-format': '0999999999',
             'placeholder': 'Enter telephone',
-            'required': True,
+            'required': True
         })
     )
     bot_cds = forms.CharField(required=False)
     dse_cds = forms.CharField(required=False)
-    user_acc_name = forms.CharField(
-        min_length=2,
-        max_length=20,
-        validators=[validate_slug],
-        widget=forms.TextInput(attrs={
-            'required': True,
-
-        })
-    )
     password = forms.CharField(
         validators=[validate_slug],
         widget=forms.PasswordInput(attrs={
-            'required': True,
+            'required': True
 
         })
     )
     verify = forms.CharField(
         validators=[validate_slug],
         widget=forms.PasswordInput(attrs={
-            'required': True,
+            'required': True
 
         })
     )
 
     def clean(self):
         cleaned_data = self.cleaned_data
-        if User.objects.filter(username=cleaned_data['phone']).exists():
+        if 'phone' in cleaned_data and User.objects.filter(username=cleaned_data['phone']).exists():
             raise forms.ValidationError("This phone number is already associated with another user!")
         if 'password' in cleaned_data and 'verify' in cleaned_data and cleaned_data['password'] != cleaned_data['verify']:
             raise forms.ValidationError("Passwords must be identical.")

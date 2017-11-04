@@ -12,7 +12,16 @@
                         {% for message in messages %}
                             <!-- ALERT -->
                             <div class="alert alert-mini alert-danger mb-30">
-                                <strong>{{ message }}</strong> Please try again.
+                                <strong>{{ message }}! Please try again.</strong>
+                            </div>
+                            <!-- /ALERT -->
+                        {% endfor %}
+                    {% endif %}
+                    {% if lForm.non_field_errors %}
+                        {% for error in lForm.non_field_errors %}
+                            <!-- ALERT -->
+                            <div class="alert alert-mini alert-danger mb-30">
+                                <strong>{{ error }}</strong>
                             </div>
                             <!-- /ALERT -->
                         {% endfor %}
@@ -20,7 +29,7 @@
                     {% if next %}
                         <!-- ALERT -->
                         <div class="alert alert-mini alert-danger mb-30">
-                            <p>You need to login to view this page else create an account in the link below.</p>
+                            <p>You need to login to view this page... else create an account in the link below.</p>
                         </div>
                         <!-- /ALERT -->
                     {% endif %}
@@ -35,10 +44,10 @@
                         {% endif %}
                             <div class="clearfix">
                                 <!-- Phone -->
-                                <label>Phone</label>
+                                <label>Email/Phone</label>
                                 <label class="input mb-10">
-                                    <i class="ico-append fa fa-phone"></i>
-                                    {{ lForm.phone }}
+                                    <i class="ico-append fa fa-user"></i>
+                                    {{ lForm.username }}
                                     <b class="tooltip tooltip-bottom-right">Needed to verify your account</b>
                                 </label>
                                 <!-- Password -->

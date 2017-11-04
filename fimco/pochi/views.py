@@ -1,18 +1,35 @@
 import uuid
 
 from chartit import DataPool, Chart
+from core.utils import render_with_global_data
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import JsonResponse
-from django.shortcuts import render, redirect
-from django_tables2 import RequestConfig
+from django.shortcuts import redirect
+from django_tables2 import RequestConfig, SingleTableView
 from fimcosite.forms import EditProfileForm
 from fimcosite.models import Account, Profile
 
-from core.utils import render_with_global_data
+from .filters import TransactionFilterEx
 from .models import Transaction, Group, GroupMembers, ExternalAccount, Ledger, BalanceSnapshot
 from .tables import TransactionTable
+
+
+class TransactionFilteredSingleTableView(SingleTableView):
+    model = Transaction
+
+    def get_context_data(self, **kwargs):
+        context = super(TransactionFilteredSingleTableView, self).get_context_data(**kwargs)
+        filter = TransactionFilterEx(self.request.GET, queryset=self.object_list)
+
+        table = TransactionTable(filter.qs)
+        RequestConfig(self.request, paginate={'per_page': 25}).configure(table)
+
+        context['filter'] = filter
+        context['table'] = table
+
+        return context
 
 
 @login_required
@@ -86,23 +103,20 @@ def statement(request):
         user_accounts = user_accounts
     if request.GET.get('channel'):
         selected_account = request.GET.get('channel')
-        account_trans = Transaction.objects.filter(profile_id=profile.profile_id, channel=selected_account).values(
-            'account', 'trans_type', 'service', 'channel', 'dest_account', 'currency', 'amount', 'charge', 'status'
-        )
+        account_trans = Transaction.objects.filter(profile_id=profile.profile_id, channel=selected_account)
     else:
         try:
             trans = Transaction.objects.filter(profile_id=request.user.profile.profile_id)
         except Transaction.DoesNotExist:
             trans = trans
 
-    table = TransactionTable(trans)
-    RequestConfig(request, paginate={'per_page': 25}).configure(table)
+    table_params = TransactionFilteredSingleTableView()
 
     context = {
         "profile": profile,
         "accounts": user_accounts,
-        "table": table,
-        'trans': trans,
+        "table": table_params,
+        "trans": trans,
         "single": account_trans
     }
     return render_with_global_data(request, 'pochi/statement.html', context)
@@ -470,8 +484,8 @@ def lock(request):
 
 
 @login_required
-def group_settings(request):
-    return render_with_global_data(request, 'pochi/group_settings.html', {})
+def group_settings(request, name=None):
+    return render_with_global_data(request, 'pochi/group_settings.html', {'group': name})
 
 
 @login_required

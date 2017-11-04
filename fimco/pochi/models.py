@@ -85,3 +85,14 @@ class Notification(models.Model):
     fulltimestamp = models.DateTimeField(auto_now_add=True)
     message = models.TextField(max_length=1024, default='NA')
     read_status = models.IntegerField(default=0)
+
+
+class PremiumUsers(models.Model):
+    TYPES = (
+        ('STANDARD', 'standard'),
+        ('PREMIUM', 'premium')
+    )
+    profile_id = models.CharField(max_length=20)
+    level = models.CharField(max_length=10, choices=TYPES)
+    start_date = models.DateTimeField(auto_now_add=True)
+    end_date = models.DateTimeField()

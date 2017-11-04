@@ -1,0 +1,160 @@
+{% extends "pochi/main.html" %}
+{% block content %}
+    <section id="middle">
+        <div id="content" class="padding-20">
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="panel-ui-tan-l2" class="panel panel-default">
+                        <div class="panel-heading">
+                            <span class="elipsis">
+                                <strong>Group Information</strong>
+                            </span>
+                            <!-- right options -->
+                            <ul class="options pull-right list-inline">
+                                <li>
+                                    <a href="#" class="opt panel_colapse" data-toggle="tooltip" title="Colapse" data-placement="bottom"></a>
+                                </li>
+                                <li>
+                                    <a href="#" class="opt panel_fullscreen hidden-xs" data-toggle="tooltip" title="Fullscreen" data-placement="bottom"><i class="fa fa-expand"></i></a>
+                                </li>
+                            </ul>
+                            <!-- /right options -->
+                        </div>
+
+                        <!-- panel content -->
+                        <div class="panel-body">
+                            <div class="row tabs nomargin">
+                                <!-- tabs -->
+                                <div class="col-md-3 col-sm-3 nopadding-right nopadding-left">
+                                    <ul class="nav nav-tabs nav-stacked">
+                                        <li class="active">
+                                            <a href="#profile" data-toggle="tab">
+                                                Profile
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#add" data-toggle="tab">
+                                                Add Member
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#remove" data-toggle="tab">
+                                                Remove Member
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#administrators" data-toggle="tab">
+                                                Administrators
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <!-- tabs content -->
+                                <div class="col-md-9 col-sm-9 nopadding-right nopadding-left">
+                                    <div class="tab-content">
+                                        <div id="profile" class="tab-pane active">
+                                            <div id="panel-ui-tan-l3" class="panel panel-default">
+                                                <div class="panel-heading">
+                                                    <span class="elipsis">
+                                                        <strong>Group Profile</strong>
+                                                    </span>
+                                                </div>
+                                                <!-- panel content -->
+                                                <div class="panel-body">
+                                                    <p>{{ group }} group currently has {{ number }} members. </p>
+                                                    <div class="tabs nomargin">
+                                                        <!-- tabs -->
+                                                        <ul class="nav nav-tabs">
+                                                            <li class="active">
+                                                                <a href="#tab1_nobg" data-toggle="tab">
+                                                                    <i class="fa fa-users"></i> Participants
+                                                                </a>
+                                                            </li>
+                                                            <li class="">
+                                                                <a href="#tab2_nobg" data-toggle="tab">
+                                                                    <i class="fa fa-sign-out"></i>Exit Group
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                        <!-- tabs content -->
+                                                        <div class="tab-content transparent">
+                                                            <div id="tab1_nobg" class="tab-pane active">
+                                                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas metus nulla, commodo a sodales sed, dignissim pretium nunc. Nam et lacus neque. Ut enim massa, sodales tempor convallis et, iaculis ac massa. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas metus nulla, commodo a sodales sed, dignissim pretium nunc. Nam et lacus neque. Ut enim massa, sodales tempor convallis et, iaculis ac massa.</p>
+                                                            </div>
+
+                                                            <div id="tab2_nobg" class="tab-pane">
+                                                                <p>Maecenas metus nulla, commodo a sodales sed, dignissim pretium nunc. Nam et lacus neque. Ut enim massa, sodales tempor convallis et, iaculis ac massa. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- /panel content -->
+                                            </div>
+                                        </div>
+
+                                        <div id="add" class="tab-pane">
+                                            <form class="payment" method="post" action="{% url 'add_member' group %}">
+                                                {% csrf_token %}
+                                                <div class="panel panel-default">
+                                                    <div class="panel-heading panel-heading-transparent">
+                                                        <strong>Add Members</strong>
+                                                    </div>
+                                                    <div class="panel panel-body">
+                                                        <fieldset>
+                                                            <div class="form-group">
+                                                                <label class="col-xs-3 control-label">Member</label>
+                                                                <div class="col-xs-5">
+                                                                    <input type="text" class="form-control" name="option[]" title=""/>
+                                                                </div>
+                                                                <div class="col-xs-4">
+                                                                    <button type="button" class="btn btn-default addButton"><i class="fa fa-plus"></i></button>
+                                                                </div>
+                                                            </div>
+
+                                                            <!-- The option field template containing an option field and a Remove button -->
+                                                            <div class="form-group hide" id="optionTemplate">
+                                                                <div class="col-xs-offset-3 col-xs-5">
+                                                                    <input class="form-control" type="text" name="option[]" title=""/>
+                                                                </div>
+                                                                <div class="col-xs-4">
+                                                                    <button type="button" class="btn btn-default removeButton"><i class="fa fa-minus"></i></button>
+                                                                </div>
+                                                            </div>
+                                                        </fieldset>
+                                                        <div class="row">
+                                                            <div class="col-md-9 col-md-offset-3">
+                                                                <button class="btn btn-primary" type="submit">
+                                                                    <i class="fa fa-check"></i> ADD MEMBER
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+
+                                        <div id="remove" class="tab-pane">
+                                            <h4>Remove a member</h4>
+
+                                        </div>
+
+                                        <div id="administrators" class="tab-pane">
+                                            <h4>List of administrators</h4>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /panel content -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block scripts %}
+    <script src="https://cdn.jsdelivr.net/npm/formvalidation@0.6.2-dev/dist/js/formValidation.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/formvalidation@0.6.2-dev/dist/js/framework/bootstrap.min.js"></script>
+{% endblock %}

@@ -40,6 +40,14 @@
                         </div>
                     </div>
                     {% if trans %}
+                        <form method='GET'>
+                            {{ filter.form }}
+                            <input type='submit' value='Filter' />
+                            |
+                            Displaying {{ filter.qs.count }} of {{ filter.queryset.count }} items.
+                            |
+                            <a href='{{ request.path }}' >Clear</a>
+                        </form>
                         <div class="table-responsive">
                             {% render_table table %}
                         </div>
@@ -51,13 +59,13 @@
                     <hr class="nomargin-top" />
                 </div>
             </div>
-            {% if trans %}
-            <div class="panel panel-default text-right">
-                <div class="panel-body">
-                    <a class="btn btn-primary" href="{% url 'printout' %}" target="_blank"><i class="fa fa-print"></i> PRINT STATEMENT</a>
-                </div>
-            </div>
-            {% endif %}
+{#            {% if trans %}#}
+{#            <div class="panel panel-default text-right">#}
+{#                <div class="panel-body">#}
+{#                    <a class="btn btn-primary" href="{% url 'printout' %}" target="_blank"><i class="fa fa-print"></i> PRINT STATEMENT</a>#}
+{#                </div>#}
+{#            </div>#}
+{#            {% endif %}#}
         </div>
     </section>
 {% endblock %}

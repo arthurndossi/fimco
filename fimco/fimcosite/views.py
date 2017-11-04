@@ -1,7 +1,9 @@
 import os
+import re
 import uuid
 from random import randint
 
+from django import forms
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
@@ -145,14 +147,27 @@ def validate(request):
     if request.method == 'POST':
         form = LoginForm(request.POST or None)
         if form.is_valid():
-            username = request.POST["phone"]
+            username = request.POST["username"]
             password = request.POST["password"]
             get_param = request.POST['next']
-            user = authenticate(username=username, password=password)
+            if re.match(r"[^@]+@[^@]+\.[^@]+", username):
+                try:
+                    user = User.objects.get(email=username)
+                    if user.check_password(password):
+                        user = user
+                    else:
+                        user = None
+                except User.DoesNotExist:
+                    user = None
+            elif re.match(r'^([+]?(\d{1,3}\s?)|[0])\s?\d+(\s?-?\d{2,4}){1,3}?$', username):
+                user = authenticate(username=username, password=password)
+            else:
+                raise forms.ValidationError("Not a valid email or phone number!")
             if user:
                 login(request, user)
                 if get_param == "":
-                    return redirect(index)
+                    from pochi.views import home
+                    return redirect(home)
                 else:
                     return redirect(get_param)
             else:
@@ -207,7 +222,6 @@ def register(request):
             password = form.cleaned_data["password"]
             bot = form.cleaned_data['bot_cds']
             dse = form.cleaned_data['dse_cds']
-            user_account = form.cleaned_data['user_acc_name']
             profile_id = "POC%s" % uuid.uuid4().hex[:6].upper()
             pin = uuid.uuid4().hex[:4].upper()
             user = User.objects.create_user(phone, email, password, first_name=fName, last_name=lName)
@@ -229,8 +243,7 @@ def register(request):
             )
             Account.objects.create(
                 profile_id=profile.profile_id,
-                account=account_no,
-                nickname=user_account
+                account=account_no
             )
 
             return redirect(index)

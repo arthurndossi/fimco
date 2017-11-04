@@ -9,3 +9,7 @@ div.heading-title.heading-border-bottom {
 a .WebProduct-Button, .tp-caption.WebProduct-Button {
   padding: 12px 35px;
 }
+
+.hide {
+  display: none;
+}

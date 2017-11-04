@@ -31,7 +31,7 @@
 
         <!-- PAGE LEVEL SCRIPTS -->
         <link href="/static/css/header-1.css" rel="stylesheet" type="text/css" />
-        <link rel="stylesheet" type="text/css" href="/static/css/main.css" />
+        <link href="/static/css/main.css" rel="stylesheet" type="text/css" />
 
         {% block links %}
         {% endblock %}
@@ -54,7 +54,7 @@
 
 						<!-- Logo -->
 						<a class="logo float-left"  href="{% url 'index' %}">
-							<img src="/static/img/fimco_logo.png" alt=""/>
+							<img src="/static/img/FIMCO-Weblogo.jpg" alt=""/>
 						</a>
 
 						<div class="navbar-collapse collapse nav-main-collapse">
@@ -70,18 +70,13 @@
                                             WHO WE ARE
                                         </a>
                                         <ul class="dropdown-menu">
-                                            <li><a href="{% url 'about' %}">About Us</a></li>
+                                            <li><a href="{% url 'about' %}#about">About Us</a></li>
                                             <li><a href="{% url 'about' %}#values">Our values</a></li>
                                             <li><a href="{% url 'about' %}#mission">Our mission</a></li>
                                             <li><a href="{% url 'about' %}#vision">Our vision</a></li>
                                             <li><a href="{% url 'about' %}#founders">Our people</a></li>
                                             <li class="divider"></li>
-                                            <li>
-                                                <a href="{% url 'about' %}#approach">
-                                                    <span class="badge badge-danger float-right">new</span>
-                                                    Our Philosophy
-                                                </a>
-                                            </li>
+                                            <li><a href="{% url 'about' %}#approach">Our Philosophy</a></li>
                                         </ul>
                                     </li>
                                     <li class="dropdown">
@@ -100,7 +95,7 @@
                                             NEWS & INSIGHTS
                                         </a>
                                         <ul class="dropdown-menu">
-                                            <li><a href="{% url 'blog' %}">BLOG</a></li>
+                                            <li><a href="{% url 'blog' %}">Blog</a></li>
                                         </ul>
                                     </li>
                                 </ul>
@@ -129,12 +124,11 @@
                                     <li>&bull;</li>
                                     <li><a href="#">Privacy</a></li>
                                 </ul>
-                                &copy; All Rights Reserved, FIMCO LTD
+                                &copy; All Rights Reserved, FIMCO Limited
                             </div>
                             <div class="col-md-4 col-sm-4 hidden-xs-down">
                                 <!-- Social Icons -->
                                 <div class="ml-50 clearfix">
-                                    <p class="mb-10">Follow Us</p>
                                     <a href="#" class="social-icon social-icon-sm social-icon-transparent social-facebook float-left" data-toggle="tooltip" data-placement="top" title="Facebook">
                                         <i class="icon-facebook"></i>
                                         <i class="icon-facebook"></i>
