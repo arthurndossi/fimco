@@ -95,7 +95,7 @@ def admin(request):
 
 @login_required
 def statement(request):
-    user_accounts = account_trans = trans = None
+    user_accounts = trans = None
     profile = request.user.profile
     try:
         user_accounts = ExternalAccount.objects.filter(profile_id=profile.profile_id)
@@ -103,21 +103,20 @@ def statement(request):
         user_accounts = user_accounts
     if request.GET.get('channel'):
         selected_account = request.GET.get('channel')
-        account_trans = Transaction.objects.filter(profile_id=profile.profile_id, channel=selected_account)
+        trans = Transaction.objects.filter(profile_id=profile.profile_id, channel=selected_account)
     else:
         try:
             trans = Transaction.objects.filter(profile_id=request.user.profile.profile_id)
         except Transaction.DoesNotExist:
             trans = trans
 
-    table_params = TransactionFilteredSingleTableView()
+    table_params = TransactionFilteredSingleTableView().get_context_data()
 
     context = {
         "profile": profile,
         "accounts": user_accounts,
         "table": table_params,
         "trans": trans,
-        "single": account_trans
     }
     return render_with_global_data(request, 'pochi/statement.html', context)
 
@@ -343,48 +342,68 @@ def withdraw(request):
         ext_acc_obj = None
 
     if request.method == "POST":
-        selected_ext_account = request.POST['ext_account']
-        amount = float(request.POST['amount'])
+        if request.POST['type'] == u"BANK":
+            user = request.user.profile
+            institution = request.POST['institution']
+            name = request.POST['name'].upper()
+            nickname = request.POST['nickname']
+            account_num = request.POST['account']
+            account_type = request.POST['type']
+            ExternalAccount.objects.create(
+                profile_id=user.profile_id,
+                account_name=name,
+                account_number=account_num,
+                nickname=nickname,
+                institution_name=institution,
+                account_type=account_type
+            )
+            messages.success(
+                request,
+                'You have successfully added ' + nickname + ' account!'
+            )
+        else:
+            selected_ext_account = request.POST['ext_account']
+            amount = float(request.POST['amount'])
 
-        selected_ext_acc_obj = ExternalAccount.objects.get(nickname=selected_ext_account)
-        institution_name = selected_ext_acc_obj.institution_name
-        dest_acc_num = selected_ext_acc_obj.account_number
+            selected_ext_acc_obj = ExternalAccount.objects.get(nickname=selected_ext_account)
+            institution_name = selected_ext_acc_obj.institution_name
+            dest_acc_num = selected_ext_acc_obj.account_number
 
-        try:
-            _account = Account.objects.get(profile_id=profile.profile_id)
-            user_balance = _account.balance
+            try:
+                _account = Account.objects.get(profile_id=profile.profile_id)
+                user_balance = _account.balance
 
-            if amount <= user_balance:
-                Transaction.objects.create(
-                    profile_id=profile.profile_id,
-                    account=_account.account,
-                    msisdn=request.user.username,
-                    external_walletid=_account.external_walletid,
-                    service='WITHDRAW',
-                    channel=institution_name,
-                    dest_account=dest_acc_num,
-                    amount=amount
-                )
-                Ledger.objects.create(
-                    profile_id=profile.profile_id,
-                    account=_account.account,
-                    trans_type='DEBIT',
-                    service='WITHDRAW',
-                    amount=amount,
-                    obal=user_balance,
-                    cbal=user_balance - amount
-                )
-                _account.balance -= amount
-                _account.save()
-                messages.info(
-                    request,
-                    'You have successfully withdrawn ' + str(amount) + ' to your ' + selected_ext_account + ' account'
-                )
-            else:
-                messages.error(request, 'You have insufficient funds to withdraw money to your account!')
+                if amount <= user_balance:
+                    Transaction.objects.create(
+                        profile_id=profile.profile_id,
+                        account=_account.account,
+                        msisdn=request.user.username,
+                        external_walletid=_account.external_walletid,
+                        service='WITHDRAW',
+                        channel=institution_name,
+                        dest_account=dest_acc_num,
+                        amount=amount
+                    )
+                    Ledger.objects.create(
+                        profile_id=profile.profile_id,
+                        account=_account.account,
+                        trans_type='DEBIT',
+                        service='WITHDRAW',
+                        amount=amount,
+                        obal=user_balance,
+                        cbal=user_balance - amount
+                    )
+                    _account.balance -= amount
+                    _account.save()
+                    messages.info(
+                        request,
+                        'You have successfully withdrawn ' + str(amount) + ' to your ' + selected_ext_account + ' account'
+                    )
+                else:
+                    messages.error(request, 'You have insufficient funds to withdraw money to your account!')
 
-        except Account.DoesNotExist:
-            pass
+            except Account.DoesNotExist:
+                pass
 
     context = {
         'external_accounts': ext_acc_obj,

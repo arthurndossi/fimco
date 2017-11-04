@@ -1,17 +1,142 @@
 {% extends "pochi/main.html" %}
 {% block content %}
-    <section id="middle" style="background-color: #ebebeb">
+    <section id="middle">
         <div id="content" class="padding-20">
+            <div class="row">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="col-xs-12">
+                        <div class="alert alert-success margin-bottom-30">
+                            <button type="button" class="close" data-dismiss="alert">
+                                <span aria-hidden="true">×</span>
+                                <span class="sr-only">Close</span>
+                            </button>
+                            <strong>{{ message }}</strong>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            </div>
             {% if not external_accounts %}
-            <div class="col-xs-8">
+            <div class="col-lg-8 col-md-10 col-sm-12">
                 <div class="alert alert-warning margin-bottom-30">
                     <h4>You have <strong>No</strong> External Account!</h4>
-                    <p>You do not have any external account associated with you POCHI account.</p>
-                    <p>You can go to the link below to create/add your external account!</p><br/>
-                    <a href="{% url 'accounts' %}" class="btn btn-primary">Add External Account</a>
+                    <p>Add an external account below <span><i class="fa fa-hand-o-down"></i></span></p>
+{#                    <a href="{% url 'accounts' %}" class="btn btn-primary">Add External Account</a>#}
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading panel-heading-transparent">
+                        <strong>Bank Account</strong>
+                    </div>
+                    <div class="panel-body">
+                        <form method="post" action="{% url 'withdraw' %}">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-lg-4 col-md-6 col-sm-8">
+                                    <label> Select your bank </label>
+                                    <select class="form-control" name="institution" title="Select bank">
+                                        <option disabled="disabled">None</option>
+                                        <option value="CRDB">CRDB</option>
+                                        <option value="NMB">NMB</option>
+                                        <option value="AMANA BANK">AMANA BANK</option>
+                                    </select>
+                                    <input type="hidden" name="type" value="BANK">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-xs-8">
+                                    <label>Account name
+                                        <input type="text" class="form-control" name="name" >
+                                    </label>
+                                </div>
+                                <div class="col-md-6 col-xs-8">
+                                    <label>Account number
+                                        <input type="text" class="form-control masked" name="account" data-format="999999999999999">
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-xs-8">
+                                    <label>Alias account name <small>(short name)</small>
+                                        <input type="text" class="form-control" name="nickname" >
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-xs-12">
+                                <input type="submit" class="btn btn-primary" value="Add Account">
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
             {% else %}
+                <div id="panel-ui-tan-l4" class="panel panel-default">
+								<div class="panel-heading">
+
+									<span class="elipsis"><!-- panel title -->
+										<strong>Accordion</strong>
+									</span>
+
+									<!-- right options -->
+									<ul class="options pull-right list-inline">
+										<li><a href="#" class="opt panel_colapse" data-toggle="tooltip" title="Colapse" data-placement="bottom"></a></li>
+										<li><a href="#" class="opt panel_fullscreen hidden-xs" data-toggle="tooltip" title="Fullscreen" data-placement="bottom"><i class="fa fa-expand"></i></a></li>
+										<li><a href="#" class="opt panel_close" data-confirm-title="Confirm" data-confirm-message="Are you sure you want to remove this panel?" data-toggle="tooltip" title="Close" data-placement="bottom"><i class="fa fa-times"></i></a></li>
+									</ul>
+									<!-- /right options -->
+								</div>
+								<!-- panel content -->
+								<div class="panel-body">
+									<div class="accordion panel-group" id="accordion">
+										<div class="panel panel-default">
+											<div class="panel-heading">
+												<h4 class="panel-title">
+													<a data-toggle="collapse" data-parent="#accordion" href="#acordion1" class="">
+														<i class="fa fa-check"></i>
+														Option 1
+													</a>
+												</h4>
+											</div>
+											<div id="acordion1" class="collapse in">
+												<div class="panel-body">
+													Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur <a data-toggle="tooltip" data-original-title="Default tooltip" href="#">pellentesque neque eget</a> diam posuere porta. Quisque ut nulla at nunc vehicula lacinia. Proin adipiscing porta tellus, ut feugiat nibh adipiscing sit amet. In eu justo a felis faucibus ornare vel id metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; In eu libero ligula. Fusce eget metus lorem, ac viverra leo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur pellentesque neque eget diam posuere porta. Quisque ut nulla at nunc vehicula lacinia.
+												</div>
+											</div>
+										</div>
+										<div class="panel panel-default">
+											<div class="panel-heading">
+												<h4 class="panel-title">
+													<a data-toggle="collapse" data-parent="#accordion" href="#acordion2" class="collapsed">
+														<i class="fa fa-check"></i>
+														Option 2
+													</a>
+												</h4>
+											</div>
+											<div id="acordion2" class="collapse">
+												<div class="panel-body">
+													Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur <a data-toggle="tooltip" data-original-title="Default tooltip" href="#">pellentesque neque eget</a> diam posuere porta. Quisque ut nulla at nunc vehicula lacinia. Proin adipiscing porta tellus, ut feugiat nibh adipiscing sit amet. In eu justo a felis faucibus ornare vel id metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; In eu libero ligula. Fusce eget metus lorem, ac viverra leo.
+												</div>
+											</div>
+										</div>
+										<div class="panel panel-default">
+											<div class="panel-heading">
+												<h4 class="panel-title">
+													<a data-toggle="collapse" data-parent="#accordion" href="#acordion3" class="collapsed">
+														<i class="fa fa-check"></i>
+														Option 3
+													</a>
+												</h4>
+											</div>
+											<div id="acordion3" class="collapse">
+												<div class="panel-body">
+													Curabitur <a data-toggle="tooltip" data-original-title="Default tooltip" href="#">pellentesque neque eget</a> diam posuere porta. Quisque ut nulla at nunc vehicula lacinia. Proin adipiscing porta tellus, ut feugiat nibh adipiscing sit amet. In eu justo a felis faucibus ornare vel id metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; In eu libero ligula.
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- /panel content -->
+							</div>
             <div class="row">
                 <div class="col-lg-6">
                     <form class="payment" method="post" action="{% url 'withdraw' %}">
@@ -34,6 +159,7 @@
                                 <label>Enter Amount</label>
                                 <input type="number" class="form-control" name="amount" placeholder="TZS" required>
                                 <br />
+                                <input type="hidden" name="type" value="WITHDRAW">
                             </div>
                             <div class="panel-footer transfer">
                                 <button class="btn btn-primary" type="submit">
@@ -42,6 +168,50 @@
                             </div>
                         </div>
                     </form>
+                    <div class="panel panel-default">
+                        <div class="panel-heading panel-heading-transparent">
+                            <strong>Add Another Account</strong>
+                        </div>
+                        <div class="panel-body">
+                            <form method="post" action="{% url 'withdraw' %}">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-6 col-sm-8">
+                                        <label> Select your bank </label>
+                                        <select class="form-control" name="institution" title="Select bank">
+                                            <option disabled="disabled">None</option>
+                                            <option value="CRDB">CRDB</option>
+                                            <option value="NMB">NMB</option>
+                                            <option value="AMANA BANK">AMANA BANK</option>
+                                        </select>
+                                        <input type="hidden" name="type" value="BANK">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 col-xs-8">
+                                        <label>Account name
+                                            <input type="text" class="form-control" name="name" >
+                                        </label>
+                                    </div>
+                                    <div class="col-md-6 col-xs-8">
+                                        <label>Account number
+                                            <input type="text" class="form-control masked" name="account" data-format="999999999999999">
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 col-xs-8">
+                                        <label>Alias account name <small>(short name)</small>
+                                            <input type="text" class="form-control" name="nickname" >
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12">
+                                    <input type="submit" class="btn btn-primary" value="Add Account">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="row">

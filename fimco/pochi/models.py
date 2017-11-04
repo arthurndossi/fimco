@@ -42,6 +42,9 @@ class Transaction(models.Model):
     message = models.TextField(max_length=1024, default='NA')
     processed_timestamp = models.DateTimeField(null=True)
 
+    # def __unicode__(self):
+    #     return '{}, {}, {}'.format(self.profile_id, self.account, self.amount)
+
 
 class Ledger(models.Model):
     TYPES = (
