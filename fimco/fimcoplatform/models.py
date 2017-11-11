@@ -19,6 +19,8 @@ class OvernightInterest(models.Model):
     current_rate = models.DecimalField(max_digits=6, decimal_places=4)
     record_datetime = models.DateTimeField()
     weighted_avg_rate = models.DecimalField(max_digits=6, decimal_places=4)
+    prev_rate = models.DecimalField(max_digits=6, decimal_places=4)
+    prev_rate_timestamp = models.DateTimeField()
 
 
 class Tbill(models.Model):
@@ -49,7 +51,7 @@ class Tbond(models.Model):
     minimum_successful_price = models.DecimalField(max_digits=4, decimal_places=2)
     weighted_avg_price_success = models.DecimalField(max_digits=4, decimal_places=2)
     weighted_avg_to_maturity = models.DecimalField(max_digits=4, decimal_places=2)
-    weigted_avg_coupon_yield = models.DecimalField(max_digits=4, decimal_places=2)
+    weighted_avg_coupon_yield = models.DecimalField(max_digits=4, decimal_places=2)
     amount_offered = models.DecimalField(max_digits=6, decimal_places=2)  # 000,0000
     total_tender = models.DecimalField(max_digits=6, decimal_places=2)  # 000,0000
     under_over_subscribed = models.DecimalField(max_digits=6, decimal_places=2)  # 000,0000
@@ -71,7 +73,7 @@ class Inflation(models.Model):
     value = models.DecimalField(max_digits=2, decimal_places=2)
 
 
-class CurrenctAccountMonthly(models.Model):
+class CurrentAccountMonthly(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     modified_on = models.DateTimeField(auto_now=False, auto_now_add=False)
     year = models.IntegerField()
@@ -86,7 +88,7 @@ class CurrentAccountYearly(models.Model):
     value = models.DecimalField(max_digits=2, decimal_places=2)
 
 
-class ImportExportMonthy(models.Model):
+class ImportExportMonthly(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     modified_on = models.DateTimeField(auto_now=False, auto_now_add=False)
     year = models.IntegerField()

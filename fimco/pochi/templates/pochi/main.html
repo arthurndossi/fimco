@@ -50,37 +50,37 @@
                             </a>
                             <ul>
                                 <li>
-                                    <a href="">
+                                    <a href="{% url 'page' 'home' %}">
                                         <i class="main-icon fa fa-cart-arrow-down"></i> <span>Market Home</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="">
+                                    <a href="{% url 'page' 'exchange' %}">
                                         <i class="main-icon fa fa-exchange"></i> <span>Exchange Rates</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="">
+                                    <a href="{% url 'page' 'interests' %}">
                                         <i class="main-icon fa fa-bar-chart-o"></i> <span>Interests Rates</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="">
+                                    <a href="{% url 'page' 'shares' %}">
                                         <i class="main-icon fa fa-table"></i> <span>Share Prices</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="">
+                                    <a href="{% url 'page' 'macro' %}">
                                         <i class="main-icon fa fa-pencil-square-o"></i> <span>Macro Data</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="">
+                                    <a href="{% url 'page' 'auctions' %}">
                                         <i class="main-icon fa fa-gift"></i> <span>Auction Data</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="">
+                                    <a href="{% url 'page' 'commodity' %}">
                                         <i class="main-icon fa fa-money"></i> <span>Commodity Prices</span>
                                     </a>
                                 </li>
@@ -88,7 +88,7 @@
                         </li>
                         {% else %}
                             <li>
-                                <a disabled tabindex="-1">
+                                <a href="{% url 'page' 'pricing' %}">
                                     <i class="main-icon fa fa-money"></i>
                                     <span>Market Information</span>
                                 </a>
@@ -96,18 +96,8 @@
                         {% endif %}
 					</ul>
 
-                    <h3 style="margin: 10px">POCHI</h3>
+                    <h3 style="margin: 10px">My POCHI</h3>
 					<ul class="nav nav-list">
-                        <li><!-- my pochi -->
-							<a href="#">
-                                <i class="fa fa-menu-arrow pull-right"></i>
-								<i class="main-icon fa fa-user"></i> <span>My POCHI</span>
-							</a>
-                            <ul>
-                                <li><a href="">Link accounts</a></li>
-                                <li><a href="{% url 'accounts' %}">Add accounts</a></li>
-                            </ul>
-						</li>
                         <li><!-- statement -->
 							<a href="{% url 'statements' %}">
 								<i class="main-icon fa fa-file-text-o"></i> <span>Statement</span>

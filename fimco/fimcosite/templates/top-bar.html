@@ -3,8 +3,6 @@
     <div class="container">
         <!-- right -->
         <ul class="top-links list-inline float-right">
-{#            <li><a class="active">NEW CLIENTS</a></li>#}
-{#            <li><a class="">EXISTING CLIENTS</a></li>#}
             {% if user.is_authenticated %}
                 <li class="text-welcome">Welcome, <strong>{{ user.get_short_name }}</strong></li>
                 <li id="login"><a href="{% url 'logout' %}?next={{request.path}}">LOGOUT</a></li>
@@ -12,12 +10,38 @@
                 <li id="login"><a href="{% url 'login' %}?next={{request.path}}">LOGIN</a></li>
                 <li id="invest"><a href="" data-toggle="modal" data-target="#accountTypeModal">REGISTER</a></li>
             {% endif %}
-{#            <li>#}
-{#                <a class="no-text-underline" href="#"><img class="flag-lang" src="static/img/flags/tz.png" width="16" height="11" alt="lang" /> SWAHILI</a>#}
-{#            </li>#}
-{#            <li>#}
-{#                <a class="no-text-underline" href="#"><img class="flag-lang" src="static/img/flags/us.png" width="16" height="11" alt="lang" /> ENGLISH</a>#}
-{#            </li>#}
+        </ul>
+        <ul class="top-links list-inline">
+            <li>
+                <a class="dropdown-toggle no-text-underline" data-toggle="dropdown" href="#">
+                    <img class="flag-lang" src="/static/img/flags/us.png" width="16" height="11" alt="lang" />
+                    ENGLISH
+                </a>
+                <ul class="dropdown-langs dropdown-menu">
+                    <li>
+                        <a tabindex="-1" href="#">
+                            <img class="flag-lang" src="/static/img/flags/tz.png" width="16" height="11" alt="lang" />
+                            SWAHILI
+                        </a>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <a tabindex="-1" href="#">
+                            <img class="flag-lang" src="/static/img/flags/us.png" width="16" height="11" alt="lang" />
+                            ENGLISH
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            {% if user.is_authenticated %}
+                <li>
+                    <a class="no-text-underline" href="{% url 'pochi' %}"><i class="et-wallet"></i> POCHI</a>
+                </li>
+                <li>
+                    <a class="no-text-underline" href="{% url 'pochi' %}"><i class="fa fa-money"></i> MARKET</a>
+                </li>
+            {% endif %}
+            <li><a href=""><i class="fa fa-phone"></i></a></li>
         </ul>
     </div>
 </div>

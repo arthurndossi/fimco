@@ -1,11 +1,63 @@
 {% extends "fimcoplatform/base.html" %}
-{% block links %}
-    <link href="/static/pochi/css/navyblue.css" rel="stylesheet" type="text/css" />
-{% endblock %}
-{% block content %}
-    <section id="middle">
-        <div class="padding-15">
-
+{% block main %}
+    <div class="row">
+        <div class="col-md-3">
+            <!-- Nav -->
+            <div id="panel-ui-tan-l5" class="panel panel-default">
+                <div class="panel-heading">
+                    <span class="elipsis">
+                        <strong>Macro Data</strong>
+                    </span>
+                </div>
+                <!-- panel content -->
+                <div class="panel-body">
+                    <ul class="side-nav list-group margin-bottom30">
+                        <li class="list-group-item"><a href="#"> GDP</a></li>
+                        <li class="list-group-item"><a href="#"> Inflation</a></li>
+                        <li class="list-group-item"><a href="#"> Imports</a></li>
+                        <li class="list-group-item"><a href="#"> Exports</a></li>
+                        <li class="list-group-item"><a href="#"> Current Account Deficit</a></li>
+                        <li class="list-group-item list-toggle">
+                            <a data-toggle="collapse" href="#national">
+                                <i class="fa fa-level-down"></i> National Debt
+                            </a>
+                            <ul id="national" class="collapse in"><!-- NOTE: "collapse in" to be open on page load -->
+                                <li class="list-group-item list-toggle">
+                                    <a data-toggle="collapse" href="#internal">
+                                        <i class="fa fa-angle-right"></i> Internal
+                                    </a>
+                                    <ul id="internal" class="collapse">
+                                        <li><a href="#"><i class="fa fa-angle-right"></i> Monthly</a></li>
+                                        <li><a href="#"><i class="fa fa-angle-right"></i> Annually</a></li>
+                                    </ul>
+                                </li>
+                                <li class="list-group-item list-toggle">
+                                    <a data-toggle="collapse" href="#external">
+                                        <i class="fa fa-angle-right"></i> External
+                                    </a>
+                                    <ul id="external" class="collapse">
+                                        <li><a href="#"><i class="fa fa-angle-right"></i> Monthly</a></li>
+                                        <li><a href="#"><i class="fa fa-angle-right"></i> Annually</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="list-group-item"><a href="#"> Private Sector Growth</a></li>
+                    </ul>
+                </div>
+                <!-- /panel content -->
+            </div>
+            <!-- /Nav -->
         </div>
-    </section>
+        <div class="col-md-9">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+
+                </div>
+                <div class="panel-body">
+
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

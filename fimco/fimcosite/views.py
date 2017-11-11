@@ -109,8 +109,13 @@ def blog_single_view(request, article):
     return render(request, 'blog-single-page.html', {'article': article})
 
 
-def info(request):
-    return render(request, 'pochi.html', {})
+def info(request, page):
+    if page == 'pochi':
+        return render(request, 'pochi.html', {})
+    elif page == 'market':
+        return render(request, 'market-information.html', {})
+    else:
+        return redirect(index)
 
 
 def fund(request):

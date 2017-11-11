@@ -1,11 +1,19 @@
 {% extends "pochi/main.html" %}
 {% block links %}
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.16/r-2.2.0/sl-1.2.3/datatables.min.css"/>
     <link href="/static/pochi/css/navyblue.css" rel="stylesheet" type="text/css" />
 {% endblock %}
 {% block content %}
     <section id="middle">
         <div class="padding-15">
-
+            {% block main %}{% endblock %}
         </div>
     </section>
+    {% include 'fimcoplatform/modals.html' %}
+{% endblock %}
+{% block scripts %}
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.16/r-2.2.0/sl-1.2.3/datatables.min.js">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+    {% block more_scripts %}{% endblock %}
 {% endblock %}

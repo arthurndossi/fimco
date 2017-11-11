@@ -1,11 +1,36 @@
 {% extends "fimcoplatform/base.html" %}
-{% block links %}
-    <link href="/static/pochi/css/navyblue.css" rel="stylesheet" type="text/css" />
-{% endblock %}
-{% block content %}
-    <section id="middle">
-        <div class="padding-15">
-
+{% block main %}
+    <div class="row">
+        <div class="col-md-2">
+            <!-- Nav -->
+            <div id="panel-ui-tan-l5" class="panel panel-default">
+                <div class="panel-heading">
+                    <span class="elipsis"><!-- panel title -->
+                        <strong>Interest types</strong>
+                    </span>
+                </div>
+                <!-- panel content -->
+                <div class="panel-body">
+                    <ul class="side-nav list-group margin-bottom30">
+                        <li class="list-group-item"><a href="#"> Overnight</a></li>
+                        <li class="list-group-item"><a href="#"> Tbill</a></li>
+                        <li class="list-group-item"><a href="#"> Tbond</a></li>
+                        <li class="list-group-item"><a href="#"> Libor rates</a></li>
+                    </ul>
+                </div>
+                <!-- /panel content -->
+            </div>
+            <!-- /Nav -->
         </div>
-    </section>
+        <div class="col-md-10">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+
+                </div>
+                <div class="panel-body">
+
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

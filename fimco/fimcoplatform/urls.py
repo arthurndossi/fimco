@@ -3,7 +3,7 @@ from django.conf.urls import url
 from . import views
 
 urlpatterns = [
-#    url(r'^$', views.market_home, name='markets'),
+   url(r'^(?P<page>[a-zA-Z]+)/$', views.market_views, name='page'),
 #    url(r'^markets$', views.market, name='markets'),
 #    url(r'^exchange', views.exchange_rates, name='exchange'),
 #    url(r'^interests$', views.interest_rates, name='interests'),

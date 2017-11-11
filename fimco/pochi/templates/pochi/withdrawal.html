@@ -22,7 +22,6 @@
                 <div class="alert alert-warning margin-bottom-30">
                     <h4>You have <strong>No</strong> External Account!</h4>
                     <p>Add an external account below <span><i class="fa fa-hand-o-down"></i></span></p>
-{#                    <a href="{% url 'accounts' %}" class="btn btn-primary">Add External Account</a>#}
                 </div>
                 <div class="panel panel-default">
                     <div class="panel-heading panel-heading-transparent">
@@ -82,13 +81,13 @@
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <h4 class="panel-title">
-                                    <a data-toggle="collapse" data-parent="#accordion" href="#acordion1" class="">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#accordion1" class="">
                                         <i class="fa fa-check"></i>
                                         <strong>Withdraw Funds</strong>
                                     </a>
                                 </h4>
                             </div>
-                            <div id="acordion1" class="collapse in">
+                            <div id="accordion1" class="collapse in">
                                 <form method="post" action="{% url 'withdraw' %}">
                                     {% csrf_token %}
                                     <div class="panel-body">
@@ -118,13 +117,13 @@
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <h4 class="panel-title">
-                                    <a data-toggle="collapse" data-parent="#accordion" href="#acordion2" class="collapsed">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#accordion2" class="collapsed">
                                         <i class="fa fa-check"></i>
                                         <strong>Add Another Account</strong>
                                     </a>
                                 </h4>
                             </div>
-                            <div id="acordion2" class="collapse">
+                            <div id="accordion2" class="collapse">
                                 <div class="panel-body">
                                     <form method="post" action="{% url 'withdraw' %}">
                                         {% csrf_token %}
@@ -164,6 +163,7 @@
                                         </div>
                                     </form>
                                 </div>
+                            </div>
                         </div>
                     </div>
                 </form>

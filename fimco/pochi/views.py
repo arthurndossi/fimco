@@ -7,29 +7,10 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.shortcuts import redirect
-from django_tables2 import RequestConfig, SingleTableView
 from fimcosite.forms import EditProfileForm
 from fimcosite.models import Account, Profile
 
-from .filters import TransactionFilterEx
 from .models import Transaction, Group, GroupMembers, ExternalAccount, Ledger, BalanceSnapshot
-from .tables import TransactionTable
-
-
-class TransactionFilteredSingleTableView(SingleTableView):
-    model = Transaction
-
-    def get_context_data(self, **kwargs):
-        context = super(TransactionFilteredSingleTableView, self).get_context_data(**kwargs)
-        filter = TransactionFilterEx(self.request.GET, queryset=self.object_list)
-
-        table = TransactionTable(filter.qs)
-        RequestConfig(self.request, paginate={'per_page': 25}).configure(table)
-
-        context['filter'] = filter
-        context['table'] = table
-
-        return context
 
 
 @login_required
@@ -110,13 +91,10 @@ def statement(request):
         except Transaction.DoesNotExist:
             trans = trans
 
-    table_params = TransactionFilteredSingleTableView().get_context_data()
-
     context = {
         "profile": profile,
         "accounts": user_accounts,
-        "table": table_params,
-        "trans": trans,
+        "transactions": trans,
     }
     return render_with_global_data(request, 'pochi/statement.html', context)
 
@@ -327,7 +305,7 @@ def process_p2p(request):
         dest_account.save()
         resp = {
             'status': 'success',
-            'msg': 'TZS ' + str(amount) + ' has been transferred from your account to ' + name + '.'
+            'msg': 'TZS' + str(amount) + ' has been transferred from your account to ' + name + '.'
         }
         return JsonResponse(resp)
 
@@ -397,7 +375,7 @@ def withdraw(request):
                     _account.save()
                     messages.info(
                         request,
-                        'You have successfully withdrawn ' + str(amount) + ' to your ' + selected_ext_account + ' account'
+                        'You have successfully withdrawn TZS'+str(amount)+' to your '+selected_ext_account+' account'
                     )
                 else:
                     messages.error(request, 'You have insufficient funds to withdraw money to your account!')

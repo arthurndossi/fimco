@@ -43,8 +43,6 @@ INSTALLED_APPS = [
     'fimcoplatform.apps.FimcoPlatformConfig',
     'chartit',
     'formtools',
-    'django_tables2',
-    'django_filters'
 ]
 
 MIDDLEWARE = [
