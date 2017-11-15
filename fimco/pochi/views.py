@@ -1,7 +1,6 @@
 import uuid
 
 import datetime
-from chartit import DataPool, Chart
 from core.utils import render_with_global_data
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -34,45 +33,8 @@ def home(request):
 
 @login_required
 def admin(request):
-    balancedata = DataPool(
-        series=[{
-            'options': {
-                'source': BalanceSnapshot.objects.all()
-            },
-            'terms': [
-                {'Date': 'fulltimestamp'},
-                {'Balance': 'closing_balance'},
-                {'Interest': 'bonus_closing_balance'}
-            ]
-        }]
-    )
-
-    chart = Chart(
-        datasource=balancedata,
-        series_options=[{
-            'options': {
-                'type': 'line',
-                'stacking': False
-            },
-            'terms': {
-                'Date': [
-                    'Balance',
-                    'Interest'
-                ]
-            }
-        }],
-        chart_options={
-            'title': {
-                'text': 'BALANCE & INTEREST SUMMARY'
-            },
-            'xAxis': {
-                'title': {
-                    'text': 'Date'
-                }
-            }
-        }
-    )
-    return render_with_global_data(request, 'pochi/admin.html', {'balanceChart': chart})
+    balance_data = BalanceSnapshot.objects.all()
+    return render_with_global_data(request, 'pochi/admin.html', {'data': balance_data})
 
 
 @login_required
