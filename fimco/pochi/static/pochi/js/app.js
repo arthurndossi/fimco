@@ -70,7 +70,7 @@ var plugin_path = '/static/pochi/plugins/';
 		_form();
 		_select2();
 		_stepper();
-		_pickers();
+		// _pickers();
 		_editors();
 		_misc();
 		_afterResize(ajax);

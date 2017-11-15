@@ -97,14 +97,6 @@ def index(request):
     return render(request, 'index.html', {})
 
 
-def about(request):
-    return render(request, 'about.html', {})
-
-
-def blog_view(request):
-    return render(request, 'blog.html', {})
-
-
 def blog_single_view(request, article):
     return render(request, 'blog-single-page.html', {'article': article})
 
@@ -118,16 +110,8 @@ def info(request, page):
         return redirect(index)
 
 
-def fund(request):
-    return render(request, 'fund.html', {})
-
-
-def brokerage(request):
-    return render(request, 'brokerage.html', {})
-
-
-def terms(request):
-    return render(request, "terms_conditions.html", {})
+def general_view(request, page):
+    return render(request, page+'.html', {})
 
 
 @anonymous_required

@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% block links %}
+    <style>
+        i.ico-color {
+            background-color:#002A54;
+        }
+        .ico-color:hover {
+            background-color:#002A54;
+            border-color:#001429;
+        }
+        .description {
+            display: block;
+            font-size: 14px;
+            text-transform: uppercase;
+            line-height: 1.563;
+            padding-left: 0;
+        }
+        .phone {
+            display: block;
+            font-size: 20px;
+            line-height: 1.2;
+            color: #001429;
+            padding-left: 0;
+            text-decoration: none;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    <!-- -->
+    <section>
+        <div class="container">
+            <div id="map3" class="h-300 mb-60"></div>
+            <div class="row">
+                <div class="col-sm-10">
+                    <h1 class="mb-10 fw-300">
+                        Contact us
+                    </h1>
+                    <h4 class="fw-400">
+                        OUR CLIENT SERVICE CENTRE IS CURRENTLY CLOSED<br>
+                        OUR BUSINESS HOURS ARE MONDAY TO FRIDAY, FROM 07:30 TO 17:30
+                    </h4>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <a class="block pb-15 pt-15">
+                        <i class="ico-color ico-rounded fa fa-phone"></i>
+                        <div class="inline-block">
+                            <span class="description">call us</span>
+                            <span class="phone fw-600">0789 123 456</span>
+                        </div>
+                    </a>
+                    <a class="block pb-15 pt-15">
+                        <i class="ico-color ico-rounded fa fa-phone"></i>
+                        <div class="inline-block">
+                            <span class="description">email us</span>
+                            <span class="phone fw-600">info@fimco.co.tz</span>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-6">
+                    <a class="block pb-15 pt-15">
+                        <i class="ico-color ico-rounded fa fa-phone"></i>
+                        <div class="inline-block">
+                            <span class="description">fax us</span>
+                            <span class="phone fw-600">+255 789 123 456</span>
+                        </div>
+                    </a>
+                    <a class="block pb-15 pt-15">
+                        <i class="ico-color ico-rounded fa fa-phone"></i>
+                        <div class="inline-block">
+                            <span class="description">calls from outside tanzania</span>
+                            <span class="phone fw-600">+255 789 123 456</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+{% block scripts %}
+    <!-- PAGELEVEL SCRIPTS -->
+    <script type="text/javascript" src="/static/js/contact.js"></script>
+
+    <!--
+        GMAP.JS
+        http://hpneo.github.io/gmaps/
+    -->
+    <script type="text/javascript" src="//maps.google.com/maps/api/js?key=AIzaSyCqCn84CgZN6o1Xc3P4dM657HIxkX3jzPY"></script>
+    <script type="text/javascript" src="/static/plugins/gmaps.js"></script>
+    <script type="text/javascript">
+
+        jQuery(document).ready(function(){
+
+            /**
+                @MULTIPLE MARKERS GOOGLE MAP
+            **/
+            map3 = new GMaps({
+                div: '#map3',
+                lat: -6.781989,
+                lng: 39.274361
+            });
+
+            // Marker 1
+            map3.addMarker({
+                lat: -6.781989,
+                lng: 39.274361,
+                title: 'Jangid Plaza',
+                details: {
+                database_id: 42,
+                author: 'HPNeo'
+                },
+                click: function(e){
+                    if(console.log) {
+                        console.log(e);
+                    }
+                    alert('2nd floor');
+                }
+            });
+
+        });
+
+    </script>
+{% endblock %}

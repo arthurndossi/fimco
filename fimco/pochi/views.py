@@ -1,5 +1,6 @@
 import uuid
 
+import datetime
 from chartit import DataPool, Chart
 from core.utils import render_with_global_data
 from django.contrib import messages
@@ -82,9 +83,17 @@ def statement(request):
         user_accounts = ExternalAccount.objects.filter(profile_id=profile.profile_id)
     except ExternalAccount.DoesNotExist:
         user_accounts = user_accounts
-    if request.GET.get('channel'):
-        selected_account = request.GET.get('channel')
-        trans = Transaction.objects.filter(profile_id=profile.profile_id, channel=selected_account)
+
+    if request.GET:
+        if request.GET.get('range'):
+            date_range = request.GET.get('range')
+            start, end = date_range.split(' - ')
+            start = datetime.datetime.strptime(start, '%m/%d/%Y').strftime('%Y-%m-%d')
+            end = datetime.datetime.strptime(end, '%m/%d/%Y').strftime('%Y-%m-%d')
+            trans = Transaction.objects.filter(profile_id=profile.profile_id, fulltimestamp__range=[start, end])
+        if request.GET.get('channel'):
+            selected_account = request.GET.get('channel')
+            trans = Transaction.objects.filter(profile_id=profile.profile_id, channel=selected_account)
     else:
         try:
             trans = Transaction.objects.filter(profile_id=request.user.profile.profile_id)

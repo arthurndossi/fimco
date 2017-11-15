@@ -70,13 +70,13 @@
                                             WHO WE ARE
                                         </a>
                                         <ul class="dropdown-menu">
-                                            <li><a href="{% url 'about' %}#about">About Us</a></li>
-                                            <li><a href="{% url 'about' %}#values">Our values</a></li>
-                                            <li><a href="{% url 'about' %}#mission">Our mission</a></li>
-                                            <li><a href="{% url 'about' %}#vision">Our vision</a></li>
-                                            <li><a href="{% url 'about' %}#founders">Our people</a></li>
+                                            <li><a href="{% url 'site' 'about' %}#about">About Us</a></li>
+                                            <li><a href="{% url 'site' 'about' %}#values">Our values</a></li>
+                                            <li><a href="{% url 'site' 'about' %}#mission">Our mission</a></li>
+                                            <li><a href="{% url 'site' 'about' %}#vision">Our vision</a></li>
+                                            <li><a href="{% url 'site' 'about' %}#founders">Our people</a></li>
                                             <li class="divider"></li>
-                                            <li><a href="{% url 'about' %}#approach">Our Philosophy</a></li>
+                                            <li><a href="{% url 'site' 'about' %}#approach">Our Philosophy</a></li>
                                         </ul>
                                     </li>
                                     <li class="dropdown">
@@ -85,8 +85,8 @@
                                         </a>
                                         <ul class="dropdown-menu">
                                             <li><a href="{% url 'info' 'pochi' %}">POCHI</a></li>
-                                            <li><a href="{% url 'brokerage' %}">Brokerage</a></li>
-                                            <li><a href="{% url 'fund' %}">Fund Management</a></li>
+                                            <li><a href="{% url 'site' 'brokerage' %}">Brokerage</a></li>
+                                            <li><a href="{% url 'site' 'fund' %}">Fund Management</a></li>
                                             <li><a href="{% url 'info' 'market' %}">Market Information</a></li>
                                         </ul>
                                     </li>
@@ -95,7 +95,7 @@
                                             NEWS & INSIGHTS
                                         </a>
                                         <ul class="dropdown-menu">
-                                            <li><a href="{% url 'blog' %}">Blog</a></li>
+                                            <li><a href="{% url 'site' 'blog' %}">Blog</a></li>
                                         </ul>
                                     </li>
                                 </ul>
@@ -120,11 +120,12 @@
                             </div>
                             <div class="col-md-6 col-sm-6">
                                 <ul class="float-right m-0 list-inline mobile-block">
-                                    <li><a href="{% url 'terms' %}">Terms &amp; Conditions</a></li>
+                                    <li><a href="{% url 'site' 'terms' %}">Terms &amp; Conditions</a></li>
                                     <li>&bull;</li>
                                     <li><a href="#">Privacy</a></li>
                                 </ul>
-                                &copy; All Rights Reserved, FIMCO Limited
+                                &copy; All Rights Reserved, FIMCO Limited<br>
+                                FIMCO is licensed by the CMSA
                             </div>
                             <div class="col-md-4 col-sm-4 hidden-xs-down">
                                 <!-- Social Icons -->
