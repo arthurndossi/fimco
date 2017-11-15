@@ -1,12 +1,11 @@
 import datetime
-import json
 
 from django.contrib.auth.decorators import login_required
 from django.db.models import Max, Min
 from django.http import JsonResponse
 from django.views import View
 
-from fimco.core.utils import render_with_global_data
+from core.utils import render_with_global_data
 from .models import ExchangeRates, OvernightInterest, Tbill, Tbond, LiborRates
 
 
