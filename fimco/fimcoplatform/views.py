@@ -35,26 +35,50 @@ class MarketTable(View):
 
 @login_required
 def market_views(request, page):
-    return render_with_global_data(request, 'fimcoplatform/'+page+'.html', {})
+    return render_with_global_data(request, 'fimcoplatform/' + page + '.html', {})
 
 
-def exchange_view(request):
+@login_required
+def exchange_view(request, page):
+    charts = False
+    if page == 'single':
+        if request.GET:
+            if request.GET.get('exchangerange'):
+                # TODO implement notification
+                value = request.GET['currency']
+                date_range = request.GET.get('exchangerange')
+                start, end = date_range.split(' - ')
+                start = datetime.datetime.strptime(start, '%m/%d/%Y').strftime('%Y-%m-%d')
+                end = datetime.datetime.strptime(end, '%m/%d/%Y').strftime('%Y-%m-%d')
+
+                if start != end:
+                    charts = True
+
+                data = ExchangeRates.objects.filter(created_on__range=[start, end], counter_currency=value) \
+                    .annotate(day_high=Max('current_rate'), day_low=Min('current_rate'))
+                data_list = []
+                label_list = []
+                for row in data:
+                    temp_label = row.created_on
+                    temp_data = row.current_rate
+                    label_list.append(temp_label.strftime('%d/%m/%Y'))
+                    data_list.append(str(temp_data))
+
+                chart_array = {'labels': label_list, 'data': data_list}
+
+                return render_with_global_data(request, 'fimcoplatform/single_exchange.html',
+                                               {'data': data, 'charts': charts, 'array': chart_array})
+            else:
+                value = request.GET['currency']
+                data = ExchangeRates.objects.filter(created_on__date=datetime.date.today(), counter_currency=value) \
+                    .annotate(day_high=Max('current_rate'), day_low=Min('current_rate'))
+
+                return render_with_global_data(request, 'fimcoplatform/single_exchange.html',
+                                               {'data': data, 'charts': charts})
+        else:
+            pass
     data = ExchangeRates.objects.filter(created_on__date=datetime.date.today()) \
         .annotate(day_high=Max('current_rate'), day_low=Min('current_rate'))
-    if request.GET:
-        value = request.GET['currency']
-        data = ExchangeRates.objects.filter(created_on__date=datetime.date.today(), counter_currency=value) \
-            .annotate(day_high=Max('current_rate'), day_low=Min('current_rate'))
-        return render_with_global_data(request, 'fimcoplatform/exchange.html', {'data': data})
-
-    if request.POST:
-        # TODO implement notification
-        start = request.POST['from']
-        end = request.POST['to']
-        value = request.POST['currency']
-        data = ExchangeRates.objects.filter(date__range=[start, end], counter_currency=value) \
-            .annotate(day_high=Max('current_rate'), day_low=Min('current_rate'))
-        return render_with_global_data(request, 'fimcoplatform/exchange.html', {'data': data})
 
     return render_with_global_data(request, 'fimcoplatform/exchange.html', {'data': data})
 
