@@ -54,12 +54,12 @@ def exchange_view(request, page):
                 if start != end:
                     charts = True
 
-                data = ExchangeRates.objects.filter(created_on__range=[start, end], counter_currency=value) \
+                data = ExchangeRates.objects.filter(modified_on__range=[start, end], counter_currency=value) \
                     .annotate(day_high=Max('current_rate'), day_low=Min('current_rate'))
                 data_list = []
                 label_list = []
                 for row in data:
-                    temp_label = row.created_on
+                    temp_label = row.modified_on
                     temp_data = row.current_rate
                     label_list.append(temp_label.strftime('%d/%m/%Y'))
                     data_list.append(str(temp_data))

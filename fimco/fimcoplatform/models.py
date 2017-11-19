@@ -6,10 +6,10 @@ class ExchangeRates(models.Model):
     modified_on = models.DateTimeField(auto_now=False, auto_now_add=False)
     base_currency = models.CharField(max_length=4)
     counter_currency = models.CharField(max_length=4)
-    change = models.DecimalField(max_digits=6, decimal_places=4)
-    current_rate = models.DecimalField(max_digits=6, decimal_places=4)
+    change = models.DecimalField(max_digits=12, decimal_places=6)
+    current_rate = models.DecimalField(max_digits=12, decimal_places=6)
     record_datetime = models.DateTimeField()
-    prev_rate = models.DecimalField(max_digits=6, decimal_places=4)
+    prev_rate = models.DecimalField(max_digits=12, decimal_places=6)
     prev_rate_timestamp = models.DateTimeField()
 
 
