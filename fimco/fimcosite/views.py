@@ -8,13 +8,14 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from django.http import JsonResponse
 
 from django.shortcuts import render, redirect
 from formtools.wizard.views import SessionWizardView
 
-from .models import KYC, CorporateProfile, PROFILE_ROOT, Account, Profile
+from .models import KYC, CorporateProfile, Account, Profile
 from .forms import RegisterForm, LoginForm
 
 
@@ -64,7 +65,7 @@ def process_form_data(form_list):
 
 class CorporateWizard(SessionWizardView):
     template_name = 'corporate.html'
-    file_storage = FileSystemStorage(location=os.path.join(PROFILE_ROOT, 'companies'))
+    file_storage = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'companies'))
     
     def done(self, form_list, **kwargs):
         process_form_data(form_list)

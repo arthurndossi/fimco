@@ -60,7 +60,7 @@
                                 <input type="submit" class="btn btn-primary btn-sm margin-top-10" value="Proceed checkout">
                                 <a href="" class="btn btn-default btn-sm margin-top-10">Cancel</a>
                                 <input type="hidden" name="account_no" value="{{ account.account }}">
-                                <input type="hidden" name="msisdn" value="{{ extra.user_object.username }}">
+                                <input type="hidden" name="overdraft" value="{{ extra.allow_overdraft }}">
                                 <input type="hidden" name="name" value="{{ extra.user_object.get_full_name }}">
                                 <input type="hidden" name="ext_wallet" value="{{ account.external_walletid }}">
                                 <input type="hidden" name="dest_acc" value="{{ extra.dest_account }}">

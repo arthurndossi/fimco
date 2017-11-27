@@ -12,7 +12,7 @@ urlpatterns = [
         name='corporate'
         ),
     url(r'^register$', views.register, name='register'),
-    url(r'^(?P<page>[a-z-]+)$', views.general_view, name='site'),
+    url(r'^site/(?P<page>[a-z-]+)$', views.general_view, name='site'),
     url(r'^blog/(?P<article>[a-z-]+)$', views.blog_single_view, name='blog_single'),
     url(r'^information/(?P<page>[a-z-]+)$', views.info, name='info'),
     url(r'^accounts/login', views.login_view, name='login'),

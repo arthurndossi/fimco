@@ -1,16 +1,17 @@
+import datetime
 import uuid
 
-import datetime
 from core.utils import render_with_global_data
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.db import transaction
 from django.http import JsonResponse
 from django.shortcuts import redirect
 from fimcosite.forms import EditProfileForm
 from fimcosite.models import Account, Profile
 
-from .models import Transaction, Group, GroupMembers, ExternalAccount, Ledger, BalanceSnapshot
+from .models import Transaction, Group, GroupMember, ExternalAccount, Ledger, BalanceSnapshot, Charge, CashOut
 
 
 @login_required
@@ -18,7 +19,7 @@ def home(request):
     profile = request.user.profile
     group_members_obj = []
     try:
-        group_account_obj = GroupMembers.objects.filter(profile_id=profile.profile_id).only('group_account')
+        group_account_obj = GroupMember.objects.filter(profile_id=profile.profile_id).only('group_account')
         for group in group_account_obj:
             try:
                 grp_name = Group.objects.get(group_account=group.group_account).name
@@ -26,7 +27,7 @@ def home(request):
             except Group.DoesNotExist:
                 pass
 
-    except GroupMembers.DoesNotExist:
+    except GroupMember.DoesNotExist:
         pass
     return render_with_global_data(request, 'pochi/home.html', {'groups': group_members_obj})
 
@@ -119,7 +120,7 @@ def view_profile(request):
         'bot_cds': user.profile.bot_cds,
         'dse_cds': user.profile.dse_cds
     }
-    obj = GroupMembers.objects.filter(profile_id=user.profile.profile_id)
+    obj = GroupMember.objects.filter(profile_id=user.profile.profile_id)
     context = {
         'pForm': form,
         'data': form_data,
@@ -153,6 +154,88 @@ def edit_profile(request):
         return redirect(edit_profile)
 
 
+@transaction.atomic
+def fund_transfer(request, service, ext_wallet, channel, profile_id, src, dest, bal, amount, overdraft=0):
+    try:
+        close_bal = Ledger.objects.last().cbal
+    except Ledger.DoesNotExist:
+        close_bal = 0
+
+    try:
+        charges = Charge.objects.get(service=service).charge
+    except Ledger.DoesNotExist:
+        charges = 0
+
+    if service == 'P2P':
+        total = amount + charges
+        if bal > total or overdraft:
+            Transaction.objects.create(
+                profile_id=profile_id,
+                account=src,
+                msisdn=request.user.username,
+                external_walletid=ext_wallet,
+                service=service,
+                dest_account=dest,
+                amount=amount
+            )
+            Ledger.objects.create(
+                trans_type='DEBIT',
+                service=service,
+                amount=amount,
+                obal=close_bal,
+                cbal=close_bal - amount
+            )
+            Ledger.objects.create(
+                trans_type='CREDIT',
+                service=service,
+                amount=amount,
+                obal=close_bal,
+                cbal=close_bal + amount
+            )
+    elif service == 'WITHDRAW':
+        if amount <= bal or overdraft:
+            Transaction.objects.create(
+                profile_id=profile_id,
+                account=src,
+                msisdn=request.user.username,
+                external_walletid=ext_wallet,
+                service=service,
+                channel=channel,
+                dest_account=dest,
+                amount=amount
+            )
+            Ledger.objects.create(
+                profile_id=profile_id,
+                trans_type='DEBIT',
+                service=service,
+                amount=amount,
+                obal=close_bal,
+                cbal=close_bal - amount
+            )
+            CashOut.objects.create(
+                ext_entity=channel,
+                ext_acc_no=ext_wallet,
+                amount=amount
+            )
+    elif service == 'DEPOSIT':
+        Transaction.objects.create(
+            profile_id=profile_id,
+            account=dest,
+            msisdn=request.user.username,
+            external_walletid=ext_wallet,
+            service='DEPOSIT',
+            amount=amount
+        )
+        Ledger.objects.create(
+            profile_id=profile_id,
+            trans_type='CREDIT',
+            service=service,
+            amount=amount,
+            obal=close_bal,
+            cbal=close_bal + amount
+        )
+
+
 @login_required
 def pochi2pochi(request):
     profile = request.user.profile
@@ -160,9 +243,10 @@ def pochi2pochi(request):
     try:
         acc = Account.objects.get(profile_id=profile.profile_id)
         bal = acc.balance
+        ov = acc.allow_overdraft
     except Account.DoesNotExist:
         acc = None
-        bal = 0
+        bal = ov = 0
 
     if request.method == "POST":
         user_obj = user_name = dest_account = dest_profile_id = None
@@ -208,6 +292,7 @@ def pochi2pochi(request):
                 'dest_profile_id': dest_profile_id,
                 'user_object': user_obj,
                 'amount': amount,
+                'allow_overdraft': ov,
                 'open_bal': bal
             }
         elif amount > bal:
@@ -230,50 +315,37 @@ def pochi2pochi(request):
 
 def process_p2p(request):
     if request.POST:
-        account_no = request.POST['account_no']
+        src_account = request.POST['account_no']
         name = request.POST['name']
-        msisdn = request.POST['msisdn']
         ext_wallet = request.POST['ext_wallet']
         dest_account = request.POST['dest_acc']
         dest_profile_id = request.POST['dest_profile_id']
+        ov = request.POST['overdraft']
         amount = request.POST['amount']
         amount = float(amount)
-        open_bal = request.POST['open_bal']
-        open_bal = float(open_bal)
+        bal = request.POST['open_bal']
+        bal = float(bal)
         profile = request.user.profile
-        Transaction.objects.create(
-            profile_id=profile.profile_id,
-            account=account_no,
-            msisdn=msisdn,
-            external_walletid=ext_wallet,
-            service='P2P',
-            dest_account=dest_account,
-            amount=amount
-        )
-        Ledger.objects.create(
-            profile_id=profile.profile_id,
-            account=account_no,
-            trans_type='DEBIT',
-            service='P2P',
-            amount=amount,
-            obal=open_bal,
-            cbal=open_bal - amount
-        )
-        Ledger.objects.create(
-            profile_id=dest_profile_id,
-            account=dest_account,
-            trans_type='CREDIT',
-            service='P2P',
-            amount=amount,
-            obal=open_bal,
-            cbal=open_bal + amount
-        )
-        src_account = Account.objects.get(profile_id=profile.profile_id)
-        src_account.balance -= float(amount)
-        src_account.save()
-        dest_account = Account.objects.get(profile_id=dest_profile_id)
-        dest_account.balance += float(amount)
-        dest_account.save()
+        src_profile_id = profile.profile_id
+
+        fund_transfer('P2P', ext_wallet, 'NA', src_profile_id, src_account, dest_account, bal, amount, ov)
+
+        src_account = dest_account = None
+        while src_account is None:
+            try:
+                src_account = Account.objects.get(profile_id=src_profile_id)
+                src_account.balance -= float(amount)
+                src_account.save()
+            except:
+                pass
+        while dest_account is None:
+            try:
+                dest_account = Account.objects.get(profile_id=dest_profile_id)
+                dest_account.balance += float(amount)
+                dest_account.save()
+            except:
+                pass
+
         resp = {
             'status': 'success',
             'msg': 'TZS' + str(amount) + ' has been transferred from your account to ' + name + '.'
@@ -284,8 +356,9 @@ def process_p2p(request):
 @login_required
 def withdraw(request):
     profile = request.user.profile
+    profile_id = profile.profile_id
     try:
-        external_account = ExternalAccount.objects.filter(profile_id=profile.profile_id)
+        external_account = ExternalAccount.objects.filter(profile_id=profile_id)
         ext_acc_obj = external_account.values('nickname')
     except ExternalAccount.DoesNotExist:
         ext_acc_obj = None
@@ -319,29 +392,14 @@ def withdraw(request):
             dest_acc_num = selected_ext_acc_obj.account_number
 
             try:
-                _account = Account.objects.get(profile_id=profile.profile_id)
-                user_balance = _account.balance
+                _account = Account.objects.get(profile_id=profile_id)
+                src_account = _account.account
+                bal = _account.balance
+                ov = _account.allow_overdraft
 
-                if amount <= user_balance:
-                    Transaction.objects.create(
-                        profile_id=profile.profile_id,
-                        account=_account.account,
-                        msisdn=request.user.username,
-                        external_walletid=_account.external_walletid,
-                        service='WITHDRAW',
-                        channel=institution_name,
-                        dest_account=dest_acc_num,
-                        amount=amount
-                    )
-                    Ledger.objects.create(
-                        profile_id=profile.profile_id,
-                        account=_account.account,
-                        trans_type='DEBIT',
-                        service='WITHDRAW',
-                        amount=amount,
-                        obal=user_balance,
-                        cbal=user_balance - amount
-                    )
+                fund_transfer('WITHDRAW', 'NA', institution_name, profile_id, src_account, dest_acc_num, bal, amount, ov)
+
+                if amount <= bal:
                     _account.balance -= amount
                     _account.save()
                     messages.info(
@@ -363,37 +421,24 @@ def withdraw(request):
 @login_required
 def deposit(request):
     profile = request.user.profile
+    src_profile_id = profile.profile_id
     if request.method == "POST":
         amount = float(request.POST['amount'])
 
         try:
             _account = Account.objects.get(profile_id=profile.profile_id)
-            user_balance = _account.balance
-            user_account = _account.account
+            bal = _account.balance
+            dest_account = _account.account
 
-            Transaction.objects.create(
-                profile_id=profile.profile_id,
-                account=user_account,
-                msisdn=request.user.username,
-                external_walletid=_account.external_walletid,
-                service='DEPOSIT',
-                amount=amount
-            )
-            Ledger.objects.create(
-                profile_id=profile.profile_id,
-                account=_account.account,
-                trans_type='CREDIT',
-                service='DEPOSIT',
-                amount=amount,
-                obal=user_balance,
-                cbal=user_balance + amount
-            )
+            fund_transfer('DEPOSIT', 'NA', 'NA', src_profile_id, 'NA', dest_account, bal, amount)
+
             _account.balance += amount
             _account.save()
             messages.info(
                 request,
                 'You have successfully deposited ' + str(amount) + ' to your account'
             )
+
         except Account.DoesNotExist:
             pass
     return render_with_global_data(request, 'pochi/deposit.html', {})
@@ -424,7 +469,7 @@ def create_group(request):
             account=grp_acc,
             nickname=groupName,
         )
-        GroupMembers.objects.create(
+        GroupMember.objects.create(
             group_account=grp_acc,
             profile_id=first_admin,
             admin=1
@@ -433,11 +478,20 @@ def create_group(request):
             is_admin = 0
             if member == sec_admin:
                 is_admin = 1
-            GroupMembers.objects.create(
+            GroupMember.objects.create(
                 group_account=grp_acc,
                 profile_id=member,
                 admin=is_admin
             )
+            # import httplib, urllib
+            # conn = httplib.HTTPSConnection("api.pushover.net:443")
+            # conn.request("POST", "/1/messages.json",
+            #              urllib.urlencode({
+            #                  "token": "APP_TOKEN",
+            #                  "user": "USER_KEY",
+            #                  "message": "hello world",
+            #              }), {"Content-type": "application/x-www-form-urlencoded"})
+            # conn.getresponse()
     return render_with_global_data(request, 'pochi/create_group.html', {})
 
 
@@ -463,7 +517,7 @@ def add_member(request, name=None):
         try:
             this_group = Group.objects.get(name=name)
             grp_acc = this_group.group_account
-            GroupMembers.objects.create(group_account=grp_acc, profile_id=members)
+            GroupMember.objects.create(group_account=grp_acc, profile_id=members)
         except Account.DoesNotExist:
             pass
     return render_with_global_data(request, 'pochi/add_member.html', {'group': name})

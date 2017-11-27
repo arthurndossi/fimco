@@ -1,4 +1,15 @@
 {% extends "fimcoplatform/base.html" %}
+{% block links %}
+    <style>
+    @media only screen and (max-width: 320px) {
+
+       .elipsis {
+          font-size: .8em;
+       }
+
+    }
+    </style>
+{% endblock %}
 {% block main %}
     <div class="row">
         <div class="col-md-10">
@@ -10,36 +21,83 @@
                 </div>
                 <div class="panel-body">
                     {% if data %}
-                    <table class="table table-striped table-bordered table-hover" id="exchange_table">
-                        <thead>
-                            <tr>
-                                <th>Currency</th>
-                                <th>Code</th>
-                                <th>Buying</th>
-                                <th>Selling</th>
-                                <th>Day High</th>
-                                <th>Day Low</th>
-                                <th>% change</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for exchange in data %}
-                            <tr>
-                                <td>
-                                    <a href="{% url 'exchange' 'single' %}?currency={{ exchange.counter_currency }}">
-                                    {{ exchange.counter_currency }}
-                                    </a>
-                                </td>
-                                <td>{{ exchange.code }}</td>
-                                <td>{{ exchange.buy }}</td>
-                                <td>{{ exchange.sell }}</td>
-                                <td>{{ exchange.day_high }}</td>
-                                <td>{{ exchange.day_low }}</td>
-                                <td>{{ exchange.change }}</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                    <h4 class="uppercase margin-bottom-0">Currency <strong>Calculator</strong></h4>
+                    <hr class="margin-top-0" />
+                    <div class="row margin-bottom-10">
+                        <div class="col-md-3 col-xs-8 nopadding-right">
+                            <input id="base_rate" type="text" value="1" min="0" class="form-control">
+                        </div>
+                        <div class="col-md-2 col-xs-4 nopadding-left">
+                            <select id="base" class="form-control select2">
+                                <option value="">USD</option>
+{#                                {% for exchange in data %}#}
+{#                                    <option value="{{ exchange.counter_currency }}">#}
+{#                                        {{ exchange.counter_currency }}#}
+{#                                    </option>#}
+{#                                {% endfor %}#}
+                            </select>
+                        </div>
+                        <div class="col-md-1 col-xs-12 text-center padding-15">
+                            <a id="exchange" class="btn btn-3d btn-primary"><i class="fa fa-exchange"></i></a>
+                        </div>
+                        <div class="col-md-4 col-xs-8 nopadding-right">
+                            <input id="counter_rate" type="text" min="0" class="form-control">
+                        </div>
+                        <div class="col-md-2 col-xs-4 nopadding-left">
+                            <select id="counter" class="form-control select2">
+                                {% for exchange in data %}
+                                    <option value="{{ exchange.counter_currency }}"
+                                        {% if exchange.counter_currency == 'GBP' %}selected{% endif %}>
+                                        {{ exchange.counter_currency }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <h4 class="uppercase margin-bottom-0">Currency <strong>Table</strong></h4>
+                    <hr class="margin-top-0" />
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover" id="exchange_table">
+                            <thead>
+                                <tr>
+                                    <th>Currency</th>
+                                    <th>Last Rate</th>
+                                    <th>Day High</th>
+                                    <th>Day Low</th>
+                                    <th>Change</th>
+                                    <th>Time</th>
+                                    <th>2-Day Trend</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for exchange in data %}
+                                <tr>
+                                    <td>
+                                        <a href="{% url 'exchange' 'single' %}?currency={{ exchange.counter_currency }}">
+                                            {{ exchange.counter_currency }}
+                                        </a>
+                                    </td>
+                                    <td>{{ exchange.current_rate }}</td>
+                                    <td>{{ exchange.day_high }}</td>
+                                    <td>{{ exchange.day_low }}</td>
+                                    {% if exchange.change < 0 %}
+                                    <td class="text-danger">{{ exchange.change }}</td>
+                                    {% elif exchange.change > 0 %}
+                                    <td class="text-success">+{{ exchange.change }}</td>
+                                    {% elif exchange.change == 0 %}
+                                    <td class="text-default">{{ exchange.change }}</td>
+                                    {% endif %}
+                                    <td>
+                                        <span class="sparkline"
+                                              data-plugin-options='{"barColor":"#002A54","height":"26px"}'>
+                                            {{ exchange.trends }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                     {% else %}
                         <div class="alert alert-default margin-bottom-30">
                             <strong>There is no exchange data available yet!</strong>
@@ -66,6 +124,38 @@
                 dom: 'B<"clear">lfrtip',
                 buttons: [ 'copy', 'csv', 'excel' ]
             } );
+
+            {% for exchange in data %}
+                var currency = "{{ exchange.counter_currency }}";
+                if (currency === 'GBP'){
+                    $("#counter_rate").val({{ exchange.current_rate }});
+                }
+            {% endfor %}
+
+            $( "#counter" ).change(function() {
+                var current_label = $.trim($("#counter").find("option:selected").text());
+                {% for exchange in data %}
+                    var currency = "{{ exchange.counter_currency }}";
+                    if (currency === current_label){
+                        $("#counter_rate").val({{ exchange.current_rate }});
+                    }
+                {% endfor %}
+            });
+
+            $( "#base_rate" ).on('input', function() {
+                var new_val = $( "#base_rate" ).val();
+                var current_label = $.trim($("#counter").find("option:selected").text());
+                {% for exchange in data %}
+                    var currency = "{{ exchange.counter_currency }}";
+                    if (currency === current_label){
+                        $("#counter_rate").val(new_val * {{ exchange.current_rate }});
+                    }
+                {% endfor %}
+            });
+
+            $('#exchange').click(function(e) {
+                e.preventDefault();
+            });
         });
     </script>
 {% endblock %}

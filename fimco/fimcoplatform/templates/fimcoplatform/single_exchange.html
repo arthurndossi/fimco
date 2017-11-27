@@ -59,9 +59,7 @@
                 </div>
                 <div class="panel-footer">
                     {% if charts %}
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exchangeChartModal">
-                        View chart
-                    </button>
+                    <canvas id="exchangeChart"></canvas>
                     {% endif %}
                 </div>
             </div>
@@ -115,24 +113,24 @@
         });
         {% if charts %}
         var ctx = document.getElementById('exchangeChart').getContext('2d');
-        new Chart(ctx, {
-            // The type of chart we want to create
-            type: 'line',
+            var label = $.trim($("#counter").find("option:selected").text());
+            new Chart(ctx, {
+                // The type of chart we want to create
+                type: 'line',
+                // The data for our dataset
+                data: {
+                    labels: {{array.labels|safe}},
+                    datasets: [{
+                        label: 'USD-'+label+' rates',
+{#                        backgroundColor: 'rgb(0,42,84)',#}
+                        borderColor: 'rgb(0,42,84)',
+                        data: {{array.data|safe}}
+                    }]
+                },
 
-            // The data for our dataset
-            data: {
-                labels: {{array.labels|safe}},
-                datasets: [{
-                    label: "{{ request.GET.currency }} rates",
-                    backgroundColor: 'rgb(0,42,84)',
-                    borderColor: 'rgb(0,42,84)',
-                    data: {{array.data|safe}}
-                }]
-            },
-
-            // Configuration options go here
-            options: {}
-        });
+                // Configuration options go here
+                options: {}
+            });
         {% endif %}
 
         $('#notificationForm').hide();

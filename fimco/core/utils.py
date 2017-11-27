@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from pochi.models import GroupMembers, Group, PremiumUsers
+from pochi.models import GroupMember, Group, PaidUser
 
 
 def render_with_global_data(request, page, context):
@@ -8,7 +8,7 @@ def render_with_global_data(request, page, context):
     group_members_obj = []
     paid_user = None
     try:
-        group_account_obj = GroupMembers.objects.filter(profile_id=profile.profile_id).only('group_account')
+        group_account_obj = GroupMember.objects.filter(profile_id=profile.profile_id).only('group_account')
         for group in group_account_obj:
             try:
                 grp_name = Group.objects.get(group_account=group.group_account).name
@@ -16,12 +16,12 @@ def render_with_global_data(request, page, context):
             except Group.DoesNotExist:
                 pass
 
-    except GroupMembers.DoesNotExist:
+    except GroupMember.DoesNotExist:
         pass
 
     try:
-        paid_user = PremiumUsers.objects.get(profile_id=profile.profile_id)
-    except PremiumUsers.DoesNotExist:
+        paid_user = PaidUser.objects.get(profile_id=profile.profile_id)
+    except PaidUser.DoesNotExist:
         pass
 
     _context = {

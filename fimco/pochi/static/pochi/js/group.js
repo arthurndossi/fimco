@@ -148,6 +148,13 @@ $(document).ready(function() {
         $('#second-admin').show();
     });
 
-    if($('.member').val()) $('.addButton').show(); else $('.addButton').hide();
+    var member_input = $('#member');
+
+    if(member_input.val()) $('.addButton').show(); else $('.addButton').hide();
+
+    member_input.on('change', function () {
+        console.log(member_input.val());
+        if(member_input.val()) $('.addButton').show(); else $('.addButton').hide();
+    })
 
 });

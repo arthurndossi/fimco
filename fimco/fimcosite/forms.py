@@ -122,6 +122,7 @@ class CorporateForm1(forms.Form):
         max_length=20,
         validators=[alphabetic],
         widget=forms.TextInput(attrs={
+            'class': 'form-control',
             'required': True,
         })
     )
@@ -130,6 +131,9 @@ class CorporateForm1(forms.Form):
         max_length=13,
         validators=[telephone],
         widget=forms.TextInput(attrs={
+            'class': 'form-control masked',
+            'data-format': '0999999999',
+            'placeholder': 'Enter telephone',
             'type': 'tel',
             'required': True,
         })
@@ -137,12 +141,14 @@ class CorporateForm1(forms.Form):
     address = forms.CharField(
         max_length=500,
         widget=forms.Textarea(attrs={
+            'class': 'form-control',
             'required': True,
         })
     )
     website = forms.URLField(
         max_length=100,
         widget=forms.URLInput(attrs={
+            'class': 'form-control',
             'required': True,
         })
     )
@@ -151,6 +157,7 @@ class CorporateForm1(forms.Form):
         max_length=20,
         validators=[validate_slug],
         widget=forms.TextInput(attrs={
+            'class': 'form-control',
             'required': True,
 
         })
@@ -168,11 +175,12 @@ class CorporateForm2(forms.Form):
     id_type = forms.ChoiceField(choices=CORPORATE_IDS)
     id_number = forms.CharField(
         widget=forms.TextInput(attrs={
+            'class': 'form-control',
             'required': True
         })
     )
     scanned_id = forms.FileField(
-        widget=forms.ClearableFileInput(attrs={'id': 'file', 'required': True})
+        widget=forms.ClearableFileInput(attrs={'id': 'file', 'class': 'form-control', 'required': True})
     )
 
 
@@ -182,6 +190,7 @@ class CorporateForm3(forms.Form):
         max_length=20,
         validators=[alphabetic],
         widget=forms.TextInput(attrs={
+            'class': 'form-control',
             'required': True,
         })
     )
@@ -190,10 +199,12 @@ class CorporateForm3(forms.Form):
         max_length=20,
         validators=[alphabetic],
         widget=forms.TextInput(attrs={
+            'class': 'form-control',
             'required': True,
         })
     )
     dob = forms.DateField(widget=forms.DateInput(attrs={
+        'class': 'form-control',
         'type': 'date',
         'required': True,
     }))
@@ -201,6 +212,7 @@ class CorporateForm3(forms.Form):
     email = forms.EmailField(
         validators=[EmailValidator],
         widget=forms.EmailInput(attrs={
+            'class': 'form-control',
             'required': True,
         })
     )
@@ -216,6 +228,7 @@ class CorporateForm3(forms.Form):
     password = forms.CharField(
         validators=[validate_slug],
         widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
             'required': True,
 
         })
@@ -223,6 +236,7 @@ class CorporateForm3(forms.Form):
     verify = forms.CharField(
         validators=[validate_slug],
         widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
             'required': True,
 
         })

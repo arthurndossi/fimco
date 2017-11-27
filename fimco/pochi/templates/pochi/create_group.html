@@ -40,7 +40,7 @@
                                             <div class="form-group">
                                                 <label class="col-xs-3 control-label">Member</label>
                                                 <div class="col-xs-5">
-                                                    <input type="text" class="form-control member" name="option[]" title=""/>
+                                                    <input type="text" id="member" class="form-control member" name="option[]" title=""/>
                                                 </div>
                                                 <div class="col-xs-4">
                                                     <button type="button" class="btn btn-default addButton"><i class="fa fa-plus"></i></button>
@@ -104,7 +104,7 @@
                                             <div class="col-md-9 col-md-offset-3">
                                                 <input type="hidden" id="members" name="members" value=""/>
                                                 <button type="submit" class="btn btn-primary">Form Group</button>
-                                                <button type="reset" class="btn btn-default">Reset</button>
+                                                <a href="{{ request.path }}" class="btn btn-default">Reset</a>
                                             </div>
                                         </div>
                                     </form>

@@ -5,20 +5,18 @@
             <!-- Nav -->
             <div id="panel-ui-tan-l5" class="panel panel-default">
                 <div class="panel-heading">
-                    <span class="elipsis"><!-- panel title -->
+                    <span class="elipsis">
                         <strong>Interest types</strong>
                     </span>
                 </div>
-                <!-- panel content -->
                 <div class="panel-body">
                     <ul class="side-nav list-group margin-bottom30">
-                        <li class="list-group-item"><a href="#"> Overnight</a></li>
-                        <li class="list-group-item"><a href="#"> Tbill</a></li>
-                        <li class="list-group-item"><a href="#"> Tbond</a></li>
-                        <li class="list-group-item"><a href="#"> Libor rates</a></li>
+                        <li class="list-group-item"><a href="{% url 'interests' %}?type=overnight"> Overnight</a></li>
+                        <li class="list-group-item"><a href="{% url 'interests' %}?type=bill"> Tbill</a></li>
+                        <li class="list-group-item"><a href="{% url 'interests' %}?type=bond"> Tbond</a></li>
+                        <li class="list-group-item"><a href="{% url 'interests' %}?type=libor"> Libor rates</a></li>
                     </ul>
                 </div>
-                <!-- /panel content -->
             </div>
             <!-- /Nav -->
         </div>
@@ -28,7 +26,212 @@
 
                 </div>
                 <div class="panel-body">
+                    {% if request.GET.type %}
+                        <h4 class="uppercase margin-bottom-0"><strong>{{ request.GET.type }}</strong></h4>
+                        <hr class="margin-top-0" />
+                        {% if data %}
+                            <canvas id="interestChart"></canvas>
+                        {% endif %}
 
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover" id="interest_table">
+                                <thead>
+                                    <tr>
+                                        <th>Current date <br></th>
+                                        <th>Previous date <br></th>
+                                        <th>Change <br>(%)</th>
+                                        <th>High <br>Last 3 months</th>
+                                        <th>Low <br>Last 3 months</th>
+                                        <th>Trend</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if data %}
+                                        {% for single in data %}
+                                        <tr>
+                                            <td>{{ single.counter_currency }}</td>
+                                            <td>{{ single.current_rate }}</td>
+                                            {% if single.change < 0 %}
+                                            <td class="text-danger">{{ single.change }}</td>
+                                            {% elif single.change > 0 %}
+                                            <td class="text-success">+{{ single.change }}</td>
+                                            {% endif %}
+                                            <td>{{ single.high }}</td>
+                                            <td>{{ single.low }}</td>
+                                            <td>
+                                                <span class="sparkline"
+                                                      data-plugin-options='{"barColor":"#002A54","height":"26px"}'>
+                                                    {{ single.trends }}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover" id="overnight_table">
+                                <thead>
+                                    <tr>
+                                        <th>Current date <br></th>
+                                        <th>Previous date <br></th>
+                                        <th>Change <br>(%)</th>
+                                        <th>High <br>Last 3 months</th>
+                                        <th>Low <br>Last 3 months</th>
+                                        <th>Trend</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if data.overnight %}
+                                        {% for table in data.overnight %}
+                                        <tr>
+                                            <td>{{ table.counter_currency }}</td>
+                                            <td>{{ table.current_rate }}</td>
+                                            {% if table.change < 0 %}
+                                            <td class="text-danger">{{ table.change }}</td>
+                                            {% elif table.change > 0 %}
+                                            <td class="text-success">+{{ table.change }}</td>
+                                            {% endif %}
+                                            <td>{{ table.high }}</td>
+                                            <td>{{ table.low }}</td>
+                                            <td>
+                                                <span class="sparkline"
+                                                      data-plugin-options='{"barColor":"#002A54","height":"26px"}'>
+                                                    {{ table.trends }}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    {% else %}
+                                        <tr><td colspan="6">There is no overnight data available yet!</td></tr>
+                                    {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover" id="bill_table">
+                                <thead>
+                                    <tr>
+                                        <th>Current date <br></th>
+                                        <th>Previous date <br></th>
+                                        <th>Change <br>(%)</th>
+                                        <th>High <br>Last 3 months</th>
+                                        <th>Low <br>Last 3 months</th>
+                                        <th>Trend</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if data.bill %}
+                                        {% for table in data.bill %}
+                                        <tr>
+                                            <td>{{ table.counter_currency }}</td>
+                                            <td>{{ table.current_rate }}</td>
+                                            {% if table.change < 0 %}
+                                            <td class="text-danger">{{ table.change }}</td>
+                                            {% elif table.change > 0 %}
+                                            <td class="text-success">+{{ table.change }}</td>
+                                            {% endif %}
+                                            <td>{{ table.high }}</td>
+                                            <td>{{ table.low }}</td>
+                                            <td>
+                                                <span class="sparkline"
+                                                      data-plugin-options='{"barColor":"#002A54","height":"26px"}'>
+                                                    {{ table.trends }}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    {% else %}
+                                        <tr><td colspan="6">There is no T-bill data available yet!</td></tr>
+                                    {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover" id="bond_table">
+                                <thead>
+                                    <tr>
+                                        <th>Current date <br></th>
+                                        <th>Previous date <br></th>
+                                        <th>Change <br>(%)</th>
+                                        <th>High <br>Last 3 months</th>
+                                        <th>Low <br>Last 3 months</th>
+                                        <th>Trend</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if data.bond %}
+                                        {% for table in data.bond %}
+                                        <tr>
+                                            <td>{{ table.counter_currency }}</td>
+                                            <td>{{ table.current_rate }}</td>
+                                            {% if table.change < 0 %}
+                                            <td class="text-danger">{{ table.change }}</td>
+                                            {% elif table.change > 0 %}
+                                            <td class="text-success">+{{ table.change }}</td>
+                                            {% endif %}
+                                            <td>{{ table.high }}</td>
+                                            <td>{{ table.low }}</td>
+                                            <td>
+                                                <span class="sparkline"
+                                                      data-plugin-options='{"barColor":"#002A54","height":"26px"}'>
+                                                    {{ table.trends }}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    {% else %}
+                                        <tr><td colspan="6">There is no T-bond data available yet!</td></tr>
+                                    {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover" id="libor_table">
+                                <thead>
+                                    <tr>
+                                        <th>Current date <br></th>
+                                        <th>Previous date <br></th>
+                                        <th>Change <br>(%)</th>
+                                        <th>High <br>Last 3 months</th>
+                                        <th>Low <br>Last 3 months</th>
+                                        <th>Trend</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if data.libor %}
+                                        {% for table in data.libor %}
+                                        <tr>
+                                            <td>{{ table.counter_currency }}</td>
+                                            <td>{{ table.current_rate }}</td>
+                                            {% if table.change < 0 %}
+                                            <td class="text-danger">{{ table.change }}</td>
+                                            {% elif table.change > 0 %}
+                                            <td class="text-success">+{{ table.change }}</td>
+                                            {% endif %}
+                                            <td>{{ table.high }}</td>
+                                            <td>{{ table.low }}</td>
+                                            <td>
+                                                <span class="sparkline"
+                                                      data-plugin-options='{"barColor":"#002A54","height":"26px"}'>
+                                                    {{ table.trends }}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    {% else %}
+                                        <tr><td colspan="6">There is no LIBOR data available yet!</td></tr>
+                                    {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% endif %}
+                    <hr class="nomargin-top" />
                 </div>
             </div>
         </div>

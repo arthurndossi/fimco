@@ -12,7 +12,7 @@ class Group(models.Model):
     group_account = models.CharField(max_length=15, db_index=True)
 
 
-class GroupMembers(models.Model):
+class GroupMember(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     group_account = models.CharField(max_length=15, db_index=True)
     profile_id = models.CharField(max_length=10)
@@ -25,25 +25,28 @@ class Transaction(models.Model):
         ('FAILED', 'FAILED'),
         ('PENDING', 'PENDING')
     )
+    SERVICES = (
+        ('P2P', 'P2P'),
+        ('DEPOSIT', 'DEPOSIT'),
+        ('WITHDRAW', 'WITHDRAW'),
+        ('BONUS', 'BONUS'),
+    )
     fulltimestamp = models.DateTimeField(auto_now_add=True)
     profile_id = models.CharField(max_length=10, db_index=True)
     account = models.CharField(max_length=15, db_index=True)
     msisdn = models.CharField(max_length=10, db_index=True, default='NA')
     external_walletid = models.CharField(max_length=25, default='NA')
-    service = models.CharField(max_length=25, db_index=True)  # DEPOSIT, WITHDRAW, BONUS, P2P
+    service = models.CharField(max_length=8, db_index=True, choices=SERVICES)
     channel = models.CharField(max_length=25, db_index=True, default='NA')
     dest_account = models.CharField(max_length=25, db_index=True, default='NA')
     amount = models.CharField(max_length=25)
     charge = models.CharField(max_length=25, default='0')
     currency = models.CharField(max_length=3, default='TZS')
     reference = models.CharField(max_length=15, db_index=True, default='NA')
-    status = models.CharField(max_length=4, choices=STATUS, default='DONE')
+    status = models.CharField(max_length=4, choices=STATUS, default='PENDING')
     resultcode = models.CharField(max_length=3, default='111', db_index=True)
     message = models.TextField(max_length=1024, default='NA')
     processed_timestamp = models.DateTimeField(null=True)
-
-    # def __unicode__(self):
-    #     return '{}, {}, {}'.format(self.profile_id, self.account, self.amount)
 
 
 class Ledger(models.Model):
@@ -52,8 +55,8 @@ class Ledger(models.Model):
         ('CREDIT', 'CREDIT')
     )
     fulltimestamp = models.DateTimeField(auto_now_add=True)
-    profile_id = models.CharField(max_length=10, db_index=True)
-    account = models.CharField(max_length=15, db_index=True)
+    profile_id = models.CharField(max_length=10, db_index=True, default='POC0GL0001')
+    account = models.CharField(max_length=15, db_index=True, default='GL0001')
     trans_type = models.CharField(max_length=10, choices=TYPES)
     service = models.CharField(max_length=25, db_index=True)  # DEPOSIT, WITHDRAW, BONUS, P2P
     channel = models.CharField(max_length=25, db_index=True, default='NA')
@@ -73,6 +76,10 @@ class BalanceSnapshot(models.Model):
 
 
 class ExternalAccount(models.Model):
+    ACCOUNTS = (
+        ('MM', 'MOBILE MONEY'),
+        ('BA', 'BANK ACCOUNT')
+    )
     profile_id = models.CharField(max_length=10, db_index=True)
     account_name = models.CharField(max_length=150)
     account_number = models.CharField(max_length=30, default='NA')
@@ -80,7 +87,7 @@ class ExternalAccount(models.Model):
     institution_name = models.CharField(max_length=100)  # Mpesa, TIGO PESA, CRDB BANK
     institution_branchcode = models.CharField(max_length=30, default='NA')
     institution_code = models.CharField(max_length=30, default='NA')
-    account_type = models.CharField(max_length=3)  # MOBILE MONEY, BANK ACCOUNT
+    account_type = models.CharField(max_length=2, choices=ACCOUNTS)
 
 
 class Notification(models.Model):
@@ -90,7 +97,7 @@ class Notification(models.Model):
     read_status = models.IntegerField(default=0)
 
 
-class PremiumUsers(models.Model):
+class PaidUser(models.Model):
     TYPES = (
         ('STANDARD', 'standard'),
         ('PREMIUM', 'premium')
@@ -99,3 +106,20 @@ class PremiumUsers(models.Model):
     level = models.CharField(max_length=10, choices=TYPES)
     start_date = models.DateTimeField(auto_now_add=True)
     end_date = models.DateTimeField()
+
+
+class Charge(models.Model):
+    service = models.CharField(max_length=8)
+    charge = models.FloatField(default=0)
+
+
+class CashOut(models.Model):
+    STATUS = (
+        ('success', 'SUCCESS'),
+        ('failed', 'FAILED'),
+        ('pending', 'PENDING')
+    )
+    ext_entity = models.CharField(max_length=100)
+    ext_acc_no = models.CharField(max_length=30, default='NA')
+    amount = models.FloatField(default=0)
+    status = models.CharField(max_length=8, choices=STATUS, default='pending')

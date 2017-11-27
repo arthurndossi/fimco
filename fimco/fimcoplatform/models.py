@@ -1,15 +1,15 @@
 from django.db import models
 
 
-class ExchangeRates(models.Model):
+class ExchangeRate(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     modified_on = models.DateTimeField(auto_now=False, auto_now_add=False)
     base_currency = models.CharField(max_length=4)
     counter_currency = models.CharField(max_length=4)
-    change = models.DecimalField(max_digits=12, decimal_places=6)
-    current_rate = models.DecimalField(max_digits=12, decimal_places=6)
+    change = models.DecimalField(max_digits=10, decimal_places=4)
+    current_rate = models.DecimalField(max_digits=10, decimal_places=4)
     record_datetime = models.DateTimeField()
-    prev_rate = models.DecimalField(max_digits=12, decimal_places=6)
+    prev_rate = models.DecimalField(max_digits=10, decimal_places=4)
     prev_rate_timestamp = models.DateTimeField()
 
 
@@ -28,6 +28,7 @@ class Tbill(models.Model):
     modified_on = models.DateTimeField(auto_now=False, auto_now_add=False)
     record_datetime = models.DateTimeField()
     due_date = models.DateField()
+    type = models.CharField(max_length=10)
     no_of_bids = models.IntegerField()
     no_of_successful_bids = models.IntegerField()
     highest_bid_percent = models.DecimalField(max_digits=4, decimal_places=2)
@@ -46,6 +47,7 @@ class Tbond(models.Model):
     modified_on = models.DateTimeField(auto_now=False, auto_now_add=False)
     record_datetime = models.DateTimeField()
     redemption_date = models.DateField()
+    type = models.CharField(max_length=10)
     no_of_bids = models.IntegerField()
     no_of_successful_bids = models.IntegerField()
     minimum_successful_price = models.DecimalField(max_digits=4, decimal_places=2)
@@ -73,7 +75,7 @@ class Inflation(models.Model):
     value = models.DecimalField(max_digits=2, decimal_places=2)
 
 
-class CurrentAccountMonthly(models.Model):
+class CurrentMonthlyAccount(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     modified_on = models.DateTimeField(auto_now=False, auto_now_add=False)
     year = models.IntegerField()
@@ -81,14 +83,14 @@ class CurrentAccountMonthly(models.Model):
     value = models.DecimalField(max_digits=5, decimal_places=2)
 
 
-class CurrentAccountYearly(models.Model):
+class CurrentYearlyAccount(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     modified_on = models.DateTimeField(auto_now=False, auto_now_add=False)
     year = models.IntegerField()
     value = models.DecimalField(max_digits=2, decimal_places=2)
 
 
-class ImportExportMonthly(models.Model):
+class MonthlyImportExport(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     modified_on = models.DateTimeField(auto_now=False, auto_now_add=False)
     year = models.IntegerField()
@@ -97,7 +99,7 @@ class ImportExportMonthly(models.Model):
     export_value = models.DecimalField(max_digits=6, decimal_places=2)
 
 
-class ImportExportYearly(models.Model):
+class YearlyImportExport(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     modified_on = models.DateTimeField(auto_now=False, auto_now_add=False)
     year = models.IntegerField()
@@ -105,7 +107,7 @@ class ImportExportYearly(models.Model):
     export_value = models.DecimalField(max_digits=6, decimal_places=2)
 
 
-class LiborRates(models.Model):
+class LiborRate(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     modified_on = models.DateTimeField(auto_now=False, auto_now_add=False)
     value_date = models.DateTimeField()

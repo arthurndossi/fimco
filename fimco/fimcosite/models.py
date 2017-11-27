@@ -5,6 +5,8 @@ import os
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -55,6 +57,12 @@ class Profile(models.Model):
     status = models.IntegerField(choices=ACTIVE_STATUS, default=0)
     approval_status = models.CharField(max_length=10, choices=STATUS, default='PENDING')
 
+    @receiver(post_save, sender=User)
+    def create_or_update_user_profile(sender, instance, created, **kwargs):
+        if created:
+            Profile.objects.create(user=instance)
+        instance.profile.save()
+
 
 class CorporateProfile(models.Model):
     company_name = models.CharField(max_length=100)
@@ -85,4 +93,5 @@ class Account(models.Model):
     balance = models.FloatField(default=0)
     ts_balance = models.DateTimeField(null=True)
     status = models.IntegerField(choices=ACTIVE_STATUS, default=0)
-    external_walletid = models.CharField(max_length=25, default='NA')
+    external_wallet_id = models.CharField(max_length=25, default='NA')
+    allow_overdraft = models.BooleanField(default=0)
