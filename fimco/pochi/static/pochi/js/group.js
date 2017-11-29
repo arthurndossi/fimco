@@ -4,7 +4,7 @@
 $(document).ready(function() {
     // The maximum number of options
     var MAX_OPTIONS = 5;
-    var form = jQuery('.form-horizontal');
+    var form = jQuery('.form-horizontal, .add-member');
 
     if (form.find(':visible[name="option[]"]').length < 2) {
         form.find('#done').hide();
@@ -152,9 +152,22 @@ $(document).ready(function() {
 
     if(member_input.val()) $('.addButton').show(); else $('.addButton').hide();
 
-    member_input.on('change', function () {
-        console.log(member_input.val());
+    member_input.on('keyup', function () {
         if(member_input.val()) $('.addButton').show(); else $('.addButton').hide();
+    });
+
+    $('#remove').click(function () {
+        var checkboxes = document.getElementsByName('members[]');
+        var list = [];
+        for (var i=0; i<checkboxes.length; i++)
+        {
+            if (checkboxes[i].checked)
+            {
+                list.push(checkboxes[i].value);
+            }
+        }
+        $("#rejected").val(JSON.stringify(list));
+        console.log(list)
     })
 
 });

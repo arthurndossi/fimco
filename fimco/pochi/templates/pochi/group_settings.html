@@ -1,10 +1,18 @@
 {% extends "pochi/main.html" %}
+{% block links %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/formvalidation@0.6.2-dev/dist/css/formValidation.min.css">
+    <style>
+        .form-control-feedback{
+            text-align: left;
+        }
+    </style>
+{% endblock %}
 {% block content %}
     <section id="middle">
         <div id="content" class="padding-20">
             <div class="row">
                 <div class="col-md-12">
-                    <div id="panel-ui-tan-l2" class="panel panel-default">
+                    <div class="panel panel-default">
                         <div class="panel-heading">
                             <span class="elipsis">
                                 <strong>Group Information</strong>
@@ -20,7 +28,6 @@
                             </ul>
                             <!-- /right options -->
                         </div>
-
                         <!-- panel content -->
                         <div class="panel-body">
                             <div class="row tabs nomargin">
@@ -61,9 +68,11 @@
                                                 </div>
                                                 <!-- panel content -->
                                                 <div class="panel-body">
-                                                    <p>{{ group }} group currently has {{ number }} members. </p>
+                                                    <p>
+                                                        {{ group }} group currently has {{ number }}
+                                                        {% if number == 1 %} member {% else %} members{% endif %}.
+                                                    </p>
                                                     <div class="tabs nomargin">
-                                                        <!-- tabs -->
                                                         <ul class="nav nav-tabs">
                                                             <li class="active">
                                                                 <a href="#tab1_nobg" data-toggle="tab">
@@ -76,14 +85,17 @@
                                                                 </a>
                                                             </li>
                                                         </ul>
-                                                        <!-- tabs content -->
                                                         <div class="tab-content transparent">
                                                             <div id="tab1_nobg" class="tab-pane active">
-                                                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas metus nulla, commodo a sodales sed, dignissim pretium nunc. Nam et lacus neque. Ut enim massa, sodales tempor convallis et, iaculis ac massa. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas metus nulla, commodo a sodales sed, dignissim pretium nunc. Nam et lacus neque. Ut enim massa, sodales tempor convallis et, iaculis ac massa.</p>
+                                                                {% for member in members %}
+                                                                    <i class="fa fa-user"></i>
+                                                                    <p class="inline-block">
+                                                                    {{ member }}
+                                                                    </p>
+                                                                {% endfor %}
                                                             </div>
-
                                                             <div id="tab2_nobg" class="tab-pane">
-                                                                <p>Maecenas metus nulla, commodo a sodales sed, dignissim pretium nunc. Nam et lacus neque. Ut enim massa, sodales tempor convallis et, iaculis ac massa. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                                                <button class="btn btn-primary">Exit</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -92,38 +104,41 @@
                                             </div>
                                         </div>
 
+                                        {% if admin %}
                                         <div id="add" class="tab-pane">
-                                            <form class="payment" method="post" action="{% url 'add_member' group %}">
+                                            <form class="add-member" method="post" action="{% url 'group_member' group 'add' %}">
                                                 {% csrf_token %}
                                                 <div class="panel panel-default">
                                                     <div class="panel-heading panel-heading-transparent">
                                                         <strong>Add Members</strong>
                                                     </div>
                                                     <div class="panel panel-body">
-                                                        <fieldset>
-                                                            <div class="form-group">
-                                                                <label class="col-xs-3 control-label">Member</label>
-                                                                <div class="col-xs-5">
-                                                                    <input type="text" class="form-control" name="option[]" title=""/>
-                                                                </div>
-                                                                <div class="col-xs-4">
-                                                                    <button type="button" class="btn btn-default addButton"><i class="fa fa-plus"></i></button>
-                                                                </div>
-                                                            </div>
-
-                                                            <!-- The option field template containing an option field and a Remove button -->
-                                                            <div class="form-group hide" id="optionTemplate">
-                                                                <div class="col-xs-offset-3 col-xs-5">
-                                                                    <input class="form-control" type="text" name="option[]" title=""/>
-                                                                </div>
-                                                                <div class="col-xs-4">
-                                                                    <button type="button" class="btn btn-default removeButton"><i class="fa fa-minus"></i></button>
-                                                                </div>
-                                                            </div>
-                                                        </fieldset>
                                                         <div class="row">
-                                                            <div class="col-md-9 col-md-offset-3">
-                                                                <button class="btn btn-primary" type="submit">
+                                                            <fieldset>
+                                                                <div class="form-group">
+                                                                    <div class="col-xs-8">
+                                                                        <input type="text" id="member" class="form-control" name="option[]" title=""/>
+                                                                    </div>
+                                                                    <div class="col-xs-4">
+                                                                        <button type="button" class="btn btn-default addButton"><i class="fa fa-plus"></i></button>
+                                                                    </div>
+                                                                </div>
+
+                                                                <!-- The option field template containing an option field and a Remove button -->
+                                                                <div class="form-group hide" id="optionTemplate">
+                                                                    <div class="col-xs-8">
+                                                                        <input class="form-control" type="text" name="option[]" title=""/>
+                                                                    </div>
+                                                                    <div class="col-xs-4">
+                                                                        <button type="button" class="btn btn-default removeButton"><i class="fa fa-minus"></i></button>
+                                                                    </div>
+                                                                </div>
+                                                            </fieldset>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-xs-12" align="center">
+                                                                <input type="hidden" id="members" name="members" value=""/>
+                                                                <button type="submit" id="done" class="btn btn-primary" >
                                                                     <i class="fa fa-check"></i> ADD MEMBER
                                                                 </button>
                                                             </div>
@@ -134,13 +149,53 @@
                                         </div>
 
                                         <div id="remove" class="tab-pane">
-                                            <h4>Remove a member</h4>
-
+                                            <form class="remove-member" method="post" action="{% url 'group_member' group 'remove' %}">
+                                                {% csrf_token %}
+                                                <div class="panel panel-default">
+                                                    <div class="panel-heading panel-heading-transparent">
+                                                        <strong>Remove a member</strong>
+                                                    </div>
+                                                    <div class="panel-body">
+                                                        <div class="row">
+                                                            <div class="col-xs-12">
+                                                                {% for member in members %}
+                                                                    <label class="checkbox">
+                                                                        <input type="checkbox" name="members[]" value="{{ member }}">
+                                                                        <i></i> {{ member }}
+                                                                    </label>
+                                                                {% endfor %}
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-xs-12" align="center">
+                                                                <input type="hidden" id="rejected" name="rejected" value=""/>
+                                                                <button type="submit" id="remove" class="btn btn-primary" >
+                                                                    <i class="fa fa-check"></i> REMOVE MEMBER(S)
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
                                         </div>
 
+                                        {% endif %}
                                         <div id="administrators" class="tab-pane">
-                                            <h4>List of administrators</h4>
-
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading panel-heading-transparent">
+                                                    <strong>List of administrators</strong>
+                                                </div>
+                                                <div class="panel panel-body">
+                                                    <div class="row">
+                                                        <div class="col-xs-12">
+                                                            {% for administrator in administrators %}
+                                                                <i class="fa fa-user-secret"></i>
+                                                                <p class="inline-block">{{ administrator }}</p>
+                                                            {% endfor %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -150,6 +205,33 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+            {% if messages %}
+                {% for message in messages %}
+                    {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                        <div class="col-xs-12">
+                            <div class="alert alert-danger margin-bottom-30">
+                                <button type="button" class="close" data-dismiss="alert">
+                                    <span aria-hidden="true">×</span>
+                                    <span class="sr-only">Close</span>
+                                </button>
+                                <strong>{{ message }}</strong>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="col-xs-12">
+                            <div class="alert alert-info margin-bottom-30">
+                                <button type="button" class="close" data-dismiss="alert">
+                                    <span aria-hidden="true">×</span>
+                                    <span class="sr-only">Close</span>
+                                </button>
+                                <strong>{{ message }}</strong>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            </div>
         </div>
     </section>
 {% endblock %}
@@ -157,4 +239,5 @@
 {% block scripts %}
     <script src="https://cdn.jsdelivr.net/npm/formvalidation@0.6.2-dev/dist/js/formValidation.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/formvalidation@0.6.2-dev/dist/js/framework/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/static/pochi/js/group.js"></script>
 {% endblock %}

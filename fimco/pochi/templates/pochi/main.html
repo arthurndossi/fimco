@@ -133,12 +133,15 @@
                                 <li>
                                     <a href="#">
                                         <i class="main-icon fa fa-users"></i>
-                                        <span class="label label-info pull-right"></span> <span>{{ group }}</span>
+                                        <span class="label label-info pull-right"></span> <span>{{ group.name }}</span>
                                     </a>
                                     <ul>
-                                        <li><a href="{% url 'group_profile' group %}">Dashboard</a></li>
-                                        <li><a href="{% url 'group_statement' group %}">Statement</a></li>
-                                        <li><a href="{% url 'group_settings' group %}">Settings</a></li>
+                                        <li><a href="{% url 'group_profile' group.name %}">Dashboard</a></li>
+                                        {% if group.admin %}
+                                        <li><a href="{% url 'group_activity' group.name %}">Activity</a></li>
+                                        {% endif %}
+                                        <li><a href="{% url 'group_statement' group.name %}">Statement</a></li>
+                                        <li><a href="{% url 'group_settings' group.name %}">Settings</a></li>
                                     </ul>
                                 </li>
                             {% endfor %}

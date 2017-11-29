@@ -354,25 +354,45 @@ def process_p2p(request):
 
 
 @login_required
-def withdraw(request):
-    profile = request.user.profile
-    profile_id = profile.profile_id
-    try:
-        external_account = ExternalAccount.objects.filter(profile_id=profile_id)
-        ext_acc_obj = external_account.values('nickname')
-    except ExternalAccount.DoesNotExist:
-        ext_acc_obj = None
+def withdraw(request, name=None):
+    if name:
+        identifier = None
+        try:
+            this_group = Group.objects.get(name=name)
+            grp_acc = this_group.group_account
+        except Account.DoesNotExist:
+            grp_acc = None
+        if grp_acc:
+            try:
+                this_account = Account.objects.get(account=grp_acc)
+                identifier = this_account
+            except Account.DoesNotExist:
+                identifier = None
+
+        try:
+            external_account = ExternalAccount.objects.filter(account_name=name)
+            ext_acc_obj = external_account.values('nickname')
+        except ExternalAccount.DoesNotExist:
+            ext_acc_obj = None
+
+    else:
+        profile = request.user.profile
+        identifier = profile.profile_id
+        try:
+            external_account = ExternalAccount.objects.filter(profile_id=identifier)
+            ext_acc_obj = external_account.values('nickname')
+        except ExternalAccount.DoesNotExist:
+            ext_acc_obj = None
 
     if request.method == "POST":
         if request.POST['type'] == u"BANK":
-            user = request.user.profile
             institution = request.POST['institution']
             name = request.POST['name'].upper()
             nickname = request.POST['nickname']
             account_num = request.POST['account']
             account_type = request.POST['type']
             ExternalAccount.objects.create(
-                profile_id=user.profile_id,
+                profile_id=identifier,
                 account_name=name,
                 account_number=account_num,
                 nickname=nickname,
@@ -392,12 +412,12 @@ def withdraw(request):
             dest_acc_num = selected_ext_acc_obj.account_number
 
             try:
-                _account = Account.objects.get(profile_id=profile_id)
+                _account = Account.objects.get(profile_id=identifier)
                 src_account = _account.account
                 bal = _account.balance
                 ov = _account.allow_overdraft
 
-                fund_transfer('WITHDRAW', 'NA', institution_name, profile_id, src_account, dest_acc_num, bal, amount, ov)
+                fund_transfer('WITHDRAW', 'NA', institution_name, identifier, src_account, dest_acc_num, bal, amount, ov)
 
                 if amount <= bal:
                     _account.balance -= amount
@@ -411,22 +431,35 @@ def withdraw(request):
 
             except Account.DoesNotExist:
                 pass
+    if name:
+        context = {
+            'group': name,
+            'account': identifier,
+            'external_accounts': ext_acc_obj,
+        }
+        return render_with_global_data(request, 'pochi/group_activity.html', context)
+    else:
+        context = {
+            'external_accounts': ext_acc_obj,
+        }
+        return render_with_global_data(request, 'pochi/withdrawal.html', context)
 
-    context = {
-        'external_accounts': ext_acc_obj,
-    }
-    return render_with_global_data(request, 'pochi/withdrawal.html', context)
+
+def how_to_deposit(request):
+    return render_with_global_data(request, 'pochi/deposit.html', {})
 
 
 @login_required
 def deposit(request):
-    profile = request.user.profile
-    src_profile_id = profile.profile_id
+    message = None
     if request.method == "POST":
         amount = float(request.POST['amount'])
+        phone = float(request.POST['msisdn'])
+
+        src_profile_id = Profile.objects.get(user__username=phone).profile_id
 
         try:
-            _account = Account.objects.get(profile_id=profile.profile_id)
+            _account = Account.objects.get(profile_id=src_profile_id)
             bal = _account.balance
             dest_account = _account.account
 
@@ -434,14 +467,13 @@ def deposit(request):
 
             _account.balance += amount
             _account.save()
-            messages.info(
-                request,
-                'You have successfully deposited ' + str(amount) + ' to your account'
-            )
+
+            message = 'You have successfully deposited ' + str(amount) + ' to your account'
 
         except Account.DoesNotExist:
+            message = 'System unavailable, Try again later!'
             pass
-    return render_with_global_data(request, 'pochi/deposit.html', {})
+    return JsonResponse({'message': message})
 
 
 @login_required
@@ -507,20 +539,91 @@ def lock(request):
 
 @login_required
 def group_settings(request, name=None):
-    return render_with_global_data(request, 'pochi/group_settings.html', {'group': name})
+    count = 0
+    administrators = []
+    members = []
+    try:
+        this_group = Group.objects.get(name=name)
+        grp_acc = this_group.group_account
+        count = GroupMember.objects.filter(group_account=grp_acc).count()
+        admins_profile_obj = GroupMember.objects.filter(group_account=grp_acc, admin=1).only('profile_id')
+        for admin_profile_obj in admins_profile_obj:
+            profile = Profile.objects.get(profile_id=admin_profile_obj.profile_id).user_id
+            administrator = User.objects.get(id=profile).get_full_name()
+            administrators.append(administrator)
+
+        members_profile_obj = GroupMember.objects.filter(group_account=grp_acc).only('profile_id')
+        for member_profile_obj in members_profile_obj:
+            profile = Profile.objects.get(profile_id=member_profile_obj.profile_id).user_id
+            member = User.objects.get(id=profile).get_full_name()
+            members.append(member)
+    except Account.DoesNotExist:
+        pass
+    context = {
+        'group': name,
+        'number': count,
+        'members': members,
+        'administrators': administrators,
+    }
+    return render_with_global_data(request, 'pochi/group_settings.html', context)
 
 
 @login_required
-def add_member(request, name=None):
-    if request.POST:
-        members = request.POST['option[]']
-        try:
-            this_group = Group.objects.get(name=name)
-            grp_acc = this_group.group_account
-            GroupMember.objects.create(group_account=grp_acc, profile_id=members)
-        except Account.DoesNotExist:
-            pass
-    return render_with_global_data(request, 'pochi/add_member.html', {'group': name})
+def add_remove_member(request, name=None, action=None):
+    if action == 'add':
+        if request.POST:
+            members = request.POST['members']
+            count = len(eval(members))
+            invalid = 0
+            for member in eval(members):
+                profile = Profile.objects.filter(profile_id=member)
+                if profile.exists():
+                    try:
+                        this_group = Group.objects.get(name=name)
+                        grp_acc = this_group.group_account
+                        GroupMember.objects.create(group_account=grp_acc, profile_id=member)
+                    except Account.DoesNotExist:
+                        pass
+                else:
+                    count -= 1
+                    invalid += 1
+            if count > 0 and invalid == 0:
+                messages.info(
+                    request,
+                    'You have successfully added ' + str(count) + ' valid members to your group'
+                )
+            elif count > 0 and invalid > 0:
+                messages.info(
+                    request,
+                    'You have successfully added ' + str(count) + ' valid members to your group'
+                )
+                messages.error(
+                    request,
+                    'Could not add ' + str(invalid) + ' invalid members in your list'
+                )
+            elif count == 0 and invalid > 0:
+                messages.error(
+                    request,
+                    'Could not add ' + str(invalid) + ' invalid members in your list'
+                )
+        if action == 'remove':
+            if request.POST:
+                names = request.POST['rejected']
+                count = len(eval(names))
+                for name in eval(names):
+                    first_name = name.split[0]
+                    rejected_profile_id = Profile.objects.get(user__first_name=first_name).profile_id
+                    try:
+                        this_group = Group.objects.get(name=name)
+                        grp_acc = this_group.group_account
+                        GroupMember.objects.filter(group_account=grp_acc, profile_id=rejected_profile_id).delete()
+                    except Account.DoesNotExist:
+                        pass
+                messages.info(
+                    request,
+                    'You have successfully removed ' + str(count) + ' members from your group'
+                )
+    return redirect(request.META['HTTP_REFERER'])
 
 
 @login_required

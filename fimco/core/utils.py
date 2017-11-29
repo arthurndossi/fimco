@@ -12,7 +12,8 @@ def render_with_global_data(request, page, context):
         for group in group_account_obj:
             try:
                 grp_name = Group.objects.get(group_account=group.group_account).name
-                group_members_obj.append(grp_name)
+                is_admin = group.admin
+                group_members_obj.append({'name': grp_name, 'admin': is_admin})
             except Group.DoesNotExist:
                 pass
 
