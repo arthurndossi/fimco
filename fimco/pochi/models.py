@@ -10,6 +10,7 @@ class Group(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     name = models.CharField(max_length=100)
     group_account = models.CharField(max_length=15, db_index=True)
+    balance = models.FloatField(default=0)
 
 
 class GroupMember(models.Model):
@@ -31,11 +32,11 @@ class Transaction(models.Model):
         ('WITHDRAW', 'WITHDRAW'),
         ('BONUS', 'BONUS'),
     )
-    fulltimestamp = models.DateTimeField(auto_now_add=True)
+    full_timestamp = models.DateTimeField(auto_now_add=True)
     profile_id = models.CharField(max_length=10, db_index=True)
     account = models.CharField(max_length=15, db_index=True)
     msisdn = models.CharField(max_length=10, db_index=True, default='NA')
-    external_walletid = models.CharField(max_length=25, default='NA')
+    external_wallet_id = models.CharField(max_length=25, default='NA')
     service = models.CharField(max_length=8, db_index=True, choices=SERVICES)
     channel = models.CharField(max_length=25, db_index=True, default='NA')
     dest_account = models.CharField(max_length=25, db_index=True, default='NA')
@@ -44,7 +45,7 @@ class Transaction(models.Model):
     currency = models.CharField(max_length=3, default='TZS')
     reference = models.CharField(max_length=15, db_index=True, default='NA')
     status = models.CharField(max_length=4, choices=STATUS, default='PENDING')
-    resultcode = models.CharField(max_length=3, default='111', db_index=True)
+    result_code = models.CharField(max_length=3, default='111', db_index=True)
     message = models.TextField(max_length=1024, default='NA')
     processed_timestamp = models.DateTimeField(null=True)
 
@@ -54,7 +55,7 @@ class Ledger(models.Model):
         ('DEBIT', 'DEBIT'),
         ('CREDIT', 'CREDIT')
     )
-    fulltimestamp = models.DateTimeField(auto_now_add=True)
+    full_timestamp = models.DateTimeField(auto_now_add=True)
     profile_id = models.CharField(max_length=10, db_index=True, default='POC0GL0001')
     account = models.CharField(max_length=15, db_index=True, default='GL0001')
     trans_type = models.CharField(max_length=10, choices=TYPES)
@@ -63,12 +64,12 @@ class Ledger(models.Model):
     amount = models.CharField(max_length=25)
     currency = models.CharField(max_length=3, default='TZS')
     reference = models.CharField(max_length=15, db_index=True, default='NA')
-    obal = models.FloatField(default=0)
-    cbal = models.FloatField(default=0)
+    o_bal = models.FloatField(default=0)
+    c_bal = models.FloatField(default=0)
 
 
 class BalanceSnapshot(models.Model):
-    fulltimestamp = models.DateTimeField(auto_now_add=True)
+    full_timestamp = models.DateTimeField(auto_now_add=True)
     profile_id = models.CharField(max_length=10, db_index=True)
     account = models.CharField(max_length=15, db_index=True)
     closing_balance = models.FloatField(default=0)
@@ -92,7 +93,7 @@ class ExternalAccount(models.Model):
 
 class Notification(models.Model):
     profile_id = models.CharField(max_length=20)
-    fulltimestamp = models.DateTimeField(auto_now_add=True)
+    full_timestamp = models.DateTimeField(auto_now_add=True)
     message = models.TextField(max_length=1024, default='NA')
     read_status = models.IntegerField(default=0)
 

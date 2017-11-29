@@ -77,7 +77,7 @@ class Account(models.Model):
         (0, 'ACTIVE'),
         (1, 'INACTIVE')
     )
-    profile_id = models.CharField(max_length=10, db_index=True)
+    profile_id = models.CharField(max_length=10, db_index=True, default='NA')
     created_on = models.DateTimeField(auto_now_add=True)
     account = models.CharField(max_length=15, db_index=True)
     currency = models.CharField(max_length=3, default='TZS')

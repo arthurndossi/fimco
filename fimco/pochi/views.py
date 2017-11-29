@@ -157,7 +157,7 @@ def edit_profile(request):
 @transaction.atomic
 def fund_transfer(request, service, ext_wallet, channel, profile_id, src, dest, bal, amount, msisdn, overdraft=0):
     try:
-        close_bal = Ledger.objects.last().cbal
+        close_bal = Ledger.objects.last().c_bal
     except Ledger.DoesNotExist:
         close_bal = 0
 
@@ -173,7 +173,7 @@ def fund_transfer(request, service, ext_wallet, channel, profile_id, src, dest, 
                 profile_id=profile_id,
                 account=src,
                 msisdn=msisdn,
-                external_walletid=ext_wallet,
+                external_wallet_id=ext_wallet,
                 service=service,
                 dest_account=dest,
                 amount=amount
@@ -182,15 +182,15 @@ def fund_transfer(request, service, ext_wallet, channel, profile_id, src, dest, 
                 trans_type='DEBIT',
                 service=service,
                 amount=amount,
-                obal=close_bal,
-                cbal=close_bal - amount
+                o_bal=close_bal,
+                c_bal=close_bal - amount
             )
             Ledger.objects.create(
                 trans_type='CREDIT',
                 service=service,
                 amount=amount,
-                obal=close_bal,
-                cbal=close_bal + amount
+                o_bal=close_bal,
+                c_bal=close_bal + amount
             )
     elif service == 'WITHDRAW':
         if amount <= bal or overdraft:
@@ -198,7 +198,7 @@ def fund_transfer(request, service, ext_wallet, channel, profile_id, src, dest, 
                 profile_id=profile_id,
                 account=src,
                 msisdn=msisdn,
-                external_walletid=ext_wallet,
+                external_wallet_id=ext_wallet,
                 service=service,
                 channel=channel,
                 dest_account=dest,
@@ -209,8 +209,8 @@ def fund_transfer(request, service, ext_wallet, channel, profile_id, src, dest, 
                 trans_type='DEBIT',
                 service=service,
                 amount=amount,
-                obal=close_bal,
-                cbal=close_bal - amount
+                o_bal=close_bal,
+                c_bal=close_bal - amount
             )
             CashOut.objects.create(
                 ext_entity=channel,
@@ -222,7 +222,7 @@ def fund_transfer(request, service, ext_wallet, channel, profile_id, src, dest, 
             profile_id=profile_id,
             account=dest,
             msisdn=msisdn,
-            external_walletid=ext_wallet,
+            external_wallet_id=ext_wallet,
             service='DEPOSIT',
             amount=amount
         )
@@ -231,8 +231,8 @@ def fund_transfer(request, service, ext_wallet, channel, profile_id, src, dest, 
             trans_type='CREDIT',
             service=service,
             amount=amount,
-            obal=close_bal,
-            cbal=close_bal + amount
+            o_bal=close_bal,
+            c_bal=close_bal + amount
         )
 
 
@@ -358,19 +358,12 @@ def process_p2p(request):
 @login_required
 def withdraw(request, name=None):
     if name:
-        identifier = None
         phone = 'NA'
         try:
             this_group = Group.objects.get(name=name)
-            grp_acc = this_group.group_account
-        except Account.DoesNotExist:
-            grp_acc = None
-        if grp_acc:
-            try:
-                this_account = Account.objects.get(account=grp_acc)
-                identifier = this_account
-            except Account.DoesNotExist:
-                identifier = None
+            identifier = this_group.group_account
+        except Group.DoesNotExist:
+            identifier = None
 
         try:
             external_account = ExternalAccount.objects.filter(account_name=name)
@@ -391,13 +384,13 @@ def withdraw(request, name=None):
     if request.method == "POST":
         if request.POST['type'] == u"BANK":
             institution = request.POST['institution']
-            name = request.POST['name'].upper()
+            bank_name = request.POST['name'].upper()
             nickname = request.POST['nickname']
             account_num = request.POST['account']
             account_type = request.POST['type']
             ExternalAccount.objects.create(
                 profile_id=identifier,
-                account_name=name,
+                account_name=bank_name,
                 account_number=account_num,
                 nickname=nickname,
                 institution_name=institution,
@@ -415,27 +408,48 @@ def withdraw(request, name=None):
             institution_name = selected_ext_acc_obj.institution_name
             dest_acc_num = selected_ext_acc_obj.account_number
 
-            try:
-                _account = Account.objects.get(profile_id=identifier)
-                src_account = _account.account
-                bal = _account.balance
-                ov = _account.allow_overdraft
+            if name:
+                try:
+                    _account = Account.objects.get(account=identifier)
+                    bal = _account.balance
+                    ov = _account.allow_overdraft
 
-                fund_transfer(request, 'WITHDRAW', 'NA', institution_name, identifier, src_account, dest_acc_num, bal,
-                              amount, phone, ov)
+                    fund_transfer(request, 'WITHDRAW', 'NA', institution_name, 'NA', identifier, dest_acc_num, bal,
+                                  amount, phone, ov)
 
-                if amount <= bal:
-                    _account.balance -= amount
-                    _account.save()
-                    messages.info(
-                        request,
-                        'You have successfully withdrawn TZS'+str(amount)+' to your '+selected_ext_account+' account'
-                    )
-                else:
-                    messages.error(request, 'You have insufficient funds to withdraw money to your account!')
+                    if amount <= bal:
+                        _account.balance -= amount
+                        _account.save()
+                        messages.info(
+                            request,
+                            'You have successfully withdrawn TZS'+str(amount)+' to '+selected_ext_account+' account'
+                        )
+                    else:
+                        messages.error(request, 'You have insufficient funds to withdraw money from your group account!')
+                except Account.DoesNotExist:
+                    pass
+            else:
+                try:
+                    _account = Account.objects.get(profile_id=identifier)
+                    src_account = _account.account
+                    bal = _account.balance
+                    ov = _account.allow_overdraft
 
-            except Account.DoesNotExist:
-                pass
+                    fund_transfer(request, 'WITHDRAW', 'NA', institution_name, identifier, src_account, dest_acc_num, bal,
+                                  amount, phone, ov)
+
+                    if amount <= bal:
+                        _account.balance -= amount
+                        _account.save()
+                        messages.info(
+                            request,
+                            'You have successfully withdrawn TZS'+str(amount)+' to your '+selected_ext_account+' account'
+                        )
+                    else:
+                        messages.error(request, 'You have insufficient funds to withdraw money from your account!')
+
+                except Account.DoesNotExist:
+                    pass
     if name:
         context = {
             'group': name,
@@ -458,31 +472,49 @@ def deposit(request):
     message = None
     if request.method == "GET":
         amount = float(request.GET['amount'])
-        phone = request.GET['msisdn']
+        if 'msisdn' in request.GET:
+            phone = request.GET['msisdn']
 
-        try:
-            src_profile_id = Profile.objects.get(user__username=phone).profile_id
-        except Profile.DoesNotExist:
-            src_profile_id = None
-
-        if src_profile_id:
             try:
-                _account = Account.objects.get(profile_id=src_profile_id)
-                bal = _account.balance
-                dest_account = _account.account
+                src_profile_id = Profile.objects.get(user__username=phone).profile_id
+            except Profile.DoesNotExist:
+                src_profile_id = None
 
-                fund_transfer(request, 'DEPOSIT', 'NA', 'NA', src_profile_id, 'NA', dest_account, bal, amount, phone)
+            if src_profile_id:
+                try:
+                    _account = Account.objects.get(profile_id=src_profile_id)
+                    bal = _account.balance
+                    dest_account = _account.account
 
-                _account.balance += amount
-                _account.save()
+                    fund_transfer(request, 'DEPOSIT', 'NA', 'NA', src_profile_id, 'NA', dest_account, bal, amount, phone)
 
-                message = 'You have successfully deposited ' + str(amount) + ' to your account'
+                    _account.balance += amount
+                    _account.save()
 
-            except Account.DoesNotExist:
-                message = 'System unavailable, Try again later!'
+                    message = 'You have successfully deposited ' + str(amount) + ' to your account'
+
+                except Account.DoesNotExist:
+                    message = 'System unavailable, Try again later!'
+                    pass
+            else:
+                message = 'Sorry!, This phone number is not registered in the system!'
+        elif 'account' in request.GET:
+            this_account = request.GET['account']
+
+            try:
+                _group = Group.objects.get(group_account=this_account)
+                bal = _group.balance
+
+                fund_transfer(request, 'DEPOSIT', 'NA', 'NA', 'NA', 'NA', this_account, bal, amount, 'NA')
+
+                _group.balance += amount
+                _group.save()
+
+                message = 'You have successfully deposited ' + str(amount) + ' to your group account'
+
+            except Group.DoesNotExist:
+                message = 'Sorry!, This account number does not belong to any group in the system!'
                 pass
-        else:
-            message = 'Sorry!, This phone number is not registered in the system!'
     return JsonResponse({'message': message})
 
 
@@ -507,7 +539,6 @@ def create_group(request):
             name=groupName,
         )
         Account.objects.create(
-            profile_id=grp_acc,
             account=grp_acc,
             nickname=groupName,
         )

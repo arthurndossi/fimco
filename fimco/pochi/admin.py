@@ -5,7 +5,7 @@ from .models import Group, GroupMember, Transaction, Ledger, BalanceSnapshot, Ex
 
 
 class GroupAdmin(admin.ModelAdmin):
-    list_display = ('created_on', 'name', 'group_account')
+    list_display = ('created_on', 'name', 'group_account', 'balance')
 
 
 class GroupMembersAdmin(admin.ModelAdmin):
@@ -13,18 +13,18 @@ class GroupMembersAdmin(admin.ModelAdmin):
 
 
 class TransactionAdmin(admin.ModelAdmin):
-    list_display = ('fulltimestamp', 'profile_id', 'account', 'msisdn', 'external_walletid', 'service', 'channel',
-                    'dest_account', 'amount', 'charge', 'currency', 'reference', 'status', 'resultcode', 'message',
+    list_display = ('full_timestamp', 'profile_id', 'account', 'msisdn', 'external_wallet_id', 'service', 'channel',
+                    'dest_account', 'amount', 'charge', 'currency', 'reference', 'status', 'result_code', 'message',
                     'processed_timestamp')
 
 
 class LedgerAdmin(admin.ModelAdmin):
-    list_display = ('fulltimestamp', 'profile_id', 'account', 'trans_type', 'service', 'channel', 'amount', 'currency',
-                    'reference', 'obal', 'cbal')
+    list_display = ('full_timestamp', 'profile_id', 'account', 'trans_type', 'service', 'channel', 'amount', 'currency',
+                    'reference', 'o_bal', 'c_bal')
 
 
 class BalanceSnapshotAdmin(admin.ModelAdmin):
-    list_display = ('fulltimestamp', 'profile_id', 'account', 'closing_balance', 'bonus_closing_balance')
+    list_display = ('full_timestamp', 'profile_id', 'account', 'closing_balance', 'bonus_closing_balance')
 
 
 class ExternalAccountAdmin(admin.ModelAdmin):
@@ -33,7 +33,7 @@ class ExternalAccountAdmin(admin.ModelAdmin):
 
 
 class NotificationAdmin(admin.ModelAdmin):
-    list_display = ('profile_id', 'fulltimestamp', 'message', 'read_status')
+    list_display = ('profile_id', 'full_timestamp', 'message', 'read_status')
 
 
 class PaidUserAdmin(admin.ModelAdmin):
