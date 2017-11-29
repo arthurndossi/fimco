@@ -5,15 +5,27 @@
             <div class="row">
             {% if messages %}
                 {% for message in messages %}
-                    <div class="col-xs-12">
-                        <div class="alert alert-success margin-bottom-30">
-                            <button type="button" class="close" data-dismiss="alert">
-                                <span aria-hidden="true">×</span>
-                                <span class="sr-only">Close</span>
-                            </button>
-                            <strong>{{ message }}</strong>
+                    {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                        <div class="col-xs-12">
+                            <div class="alert alert-danger margin-bottom-30">
+                                <button type="button" class="close" data-dismiss="alert">
+                                    <span aria-hidden="true">×</span>
+                                    <span class="sr-only">Close</span>
+                                </button>
+                                <strong>{{ message }}</strong>
+                            </div>
                         </div>
-                    </div>
+                    {% else %}
+                        <div class="col-xs-12">
+                            <div class="alert alert-success margin-bottom-30">
+                                <button type="button" class="close" data-dismiss="alert">
+                                    <span aria-hidden="true">×</span>
+                                    <span class="sr-only">Close</span>
+                                </button>
+                                <strong>{{ message }}</strong>
+                            </div>
+                        </div>
+                    {% endif %}
                 {% endfor %}
             {% endif %}
             </div>
@@ -167,34 +179,6 @@
                         </div>
                     </div>
                 </form>
-            </div>
-
-            <div class="row">
-            {% if messages %}
-                {% for message in messages %}
-                    {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
-                        <div class="col-xs-12">
-                            <div class="alert alert-danger margin-bottom-30">
-                                <button type="button" class="close" data-dismiss="alert">
-                                    <span aria-hidden="true">×</span>
-                                    <span class="sr-only">Close</span>
-                                </button>
-                                <strong>{{ message }}</strong>
-                            </div>
-                        </div>
-                    {% else %}
-                        <div class="col-xs-12">
-                            <div class="alert alert-danger margin-bottom-30">
-                                <button type="button" class="close" data-dismiss="alert">
-                                    <span aria-hidden="true">×</span>
-                                    <span class="sr-only">Close</span>
-                                </button>
-                                <strong>{{ message }}</strong>
-                            </div>
-                        </div>
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
             </div>
             {% endif %}
         </div>

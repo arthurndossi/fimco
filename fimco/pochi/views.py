@@ -155,7 +155,7 @@ def edit_profile(request):
 
 
 @transaction.atomic
-def fund_transfer(request, service, ext_wallet, channel, profile_id, src, dest, bal, amount, overdraft=0):
+def fund_transfer(request, service, ext_wallet, channel, profile_id, src, dest, bal, amount, msisdn, overdraft=0):
     try:
         close_bal = Ledger.objects.last().cbal
     except Ledger.DoesNotExist:
@@ -172,7 +172,7 @@ def fund_transfer(request, service, ext_wallet, channel, profile_id, src, dest, 
             Transaction.objects.create(
                 profile_id=profile_id,
                 account=src,
-                msisdn=request.user.username,
+                msisdn=msisdn,
                 external_walletid=ext_wallet,
                 service=service,
                 dest_account=dest,
@@ -197,7 +197,7 @@ def fund_transfer(request, service, ext_wallet, channel, profile_id, src, dest, 
             Transaction.objects.create(
                 profile_id=profile_id,
                 account=src,
-                msisdn=request.user.username,
+                msisdn=msisdn,
                 external_walletid=ext_wallet,
                 service=service,
                 channel=channel,
@@ -221,7 +221,7 @@ def fund_transfer(request, service, ext_wallet, channel, profile_id, src, dest, 
         Transaction.objects.create(
             profile_id=profile_id,
             account=dest,
-            msisdn=request.user.username,
+            msisdn=msisdn,
             external_walletid=ext_wallet,
             service='DEPOSIT',
             amount=amount
@@ -325,10 +325,12 @@ def process_p2p(request):
         amount = float(amount)
         bal = request.POST['open_bal']
         bal = float(bal)
+        phone = request.user.username
         profile = request.user.profile
         src_profile_id = profile.profile_id
 
-        fund_transfer('P2P', ext_wallet, 'NA', src_profile_id, src_account, dest_account, bal, amount, ov)
+        fund_transfer(request, 'P2P', ext_wallet, 'NA', src_profile_id, src_account, dest_account, bal, amount,
+                      phone, ov)
 
         src_account = dest_account = None
         while src_account is None:
@@ -357,6 +359,7 @@ def process_p2p(request):
 def withdraw(request, name=None):
     if name:
         identifier = None
+        phone = 'NA'
         try:
             this_group = Group.objects.get(name=name)
             grp_acc = this_group.group_account
@@ -378,6 +381,7 @@ def withdraw(request, name=None):
     else:
         profile = request.user.profile
         identifier = profile.profile_id
+        phone = request.user.username
         try:
             external_account = ExternalAccount.objects.filter(profile_id=identifier)
             ext_acc_obj = external_account.values('nickname')
@@ -417,7 +421,8 @@ def withdraw(request, name=None):
                 bal = _account.balance
                 ov = _account.allow_overdraft
 
-                fund_transfer('WITHDRAW', 'NA', institution_name, identifier, src_account, dest_acc_num, bal, amount, ov)
+                fund_transfer(request, 'WITHDRAW', 'NA', institution_name, identifier, src_account, dest_acc_num, bal,
+                              amount, phone, ov)
 
                 if amount <= bal:
                     _account.balance -= amount
@@ -449,30 +454,35 @@ def how_to_deposit(request):
     return render_with_global_data(request, 'pochi/deposit.html', {})
 
 
-@login_required
 def deposit(request):
     message = None
-    if request.method == "POST":
-        amount = float(request.POST['amount'])
-        phone = float(request.POST['msisdn'])
-
-        src_profile_id = Profile.objects.get(user__username=phone).profile_id
+    if request.method == "GET":
+        amount = float(request.GET['amount'])
+        phone = request.GET['msisdn']
 
         try:
-            _account = Account.objects.get(profile_id=src_profile_id)
-            bal = _account.balance
-            dest_account = _account.account
+            src_profile_id = Profile.objects.get(user__username=phone).profile_id
+        except Profile.DoesNotExist:
+            src_profile_id = None
 
-            fund_transfer('DEPOSIT', 'NA', 'NA', src_profile_id, 'NA', dest_account, bal, amount)
+        if src_profile_id:
+            try:
+                _account = Account.objects.get(profile_id=src_profile_id)
+                bal = _account.balance
+                dest_account = _account.account
 
-            _account.balance += amount
-            _account.save()
+                fund_transfer(request, 'DEPOSIT', 'NA', 'NA', src_profile_id, 'NA', dest_account, bal, amount, phone)
 
-            message = 'You have successfully deposited ' + str(amount) + ' to your account'
+                _account.balance += amount
+                _account.save()
 
-        except Account.DoesNotExist:
-            message = 'System unavailable, Try again later!'
-            pass
+                message = 'You have successfully deposited ' + str(amount) + ' to your account'
+
+            except Account.DoesNotExist:
+                message = 'System unavailable, Try again later!'
+                pass
+        else:
+            message = 'Sorry!, This phone number is not registered in the system!'
     return JsonResponse({'message': message})
 
 

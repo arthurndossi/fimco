@@ -5,8 +5,6 @@ import os
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 from django.db import models
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -56,12 +54,6 @@ class Profile(models.Model):
     profile_id = models.CharField(max_length=10)
     status = models.IntegerField(choices=ACTIVE_STATUS, default=0)
     approval_status = models.CharField(max_length=10, choices=STATUS, default='PENDING')
-
-    @receiver(post_save, sender=User)
-    def create_or_update_user_profile(sender, instance, created, **kwargs):
-        if created:
-            Profile.objects.create(user=instance)
-        instance.profile.save()
 
 
 class CorporateProfile(models.Model):
