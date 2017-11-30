@@ -29,7 +29,7 @@
                         </div>
                         <div class="col-md-2 col-xs-4 nopadding-left">
                             <select id="base" class="form-control select2">
-                                <option value="">USD</option>
+                                <option value="">TZS</option>
 {#                                {% for exchange in data %}#}
 {#                                    <option value="{{ exchange.counter_currency }}">#}
 {#                                        {{ exchange.counter_currency }}#}
@@ -47,7 +47,7 @@
                             <select id="counter" class="form-control select2">
                                 {% for exchange in data %}
                                     <option value="{{ exchange.counter_currency }}"
-                                        {% if exchange.counter_currency == 'GBP' %}selected{% endif %}>
+                                        {% if exchange.counter_currency == 'USD' %}selected{% endif %}>
                                         {{ exchange.counter_currency }}
                                     </option>
                                 {% endfor %}
@@ -87,10 +87,11 @@
                                     {% elif exchange.change == 0 %}
                                     <td class="text-default">{{ exchange.change }}</td>
                                     {% endif %}
+                                    <td>{{ exchange.time }}</td>
                                     <td>
                                         <span class="sparkline"
                                               data-plugin-options='{"barColor":"#002A54","height":"26px"}'>
-                                            {{ exchange.trends }}
+                                            {{ exchange.trend }}
                                         </span>
                                     </td>
                                 </tr>

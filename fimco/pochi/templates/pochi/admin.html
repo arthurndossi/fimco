@@ -23,7 +23,7 @@
 
                 <!-- panel content -->
                 <div class="panel-body">
-                    <div id="bal-interest" class="fullwidth height-250"></div>
+                    <canvas id="balInterest" height='400' class="fullwidth"></canvas>
                 </div>
                 <!-- /panel content -->
             </div>
@@ -105,7 +105,6 @@
     </section>
 {% endblock %}
 {% block scripts %}
-    <script type="text/javascript" src="/static/pochi/plugins/highcharts.js"></script>
-    {% load chartit %}
-    {{ balanceChart|load_charts:"bal-interest" }}
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+    <script type="text/javascript" src="/static/pochi/js/admin.js"></script>
 {% endblock %}

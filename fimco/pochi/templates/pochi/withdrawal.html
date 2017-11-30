@@ -81,105 +81,109 @@
                 </div>
             </div>
             {% else %}
-            <div id="panel-ui-tan-l4" class="panel panel-default">
-                <div class="panel-heading">
-                    <span class="elipsis">
-                        <strong>Options</strong>
-                    </span>
-                </div>
-                <form class="payment" method="post" action="{% url 'withdraw' %}">
-                    {% csrf_token %}
-                    <div class="accordion panel-group" id="accordion">
-                        <div class="panel panel-default">
+                <div class="row">
+                    <div class="col-md-6 col-xs-12">
+                        <div id="panel-ui-tan-l4" class="panel panel-default">
                             <div class="panel-heading">
-                                <h4 class="panel-title">
-                                    <a data-toggle="collapse" data-parent="#accordion" href="#accordion1" class="">
-                                        <i class="fa fa-check"></i>
-                                        <strong>Withdraw Funds</strong>
-                                    </a>
-                                </h4>
+                                <span class="elipsis">
+                                    <strong>Options</strong>
+                                </span>
                             </div>
-                            <div id="accordion1" class="collapse in">
-                                <form method="post" action="{% url 'withdraw' %}">
-                                    {% csrf_token %}
-                                    <div class="panel-body">
-                                        <div class="fancy-form fancy-form-select">
-                                            <select class="form-control" name="ext_account" title="">
-                                                <option disabled>Select your account</option>
-                                                {% for account in external_accounts %}
-                                                    <option value="{{ account.nickname }}">{{ account.nickname }}</option>
-                                                {% endfor %}
-                                            </select>
-                                            <i class="fancy-arrow"></i>
+                            <form class="payment" method="post" action="{% url 'withdraw' %}">
+                                {% csrf_token %}
+                                <div class="accordion panel-group" id="accordion">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h4 class="panel-title">
+                                                <a data-toggle="collapse" data-parent="#accordion" href="#accordion1" class="">
+                                                    <i class="fa fa-check"></i>
+                                                    <strong>Withdraw Funds</strong>
+                                                </a>
+                                            </h4>
                                         </div>
-                                        <br />
-                                        <label>Enter Amount</label>
-                                        <input type="number" class="form-control" name="amount" placeholder="TZS" required>
-                                        <br />
-                                        <input type="hidden" name="type" value="WITHDRAW">
+                                        <div id="accordion1" class="collapse in">
+                                            <form method="post" action="{% url 'withdraw' %}">
+                                                {% csrf_token %}
+                                                <div class="panel-body">
+                                                    <div class="fancy-form fancy-form-select">
+                                                        <select class="form-control" name="ext_account" title="">
+                                                            <option disabled>Select your account</option>
+                                                            {% for account in external_accounts %}
+                                                                <option value="{{ account.nickname }}">{{ account.nickname }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                        <i class="fancy-arrow"></i>
+                                                    </div>
+                                                    <br />
+                                                    <label>Enter Amount</label>
+                                                    <input type="number" class="form-control" name="amount" placeholder="TZS" required>
+                                                    <br />
+                                                    <input type="hidden" name="type" value="WITHDRAW">
+                                                </div>
+                                                <div class="panel-footer transfer">
+                                                    <button class="btn btn-primary" type="submit">
+                                                        <i class="fa fa-check"></i> CONFIRM MONEY TRANSFER
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
                                     </div>
-                                    <div class="panel-footer transfer">
-                                        <button class="btn btn-primary" type="submit">
-                                            <i class="fa fa-check"></i> CONFIRM MONEY TRANSFER
-                                        </button>
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h4 class="panel-title">
+                                                <a data-toggle="collapse" data-parent="#accordion" href="#accordion2" class="collapsed">
+                                                    <i class="fa fa-check"></i>
+                                                    <strong>Add Another Account</strong>
+                                                </a>
+                                            </h4>
+                                        </div>
+                                        <div id="accordion2" class="collapse">
+                                            <div class="panel-body">
+                                                <form method="post" action="{% url 'withdraw' %}">
+                                                    {% csrf_token %}
+                                                    <div class="row">
+                                                        <div class="col-lg-4 col-md-6 col-sm-8">
+                                                            <label> Select your bank </label>
+                                                            <select class="form-control" name="institution" title="Select bank">
+                                                                <option disabled="disabled">None</option>
+                                                                <option value="CRDB">CRDB</option>
+                                                                <option value="NMB">NMB</option>
+                                                                <option value="AMANA BANK">AMANA BANK</option>
+                                                            </select>
+                                                            <input type="hidden" name="type" value="BANK">
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6 col-xs-8">
+                                                            <label>Account name
+                                                                <input type="text" class="form-control" name="name" >
+                                                            </label>
+                                                        </div>
+                                                        <div class="col-md-6 col-xs-8">
+                                                            <label>Account number
+                                                                <input type="text" class="form-control masked" name="account" data-format="999999999999999">
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6 col-xs-8">
+                                                            <label>Alias account name <small>(short name)</small>
+                                                                <input type="text" class="form-control" name="nickname" >
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12">
+                                                        <input type="submit" class="btn btn-primary" value="Add Account">
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
                                     </div>
-                                </form>
-                            </div>
-                        </div>
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h4 class="panel-title">
-                                    <a data-toggle="collapse" data-parent="#accordion" href="#accordion2" class="collapsed">
-                                        <i class="fa fa-check"></i>
-                                        <strong>Add Another Account</strong>
-                                    </a>
-                                </h4>
-                            </div>
-                            <div id="accordion2" class="collapse">
-                                <div class="panel-body">
-                                    <form method="post" action="{% url 'withdraw' %}">
-                                        {% csrf_token %}
-                                        <div class="row">
-                                            <div class="col-lg-4 col-md-6 col-sm-8">
-                                                <label> Select your bank </label>
-                                                <select class="form-control" name="institution" title="Select bank">
-                                                    <option disabled="disabled">None</option>
-                                                    <option value="CRDB">CRDB</option>
-                                                    <option value="NMB">NMB</option>
-                                                    <option value="AMANA BANK">AMANA BANK</option>
-                                                </select>
-                                                <input type="hidden" name="type" value="BANK">
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6 col-xs-8">
-                                                <label>Account name
-                                                    <input type="text" class="form-control" name="name" >
-                                                </label>
-                                            </div>
-                                            <div class="col-md-6 col-xs-8">
-                                                <label>Account number
-                                                    <input type="text" class="form-control masked" name="account" data-format="999999999999999">
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6 col-xs-8">
-                                                <label>Alias account name <small>(short name)</small>
-                                                    <input type="text" class="form-control" name="nickname" >
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="col-xs-12">
-                                            <input type="submit" class="btn btn-primary" value="Add Account">
-                                        </div>
-                                    </form>
                                 </div>
-                            </div>
+                            </form>
                         </div>
                     </div>
-                </form>
-            </div>
+                </div>
             {% endif %}
         </div>
     </section>

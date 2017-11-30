@@ -193,22 +193,18 @@
 								</span>
 							</a>
 							<ul class="dropdown-menu hold-on-click">
-								<li><!-- my inbox -->
+								<li>
 									<a href=""><i class="fa fa-envelope"></i> Notifications
 										<span class="pull-right label label-default">0</span>
 									</a>
 								</li>
-								<li><!-- settings -->
+								<li>
 									<a href="{% url 'profile_view' %}"><i class="fa fa-cogs"></i> View/Edit profile</a>
 								</li>
 
 								<li class="divider"></li>
 
-{#								<li>#}
-                                    <!-- lockscreen -->
-{#									<a href="{% url 'lock' %}"><i class="fa fa-lock"></i> Lock Screen</a>#}
-{#								</li>#}
-								<li><!-- logout -->
+								<li>
 									<a href="{% url 'logout' %}"><i class="fa fa-power-off"></i> Log Out</a>
 								</li>
 							</ul>
@@ -220,8 +216,6 @@
 			</header>
 			<!-- /HEADER -->
 
-{#            {% include 'pochi/modals.html' %}#}
-
 			<!-- MIDDLE -->
 			{% block content %}{% endblock %}
 			<!-- /MIDDLE -->
@@ -230,7 +224,6 @@
 		<!-- JAVASCRIPT FILES -->
 		<script type="text/javascript" src="/static/pochi/plugins/jquery/jquery-2.2.3.min.js"></script>
 		<script type="text/javascript" src="/static/pochi/js/app.js"></script>
-
         {% block scripts %}{% endblock %}
 	</body>
 </html>

@@ -2,41 +2,29 @@ import datetime
 
 from django.contrib.auth.decorators import login_required
 from django.db.models import Max, Min
-from django.http import JsonResponse
-from django.views import View
 
 from core.utils import render_with_global_data
 from .models import ExchangeRate, OvernightInterest, Tbill, Tbond, LiborRate
-
-
-def post(request, *args, **kwargs):
-    start = request.POST['from']
-    end = request.POST['to']
-    table = request.POST['table']
-
-    rows = table.objects.filter(date__range=[start, end])
-
-    return JsonResponse(rows)
-
-
-class MarketTable(View):
-    model_class = []
-    table_arr = []
-    template_name = 'fimcoplatform/exchange.html'
-
-    def get(self, request, *args, **kwargs):
-        if type(self.table_arr) is not list:
-            rows = self.table_arr
-        else:
-            rows = [(i, table) for i, table in enumerate(self.table_arr)]
-
-        return render_with_global_data(request, self.template_name, {'rows': rows})
 
 
 @login_required
 def market_views(request, page):
     return render_with_global_data(request, 'fimcoplatform/' + page + '.html', {})
 
+
+class ExchangeRateDto:
+    trend = None
+
+    def __init__(self, base_currency, counter_currency, change, current_rate, modified_on):
+        self.base_currency = base_currency
+        self.counter_currency = counter_currency
+        self.change = change
+        self.current_rate = current_rate
+        self.modified_on = modified_on
+
+    def add_history(self, trend):
+        self.trend = trend
+        
 
 @login_required
 def exchange_view(request, page):
@@ -77,35 +65,34 @@ def exchange_view(request, page):
                                                {'data': data, 'charts': charts})
         else:
             pass
-    table = ExchangeRate.objects.filter(modified_on='2017-11-23')
-    last_month = datetime.datetime.today() - datetime.timedelta(days=30)
-    data = ExchangeRate.objects.filter(modified_on__gte=last_month, counter_currency='GBP')
+    else:
+        _table = ExchangeRate.objects.all()
 
-    data_list = []
-    label_list = []
-    for row in data:
-        temp_label = row.modified_on
-        temp_data = row.current_rate
-        label_list.append(temp_label.strftime('%d/%m/%Y'))
-        data_list.append(str(temp_data))
+        table = []
+        for single_obj in _table:
+            currency = single_obj.counter_currency
 
-    for single_obj in table:
-        currency = single_obj.counter_currency
-        list_data = ExchangeRate.objects.filter(counter_currency=currency,
-                                                 modified_on__gte=datetime.datetime.now()-datetime.timedelta(days=15))\
-            .values('current_rate')
-        values_list = []
-        for json in list_data:
-            values_list.append(json['current_rate'])
-        numeric_array = [float(decimal_value) for decimal_value in values_list]
-        required_array = numeric_array[-2:]
-        trends = (", ".join(repr(e) for e in required_array))
-        table.annotate(day_high=Max('current_rate'), day_low=Min('current_rate'))
+            dto = ExchangeRateDto(
+                single_obj.base_currency,
+                single_obj.counter_currency,
+                single_obj.change,
+                single_obj.current_rate,
+                single_obj.modified_on
+            )
+            list_data = ExchangeRate.objects.filter(
+                counter_currency=currency, modified_on__gte=datetime.datetime.now()-datetime.timedelta(days=7))\
+                .values('current_rate')
+            values_list = []
+            for json in list_data:
+                values_list.append(json['current_rate'])
+            numeric_array = [float(decimal_value) for decimal_value in values_list]
+            required_array = numeric_array[-2:]
+            trends = (", ".join(repr(e) for e in required_array))
 
-    chart_array = {'labels': label_list, 'data': data_list}
+            dto.add_history(trends)
+            table.append(dto)
 
-    return render_with_global_data(request, 'fimcoplatform/exchange.html',
-                                   {'data': table, 'array': chart_array})
+        return render_with_global_data(request, 'fimcoplatform/exchange.html', {'data': table})
 
 
 @login_required
