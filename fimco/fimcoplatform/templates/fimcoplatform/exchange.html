@@ -29,13 +29,14 @@
                         </div>
                         <div class="col-md-2 col-xs-4 nopadding-left">
                             <select id="base" class="form-control select2">
-                                <option value="">TZS</option>
-{#                                {% for exchange in data %}#}
-{#                                    <option value="{{ exchange.counter_currency }}">#}
-{#                                        {{ exchange.counter_currency }}#}
-{#                                    </option>#}
-{#                                {% endfor %}#}
+                                {% for exchange in data %}
+                                    <option value="{{ exchange.counter_currency }}"
+                                        {% if exchange.counter_currency == 'TZS' %}selected{% endif %}>
+                                        {{ exchange.counter_currency }}
+                                    </option>
+                                {% endfor %}
                             </select>
+                            <div><p> 1 TZS = {{ exchange.current_rate }} USD</p></div>
                         </div>
                         <div class="col-md-1 col-xs-12 text-center padding-15">
                             <a id="exchange" class="btn btn-3d btn-primary"><i class="fa fa-exchange"></i></a>
@@ -52,6 +53,7 @@
                                     </option>
                                 {% endfor %}
                             </select>
+{#                            <div><p> 1 USD = {% inverse exchange.current_rate %} TZS</p></div>#}
                         </div>
                     </div>
                     <h4 class="uppercase margin-bottom-0">Currency <strong>Table</strong></h4>
@@ -116,47 +118,5 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.16/r-2.2.0/sl-1.2.3/datatables.min.js">
     </script>
-    <script type="text/javascript">
-        $(document).ready(function() {
-
-            $('input[name="exchangerange"]').daterangepicker();
-
-            $('#exchange_table').DataTable( {
-                dom: 'B<"clear">lfrtip',
-                buttons: [ 'copy', 'csv', 'excel' ]
-            } );
-
-            {% for exchange in data %}
-                var currency = "{{ exchange.counter_currency }}";
-                if (currency === 'GBP'){
-                    $("#counter_rate").val({{ exchange.current_rate }});
-                }
-            {% endfor %}
-
-            $( "#counter" ).change(function() {
-                var current_label = $.trim($("#counter").find("option:selected").text());
-                {% for exchange in data %}
-                    var currency = "{{ exchange.counter_currency }}";
-                    if (currency === current_label){
-                        $("#counter_rate").val({{ exchange.current_rate }});
-                    }
-                {% endfor %}
-            });
-
-            $( "#base_rate" ).on('input', function() {
-                var new_val = $( "#base_rate" ).val();
-                var current_label = $.trim($("#counter").find("option:selected").text());
-                {% for exchange in data %}
-                    var currency = "{{ exchange.counter_currency }}";
-                    if (currency === current_label){
-                        $("#counter_rate").val(new_val * {{ exchange.current_rate }});
-                    }
-                {% endfor %}
-            });
-
-            $('#exchange').click(function(e) {
-                e.preventDefault();
-            });
-        });
-    </script>
+    <script type="text/javascript" src="/static/platform/js/exchange.js"></script>
 {% endblock %}

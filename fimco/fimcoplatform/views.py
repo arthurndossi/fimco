@@ -4,7 +4,14 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Max, Min
 
 from core.utils import render_with_global_data
+from django.template.defaultfilters import register
+
 from .models import ExchangeRate, OvernightInterest, Tbill, Tbond, LiborRate
+
+
+@register.simple_tag()
+def inverse(rate):
+    return 1 / rate
 
 
 @login_required
