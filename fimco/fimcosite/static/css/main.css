@@ -77,8 +77,9 @@ ul.process-steps li a.active, ul.process-steps li a.active:focus, ul.process-ste
 }
 
 .WebProduct-Content {
-    min-width: 448px;
-    max-width: 448px;
+    /*min-width: 448px;*/
+    /*max-width: 448px;*/
+    min-width: 548px!important;
     font-size: 20px !important;
     font-weight: 100 !important;
     line-height: 1.3 !important;
@@ -90,9 +91,8 @@ ul.process-steps li a.active, ul.process-steps li a.active:focus, ul.process-ste
     font-size: 21px !important;
 }
 
-@media screen and (max-height: 1024px) {
-    #slide-230-layer-9 {
-        min-width: 500px;
-        max-width: 500px;
-    }
-}
+/*@media screen and (max-height: 1024px) {*/
+    /*#slide-230-layer-9 {*/
+        /*min-width: 548px!important;*/
+    /*}*/
+/*}*/
