@@ -8,6 +8,7 @@
 				<h4 class="modal-title" id="withdrawModalLabel">Withdraw money to my mobile money account</h4>
 			</div>
             <form action="{% url 'withdraw' %}" method="post">
+                {% csrf_token %}
                 <!-- Modal Body -->
                 <div class="modal-body">
                     <div class="row">
