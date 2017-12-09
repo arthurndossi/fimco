@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'pochi.apps.PochiConfig',
     'fimcoplatform.apps.FimcoPlatformConfig',
     'formtools',
+    'reportlab',
 ]
 
 
