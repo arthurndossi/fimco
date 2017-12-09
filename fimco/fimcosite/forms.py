@@ -26,7 +26,7 @@ CORPORATE_IDS = (
 
 class LoginForm(forms.Form):
     username = forms.CharField(
-        validators=[validate_slug],
+        # validators=[validate_slug],
         widget=forms.TextInput(attrs={
             'class': 'form-control',
             'placeholder': 'Enter phone number/email address',
@@ -68,7 +68,7 @@ class RegisterForm(forms.Form):
     client_id = forms.CharField(
         widget=forms.TextInput(attrs={
             'class': 'form-control masked',
-            'data-placeholder': '_',
+            'data-placeholder': 'X',
             'required': True
         })
     )

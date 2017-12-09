@@ -1,6 +1,6 @@
 $( document ).ready(function() {
-    $('.more-content').addClass('hide');
-    $('.read-more-show').removeClass('hide');
+    // $('.more-content').addClass('hide');
+    // $('.read-more-show').removeClass('hide');
 
     // Set up the toggle effect:
     $('.read-more-show').on('click', function(e) {
