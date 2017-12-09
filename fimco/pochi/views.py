@@ -301,11 +301,12 @@ def pochi2pochi(request, name=None):
             except Account.DoesNotExist:
                 dest_profile_id = None
 
-            try:
-                user_obj = User.objects.select_related('profile').filter(profile_id=dest_profile_id)
-                user_name = user_obj.get_full_name()
-            except Profile.DoesNotExist:
-                user_name = None
+            if dest_profile_id:
+                try:
+                    user_obj = User.objects.select_related('profile').filter(profile_id=dest_profile_id)
+                    user_name = user_obj.get_full_name()
+                except Profile.DoesNotExist:
+                    user_name = None
 
         amount = request.POST['amount']
         amount = float(amount)
@@ -324,7 +325,7 @@ def pochi2pochi(request, name=None):
                 'allow_overdraft': ov,
                 'open_bal': bal
             }
-        elif amount > bal:
+        elif amount > bal and user_name is not None:
             messages.error(
                 request,
                 'You do not have enough balance to make to transfer TZS'+str(amount)+' to '+user_name+'.'
