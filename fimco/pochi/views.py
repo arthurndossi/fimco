@@ -333,7 +333,7 @@ def pochi2pochi(request, name=None):
         elif user_name is None:
             messages.error(
                 request,
-                'This user is not registered with a pochi account!'
+                'This user is not registered with a POCHI account!'
             )
     if name:
         context = {
