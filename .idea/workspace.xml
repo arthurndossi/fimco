@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="2bb6a40e-3dd1-4683-a1ae-6832ed7492de" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fimco/core/settings.py" afterPath="$PROJECT_DIR$/fimco/core/settings.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fimco/fimcosite/static/css/main.css" afterPath="$PROJECT_DIR$/fimco/fimcosite/static/css/main.css" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -69,11 +69,36 @@
       <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/fimco/pochi/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="893" column="73" lean-forward="false" selection-start-line="893" selection-start-column="73" selection-end-line="893" selection-end-column="73" />
+            <state relative-caret-position="163">
+              <caret line="892" column="70" lean-forward="true" selection-start-line="892" selection-start-column="70" selection-end-line="892" selection-end-column="70" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/fimco/fimcosite/templates/index.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="82">
+              <caret line="331" column="45" lean-forward="false" selection-start-line="331" selection-start-column="28" selection-end-line="331" selection-end-column="45" />
+              <folding>
+                <marker date="1512620179939" expanded="false" signature="6069:6120" ph="..." />
+                <marker date="1512620179939" expanded="false" signature="11734:11786" ph="..." />
+                <marker date="1512620179939" expanded="false" signature="17067:17119" ph="..." />
+                <marker date="1512620179939" expanded="false" signature="22476:22528" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="main.css" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/fimco/fimcosite/static/css/main.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="296">
+              <caret line="94" column="25" lean-forward="true" selection-start-line="94" selection-start-column="25" selection-end-line="94" selection-end-column="25" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -98,11 +123,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="settings.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="settings.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/fimco/core/settings.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="332">
-              <caret line="43" column="16" lean-forward="false" selection-start-line="43" selection-start-column="16" selection-end-line="43" selection-end-column="16" />
+            <state relative-caret-position="179">
+              <caret line="34" column="26" lean-forward="true" selection-start-line="34" selection-start-column="26" selection-end-line="34" selection-end-column="26" />
               <folding />
             </state>
           </provider>
@@ -195,7 +220,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/fimco/pochi/templates/pochi/create_group.html" />
         <option value="$PROJECT_DIR$/fimco/fimcosite/templates/corporate.html" />
         <option value="$PROJECT_DIR$/fimco/fimcoplatform/admin.py" />
         <option value="$PROJECT_DIR$/fimco/fimcosite/admin.py" />
@@ -246,6 +270,7 @@
         <option value="$PROJECT_DIR$/fimco/pochi/templates/pochi/withdrawal.html" />
         <option value="$PROJECT_DIR$/fimco/pochi/views.py" />
         <option value="$PROJECT_DIR$/fimco/core/settings.py" />
+        <option value="$PROJECT_DIR$/fimco/fimcosite/static/css/main.css" />
       </list>
     </option>
   </component>
@@ -321,7 +346,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="pochi" />
+              <option name="myItemId" value="fimcosite" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -339,17 +364,13 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="pochi" />
+              <option name="myItemId" value="fimcosite" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="templates" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="pochi" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -365,7 +386,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="pochi" />
+              <option name="myItemId" value="fimcosite" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -387,171 +408,11 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="pochi" />
+              <option name="myItemId" value="fimcosite" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="static" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="pochi" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="FIMCO" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="FIMCO" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="fimco" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="pochi" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="static" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="pochi" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="js" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="FIMCO" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="FIMCO" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="fimco" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="pochi" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="static" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="pochi" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="css" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="FIMCO" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="FIMCO" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="fimco" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="fimcoplatform" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="FIMCO" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="FIMCO" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="fimco" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="fimcoplatform" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="templates" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="fimcoplatform" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="FIMCO" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="FIMCO" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="fimco" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="fimcoplatform" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="static" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="platform" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="FIMCO" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="FIMCO" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="fimco" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="fimcoplatform" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="static" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="platform" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -854,13 +715,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1500455200738</updated>
-    </task>
-    <task id="LOCAL-00020" summary="added static root to settings">
-      <created>1506828061040</created>
-      <option name="number" value="00020" />
-      <option name="presentableId" value="LOCAL-00020" />
-      <option name="project" value="LOCAL" />
-      <updated>1506828061040</updated>
     </task>
     <task id="LOCAL-00021" summary="changed allowed hosts in settings">
       <created>1506828471239</created>
@@ -1198,7 +1052,14 @@
       <option name="project" value="LOCAL" />
       <updated>1512804668824</updated>
     </task>
-    <option name="localTasksCounter" value="69" />
+    <task id="LOCAL-00069" summary="added reportlab dependency">
+      <created>1512804930233</created>
+      <option name="number" value="00069" />
+      <option name="presentableId" value="LOCAL-00069" />
+      <option name="project" value="LOCAL" />
+      <updated>1512804930234</updated>
+    </task>
+    <option name="localTasksCounter" value="70" />
     <servers />
   </component>
   <component name="TodoView">
@@ -1289,7 +1150,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="changed market to fimcoplatform" />
     <MESSAGE value="removed backend" />
     <MESSAGE value="changes" />
     <MESSAGE value="fimcosite changes" />
@@ -1314,7 +1174,8 @@
     <MESSAGE value="changed debug to true in settings" />
     <MESSAGE value="changed statement template in pochi" />
     <MESSAGE value="made changes to pochi" />
-    <option name="LAST_COMMIT_MESSAGE" value="made changes to pochi" />
+    <MESSAGE value="added reportlab dependency" />
+    <option name="LAST_COMMIT_MESSAGE" value="added reportlab dependency" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1334,29 +1195,6 @@
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/fimco/fimcosite/templates/base.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="352">
-          <caret line="128" column="70" lean-forward="true" selection-start-line="128" selection-start-column="70" selection-end-line="128" selection-end-column="70" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fimco/fimcosite/static/css/about.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fimco/fimcosite/static/js/about.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="22" lean-forward="false" selection-start-line="5" selection-start-column="8" selection-end-line="5" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/fimco/fimcosite/templates/contact.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="217">
@@ -1549,19 +1387,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fimco/fimcosite/templates/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4889">
-          <caret line="607" column="66" lean-forward="true" selection-start-line="607" selection-start-column="66" selection-end-line="607" selection-end-column="66" />
-          <folding>
-            <marker date="1512620179939" expanded="false" signature="6069:6120" ph="..." />
-            <marker date="1512620179939" expanded="false" signature="11734:11786" ph="..." />
-            <marker date="1512620179939" expanded="false" signature="17067:17119" ph="..." />
-            <marker date="1512620179939" expanded="false" signature="22476:22528" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/fimco/fimcosite/urls.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="187">
@@ -1750,16 +1575,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fimco/pochi/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="893" column="73" lean-forward="false" selection-start-line="893" selection-start-column="73" selection-end-line="893" selection-end-column="73" />
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/fimco/pochi/templates/pochi/withdrawal.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="251">
@@ -1770,8 +1585,55 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/fimco/core/settings.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="332">
-          <caret line="43" column="16" lean-forward="false" selection-start-line="43" selection-start-column="16" selection-end-line="43" selection-end-column="16" />
+        <state relative-caret-position="179">
+          <caret line="34" column="26" lean-forward="true" selection-start-line="34" selection-start-column="26" selection-end-line="34" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fimco/pochi/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="163">
+          <caret line="892" column="70" lean-forward="true" selection-start-line="892" selection-start-column="70" selection-end-line="892" selection-end-column="70" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fimco/fimcosite/static/css/layout.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-118513">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fimco/fimcosite/templates/base.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-313">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fimco/fimcosite/templates/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="82">
+          <caret line="331" column="45" lean-forward="false" selection-start-line="331" selection-start-column="28" selection-end-line="331" selection-end-column="45" />
+          <folding>
+            <marker date="1512620179939" expanded="false" signature="6069:6120" ph="..." />
+            <marker date="1512620179939" expanded="false" signature="11734:11786" ph="..." />
+            <marker date="1512620179939" expanded="false" signature="17067:17119" ph="..." />
+            <marker date="1512620179939" expanded="false" signature="22476:22528" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fimco/fimcosite/static/css/main.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="296">
+          <caret line="94" column="25" lean-forward="true" selection-start-line="94" selection-start-column="25" selection-end-line="94" selection-end-column="25" />
           <folding />
         </state>
       </provider>
