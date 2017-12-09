@@ -8,23 +8,25 @@
                         {% csrf_token %}
                         <div class="panel panel-default">
                             <div class="panel-heading panel-heading-transparent">
-                                <strong>POCHI TO POCHI Funds Transfer</strong>
+                                <strong>POCHI TO POCHI</strong>
                             </div>
                             <div class="panel-body">
+                                <label>Choose a money transfer method</label>
                                 <div class="fancy-form fancy-form-select">
                                     <select id="account_choice" class="form-control" title="">
                                         <option disabled="disabled">Select destination choice</option>
-                                        <option value="mobile">Phone number</option>
-                                        <option value="account">Account number</option>
+                                        <option value="mobile">Mobile number</option>
+                                        <option value="account">POCHI Account</option>
                                     </select>
+                                    <i class="fancy-arrow"></i>
                                 </div>
                                 <div id="mobile-section">
-                                    <label>Enter destination phone number</label>
-                                    <input type="tel" class="form-control" name="dest_mobile" placeholder="Mobile number">
+                                    <label>Enter destination mobile number</label>
+                                    <input type="tel" class="form-control masked" name="dest_mobile" data-format="0999999999" data-placeholder="X" placeholder="Mobile number">
                                 </div>
                                 <div id="account-section">
-                                    <label>Enter destination account</label>
-                                    <input type="text" class="form-control" name="dest_account" placeholder="Account">
+                                    <label>Enter POCHI destination account</label>
+                                    <input type="text" class="form-control masked" name="dest_account" data-format="**********" data-placeholder="_" placeholder="Account">
                                 </div>
                                 <div id="amount-section">
                                     <label>Enter Amount</label>
@@ -32,7 +34,7 @@
                                 </div>
                             </div>
                             <div class="panel-footer transfer">
-                                <button class="btn btn-primary" type="submit"><i class="fa fa-check"></i> CONFIRM MONEY TRANSFER</button>
+                                <button class="btn btn-primary" type="submit"><i class="fa fa-check"></i> SEND MONEY</button>
                             </div>
                         </div>
                     </form>
@@ -57,7 +59,7 @@
                                     <span class="sr-only">Close</span>
                                 </button>
                                 <strong>{{ message }}</strong>
-                                <input type="submit" class="btn btn-primary btn-sm margin-top-10" value="Proceed checkout">
+                                <input type="submit" class="btn btn-primary btn-sm margin-top-10" value="Confirm money transfer">
                                 <a href="" class="btn btn-default btn-sm margin-top-10">Cancel</a>
                                 <input type="hidden" name="account_no" value="{{ account.account }}">
                                 <input type="hidden" name="overdraft" value="{{ extra.allow_overdraft }}">

@@ -9,46 +9,49 @@ $(document).ready(function() {
         buttons: [ 'copy', 'csv', 'excel' ]
     } );
 
-    {% for exchange in data %}
-        var currency = "{{ exchange.counter_currency }}";
-        if (currency === 'GBP'){
-            $("#counter_rate").val({{ exchange.current_rate }});
-        }
-    {% endfor %}
+    // {% for exchange in data %}
+    //     var currency = "{{ exchange.counter_currency }}";
+    //     if (currency === 'GBP'){
+    //         $("#counter_rate").val({{ exchange.current_rate }});
+    //     }
+    // {% endfor %}
 
     $( "#counter" ).change(function() {
-        var current_label = $.trim($("#counter").find("option:selected").text());
-        {% for exchange in data %}
-            var currency = "{{ exchange.counter_currency }}";
-            if (currency === current_label){
-                $("#counter_rate").val({{ exchange.current_rate }});
-            }
-        {% endfor %}
+        // var current_label = $.trim($("#counter").find("option:selected").text());
+        // {% for exchange in data %}
+        //     var currency = "{{ exchange.counter_currency }}";
+        //     if (currency === current_label){
+        //         $("#counter_rate").val({{ exchange.current_rate }})
+        //     }
+        // {% endfor %}
     });
 
     $( "#base_rate" ).on('input', function() {
-        var new_val = $( "#base_rate" ).val();
-        var current_label = $.trim($("#counter").find("option:selected").text());
-        {% for exchange in data %}
-            var currency = "{{ exchange.counter_currency }}";
-            if (currency === current_label){
-                $("#counter_rate").val(new_val * {{ exchange.current_rate }});
-            }
-        {% endfor %}
+        // var new_val = $( "#base_rate" ).val();
+        // var current_label = $.trim($("#counter").find("option:selected").text());
+        // {% for exchange in data %}
+        //     var currency = "{{ exchange.counter_currency }}";
+        //     if (currency === current_label){
+        //         $("#counter_rate").val(new_val * {{ exchange.current_rate }});
+        //     }
+        // {% endfor %}
     });
 
     $('#exchange').click(function(e) {
         e.preventDefault();
     });
 
-    var base_currency, counter_currency;
+    // var base_currency, counter_currency;
+    var baseInput = $('#base_input');
+    var counterInput = $('#counter_input');
     $('#base_select, #counter_select').change(function(){
-        var selected_counter_option = $("#counter_select").find("option:selected").text();
-        var selected_base_option = $("#base_select").find("option:selected").text();
-        var default_rate = {{ exchange.current_rate }};
+        // var selected_counter_option = $("#counter_select").find("option:selected").text();
+        // var selected_base_option = $("#base_select").find("option:selected").text();
+        // var default_rate = {{ exchange.current_rate }};
+        var default_rate = '';
         var default_inverse_rate = 1/default_rate;
-        var base_input = $('#base_input').val();
-        var counter_input = $('#counter_input').val();
+        var base_input = baseInput.val();
+        var counter_input = counterInput.val();
         var conversion_value;
 
         if (base_input){

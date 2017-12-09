@@ -16,13 +16,17 @@ $(":checkbox").change(function() {
 choice.on('change', function() {
     var id_choice = choice.find(":selected").val();
     if (id_choice === 'national'){
-        id.attr('pattern', '^[A-Z0-9]{8}(-)([A-Z0-9]{5}(-)){2}[A-Z0-9]{2}$')
+        id.attr('pattern', '^[A-Z0-9]{8}(-)([A-Z0-9]{5}(-)){2}[A-Z0-9]{2}$');
+        id.attr('data-format', '********-*****-*****-**')
     }else if (id_choice === 'voting'){
-        id.attr('pattern', '^(T-)([a-zA-Z0-9]{4}(-)){2}([a-zA-Z0-9]){3}(-)[a-zA-Z0-9]$')
+        id.attr('pattern', '^(T-)([a-zA-Z0-9]{4}(-)){2}([a-zA-Z0-9]){3}(-)[a-zA-Z0-9]$');
+        id.attr('data-format', 'T-9999-9999-999-9')
     }else if (id_choice === 'passport'){
-        id.attr('pattern', '^[A-Z]{2}[0-9]{6}$')
+        id.attr('pattern', '^[A-Z]{2}[0-9]{6}$');
+        id.attr('data-format', 'aa999999')
     }else if (id_choice === 'driving'){
-        id.attr('pattern', '^\\d{10}$')
+        id.attr('pattern', '^\\d{10}$');
+        id.attr('data-format', '9999999999')
     }
 });
 
@@ -47,6 +51,15 @@ function readURL(input, id) {
         reader.readAsDataURL(input.files[0]);
     }
 }
+
+var uploadField = $("#file");
+
+uploadField.onchange = function() {
+    if(this.files[0].size > 5242880){
+       alert("File is too big!");
+       this.value = "";
+    }
+};
 
 var password = $("#id_password"),
 		msg = $("#pass-message"),

@@ -71,7 +71,7 @@
                                     <th>2-Day Trend</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody>l
                                 {% for exchange in data %}
                                 <tr>
                                     <td>
@@ -114,9 +114,5 @@
 {% endblock %}
 
 {% block more_scripts %}
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.16/r-2.2.0/sl-1.2.3/datatables.min.js">
-    </script>
     <script type="text/javascript" src="/static/platform/js/exchange.js"></script>
 {% endblock %}

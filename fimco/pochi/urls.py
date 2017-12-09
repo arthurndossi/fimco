@@ -13,6 +13,7 @@ urlpatterns = [
     url(r'^how/to/deposit$', views.how_to_deposit, name='deposit'),
     url(r'^deposit$', views.deposit),
     url(r'^p2p/process$', views.process_p2p, name='process_p2p'),
+    url(r'^g2p/process$', views.process_g2p, name='process_g2p'),
     url(r'^withdraw$', views.withdraw, name='withdraw'),
     url(r'^add$', views.withdraw, name='add'),
     url(r'^create/group$', views.new_group, name='group'),
@@ -22,8 +23,11 @@ urlpatterns = [
     url(r'^(?P<name>[a-zA-Z]+)/statement$', views.group_statement, name='group_statement'),
     url(r'^(?P<name>[a-zA-Z]+)/(?P<action>[a-z]+)/member$', views.add_remove_member, name='group_member'),
     url(r'^(?P<name>[a-zA-Z]+)/settings$', views.group_settings, name='group_settings'),
-    url(r'^(?P<name>[a-zA-Z]+)/activity$', views.withdraw, name='group_activity'),
+    url(r'^(?P<name>[a-zA-Z]+)/activity$', views.pochi2pochi, name='group_activity'),
+    url(r'^(?P<name>[a-zA-Z]+)/exit$', views.exit_group, name='exit_group'),
     url(r'^edit/group$', views.edit_group, name='grp_edt'),
     url(r'^edit/user$', views.edit_profile, name='usr_edt'),
-    url(r'^lock$', views.lock, name='lock')
+    url(r'^lock$', views.lock, name='lock'),
+    url(r'^delete/account$', views.delete_account, name='delete_account'),
+    url(r'^create/form$', views.create_form, name='create_form')
 ]

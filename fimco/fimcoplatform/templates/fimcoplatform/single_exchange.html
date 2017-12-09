@@ -1,4 +1,7 @@
 {% extends "fimcoplatform/base.html" %}
+{% block links %}
+    <link href="/static/platform/css/exchange.css" rel="stylesheet" type="text/css" />
+{% endblock %}
 {% block main %}
     <div class="row">
         <div class="col-md-10">
@@ -58,9 +61,46 @@
                     </div>
                 </div>
                 <div class="panel-footer">
-                    {% if charts %}
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="dropdown">
+                                <button onclick="show_dropdown()" class="btn btn-primary">1 day</button>
+                                <div id="myDropdown" class="dropdown-content">
+                                    <a href="{% url 'exchange' 'single' %}?time=5min">5 min</a>
+                                    <a href="{% url 'exchange' 'single' %}?time=15min" >15 min</a>
+                                    <a href="{% url 'exchange' 'single' %}?time=30min" >30 min</a>
+                                    <a href="{% url 'exchange' 'single' %}?time=1hr" >1 hour</a>
+                                    <a href="{% url 'exchange' 'single' %}?time=6hr" >6 hours</a>
+                                    <a href="{% url 'exchange' 'single' %}?time=12hr" >12 hours</a>
+                                </div>
+                            </div>
+                            <div class="dropdown">
+                                <button onclick="updateChart('7days')" class="btn btn-primary">7 days</button>
+                            </div>
+                            <div class="dropdown">
+                                <button onclick="updateChart('1months')" class="btn btn-primary">1 Mo</button>
+                            </div>
+                            <div class="dropdown">
+                                <button onclick="updateChart('3months')" class="btn btn-primary">3 Mos</button>
+                            </div>
+                            <div class="dropdown">
+                                <button onclick="updateChart('6months')" class="btn btn-primary">6 Mos</button>
+                            </div>
+                            <div class="dropdown">
+                                <button onclick="updateChart('1year')" class="btn btn-primary">1 Yr</button>
+                            </div>
+                            <div class="dropdown">
+                                <button onclick="updateChart('3year')" class="btn btn-primary">3 Yrs</button>
+                            </div>
+                            <div class="dropdown">
+                                <button onclick="updateChart('5year')" class="btn btn-primary">5 Yrs</button>
+                            </div>
+                            <div class="dropdown">
+                                <button onclick="updateChart('max')" class="btn btn-primary">Max</button>
+                            </div>
+                        </div>
+                    </div>
                     <canvas id="exchangeChart"></canvas>
-                    {% endif %}
                 </div>
             </div>
         </div>
@@ -97,10 +137,6 @@
 {% endblock %}
 
 {% block more_scripts %}
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.16/r-2.2.0/sl-1.2.3/datatables.min.js">
-    </script>
     <script type="text/javascript">
         $(document).ready(function() {
 
@@ -110,28 +146,37 @@
                 dom: 'B<"clear">lfrtip',
                 buttons: [ 'copy', 'csv', 'excel' ]
             } );
-        });
-        {% if charts %}
-        var ctx = document.getElementById('exchangeChart').getContext('2d');
-            var label = $.trim($("#counter").find("option:selected").text());
-            new Chart(ctx, {
-                // The type of chart we want to create
-                type: 'line',
-                // The data for our dataset
-                data: {
-                    labels: {{array.labels|safe}},
-                    datasets: [{
-                        label: 'USD-'+label+' rates',
-{#                        backgroundColor: 'rgb(0,42,84)',#}
-                        borderColor: 'rgb(0,42,84)',
-                        data: {{array.data|safe}}
-                    }]
-                },
 
-                // Configuration options go here
-                options: {}
-            });
-        {% endif %}
+{#            var xchangeValue = $('#')#}
+        });
+
+        var ctx = document.getElementById('exchangeChart').getContext('2d');
+        var label = $.trim($("#counter").find("option:selected").text());
+        var exchange_chart = new Chart(ctx, {
+            // The type of chart we want to create
+            type: 'line',
+            // The data for our dataset
+            data: {
+                {% if array %}
+                labels: {{array.labels|safe}},
+                {% else %}
+                labels: [],
+                {% endif %}
+                datasets: [{
+                    label: 'USD-'+label+' rates',
+{#                        backgroundColor: 'rgb(0,42,84)',#}
+                    borderColor: 'rgb(0,42,84)',
+                    {% if array %}
+                    data: {{array.data|safe}},
+                    {% else %}
+                    data: [],
+                    {% endif %}
+                }]
+            },
+
+            // Configuration options go here
+            options: {}
+        });
 
         $('#notificationForm').hide();
 
@@ -142,5 +187,40 @@
                 $('#notificationForm').hide()
             }
         });
+
+        function addData(chart, label, data) {
+            chart.data.labels = label;
+            chart.data.datasets.forEach(function(dataset) {
+                dataset.data = data;
+            });
+            chart.update();
+        }
+
+        function removeData(chart) {
+            chart.data.labels.pop();
+            chart.data.datasets.forEach(function(dataset){
+                dataset.data.pop();
+            });
+            chart.update();
+        }
+
+        function updateChart(duration) {
+            var url = "{% url 'exchange' 'single' %}?time="+duration;
+            $.ajax({
+                url: url,
+                dataType: 'json',
+                success: function (response) {
+                  if (response.success) {
+                    console.log(response.array);
+                    removeData(exchange_chart);
+                    addData(exchange_chart, response.array.labels, response.array.data);
+                  }
+                }
+            });
+        }
+
+        function show_dropdown() {
+            document.getElementById("myDropdown").classList.toggle("show");
+        }
     </script>
 {% endblock %}

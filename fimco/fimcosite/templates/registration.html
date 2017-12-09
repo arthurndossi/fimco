@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+    {% extends 'base.html' %}
 {% block links %}
     <link rel="stylesheet" type="text/css" href="/static/css/reg.css" />
 {% endblock %}
@@ -6,6 +6,34 @@
     <!-- REGISTER -->
     <section>
         <div class="container">
+            <div class="row">
+            {% if messages %}
+                {% for message in messages %}
+                    {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                        <div class="alert alert-success mb-30">
+                            <button type="button" class="close" data-dismiss="alert">
+                                <span aria-hidden="true">×</span>
+                                <span class="sr-only">Close</span>
+                            </button>
+                            <h4>Oops! <strong>Try Again!</strong></h4>
+                            <p>{{ message }}</p>
+                        </div>
+                    {% else %}
+                        <div class="col-xs-12">
+                            <div class="alert alert-success mb-30">
+                                <button type="button" class="close" data-dismiss="alert">
+                                    <span aria-hidden="true">×</span>
+                                    <span class="sr-only">Close</span>
+                                </button>
+                                <h4>Congratulations! <strong>Registration successful!</strong></h4>
+                                <p>{{ message }}</p>
+                                <a href="{% url 'index' %}" class="btn btn-info btn-sm mt-10">OK</a>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            </div>
             <div class="row">
                 <div class="col-md-6 col-sm-6 offset-md-3 offset-sm-3">
                     {% if rForm.non_field_errors %}
@@ -62,7 +90,6 @@
                                     <div class="col-md-6 col-sm-6">
                                         <label for="register:dob">Date of Birth <small>(required)</small></label>
                                         <label class="input mb-10">
-{#                                            <i class="ico-append fa fa-calendar"></i>#}
                                             {{ rForm.dob }}
                                             <b class="tooltip tooltip-bottom-right">Date of Birth</b>
                                         </label>
@@ -177,7 +204,7 @@
                                                 <img src="/static/img/id-card.png" class="picture-src" id="wizardFilePreview" />
                                                 {{ rForm.scanned_id }}
                                             </div>
-                                            <h6>Select your ID</h6>
+                                            <h6>Select your ID (max. size 5MB)</h6>
                                         </div>
                                         {% if rForm.scanned_id.errors %}
                                             {% for error in rForm.scanned_id.errors %}

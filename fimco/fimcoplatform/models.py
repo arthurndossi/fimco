@@ -116,3 +116,4 @@ class LiborRate(models.Model):
     m3_rate = models.DecimalField(max_digits=6, decimal_places=2)
     m6_rate = models.DecimalField(max_digits=6, decimal_places=2)
     m12_rate = models.DecimalField(max_digits=6, decimal_places=2)
+

@@ -67,6 +67,8 @@ class RegisterForm(forms.Form):
     gender = forms.ChoiceField(choices=GENDER)
     client_id = forms.CharField(
         widget=forms.TextInput(attrs={
+            'class': 'form-control masked',
+            'data-placeholder': '_',
             'required': True
         })
     )
@@ -77,7 +79,7 @@ class RegisterForm(forms.Form):
     email = forms.EmailField(
         validators=[EmailValidator],
         widget=forms.EmailInput(attrs={
-            'required': False
+            'required': True
         })
     )
     phone = forms.CharField(
@@ -110,10 +112,21 @@ class RegisterForm(forms.Form):
         cleaned_data = self.cleaned_data
         if 'phone' in cleaned_data and User.objects.filter(username=cleaned_data['phone']).exists():
             raise forms.ValidationError("This phone number is already associated with another user!")
+        if 'email' in cleaned_data and User.objects.filter(email=cleaned_data['email']).exists():
+            raise forms.ValidationError("This email is already associated with another user!")
         if 'password' in cleaned_data and 'verify' in cleaned_data and cleaned_data['password'] != cleaned_data['verify']:
             raise forms.ValidationError("Passwords must be identical.")
 
         return cleaned_data
+
+    def clean_image(self):
+        image = self.cleaned_data['scanned_id']
+        if image:
+            if image.file.size > 5 * 1024 * 1024:
+                raise ValidationError("Image file too large ( > 5mb )")
+            return image
+        else:
+            raise ValidationError("Couldn't read uploaded image")
 
 
 class CorporateForm1(forms.Form):

@@ -1,9 +1,9 @@
 import datetime
 
+from core.utils import render_with_global_data
 from django.contrib.auth.decorators import login_required
 from django.db.models import Max, Min
-
-from core.utils import render_with_global_data
+from django.http import JsonResponse
 from django.template.defaultfilters import register
 
 from .models import ExchangeRate, OvernightInterest, Tbill, Tbond, LiborRate
@@ -31,23 +31,77 @@ class ExchangeRateDto:
 
     def add_history(self, trend):
         self.trend = trend
-        
+
+
+class OvernightRateDto:
+
+    def __init__(self, current_date, previous_date, current_rate, previous_rate):
+        self.current_date = current_date
+        self.previous_date = previous_date
+        self.change = round((current_rate - previous_rate)/current_rate * 100, 3)
+        # self.last_high = last_high
+        # self.last_low = last_low
+
+
+def get_chart_info(request, time, value):
+    if 'min' in time:
+        duration = int(time[0:-3])
+        data = ExchangeRate.objects.filter(
+            modified_on__gte=datetime.datetime.now()-datetime.timedelta(minutes=duration), counter_currency=value)
+    elif 'hr' in time:
+        duration = int(time[0:-2])
+        data = ExchangeRate.objects.filter(modified_on__gte=datetime.datetime.now()-datetime.timedelta(hours=duration),
+                                           counter_currency=value)
+    elif 'day' in time:
+        duration = int(time[0:-4])
+        data = ExchangeRate.objects.filter(modified_on__gte=datetime.datetime.now()-datetime.timedelta(days=duration),
+                                           counter_currency=value)
+    elif 'month' in time:
+        duration = int(time[0:-6])*4
+        data = ExchangeRate.objects.filter(modified_on__gte=datetime.datetime.now()-datetime.timedelta(weeks=duration),
+                                           counter_currency=value)
+    elif 'year' in time:
+        duration = int(time[0:-5])*52
+        data = ExchangeRate.objects.filter(modified_on__gte=datetime.datetime.now()-datetime.timedelta(weeks=duration),
+                                           counter_currency=value)
+    else:
+        data = ExchangeRate.objects.filter(counter_currency=value)
+
+    data_list = []
+    label_list = []
+    for row in data:
+        temp_label = row.modified_on
+        temp_data = row.current_rate
+        label_list.append(temp_label.strftime('%d/%m/%Y'))
+        data_list.append(str(temp_data))
+
+    chart_array = {'labels': label_list, 'data': data_list}
+    # chart_data = serializers.serialize('json', data)
+
+    context = {
+        'success': True,
+        'array': chart_array
+    }
+
+    return JsonResponse(context)
+
 
 @login_required
 def exchange_view(request, page):
-    charts = False
     if page == 'single':
         if request.GET:
-            if request.GET.get('exchangerange'):
+            if request.GET.get('time'):
+                time = request.GET['time']
+                currency_val = request.session['currency']
+                return get_chart_info(request, time, currency_val)
+
+            elif request.GET.get('exchangerange'):
                 # TODO implement notification
                 value = request.GET['currency']
                 date_range = request.GET.get('exchangerange')
                 start, end = date_range.split(' - ')
                 start = datetime.datetime.strptime(start, '%m/%d/%Y').strftime('%Y-%m-%d')
                 end = datetime.datetime.strptime(end, '%m/%d/%Y').strftime('%Y-%m-%d')
-
-                if start != end:
-                    charts = True
 
                 data = ExchangeRate.objects.filter(modified_on__range=[start, end], counter_currency=value) \
                     .annotate(day_high=Max('current_rate'), day_low=Min('current_rate'))
@@ -62,14 +116,14 @@ def exchange_view(request, page):
                 chart_array = {'labels': label_list, 'data': data_list}
 
                 return render_with_global_data(request, 'fimcoplatform/single_exchange.html',
-                                               {'data': data, 'charts': charts, 'array': chart_array})
+                                               {'data': data, 'array': chart_array})
             else:
                 value = request.GET['currency']
-                data = ExchangeRate.objects.filter(created_on__date='2017-11-19', counter_currency=value) \
+                request.session['currency'] = value
+                data = ExchangeRate.objects.filter(modified_on__date=datetime.datetime.today(), counter_currency=value)\
                     .annotate(day_high=Max('current_rate'), day_low=Min('current_rate'))
 
-                return render_with_global_data(request, 'fimcoplatform/single_exchange.html',
-                                               {'data': data, 'charts': charts})
+                return render_with_global_data(request, 'fimcoplatform/single_exchange.html', {'data': data})
         else:
             pass
     else:
@@ -104,20 +158,117 @@ def exchange_view(request, page):
 
 @login_required
 def interests_view(request):
-    if request.GET:
+    if request.GET['type']:
         interest_type = request.GET['type']
+
         if interest_type == 'overnight':
-            on = OvernightInterest.objects.filter(created_on__date=datetime.date.today())
-            return render_with_global_data(request, 'fimcoplatform/interests.html', {'data': on})
-        elif interest_type == 'bill':
-            tb = Tbill.objects.filter(created_on__date=datetime.date.today())
-            return render_with_global_data(request, 'fimcoplatform/interests.html', {'data': tb})
-        elif interest_type == 'bond':
-            td = Tbond.objects.filter(created_on__date=datetime.date.today())
-            return render_with_global_data(request, 'fimcoplatform/interests.html', {'data': td})
+            ovi = OvernightInterest.objects.all()
+            ovi_table = []
+            for single_obj in ovi:
+                ovi_dto = OvernightRateDto(
+                    single_obj.record_datetime,
+                    single_obj.prev_rate_timestamp,
+                    single_obj.weighted_avg_rate,
+                    single_obj.prev_rate,
+                )
+                ovi_table.append(ovi_dto)
+            context = {
+                'type': interest_type,
+                'data': ovi_table
+            }
+
+            return render_with_global_data(request, 'fimcoplatform/interests.html', context)
+
+        elif interest_type == '1mo-bill':
+            one_month_t_bill = Tbill.objects.filter(type='1month').values('record_datetime', 'weighted_avg_price_success')
+            context = {
+                'type': '1-month Treasury bill rate',
+                'data': one_month_t_bill
+            }
+
+            return render_with_global_data(request, 'fimcoplatform/interests.html', context)
+
+        elif interest_type == '3mos-bill':
+            three_month_t_bill = Tbill.objects.filter(type='3month').values('record_datetime', 'weighted_avg_price_success')
+            context = {
+                'type': '3-months Treasury bill rate',
+                'data': three_month_t_bill
+            }
+
+            return render_with_global_data(request, 'fimcoplatform/interests.html', context)
+
+        elif interest_type == '6mos-bill':
+            six_month_t_bill = Tbill.objects.filter(type='6month').values('record_datetime', 'weighted_avg_price_success')
+            context = {
+                'type': '6-months Treasury bill rate',
+                'data': six_month_t_bill
+            }
+
+            return render_with_global_data(request, 'fimcoplatform/interests.html', context)
+
+        elif interest_type == '1yr-bill':
+            one_year_t_bill = Tbill.objects.filter(type='1year').values('record_datetime', 'weighted_avg_price_success')
+            context = {
+                'type': '1-year Treasury bill rate',
+                'data': one_year_t_bill
+            }
+
+            return render_with_global_data(request, 'fimcoplatform/interests.html', context)
+
+        elif interest_type == '2yr-bond':
+            two_year_t_bond = Tbill.objects.filter(type='2year').values('record_datetime', 'weighted_avg_price_success')
+            context = {
+                'type': '2-year Treasury bond rate',
+                'data': two_year_t_bond
+            }
+
+            return render_with_global_data(request, 'fimcoplatform/interests.html', context)
+
+        elif interest_type == '5yr-bond':
+            five_year_t_bond = Tbill.objects.filter(type='5year').values('record_datetime', 'weighted_avg_price_success')
+            context = {
+                'type': '5-year Treasury bond rate',
+                'data': five_year_t_bond
+            }
+
+            return render_with_global_data(request, 'fimcoplatform/interests.html', context)
+
+        elif interest_type == '7yr-bond':
+            seven_year_t_bond = Tbill.objects.filter(type='7year').values('record_datetime', 'weighted_avg_price_success')
+            context = {
+                'type': '7-year Treasury bond rate',
+                'data': seven_year_t_bond
+            }
+
+            return render_with_global_data(request, 'fimcoplatform/interests.html', context)
+
+        elif interest_type == '10yr-bond':
+            ten_year_t_bond = Tbill.objects.filter(type='10year').values('record_datetime', 'weighted_avg_price_success')
+            context = {
+                'type': '10-year Treasury bond rate',
+                'data': ten_year_t_bond
+            }
+
+            return render_with_global_data(request, 'fimcoplatform/interests.html', context)
+
+        elif interest_type == '15yr-bond':
+            five_ten_year_t_bond = Tbill.objects.filter(type='15year').values('record_datetime', 'weighted_avg_price_success')
+            context = {
+                'type': '15-year Treasury bond rate',
+                'data': five_ten_year_t_bond
+            }
+
+            return render_with_global_data(request, 'fimcoplatform/interests.html', context)
+
         elif interest_type == 'libor':
-            lr = LiborRate.objects.filter(created_on__date=datetime.date.today())
-            return render_with_global_data(request, 'fimcoplatform/interests.html', {'data': lr})
+            libor = LiborRate.objects.all()
+            context = {
+                'type': 'USD libor Rate',
+                'data': libor
+            }
+
+            return render_with_global_data(request, 'fimcoplatform/interests.html', context)
+
         else:
             pass
 
@@ -141,15 +292,50 @@ def interests_view(request):
         else:
             pass
 
-    on = OvernightInterest.objects.filter(created_on__date=datetime.date.today())
-    tb = Tbill.objects.filter(created_on__date=datetime.date.today())
-    td = Tbond.objects.filter(created_on__date=datetime.date.today())
-    lr = LiborRate.objects.filter(created_on__date=datetime.date.today())
+    ovi = OvernightInterest.objects.filter(record_datetime__date=datetime.date.today())\
+        .values('current_rate', 'record_datetime', 'weighted_avg_rate', 'prev_rate', 'prev_rate_timestamp')
+
+    ovi_dto = OvernightRateDto(
+        ovi.record_datetime,
+        ovi.prev_rate_timestamp,
+        ovi.weighted_avg_rate,
+        ovi.prev_rate
+    )
+    ovi_table = [ovi_dto]
+
+    one_month_t_bill = Tbill.objects.filter(record_datetime__date=datetime.date.today(), type='1month')
+    three_month_t_bill = Tbill.objects.filter(record_datetime__date=datetime.date.today(), type='3month')
+    six_month_t_bill = Tbill.objects.filter(record_datetime__date=datetime.date.today(), type='6month')
+    one_year_t_bill = Tbill.objects.filter(record_datetime__date=datetime.date.today(), type='1year')
+
+    t_bill_table = {
+        '1-month': one_month_t_bill,
+        '3-month': three_month_t_bill,
+        '6-month': six_month_t_bill,
+        '1-year': one_year_t_bill
+    }
+
+    two_year_t_bond = Tbond.objects.filter(record_datetime__date=datetime.date.today(), type='2year')
+    five_year_t_bond = Tbond.objects.filter(record_datetime__date=datetime.date.today(), type='5year')
+    seven_year_t_bond = Tbond.objects.filter(record_datetime__date=datetime.date.today(), type='7year')
+    ten_year_t_bond = Tbond.objects.filter(record_datetime__date=datetime.date.today(), type='10year')
+    five_ten_year_t_bond = Tbond.objects.filter(record_datetime__date=datetime.date.today(), type='15year')
+
+    t_bond_table = {
+        '2-years': two_year_t_bond,
+        '5-years': five_year_t_bond,
+        '7-years': seven_year_t_bond,
+        '10-years': ten_year_t_bond,
+        '15-years': five_ten_year_t_bond
+    }
+
+    libor_table = LiborRate.objects.filter(created_on__date=datetime.date.today())
+
     context = {
-        'overnight': on,
-        'bill': tb,
-        'bond': td,
-        'libor': lr
+        'overnight': ovi_table,
+        'bill': t_bill_table,
+        'bond': t_bond_table.items(),
+        'libor': libor_table
     }
     return render_with_global_data(request, 'fimcoplatform/interests.html', {'data': context})
 

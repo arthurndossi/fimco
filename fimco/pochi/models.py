@@ -8,7 +8,7 @@ telephone = RegexValidator(r'^([+]?(\d{1,3}\s?)|[0])\s?\d+(\s?\-?\d{2,4}){1,3}?$
 
 class Group(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=30)
     group_account = models.CharField(max_length=15, db_index=True)
     balance = models.FloatField(default=0)
 

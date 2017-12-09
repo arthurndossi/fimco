@@ -45,3 +45,7 @@ $('.list-group-item a').click(function () {
       break;
   }
 });
+
+function show_dropdown(id_name) {
+    document.getElementById(id_name).classList.toggle("show");
+}

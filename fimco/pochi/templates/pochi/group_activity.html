@@ -3,205 +3,93 @@
     <section id="middle">
         <div id="content" class="padding-20">
             <div class="row">
+                <div class="col-lg-6">
+                    <form class="payment" method="post" action="{% url 'pochi2pochi' %}">
+                        {% csrf_token %}
+                        <div class="panel panel-default">
+                            <div class="panel-heading panel-heading-transparent">
+                                <strong>POCHI TO POCHI Funds Transfer</strong>
+                            </div>
+                            <div class="panel-body">
+                                <div class="fancy-form fancy-form-select">
+                                    <select id="account_choice" class="form-control" title="">
+                                        <option disabled="disabled">Select destination choice</option>
+                                        <option value="mobile">Mobile number</option>
+                                        <option value="account">POCHI Account</option>
+                                    </select>
+                                    <i class="fancy-arrow"></i>
+                                </div>
+                                <div id="mobile-section">
+                                    <label>Enter destination mobile number</label>
+                                    <input type="tel" class="form-control masked" name="dest_mobile" data-format="0999999999" data-placeholder="X" placeholder="Mobile number">
+                                </div>
+                                <div id="account-section">
+                                    <label>Enter POCHI destination account</label>
+                                    <input type="text" class="form-control masked" name="dest_account" data-format="**********" data-placeholder="_" placeholder="Account">
+                                </div>
+                                <div id="amount-section">
+                                    <label>Enter Amount</label>
+                                    <input type="number" class="form-control" name="amount" placeholder="TZS" required>
+                                </div>
+                            </div>
+                            <div class="panel-footer transfer">
+                                <button class="btn btn-primary" type="submit"><i class="fa fa-check"></i> CONFIRM MONEY TRANSFER</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
             {% if messages %}
                 {% for message in messages %}
-                    <div class="col-xs-12">
-                        <div class="alert alert-success margin-bottom-30">
+                    {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                        <div class="alert alert-danger margin-bottom-30">
                             <button type="button" class="close" data-dismiss="alert">
                                 <span aria-hidden="true">×</span>
                                 <span class="sr-only">Close</span>
                             </button>
                             <strong>{{ message }}</strong>
                         </div>
-                    </div>
-                {% endfor %}
-            {% endif %}
-            </div>
-            {% if not external_accounts %}
-            <div class="col-lg-6 col-md-6 col-sm-6">
-                <div class="alert alert-warning margin-bottom-30">
-                    <h4>You have <strong>No</strong> External Account!</h4>
-                    <p>Add an external account below <span><i class="fa fa-hand-o-down"></i></span></p>
-                </div>
-                <div class="panel panel-default">
-                    <div class="panel-heading panel-heading-transparent">
-                        <strong>Bank Account</strong>
-                    </div>
-                    <div class="panel-body">
-                        <form method="post" action="{% url 'group_activity' group %}">
-                            {% csrf_token %}
-                            <div class="row">
-                                <div class="col-lg-4 col-md-6 col-sm-8">
-                                    <label> Select your bank </label>
-                                    <select class="form-control" name="institution" title="Select bank" required>
-                                        <option disabled="disabled">None</option>
-                                        <option value="CRDB">CRDB</option>
-                                        <option value="NMB">NMB</option>
-                                        <option value="AMANA BANK">AMANA BANK</option>
-                                    </select>
-                                    <input type="hidden" name="type" value="BANK">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 col-xs-8">
-                                    <label>Account name
-                                        <input type="text" class="form-control" name="name" required>
-                                    </label>
-                                </div>
-                                <div class="col-md-6 col-xs-8">
-                                    <label>Account number
-                                        <input type="text" class="form-control masked" name="account"
-                                               data-format="999999999999999" required>
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 col-xs-8">
-                                    <label>Alias account name <small>(short name)</small>
-                                        <input type="text" class="form-control" name="nickname" required>
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="col-xs-12">
-                                <input type="submit" class="btn btn-primary" value="Add Account">
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            {% else %}
-            <div id="panel-ui-tan-l4" class="panel panel-default">
-                <div class="panel-heading">
-                    <span class="elipsis">
-                        <strong>Options</strong>
-                    </span>
-                </div>
-                <form class="payment" method="post" action="{% url 'group_activity' group %}">
-                    {% csrf_token %}
-                    <div class="accordion panel-group" id="accordion">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h4 class="panel-title">
-                                    <a data-toggle="collapse" data-parent="#accordion" href="#accordion1" class="">
-                                        <i class="fa fa-check"></i>
-                                        <strong>Withdraw Funds</strong>
-                                    </a>
-                                </h4>
-                            </div>
-                            <div id="accordion1" class="collapse in">
-                                <form method="post" action="{% url 'group_activity' group %}">
-                                    {% csrf_token %}
-                                    <div class="panel-body">
-                                        <div class="fancy-form fancy-form-select">
-                                            <select class="form-control" name="ext_account" title="" required>
-                                                <option disabled>Select your account</option>
-                                                {% for account in external_accounts %}
-                                                    <option value="{{ account.nickname }}">{{ account.nickname }}</option>
-                                                {% endfor %}
-                                            </select>
-                                            <i class="fancy-arrow"></i>
-                                        </div>
-                                        <br />
-                                        <label>Enter Amount</label>
-                                        <input type="number" class="form-control" name="amount" placeholder="TZS" required>
-                                        <br />
-                                        <input type="hidden" name="type" value="WITHDRAW">
-                                    </div>
-                                    <div class="panel-footer transfer">
-                                        <button class="btn btn-primary" type="submit">
-                                            <i class="fa fa-check"></i> CONFIRM MONEY TRANSFER
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h4 class="panel-title">
-                                    <a data-toggle="collapse" data-parent="#accordion" href="#accordion2" class="collapsed">
-                                        <i class="fa fa-check"></i>
-                                        <strong>Add Another Account</strong>
-                                    </a>
-                                </h4>
-                            </div>
-                            <div id="accordion2" class="collapse">
-                                <div class="panel-body">
-                                    <form method="post" action="{% url 'group_activity' group %}">
-                                        {% csrf_token %}
-                                        <div class="row">
-                                            <div class="col-lg-4 col-md-6 col-sm-8">
-                                                <label> Select your bank </label>
-                                                <select class="form-control" name="institution" title="Select bank" required>
-                                                    <option disabled="disabled">None</option>
-                                                    <option value="CRDB">CRDB</option>
-                                                    <option value="NMB">NMB</option>
-                                                    <option value="AMANA BANK">AMANA BANK</option>
-                                                </select>
-                                                <input type="hidden" name="type" value="BANK">
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6 col-xs-8">
-                                                <label>Account name
-                                                    <input type="text" class="form-control" name="name" required>
-                                                </label>
-                                            </div>
-                                            <div class="col-md-6 col-xs-8">
-                                                <label>Account number
-                                                    <input type="text" class="form-control masked" name="account"
-                                                           data-format="999999999999999" required>
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6 col-xs-8">
-                                                <label>Alias account name <small>(short name)</small>
-                                                    <input type="text" class="form-control" name="nickname" required>
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="col-xs-12">
-                                            <input type="submit" class="btn btn-primary" value="Add Account" required>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-
-            <div class="row">
-            {% if messages %}
-                {% for message in messages %}
-                    {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
-                        <div class="col-xs-12">
-                            <div class="alert alert-danger margin-bottom-30">
-                                <button type="button" class="close" data-dismiss="alert">
-                                    <span aria-hidden="true">×</span>
-                                    <span class="sr-only">Close</span>
-                                </button>
-                                <strong>{{ message }}</strong>
-                            </div>
-                        </div>
                     {% else %}
-                        <div class="col-xs-12">
+                        <form method="post" action="{% url 'process_g2p' %}">
+                            {% csrf_token %}
                             <div class="alert alert-info margin-bottom-30">
                                 <button type="button" class="close" data-dismiss="alert">
                                     <span aria-hidden="true">×</span>
                                     <span class="sr-only">Close</span>
                                 </button>
                                 <strong>{{ message }}</strong>
+                                <input type="submit" class="btn btn-primary btn-sm margin-top-10" value="Proceed checkout">
+                                <a href="" class="btn btn-default btn-sm margin-top-10">Cancel</a>
+                                <input type="hidden" name="group_name" value="{{ group }}">
+                                <input type="hidden" name="account_no" value="{{ account.account }}">
+                                <input type="hidden" name="overdraft" value="{{ extra.allow_overdraft }}">
+                                <input type="hidden" name="name" value="{{ extra.user_object.get_full_name }}">
+                                <input type="hidden" name="ext_wallet" value="{{ account.external_walletid }}">
+                                <input type="hidden" name="dest_acc" value="{{ extra.dest_account }}">
+                                <input type="hidden" name="dest_profile_id" value="{{ extra.dest_profile_id }}">
+                                <input type="hidden" name="amount" value="{{ extra.amount }}">
+                                <input type="hidden" name="open_bal" value="{{ extra.open_bal }}">
                             </div>
-                        </div>
+                        </form>
                     {% endif %}
                 {% endfor %}
-            {% endif %}
-            </div>
             {% endif %}
         </div>
     </section>
 {% endblock %}
 {% block scripts %}
-    <script type="text/javascript" src="/static/pochi/js/ajax.js"></script>
+    <script type="text/javascript">
+        $('#account-section').hide();
+        var choice = $("#account_choice");
+        choice.on('change', function() {
+            var id_choice = choice.find(":selected").val();
+            if (id_choice === 'mobile'){
+                $('#mobile-section').show();
+                $('#account-section').hide();
+            }else if (id_choice === 'account'){
+                $('#account-section').show();
+                $('#mobile-section').hide();
+            }
+        });
+    </script>
 {% endblock %}

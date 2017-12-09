@@ -1,3 +1,4 @@
+reportlab
 certifi==2017.7.27.1
 Django==1.10.6
 django-pin-passcode==0.2.0

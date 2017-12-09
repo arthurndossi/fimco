@@ -155,7 +155,7 @@ def validate(request):
                 raise forms.ValidationError("Not a valid email or phone number!")
             if user:
                 login(request, user)
-                if get_param == "":
+                if get_param == "/":
                     from pochi.views import home
                     return redirect(home)
                 else:
@@ -235,9 +235,17 @@ def register(request):
                 profile_id=profile.profile_id,
                 account=account_no
             )
-
-            return redirect(index)
+            messages.info(
+                request,
+                'Registration successful!,'
+                ' You will receive notification shortly, meanwhile you can sign in using your credentials!'
+            )
+            return redirect(request.META['HTTP_REFERER'])
         else:
+            messages.error(
+                request,
+                'Something is not right... Please try again!'
+            )
             return render(request, 'registration.html', {'rForm': form})
 
     return redirect(account)

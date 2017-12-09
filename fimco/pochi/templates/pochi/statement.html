@@ -23,33 +23,29 @@
                                 <li><strong> POCHI ID:</strong> {{ profile.profile_id }}</li>
                             </ul>
                         </div>
-                        <div class="col-lg-3 col-md-4 col-sm-6 col-md-offset-2 col-lg-offset-3">
-                            <h4>Select <strong>Account</strong></h4>
-                            <form method="get">
-                                <div class="fancy-form fancy-form-select">
-                                    <select class="form-control select2" title="">
-                                        {% for account in accounts %}
-                                            <option value="{{ account.institution_name }}">
-                                                {{ account.institution_name }}
-                                            </option>
-                                        {% endfor %}
-                                    </select>
-                                    <i class="fancy-arrow-double"></i>
-                                </div>
-                            </form>
-                        </div>
                     </div>
                     {% if transactions %}
-                        <form method='GET'>
+                        <form method='GET' action="{% url 'statements' %}">
                             <div class="row">
-                                <div class="col-lg-3 offset-lg-6 col-md-3 offset-md-6 col-sm-8">
-                                    <input type="text"
+                                <div class="col-lg-3 col-md-3 col-sm-8">
+                                    <label>Filter by service
+                                        <input type="text" class="form-control" name="service">
+                                    </label>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-8">
+                                    <label>Filter by channel
+                                        <input type="text" class="form-control" name="channel">
+                                    </label>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-8">
+                                    <label>Select date range
+                                        <input type="text"
                                            class="form-control rangepicker"
                                            name="range"
-                                           value=""
                                            data-format="yyyy-mm-dd"
                                            data-from="2018-01-01"
                                            data-to="2018-12-31">
+                                    </label>
                                 </div>
                                 <div class="col-lg-3 col-md-3 col-sm-4">
                                     <input type="submit" class="btn btn-primary" value="GO">
@@ -61,11 +57,8 @@
                                 <thead>
                                     <tr>
                                         <th>Date</th>
-                                        <th>Account</th>
-                                        <th>Mobile number</th>
                                         <th>Service</th>
-                                        <th>Channel</th>
-                                        <th>Currency</th>
+                                        <th>Mode</th>
                                         <th>Amount</th>
                                         <th>Charges</th>
                                         <th>Reference</th>
@@ -76,12 +69,9 @@
                                 {% for transaction in transactions %}
                                     <tr class="odd gradeX">
                                         <td class="center">{{ transaction.full_timestamp }}</td>
-                                        <td class="center">{{ transaction.account }}</td>
-                                        <td class="center">{{ transaction.msisdn }}</td>
                                         <td class="center">{{ transaction.service }}</td>
                                         <td class="center">{{ transaction.channel }}</td>
-                                        <td class="center">{{ transaction.currency }}</td>
-                                        <td class="center">{{ transaction.amount }}</td>
+                                        <td class="center">{{ transaction.currency }} {{ transaction.amount }}</td>
                                         <td class="center">{{ transaction.charge }}</td>
                                         <td class="center">{{ transaction.reference }}</td>
                                         <td class="center">{{ transaction.status }}</td>
@@ -98,13 +88,6 @@
                     <hr class="nomargin-top" />
                 </div>
             </div>
-{#            {% if trans %}#}
-{#            <div class="panel panel-default text-right">#}
-{#                <div class="panel-body">#}
-{#                    <a class="btn btn-primary" href="{% url 'printout' %}" target="_blank"><i class="fa fa-print"></i> PRINT STATEMENT</a>#}
-{#                </div>#}
-{#            </div>#}
-{#            {% endif %}#}
         </div>
     </section>
 {% endblock %}

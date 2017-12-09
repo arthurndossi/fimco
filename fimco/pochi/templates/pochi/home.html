@@ -8,22 +8,26 @@
             <div class="sheet">
                 <div class="row">
                     <p class="lead">Current balance</p>
-                    <p class="balance">3000 TZS</p>
+                    <p class="balance"> TZS {{ account.balance }}</p>
                 </div>
                 <div class="row">
                     <div class="col-xs-6 headerDivider">
                         <p class="lead">Available</p>
-                        <p class="lead">3000 TZS</p>
+                        <p class="lead"> TZS {{ account.balance }}</p>
                     </div>
                     <div class="col-xs-6">
-                        <p class="lead">Reserved</p>
-                        <p class="lead">0 TZS</p>
+                        <p class="lead">Interest</p>
+                        {% if account.ts_balance %}
+                        <p class="lead"> TZS {{ account.ts_balance }}</p>
+                        {% else %}
+                        <p class="lead"> TZS 0.0</p>
+                        {% endif %}
                     </div>
                 </div>
             </div>
             <div class="row margin-top-20 mid-align">
                 <div class="col-xs-12 col-md-4 col-lg-3 col-lg-offset-4">
-                    <a href="#" class="btn btn-featured btn-primary">
+                    <a href="{% url 'statements' %}" class="btn btn-featured btn-primary">
                         <span>View your statement</span>
                         <i class="et-document"></i>
                     </a>

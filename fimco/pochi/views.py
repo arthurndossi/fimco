@@ -6,10 +6,12 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db import transaction
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import redirect
 from fimcosite.forms import EditProfileForm
 from fimcosite.models import Account, Profile
+
+from reportlab.pdfgen import canvas
 
 from .models import Transaction, Group, GroupMember, ExternalAccount, Ledger, BalanceSnapshot, Charge, CashOut
 
@@ -17,6 +19,11 @@ from .models import Transaction, Group, GroupMember, ExternalAccount, Ledger, Ba
 @login_required
 def home(request):
     profile = request.user.profile
+    try:
+        balance_data = Account.objects.get(profile_id=profile.profile_id)
+    except Account.DoesNotExist:
+        balance_data = None
+
     group_members_obj = []
     try:
         group_account_obj = GroupMember.objects.filter(profile_id=profile.profile_id).only('group_account')
@@ -29,23 +36,24 @@ def home(request):
 
     except GroupMember.DoesNotExist:
         pass
-    return render_with_global_data(request, 'pochi/home.html', {'groups': group_members_obj})
+
+    context = {
+        'profile': profile,
+        'account': balance_data,
+        'groups': group_members_obj
+    }
+    return render_with_global_data(request, 'pochi/home.html', context)
 
 
 @login_required
 def admin(request):
-    balance_data = BalanceSnapshot.objects.all()
-    return render_with_global_data(request, 'pochi/admin.html', {'data': balance_data})
+    return render_with_global_data(request, 'pochi/admin.html', {})
 
 
 @login_required
 def statement(request):
-    user_accounts = trans = None
+    trans = None
     profile = request.user.profile
-    try:
-        user_accounts = ExternalAccount.objects.filter(profile_id=profile.profile_id)
-    except ExternalAccount.DoesNotExist:
-        user_accounts = user_accounts
 
     if request.GET:
         if request.GET.get('range'):
@@ -54,9 +62,12 @@ def statement(request):
             start = datetime.datetime.strptime(start, '%m/%d/%Y').strftime('%Y-%m-%d')
             end = datetime.datetime.strptime(end, '%m/%d/%Y').strftime('%Y-%m-%d')
             trans = Transaction.objects.filter(profile_id=profile.profile_id, fulltimestamp__range=[start, end])
-        if request.GET.get('channel'):
+        elif request.GET.get('channel'):
             selected_account = request.GET.get('channel')
             trans = Transaction.objects.filter(profile_id=profile.profile_id, channel=selected_account)
+        elif request.GET.get('service'):
+            selected_account = request.GET.get('service')
+            trans = Transaction.objects.filter(profile_id=profile.profile_id, service=selected_account)
     else:
         try:
             trans = Transaction.objects.filter(profile_id=request.user.profile.profile_id)
@@ -65,7 +76,6 @@ def statement(request):
 
     context = {
         "profile": profile,
-        "accounts": user_accounts,
         "transactions": trans,
     }
     return render_with_global_data(request, 'pochi/statement.html', context)
@@ -176,7 +186,8 @@ def fund_transfer(request, service, ext_wallet, channel, profile_id, src, dest, 
                 external_wallet_id=ext_wallet,
                 service=service,
                 dest_account=dest,
-                amount=amount
+                amount=amount,
+                status='DONE'
             )
             Ledger.objects.create(
                 trans_type='DEBIT',
@@ -237,16 +248,34 @@ def fund_transfer(request, service, ext_wallet, channel, profile_id, src, dest, 
 
 
 @login_required
-def pochi2pochi(request):
-    profile = request.user.profile
+def pochi2pochi(request, name=None):
+    this_group = None
+    acc = None
     extras = None
-    try:
-        acc = Account.objects.get(profile_id=profile.profile_id)
-        bal = acc.balance
-        ov = acc.allow_overdraft
-    except Account.DoesNotExist:
-        acc = None
+    if name:
         bal = ov = 0
+        try:
+            this_group = Group.objects.get(name=name)
+            this_group_account = this_group.group_account
+            try:
+                acc = Account.objects.get(account=this_group_account)
+                ov = acc.allow_overdraft
+                bal = acc.balance
+            except Account.DoesNotExist:
+                acc = None
+        except Group.DoesNotExist:
+            pass
+
+    else:
+        profile = request.user.profile
+        extras = None
+        try:
+            acc = Account.objects.get(profile_id=profile.profile_id)
+            bal = acc.balance
+            ov = acc.allow_overdraft
+        except Account.DoesNotExist:
+            acc = None
+            bal = ov = 0
 
     if request.method == "POST":
         user_obj = user_name = dest_account = dest_profile_id = None
@@ -305,12 +334,68 @@ def pochi2pochi(request):
                 request,
                 'This user is not registered with a pochi account!'
             )
-
-    context = {
-        'extra': extras,
-        'account': acc
-    }
+    if name:
+        context = {
+            'group': name,
+            'account': this_group,
+            'extra': extras,
+        }
+        return render_with_global_data(request, 'pochi/group_activity.html', context)
+    else:
+        context = {
+            'extra': extras,
+            'account': acc
+        }
     return render_with_global_data(request, 'pochi/pochi2pochi.html', context)
+
+
+def process_g2p(request):
+    if request.POST:
+        src_account_no = request.POST['account_no']
+        name = request.POST['name']
+        group_name = request.POST['group_name']
+        ext_wallet = request.POST['ext_wallet']
+        dest_account_no = request.POST['dest_acc']
+        dest_profile_id = request.POST['dest_profile_id']
+        ov = request.POST['overdraft']
+        amount = request.POST['amount']
+        amount = float(amount)
+        bal = request.POST['open_bal']
+        bal = float(bal)
+        phone = 'NA'
+        src_profile_id = 'NA'
+
+        fund_transfer(request, 'P2P', ext_wallet, 'NA', src_profile_id, src_account_no, dest_account_no, bal, amount,
+                      phone, ov)
+
+        src_account = None
+        dest_account = None
+        try:
+            src_account = Account.objects.get(account=src_account_no)
+            src_account.balance -= float(amount)
+            src_account.save()
+        except Account.DoesNotExist:
+            pass
+
+        try:
+            dest_account = Account.objects.get(profile_id=dest_profile_id)
+            dest_account.balance += float(amount)
+            dest_account.save()
+        except Account.DoesNotExist:
+            pass
+
+        if src_account and dest_account:
+            resp = {
+                'status': 'success',
+                'msg': 'TZS' + str(amount) + ' has been transferred from '+group_name+' account to ' + name + '.'
+            }
+            return JsonResponse(resp)
+        else:
+            resp = {
+                'status': 'fail',
+                'msg': 'An invalid account was selected.'
+            }
+            return JsonResponse(resp)
 
 
 def process_p2p(request):
@@ -333,56 +418,68 @@ def process_p2p(request):
                       phone, ov)
 
         src_account = dest_account = None
-        while src_account is None:
-            try:
-                src_account = Account.objects.get(profile_id=src_profile_id)
-                src_account.balance -= float(amount)
-                src_account.save()
-            except:
-                pass
-        while dest_account is None:
-            try:
-                dest_account = Account.objects.get(profile_id=dest_profile_id)
-                dest_account.balance += float(amount)
-                dest_account.save()
-            except:
-                pass
+        try:
+            src_account = Account.objects.get(profile_id=src_profile_id)
+            src_account.balance -= float(amount)
+            src_account.save()
+        except Account.DoesNotExist:
+            pass
 
-        resp = {
-            'status': 'success',
-            'msg': 'TZS' + str(amount) + ' has been transferred from your account to ' + name + '.'
-        }
-        return JsonResponse(resp)
+        try:
+            dest_account = Account.objects.get(profile_id=dest_profile_id)
+            dest_account.balance += float(amount)
+            dest_account.save()
+        except Account.DoesNotExist:
+            pass
+
+        if src_account and dest_account:
+            resp = {
+                'status': 'success',
+                'msg': 'TZS' + str(amount) + ' has been transferred from your account to ' + name + '.'
+            }
+            return JsonResponse(resp)
+        else:
+            resp = {
+                'status': 'fail',
+                'msg': 'An invalid account was selected.'
+            }
+            return JsonResponse(resp)
 
 
 @login_required
-def withdraw(request, name=None):
-    if name:
-        phone = 'NA'
-        try:
-            this_group = Group.objects.get(name=name)
-            identifier = this_group.group_account
-        except Group.DoesNotExist:
-            identifier = None
+def withdraw(request):
+    profile = request.user.profile
+    identifier = profile.profile_id
+    phone = request.user.username
+    msisdn_3 = phone[:3]
 
-        try:
-            external_account = ExternalAccount.objects.filter(account_name=name)
-            ext_acc_obj = external_account.values('nickname')
-        except ExternalAccount.DoesNotExist:
-            ext_acc_obj = None
+    tigo = ['065', '067', '071']
+    airtel = ['068', '078']
+    vodacom = ['074', '075', '076']
 
+    if any(prefix in msisdn_3 for prefix in airtel):
+        institution = 'AIRTEL MONEY'
+    elif any(prefix in msisdn_3 for prefix in tigo):
+        institution = 'TIGO PESA'
+    elif any(prefix in msisdn_3 for prefix in vodacom):
+        institution = 'M PESA'
+    elif '062' in msisdn_3:
+        institution = 'HALO PESA'
+    elif '077' in msisdn_3:
+        institution = 'HALO PESA'
+    elif '073' in msisdn_3:
+        institution = 'TTCL PESA'
     else:
-        profile = request.user.profile
-        identifier = profile.profile_id
-        phone = request.user.username
-        try:
-            external_account = ExternalAccount.objects.filter(profile_id=identifier)
-            ext_acc_obj = external_account.values('nickname')
-        except ExternalAccount.DoesNotExist:
-            ext_acc_obj = None
+        institution = None
+
+    try:
+        external_account = ExternalAccount.objects.filter(profile_id=identifier)
+        ext_acc_obj = external_account.values('nickname')
+    except ExternalAccount.DoesNotExist:
+        ext_acc_obj = None
 
     if request.method == "POST":
-        if request.POST['type'] == u"BANK":
+        if request.POST['type'] == u"account":
             institution = request.POST['institution']
             bank_name = request.POST['name'].upper()
             nickname = request.POST['nickname']
@@ -400,7 +497,32 @@ def withdraw(request, name=None):
                 request,
                 'You have successfully added ' + nickname + ' account!'
             )
-        else:
+        elif request.POST['type'] == u"mobile":
+            amount = float(request.POST['amount'])
+
+            try:
+                _account = Account.objects.get(profile_id=identifier)
+                pochi_id = _account.account
+                bal = _account.balance
+                ov = _account.allow_overdraft
+
+                fund_transfer(request, 'WITHDRAW', 'NA', institution, identifier, pochi_id, phone, bal,
+                              amount, phone, ov)
+
+                if amount <= bal:
+                    _account.balance -= amount
+                    _account.save()
+                    messages.info(
+                        request,
+                        'You have successfully withdrawn TZS' + str(
+                            amount) + ' to your ' + institution + ' account'
+                    )
+                else:
+                    messages.error(request, 'You have insufficient funds to withdraw money from your account!')
+
+            except Account.DoesNotExist:
+                pass
+        elif request.POST['type'] == u"bank":
             selected_ext_account = request.POST['ext_account']
             amount = float(request.POST['amount'])
 
@@ -408,62 +530,34 @@ def withdraw(request, name=None):
             institution_name = selected_ext_acc_obj.institution_name
             dest_acc_num = selected_ext_acc_obj.account_number
 
-            if name:
-                try:
-                    _account = Account.objects.get(account=identifier)
-                    bal = _account.balance
-                    ov = _account.allow_overdraft
+            try:
+                _account = Account.objects.get(profile_id=identifier)
+                src_account = _account.account
+                bal = _account.balance
+                ov = _account.allow_overdraft
 
-                    fund_transfer(request, 'WITHDRAW', 'NA', institution_name, 'NA', identifier, dest_acc_num, bal,
-                                  amount, phone, ov)
+                fund_transfer(request, 'WITHDRAW', 'NA', institution_name, identifier, src_account, dest_acc_num, bal,
+                              amount, phone, ov)
 
-                    if amount <= bal:
-                        _account.balance -= amount
-                        _account.save()
-                        messages.info(
-                            request,
-                            'You have successfully withdrawn TZS'+str(amount)+' to '+selected_ext_account+' account'
-                        )
-                    else:
-                        messages.error(request, 'You have insufficient funds to withdraw money from your group account!')
-                except Account.DoesNotExist:
-                    pass
-            else:
-                try:
-                    _account = Account.objects.get(profile_id=identifier)
-                    src_account = _account.account
-                    bal = _account.balance
-                    ov = _account.allow_overdraft
+                if amount <= bal:
+                    _account.balance -= amount
+                    _account.save()
+                    messages.info(
+                        request,
+                        'You have successfully withdrawn TZS'+str(amount)+' to your '+selected_ext_account+' account'
+                    )
+                else:
+                    messages.error(request, 'You have insufficient funds to withdraw money from your account!')
 
-                    fund_transfer(request, 'WITHDRAW', 'NA', institution_name, identifier, src_account, dest_acc_num, bal,
-                                  amount, phone, ov)
-
-                    if amount <= bal:
-                        _account.balance -= amount
-                        _account.save()
-                        messages.info(
-                            request,
-                            'You have successfully withdrawn TZS'+str(amount)+' to your '+selected_ext_account+' account'
-                        )
-                    else:
-                        messages.error(request, 'You have insufficient funds to withdraw money from your account!')
-
-                except Account.DoesNotExist:
-                    pass
-    if name:
-        context = {
-            'group': name,
-            'account': identifier,
-            'external_accounts': ext_acc_obj,
-        }
-        return render_with_global_data(request, 'pochi/group_activity.html', context)
-    else:
-        context = {
-            'external_accounts': ext_acc_obj,
-        }
-        return render_with_global_data(request, 'pochi/withdrawal.html', context)
+            except Account.DoesNotExist:
+                pass
+    context = {
+        'external_accounts': ext_acc_obj,
+    }
+    return render_with_global_data(request, 'pochi/withdrawal.html', context)
 
 
+@login_required
 def how_to_deposit(request):
     return render_with_global_data(request, 'pochi/deposit.html', {})
 
@@ -673,14 +767,35 @@ def group_statement(request, name=None):
     try:
         this_group = Group.objects.get(name=name)
         grp_acc = this_group.group_account
-        try:
-            group_transactions = Transaction.objects.filter(account=grp_acc) \
-                .values('service', 'channel', 'dest_account', 'currency', 'amount', 'charge', 'status', 'message')
-        except Transaction.DoesNotExist:
-            group_transactions = None
     except Account.DoesNotExist:
-        pass
-    return render_with_global_data(request, 'pochi/group_statement.html', {'statement': group_transactions})
+        grp_acc = None
+    if grp_acc:
+        if request.GET:
+            if request.GET.get('range'):
+                date_range = request.GET.get('range')
+                start, end = date_range.split(' - ')
+                start = datetime.datetime.strptime(start, '%m/%d/%Y').strftime('%Y-%m-%d')
+                end = datetime.datetime.strptime(end, '%m/%d/%Y').strftime('%Y-%m-%d')
+                group_transactions = Transaction.objects.filter(account=grp_acc, fulltimestamp__range=[start, end])
+            elif request.GET.get('channel'):
+                selected_account = request.GET.get('channel')
+                group_transactions = Transaction.objects.filter(account=grp_acc, channel=selected_account)
+            elif request.GET.get('service'):
+                selected_account = request.GET.get('service')
+                group_transactions = Transaction.objects.filter(account=grp_acc, service=selected_account)
+        else:
+            try:
+                group_transactions = Transaction.objects.filter(account=grp_acc)
+            except Transaction.DoesNotExist:
+                group_transactions = None
+        context = {
+            'group': name,
+            'account': grp_acc,
+            'transactions': group_transactions
+        }
+        return render_with_global_data(request, 'pochi/group_statement.html', context)
+    else:
+        return render_with_global_data(request, 'pochi/group_statement.html', {'group': name})
 
 
 @login_required
@@ -707,3 +822,79 @@ def group_profile(request, name=None):
         'statement': group_transactions
     }
     return render_with_global_data(request, 'pochi/group_profile.html', context)
+
+
+def delete_group(request, name=None):
+    profile = request.user.profile
+    try:
+        group = Group.objects.filter(name=name)
+        group_acc = group.group_account
+    except Group.DoesNotExist:
+        group_acc = None
+        group = None
+    if group_acc:
+        group_member_obj = GroupMember.objects.get(profile_id=profile.profile_id)
+        is_admin = group_member_obj.admin
+        if is_admin:
+            if group.balance > 0:
+                admin_id = group_member_obj.profile_id
+                Account.objects.get(profile_id=admin_id).balance += group.balance
+            GroupMember.objects.filter(group_account=group_acc).delete()
+            Group.objects.get(name=name).delete()
+    return redirect(request.META['HTTP_REFERER'])
+
+
+def exit_group(request, name=None):
+    profile = request.user.profile
+    try:
+        group = Group.objects.filter(name=name)
+        group_acc = group.group_account
+    except Group.DoesNotExist:
+        group_acc = None
+        group = None
+
+    if group_acc:
+        try:
+            members_queryset = GroupMember.objects.filter(group_account=group_acc)
+        except GroupMember.DoesNotExist:
+            members_queryset = None
+
+        members_count = members_queryset.count()
+
+        if members_count <= 2:
+            if group.balance > 0:
+                remaining_member_queryset = GroupMember.objects.exclude(profile_id=profile.profile_id)
+                remaining_member_id = remaining_member_queryset.profile_id
+                Account.objects.get(profile_id=remaining_member_id).balance += group.balance
+            GroupMember.objects.get(profile_id=profile.profile_id).delete()
+            Group.objects.get(name=name).delete()
+        else:
+            is_admin = GroupMember.objects.get(profile_id=profile.profile_id).admin
+            if is_admin:
+                remaining_member_queryset = GroupMember.objects.exclude(profile_id=profile.profile_id)
+                new_admin_queryset = remaining_member_queryset.first()
+                new_admin_queryset.admin = 1
+            GroupMember.objects.get(profile_id=profile.profile_id).delete()
+    return redirect(request.META['HTTP_REFERER'])
+
+
+def delete_account(request):
+    pass
+
+
+def create_form(request):
+    # Create the HttpResponse object with the appropriate PDF headers.
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="indemnity.pdf"'
+
+    # Create the PDF object, using the response object as its "file."
+    p = canvas.Canvas(response)
+
+    # Draw things on the PDF. Here's where the PDF generation happens.
+    # See the ReportLab documentation for the full list of functionality.
+    p.drawString(100, 100, "Hello world.")
+
+    # Close the PDF object cleanly, and we're done.
+    p.showPage()
+    p.save()
+    return response

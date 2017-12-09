@@ -37,16 +37,67 @@
 			<aside id="aside">
 				<nav id="sideNav"><!-- MAIN MENU -->
 					<ul class="nav nav-list">
-                        <li><!-- dashboard -->
-                            <a class="dashboard" href="{% url 'dashboard' %}">
-                                <i class="main-icon fa fa-dashboard"></i> <span>Dashboard</span>
+                        <li><!-- home -->
+                            <a class="dashboard" href="{% url 'pochi' %}">
+                                <i class="main-icon fa fa-home"></i> <span>Home</span>
                             </a>
                         </li>
+                        <li class="active"><!-- pochi -->
+                            <a href="#">
+                                <i class="fa fa-menu-arrow pull-right"></i>
+                                <i class="main-icon et-wallet"></i> <span>My POCHI</span>
+                            </a>
+                            <ul>
+                                <li><!-- dashboard -->
+                                    <a href="{% url 'dashboard' %}">
+                                        <i class="main-icon fa fa-dashboard"></i> <span>Dashboard</span>
+                                    </a>
+                                </li>
+                                <li><!-- balance -->
+                                    <a href="{% url 'pochi' %}">
+                                        <i class="main-icon fa fa-credit-card"></i> <span>Balance</span>
+                                    </a>
+                                </li>
+                                <li><!-- statement -->
+                                    <a href="{% url 'statements' %}">
+                                        <i class="main-icon fa fa-file-text-o"></i> <span>Statement</span>
+                                    </a>
+                                </li>
+                                <li><!-- withdrawal -->
+                                    <a href="#">
+                                        <i class="fa fa-menu-arrow pull-right"></i>
+                                        <i class="main-icon fa fa-money"></i>
+                                        <span>Fund Transfer</span>
+                                    </a>
+                                    <ul>
+										<li>
+											<a href="{% url 'pochi2pochi' %}">
+												Pochi to Pochi
+											</a>
+										</li>
+                                        <li>
+											<a data-toggle="modal" data-target="#withdrawModal">
+												Mobile Money
+											</a>
+										</li>
+                                        <li>
+											<a href="{% url 'withdrawal' %}">
+												Bank Account
+											</a>
+										</li>
+                                    </ul>
+                                </li>
+                                <li><!-- deposit -->
+                                    <a href="{% url 'deposit' %}">
+                                        <i class="main-icon fa fa-credit-card"></i> <span>How to Deposit</span>
+                                    </a>
+                                </li>
+                            </ul>
                         {% if paid %}
                         <li><!-- market -->
                             <a href="#">
                                 <i class="fa fa-menu-arrow pull-right"></i>
-                                <i class="main-icon fa fa-money"></i> <span>Market Information</span>
+                                <i class="main-icon fa fa-bar-chart"></i> <span>Market Information</span>
                             </a>
                             <ul>
                                 <li>
@@ -89,35 +140,11 @@
                         {% else %}
                             <li>
                                 <a href="{% url 'page' 'pricing' %}">
-                                    <i class="main-icon fa fa-money"></i>
+                                    <i class="main-icon fa fa-bar-chart"></i>
                                     <span>Market Information</span>
                                 </a>
                             </li>
                         {% endif %}
-					</ul>
-
-                    <h3 style="margin: 10px">My POCHI</h3>
-					<ul class="nav nav-list">
-                        <li><!-- statement -->
-							<a href="{% url 'statements' %}">
-								<i class="main-icon fa fa-file-text-o"></i> <span>Statement</span>
-							</a>
-						</li>
-                        <li><!-- pochi2pochi -->
-							<a href="{% url 'pochi2pochi' %}">
-								<i class="main-icon fa fa-exchange"></i> <span>Pochi2Pochi</span>
-							</a>
-						</li>
-                        <li><!-- withdrawal -->
-							<a href="{% url 'withdrawal' %}">
-								<i class="main-icon fa fa-money"></i> <span>Withdrawals</span>
-							</a>
-						</li>
-                        <li><!-- deposit -->
-							<a href="{% url 'deposit' %}">
-								<i class="main-icon fa fa-credit-card"></i> <span>How to Deposit</span>
-							</a>
-						</li>
 					</ul>
 
 					<h3>POCHI GROUPS</h3>
@@ -137,6 +164,7 @@
                                     </a>
                                     <ul>
                                         <li><a href="{% url 'group_profile' group.name %}">Dashboard</a></li>
+                                        <li><a href="{% url 'group_profile' group.name %}">Balance</a></li>
                                         {% if group.admin %}
                                         <li><a href="{% url 'group_activity' group.name %}">Activity</a></li>
                                         {% endif %}
@@ -154,6 +182,22 @@
                             </li>
                         {% endif %}
 					</ul>
+
+                    <h3>MORE</h3>
+                    <ul class="nav nav-list">
+                        <li>
+                            <a href="{% url 'index' %}">
+                                <i class="main-icon fa fa-trash-o"></i>
+                                <span class="label label-info pull-right"></span><span>Delete POCHI account</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'index' %}">
+                                <i class="main-icon fa fa-link"></i>
+                                <span class="label label-info pull-right"></span><span>Website</span>
+                            </a>
+                        </li>
+                    </ul>
 				</nav>
 				<span id="asidebg"><!-- aside fixed background --></span>
 			</aside>
@@ -171,10 +215,6 @@
 				</a>
                 <!-- Logo -->
 
-				<form method="get" action="" class="search pull-left hidden-xs">
-					<input type="text" class="form-control" name="k" placeholder="Search for something..." />
-				</form>
-
 				<nav>
 					<!-- OPTIONS LIST -->
 					<ul class="nav pull-right">
@@ -188,11 +228,13 @@
 								<img class="user-avatar" alt="" src="/static/pochi/img/noavatar.jpg" height="34" />
 								<span class="user-name">
 									<span class="hidden-xs">
-										{{ user.get_short_name }} <i class="fa fa-angle-down"></i>
+										{{ user.get_short_name }}<i class="fa fa-angle-down"></i>
 									</span>
 								</span>
 							</a>
 							<ul class="dropdown-menu hold-on-click">
+                                <li><a>{{ profile.profile_id }}</a></li>
+                                <li class="divider"></li>
 								<li>
 									<a href=""><i class="fa fa-envelope"></i> Notifications
 										<span class="pull-right label label-default">0</span>
@@ -219,6 +261,7 @@
 			<!-- MIDDLE -->
 			{% block content %}{% endblock %}
 			<!-- /MIDDLE -->
+            {% include 'pochi/modals.html' %}
 		</div>
 
 		<!-- JAVASCRIPT FILES -->
