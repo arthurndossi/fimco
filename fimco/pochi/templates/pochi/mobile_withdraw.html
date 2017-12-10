@@ -1,0 +1,72 @@
+{% extends "pochi/main.html" %}
+{% block links %}
+    <link href="/static/pochi/css/withdraw.css" rel="stylesheet" type="text/css" />
+{% endblock %}
+{% block content %}
+    <section id="middle">
+        <div id="content" class="padding-20">
+            <div class="row">
+            {% if messages %}
+                {% for message in messages %}
+                    {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                        <div class="col-lg-6 col-xs-12 col-centered">
+                            <div class="alert alert-danger margin-bottom-30">
+                                <button type="button" class="close" data-dismiss="alert">
+                                    <span aria-hidden="true">×</span>
+                                    <span class="sr-only">Close</span>
+                                </button>
+                                <p><strong>{{ message }}</strong></p>
+                            </div>
+                        </div>
+                    {% elif message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
+                        <div class="col-lg-6 col-xs-12 col-centered">
+                            <div class="alert alert-info margin-bottom-30">
+                                <button type="button" class="close" data-dismiss="alert">
+                                    <span aria-hidden="true">×</span>
+                                    <span class="sr-only">Close</span>
+                                </button>
+                                <p><strong>{{ message }}</strong></p>
+                                <a href="{% url 'confirm' %}" class="btn btn-info btn-sm margin-top-10">Proceed withdrawal</a>
+                                <a href="#" class="btn btn-default btn-sm margin-top-10">Cancel</a>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="col-lg-6 col-xs-12 col-centered">
+                            <div class="alert alert-success margin-bottom-30">
+                                <button type="button" class="close" data-dismiss="alert">
+                                    <span aria-hidden="true">×</span>
+                                    <span class="sr-only">Close</span>
+                                </button>
+                                <p><strong>{{ message }}</strong></p>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            </div>
+            <div class="row">
+                <div class="col-lg-6 col-xs-12 col-centered">
+                    <div class="panel panel-default">
+                        <div class="panel-heading panel-heading-transparent">
+                            <strong>Withdraw money</strong>
+                        </div>
+                        <div class="panel-body">
+                            <form action="{% url 'withdraw' %}" method="post">
+                                {% csrf_token %}
+                                <label>Enter Amount</label>
+                                <div class="input-group margin-top-10 margin-bottom6">
+                                    <input type="hidden" name="type" value="mobile">
+                                    <input type="number" class="form-control" name="amount" placeholder="TZS" required>
+                                    <div class="input-group-btn">
+                                        <button type="submit" class="btn btn-primary">Withdraw money</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+{#{% block scripts %}{% endblock %}#}

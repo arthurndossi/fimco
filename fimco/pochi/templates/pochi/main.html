@@ -37,11 +37,11 @@
 			<aside id="aside">
 				<nav id="sideNav"><!-- MAIN MENU -->
 					<ul class="nav nav-list">
-                        <li><!-- home -->
-                            <a class="dashboard" href="{% url 'pochi' %}">
-                                <i class="main-icon fa fa-home"></i> <span>Home</span>
-                            </a>
-                        </li>
+{#                        <li><!-- home -->#}
+{#                            <a class="dashboard" href="{% url 'pochi' %}">#}
+{#                                <i class="main-icon fa fa-home"></i> <span>Home</span>#}
+{#                            </a>#}
+{#                        </li>#}
                         <li class="active"><!-- pochi -->
                             <a href="#">
                                 <i class="fa fa-menu-arrow pull-right"></i>
@@ -63,7 +63,7 @@
                                         <i class="main-icon fa fa-file-text-o"></i> <span>Statement</span>
                                     </a>
                                 </li>
-                                <li><!-- withdrawal -->
+                                <li><!-- withdraw -->
                                     <a href="#">
                                         <i class="fa fa-menu-arrow pull-right"></i>
                                         <i class="main-icon fa fa-money"></i>
@@ -76,12 +76,12 @@
 											</a>
 										</li>
                                         <li>
-											<a data-toggle="modal" data-target="#withdrawModal">
+											<a href="{% url 'mobile' %}">
 												Mobile Money
 											</a>
 										</li>
                                         <li>
-											<a href="{% url 'withdrawal' %}">
+											<a href="{% url 'withdraw' %}">
 												Bank Account
 											</a>
 										</li>

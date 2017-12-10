@@ -9,13 +9,10 @@ urlpatterns = [
     url(r'^add/account$', views.account, name='accounts'),
     url(r'^statements$', views.statement, name='statements'),
     url(r'^pochi2pochi', views.pochi2pochi, name='pochi2pochi'),
-    url(r'^withdrawal$', views.withdraw, name='withdrawal'),
+    url(r'^withdraw$', views.withdraw, name='withdraw'),
     url(r'^how/to/deposit$', views.how_to_deposit, name='deposit'),
     url(r'^deposit$', views.deposit),
-    url(r'^p2p/process$', views.process_p2p, name='process_p2p'),
-    url(r'^g2p/process$', views.process_g2p, name='process_g2p'),
-    url(r'^withdraw$', views.withdraw, name='withdraw'),
-    url(r'^add$', views.withdraw, name='add'),
+    url(r'^mobile/withdraw$', views.mobile, name='mobile'),
     url(r'^create/group$', views.new_group, name='group'),
     url(r'^view/profile$', views.view_profile, name='profile_view'),
     url(r'^group$', views.create_group, name='create_group'),
@@ -29,5 +26,6 @@ urlpatterns = [
     url(r'^edit/user$', views.edit_profile, name='usr_edt'),
     url(r'^lock$', views.lock, name='lock'),
     url(r'^delete/account$', views.delete_account, name='delete_account'),
+    url(r'^confirm/transfer$', views.confirm_transfer, name='confirm'),
     url(r'^create/form$', views.create_form, name='create_form')
 ]

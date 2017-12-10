@@ -164,6 +164,137 @@ def edit_profile(request):
         return redirect(edit_profile)
 
 
+def confirm_transfer(request):
+    if request.session['confirm'] == u'mobile':
+        institution = request.session['institution']
+        identifier = request.session['identifier']
+        pochi_id = request.session['pochi_id']
+        phone = request.session['phone']
+        bal = request.session['bal']
+        amount = request.session['amount']
+        ov = request.session['overdraft']
+
+        del request.session['confirm']
+        del request.session['institution']
+        del request.session['identifier']
+        del request.session['pochi_id']
+        del request.session['phone']
+        del request.session['bal']
+        del request.session['amount']
+        del request.session['overdraft']
+
+        fund_transfer(request, 'WITHDRAW', 'NA', institution, identifier, pochi_id, phone, bal, amount, phone, ov)
+
+        messages.success(
+            request,
+            'You have successfully withdrawn TZS' + str(amount) + ' to your ' + institution + ' account ' + phone
+        )
+
+        return render_with_global_data(request, 'pochi/mobile_withdraw.html', {})
+    elif request.session['confirm'] == u'P2P':
+        src_account = request.session['account_no']
+        name = request.session['name']
+        ext_wallet = request.session['ext_wallet']
+        dest_account = request.session['dest_account']
+        dest_profile_id = request.session['dest_profile_id']
+        amount = request.session['amount']
+        ov = request.session['overdraft']
+        bal = request.session['open_bal']
+
+        del request.session['confirm']
+        del request.session['dest_account']
+        del request.session['dest_profile_id']
+        del request.session['amount']
+        del request.session['overdraft']
+        del request.session['open_bal']
+        del request.session['account_no']
+        del request.session['name']
+        del request.session['ext_wallet']
+
+        amount = float(amount)
+        bal = float(bal)
+        phone = request.user.username
+        profile = request.user.profile
+        src_profile_id = profile.profile_id
+
+        fund_transfer(request, 'P2P', ext_wallet, 'NA', src_profile_id, src_account, dest_account, bal, amount,
+                      phone, ov)
+
+        src_account = dest_account = None
+        try:
+            src_account = Account.objects.get(profile_id=src_profile_id)
+            src_account.balance -= float(amount)
+            src_account.save()
+        except Account.DoesNotExist:
+            pass
+
+        try:
+            dest_account = Account.objects.get(profile_id=dest_profile_id)
+            dest_account.balance += float(amount)
+            dest_account.save()
+        except Account.DoesNotExist:
+            pass
+
+        if src_account and dest_account:
+            messages.success(request, 'TZS' + str(amount) + ' has been transferred from your account to ' + name + '.')
+        else:
+            messages.error(request, 'An invalid account was selected.')
+
+        return render_with_global_data(request, 'pochi/pochi2pochi.html', {})
+    elif request.session['confirm'] == u'G2P':
+        src_account_no = request.session['account_no']
+        name = request.session['name']
+        group_name = request.session['group_name']
+        ext_wallet = request.session['ext_wallet']
+        dest_account_no = request.session['dest_account']
+        dest_profile_id = request.session['dest_profile_id']
+        amount = request.session['amount']
+        ov = request.session['overdraft']
+        bal = request.session['open_bal']
+
+        amount = float(amount)
+        bal = float(bal)
+        phone = 'NA'
+        src_profile_id = 'NA'
+
+        del request.session['confirm']
+        del request.session['dest_account']
+        del request.session['dest_profile_id']
+        del request.session['amount']
+        del request.session['overdraft']
+        del request.session['open_bal']
+        del request.session['account_no']
+        del request.session['name']
+        del request.session['ext_wallet']
+        del request.session['group_name']
+
+        fund_transfer(request, 'P2P', ext_wallet, 'NA', src_profile_id, src_account_no, dest_account_no, bal, amount,
+                      phone, ov)
+
+        src_account = None
+        dest_account = None
+        try:
+            src_account = Account.objects.get(account=src_account_no)
+            src_account.balance -= float(amount)
+            src_account.save()
+        except Account.DoesNotExist:
+            pass
+
+        try:
+            dest_account = Account.objects.get(profile_id=dest_profile_id)
+            dest_account.balance += float(amount)
+            dest_account.save()
+        except Account.DoesNotExist:
+            pass
+
+        if src_account and dest_account:
+            messages.success(request, 'TZS' + str(amount) + ' has been transferred from ' + group_name + ' account to ' + name + '.')
+        else:
+            messages.error(request, 'An invalid account was selected.')
+
+        return render_with_global_data(request, 'pochi/group_activity.html', {})
+
+
 @transaction.atomic
 def fund_transfer(request, service, ext_wallet, channel, profile_id, src, dest, bal, amount, msisdn, overdraft=0):
     try:
@@ -251,7 +382,6 @@ def fund_transfer(request, service, ext_wallet, channel, profile_id, src, dest, 
 def pochi2pochi(request, name=None):
     this_group = None
     acc = None
-    extras = None
     if name:
         bal = ov = 0
         try:
@@ -268,7 +398,6 @@ def pochi2pochi(request, name=None):
 
     else:
         profile = request.user.profile
-        extras = None
         try:
             acc = Account.objects.get(profile_id=profile.profile_id)
             bal = acc.balance
@@ -278,7 +407,7 @@ def pochi2pochi(request, name=None):
             bal = ov = 0
 
     if request.method == "POST":
-        user_obj = user_name = dest_account = dest_profile_id = None
+        user_name = dest_account = dest_profile_id = None
         if request.POST['dest_mobile']:
             phone = request.POST['dest_mobile']
             try:
@@ -309,142 +438,52 @@ def pochi2pochi(request, name=None):
                     user_name = None
 
         amount = request.POST['amount']
+        request.session['confirm'] = request.POST['type']
         amount = float(amount)
 
-        if amount <= bal and user_name is not None:
-            messages.info(
-                request,
-                'You are about to transfer TZS' + str(
-                    amount) + ' to ' + user_name + '.\r Proceed with the transfer?'
-            )
-            extras = {
-                'dest_account': dest_account,
-                'dest_profile_id': dest_profile_id,
-                'user_object': user_obj,
-                'amount': amount,
-                'allow_overdraft': ov,
-                'open_bal': bal
-            }
-        elif amount > bal and user_name is not None:
-            messages.error(
-                request,
-                'You do not have enough balance to make to transfer TZS'+str(amount)+' to '+user_name+'.'
-            )
-        elif user_name is None:
-            messages.error(
-                request,
-                'This user is not registered with a POCHI account!'
-            )
+        if dest_account:
+            if amount <= bal and user_name is not None:
+                messages.info(
+                    request,
+                    'You are about to transfer TZS' + str(amount) + ' to ' + user_name + '.\r Proceed with the transfer?'
+                )
+
+                request.session['dest_account'] = dest_account
+                request.session['dest_profile_id'] = dest_profile_id
+                request.session['account_no'] = acc.account
+                request.session['name'] = user_name
+                request.session['ext_wallet'] = acc.external_wallet_id
+                request.session['amount'] = amount
+                request.session['overdraft'] = ov
+                request.session['open_bal'] = bal
+                if name:
+                    request.session['group_name'] = name
+
+            elif amount > bal and user_name is not None:
+                messages.error(
+                    request,
+                    'You do not have enough balance to make to transfer TZS' + str(amount) + ' to ' + user_name + '.'
+                )
+            elif user_name is None:
+                messages.error(request, 'This user is not registered with a POCHI account!')
+        else:
+            messages.error(request, 'This user is not registered with a POCHI account!')
     if name:
         context = {
             'group': name,
             'account': this_group,
-            'extra': extras,
         }
         return render_with_global_data(request, 'pochi/group_activity.html', context)
     else:
         context = {
-            'extra': extras,
             'account': acc
         }
     return render_with_global_data(request, 'pochi/pochi2pochi.html', context)
 
 
-def process_g2p(request):
-    if request.POST:
-        src_account_no = request.POST['account_no']
-        name = request.POST['name']
-        group_name = request.POST['group_name']
-        ext_wallet = request.POST['ext_wallet']
-        dest_account_no = request.POST['dest_acc']
-        dest_profile_id = request.POST['dest_profile_id']
-        ov = request.POST['overdraft']
-        amount = request.POST['amount']
-        amount = float(amount)
-        bal = request.POST['open_bal']
-        bal = float(bal)
-        phone = 'NA'
-        src_profile_id = 'NA'
-
-        fund_transfer(request, 'P2P', ext_wallet, 'NA', src_profile_id, src_account_no, dest_account_no, bal, amount,
-                      phone, ov)
-
-        src_account = None
-        dest_account = None
-        try:
-            src_account = Account.objects.get(account=src_account_no)
-            src_account.balance -= float(amount)
-            src_account.save()
-        except Account.DoesNotExist:
-            pass
-
-        try:
-            dest_account = Account.objects.get(profile_id=dest_profile_id)
-            dest_account.balance += float(amount)
-            dest_account.save()
-        except Account.DoesNotExist:
-            pass
-
-        if src_account and dest_account:
-            resp = {
-                'status': 'success',
-                'msg': 'TZS' + str(amount) + ' has been transferred from '+group_name+' account to ' + name + '.'
-            }
-            return JsonResponse(resp)
-        else:
-            resp = {
-                'status': 'fail',
-                'msg': 'An invalid account was selected.'
-            }
-            return JsonResponse(resp)
-
-
-def process_p2p(request):
-    if request.POST:
-        src_account = request.POST['account_no']
-        name = request.POST['name']
-        ext_wallet = request.POST['ext_wallet']
-        dest_account = request.POST['dest_acc']
-        dest_profile_id = request.POST['dest_profile_id']
-        ov = request.POST['overdraft']
-        amount = request.POST['amount']
-        amount = float(amount)
-        bal = request.POST['open_bal']
-        bal = float(bal)
-        phone = request.user.username
-        profile = request.user.profile
-        src_profile_id = profile.profile_id
-
-        fund_transfer(request, 'P2P', ext_wallet, 'NA', src_profile_id, src_account, dest_account, bal, amount,
-                      phone, ov)
-
-        src_account = dest_account = None
-        try:
-            src_account = Account.objects.get(profile_id=src_profile_id)
-            src_account.balance -= float(amount)
-            src_account.save()
-        except Account.DoesNotExist:
-            pass
-
-        try:
-            dest_account = Account.objects.get(profile_id=dest_profile_id)
-            dest_account.balance += float(amount)
-            dest_account.save()
-        except Account.DoesNotExist:
-            pass
-
-        if src_account and dest_account:
-            resp = {
-                'status': 'success',
-                'msg': 'TZS' + str(amount) + ' has been transferred from your account to ' + name + '.'
-            }
-            return JsonResponse(resp)
-        else:
-            resp = {
-                'status': 'fail',
-                'msg': 'An invalid account was selected.'
-            }
-            return JsonResponse(resp)
+@login_required
+def mobile(request):
+    return render_with_global_data(request, 'pochi/mobile_withdraw.html', {})
 
 
 @login_required
@@ -453,6 +492,10 @@ def withdraw(request):
     identifier = profile.profile_id
     phone = request.user.username
     msisdn_3 = phone[:3]
+
+    swift = None
+    address = None
+    display_buttons = False
 
     tigo = ['065', '067', '071']
     airtel = ['068', '078']
@@ -474,10 +517,9 @@ def withdraw(request):
         institution = None
 
     try:
-        external_account = ExternalAccount.objects.filter(profile_id=identifier)
-        ext_acc_obj = external_account.values('nickname')
+        external_account = ExternalAccount.objects.get(profile_id=identifier)
     except ExternalAccount.DoesNotExist:
-        ext_acc_obj = None
+        external_account = None
 
     if request.method == "POST":
         if request.POST['type'] == u"account":
@@ -498,8 +540,15 @@ def withdraw(request):
                 request,
                 'You have successfully added ' + nickname + ' account!'
             )
+            if request.POST['swift']:
+                swift = request.POST['swift']
+            if request.POST['swift']:
+                address = request.POST['address']
+
+            display_buttons = True
         elif request.POST['type'] == u"mobile":
             amount = float(request.POST['amount'])
+            request.session['confirm'] = request.POST['type']
 
             try:
                 _account = Account.objects.get(profile_id=identifier)
@@ -507,53 +556,35 @@ def withdraw(request):
                 bal = _account.balance
                 ov = _account.allow_overdraft
 
-                fund_transfer(request, 'WITHDRAW', 'NA', institution, identifier, pochi_id, phone, bal,
-                              amount, phone, ov)
-
                 if amount <= bal:
                     _account.balance -= amount
                     _account.save()
+
+                    request.session['institution'] = institution
+                    request.session['identifier'] = identifier
+                    request.session['pochi_id'] = pochi_id
+                    request.session['phone'] = phone
+                    request.session['bal'] = bal
+                    request.session['amount'] = amount
+                    request.session['overdraft'] = ov
+
                     messages.info(
                         request,
-                        'You have successfully withdrawn TZS' + str(
-                            amount) + ' to your ' + institution + ' account'
+                        'You are about to withdraw TZS ' + str(amount) + ' to your ' + institution + ' account ' + phone
                     )
                 else:
                     messages.error(request, 'You have insufficient funds to withdraw money from your account!')
 
             except Account.DoesNotExist:
                 pass
-        elif request.POST['type'] == u"bank":
-            selected_ext_account = request.POST['ext_account']
-            amount = float(request.POST['amount'])
 
-            selected_ext_acc_obj = ExternalAccount.objects.get(nickname=selected_ext_account)
-            institution_name = selected_ext_acc_obj.institution_name
-            dest_acc_num = selected_ext_acc_obj.account_number
+            return render_with_global_data(request, 'pochi/mobile_withdraw.html', {})
 
-            try:
-                _account = Account.objects.get(profile_id=identifier)
-                src_account = _account.account
-                bal = _account.balance
-                ov = _account.allow_overdraft
-
-                fund_transfer(request, 'WITHDRAW', 'NA', institution_name, identifier, src_account, dest_acc_num, bal,
-                              amount, phone, ov)
-
-                if amount <= bal:
-                    _account.balance -= amount
-                    _account.save()
-                    messages.info(
-                        request,
-                        'You have successfully withdrawn TZS'+str(amount)+' to your '+selected_ext_account+' account'
-                    )
-                else:
-                    messages.error(request, 'You have insufficient funds to withdraw money from your account!')
-
-            except Account.DoesNotExist:
-                pass
     context = {
-        'external_accounts': ext_acc_obj,
+        'bank_account': external_account,
+        'address': address,
+        'swift': swift,
+        'buttons': display_buttons
     }
     return render_with_global_data(request, 'pochi/withdrawal.html', context)
 

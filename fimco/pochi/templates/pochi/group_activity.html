@@ -3,6 +3,45 @@
     <section id="middle">
         <div id="content" class="padding-20">
             <div class="row">
+            {% if messages %}
+                {% for message in messages %}
+                    {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                        <div class="col-lg-6 col-xs-12">
+                            <div class="alert alert-danger margin-bottom-30">
+                                <button type="button" class="close" data-dismiss="alert">
+                                    <span aria-hidden="true">×</span>
+                                    <span class="sr-only">Close</span>
+                                </button>
+                                <p><strong>{{ message }}</strong></p>
+                            </div>
+                        </div>
+                    {% elif message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
+                        <div class="col-lg-6 col-xs-12">
+                            <div class="alert alert-info margin-bottom-30">
+                                <button type="button" class="close" data-dismiss="alert">
+                                    <span aria-hidden="true">×</span>
+                                    <span class="sr-only">Close</span>
+                                </button>
+                                <p><strong>{{ message }}</strong></p>
+                                <a href="{% url 'confirm' %}" class="btn btn-info btn-sm margin-top-10">Proceed transfer</a>
+                                <a href="#" class="btn btn-default btn-sm margin-top-10">Cancel</a>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="col-lg-6 col-xs-12">
+                            <div class="alert alert-success margin-bottom-30">
+                                <button type="button" class="close" data-dismiss="alert">
+                                    <span aria-hidden="true">×</span>
+                                    <span class="sr-only">Close</span>
+                                </button>
+                                <p><strong>{{ message }}</strong></p>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            </div>
+            <div class="row">
                 <div class="col-lg-6">
                     <form class="payment" method="post" action="{% url 'pochi2pochi' %}">
                         {% csrf_token %}
@@ -33,47 +72,13 @@
                                 </div>
                             </div>
                             <div class="panel-footer transfer">
-                                <button class="btn btn-primary" type="submit"><i class="fa fa-check"></i> CONFIRM MONEY TRANSFER</button>
+                                <input type="hidden" name="type" value="G2P">
+                                <button class="btn btn-primary" type="submit"><i class="fa fa-check"></i> SEND MONEY</button>
                             </div>
                         </div>
                     </form>
                 </div>
             </div>
-            {% if messages %}
-                {% for message in messages %}
-                    {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
-                        <div class="alert alert-danger margin-bottom-30">
-                            <button type="button" class="close" data-dismiss="alert">
-                                <span aria-hidden="true">×</span>
-                                <span class="sr-only">Close</span>
-                            </button>
-                            <strong>{{ message }}</strong>
-                        </div>
-                    {% else %}
-                        <form method="post" action="{% url 'process_g2p' %}">
-                            {% csrf_token %}
-                            <div class="alert alert-info margin-bottom-30">
-                                <button type="button" class="close" data-dismiss="alert">
-                                    <span aria-hidden="true">×</span>
-                                    <span class="sr-only">Close</span>
-                                </button>
-                                <strong>{{ message }}</strong>
-                                <input type="submit" class="btn btn-primary btn-sm margin-top-10" value="Proceed checkout">
-                                <a href="" class="btn btn-default btn-sm margin-top-10">Cancel</a>
-                                <input type="hidden" name="group_name" value="{{ group }}">
-                                <input type="hidden" name="account_no" value="{{ account.account }}">
-                                <input type="hidden" name="overdraft" value="{{ extra.allow_overdraft }}">
-                                <input type="hidden" name="name" value="{{ extra.user_object.get_full_name }}">
-                                <input type="hidden" name="ext_wallet" value="{{ account.external_walletid }}">
-                                <input type="hidden" name="dest_acc" value="{{ extra.dest_account }}">
-                                <input type="hidden" name="dest_profile_id" value="{{ extra.dest_profile_id }}">
-                                <input type="hidden" name="amount" value="{{ extra.amount }}">
-                                <input type="hidden" name="open_bal" value="{{ extra.open_bal }}">
-                            </div>
-                        </form>
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
         </div>
     </section>
 {% endblock %}
