@@ -32,73 +32,99 @@
 
         <!-- BOXES -->
         <div class="row">
-            <!-- Feedback Box -->
+            <!-- Rate Box -->
             <div class="col-md-3 col-sm-6">
-                <!-- BOX -->
-                <div class="box danger"><!-- default, danger, warning, info, success -->
-                    <div class="box-title"><!-- add .noborder class if box-body is removed -->
-                        <h4><a href="#">POCHI Rates</a></h4>
-                        <small class="block">8.4%</small>
-                        <i class="fa fa-comments"></i>
+            {% if group %}
+                <a href="{% url 'group_data' 'rates' group %}">
+            {% else %}
+                <a href="{% url 'data' 'rates' %}">
+            {% endif %}
+                    <!-- BOX -->
+                    <div class="box danger"><!-- default, danger, warning, info, success -->
+                        <div class="box-title"><!-- add .noborder class if box-body is removed -->
+                            <h4>POCHI Rates</h4>
+                            <small class="block">{{ rates.today }}%</small>
+{#                            <i class="fa fa-comments"></i>#}
+                        </div>
+                        <div class="box-body text-center">
+                            <span class="sparkline" data-plugin-options='{"type":"bar","barColor":"#ffffff","height":"35px","width":"100%","zeroAxis":"false","barSpacing":"2"}'>
+                                {{ rates.month }}
+                            </span>
+                        </div>
                     </div>
-                    <div class="box-body text-center">
-                        <span class="sparkline" data-plugin-options='{"type":"bar","barColor":"#ffffff","height":"35px","width":"100%","zeroAxis":"false","barSpacing":"2"}'>
-                            331,265,456,411,367,319,402,312,300,312,283,384,372,269,402,319,416,355,416,371,423,259,361,312,269,402,327
-                        </span>
-                    </div>
-                </div>
-                <!-- /BOX -->
+                    <!-- /BOX -->
+                </a>
             </div>
-            <!-- Profit Box -->
+            <!-- Daily Box -->
             <div class="col-md-3 col-sm-6">
-                <!-- BOX -->
-                <div class="box warning"><!-- default, danger, warning, info, success -->
-                    <div class="box-title"><!-- add .noborder class if box-body is removed -->
-                        <h4>Daily Earnings</h4>
-                        <small class="block">TZS 178/=</small>
-                        <i class="fa fa-bar-chart-o"></i>
+            {% if group %}
+                <a href="{% url 'group_data' 'daily' group %}">
+            {% else %}
+                <a href="{% url 'data' 'daily' %}">
+            {% endif %}
+                    <!-- BOX -->
+                    <div class="box warning"><!-- default, danger, warning, info, success -->
+                        <div class="box-title"><!-- add .noborder class if box-body is removed -->
+                            <h4>Daily Earnings</h4>
+                            <small class="block">TZS {{ daily.today }}/=</small>
+    {#                        <i class="fa fa-bar-chart-o"></i>#}
+                        </div>
+                        <div class="box-body text-center">
+                            <span class="sparkline" data-plugin-options='{"type":"bar","barColor":"#ffffff","height":"35px","width":"100%","zeroAxis":"false","barSpacing":"2"}'>
+                                {{ daily.month }}
+                            </span>
+                        </div>
                     </div>
-                    <div class="box-body text-center">
-                        <span class="sparkline" data-plugin-options='{"type":"bar","barColor":"#ffffff","height":"35px","width":"100%","zeroAxis":"false","barSpacing":"2"}'>
-                            331,265,456,411,367,319,402,312,300,312,283,384,372,269,402,319,416,355,416,371,423,259,361,312,269,402,327
-                        </span>
-                    </div>
-                </div>
-                <!-- /BOX -->
+                    <!-- /BOX -->
+                </a>
             </div>
-            <!-- Orders Box -->
+            <!-- Monthly Box -->
             <div class="col-md-3 col-sm-6">
-                <!-- BOX -->
-                <div class="box default"><!-- default, danger, warning, info, success -->
-                    <div class="box-title"><!-- add .noborder class if box-body is removed -->
-                        <h4>Monthly earnings</h4>
-                        <small class="block">TZS 8,105/=</small>
-                        <i class="fa fa-shopping-cart"></i>
+            {% if group %}
+                <a href="{% url 'group_data' 'monthly' group %}">
+            {% else %}
+                <a href="{% url 'data' 'monthly' %}">
+            {% endif %}
+                    <!-- BOX -->
+                    <div class="box default"><!-- default, danger, warning, info, success -->
+                        <div class="box-title"><!-- add .noborder class if box-body is removed -->
+                            <h4>Monthly earnings</h4>
+                            {% for m in monthly.month %}
+                            <small class="block">TZS {{ m.bonus }}/=</small>
+                            {% endfor %}
+    {#                        <i class="fa fa-shopping-cart"></i>#}
+                        </div>
+                        <div class="box-body text-center">
+                            <span class="sparkline" data-plugin-options='{"type":"bar","barColor":"#ffffff","height":"35px","width":"100%","zeroAxis":"false","barSpacing":"2"}'>
+                                {{ monthly.year }}
+                            </span>
+                        </div>
                     </div>
-                    <div class="box-body text-center">
-                        <span class="sparkline" data-plugin-options='{"type":"bar","barColor":"#ffffff","height":"35px","width":"100%","zeroAxis":"false","barSpacing":"2"}'>
-                            331,265,456,411,367,319,402,312,300,312,283,384,372,269,402,319,416,355,416,371,423,259,361,312,269,402,327
-                        </span>
-                    </div>
-                </div>
-                <!-- /BOX -->
+                    <!-- /BOX -->
+                </a>
             </div>
-            <!-- Online Box -->
+            <!-- Total Box -->
             <div class="col-md-3 col-sm-6">
-                <!-- BOX -->
-                <div class="box success"><!-- default, danger, warning, info, success -->
-                    <div class="box-title"><!-- add .noborder class if box-body is removed -->
-                        <h4>Total Earnings</h4>
-                        <small class="block">TZS 178,185/=</small>
-                        <i class="fa fa-globe"></i>
+            {% if group %}
+                <a href="{% url 'group_data' 'total' group %}">
+            {% else %}
+                <a href="{% url 'data' 'total' %}">
+            {% endif %}
+                    <!-- BOX -->
+                    <div class="box success"><!-- default, danger, warning, info, success -->
+                        <div class="box-title"><!-- add .noborder class if box-body is removed -->
+                            <h4>Total Earnings</h4>
+                            <small class="block">TZS {{ total.total.bonus_closing_balance__sum }}/=</small>
+    {#                        <i class="fa fa-globe"></i>#}
+                        </div>
+                        <div class="box-body text-center">
+                            <span class="sparkline" data-plugin-options='{"type":"bar","barColor":"#ffffff","height":"35px","width":"100%","zeroAxis":"false","barSpacing":"2"}'>
+                                {{ total.month }}
+                            </span>
+                        </div>
                     </div>
-                    <div class="box-body text-center">
-                       <span class="sparkline" data-plugin-options='{"type":"bar","barColor":"#ffffff","height":"35px","width":"100%","zeroAxis":"false","barSpacing":"2"}'>
-                            331,265,456,411,367,319,402,312,300,312,283,384,372,269,402,319,416,355,416,371,423,259,361,312,269,402,327
-                        </span>
-                    </div>
-                </div>
-                <!-- /BOX -->
+                    <!-- /BOX -->
+                </a>
             </div>
         </div>
         <!-- /BOXES -->
@@ -107,4 +133,38 @@
 {% block scripts %}
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
     <script type="text/javascript" src="/static/pochi/js/admin.js"></script>
+    <script type="text/javascript">
+        var ctx = document.getElementById('balInterest').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                {% if labels %}
+                    labels: {{labels|safe}},
+                {% else %}
+                    labels: [],
+                {% endif %}
+                datasets: [
+                    {
+                        label: 'Balance',
+                        borderColor: 'rgb(0,42,84)',
+                        {% if balance %}
+                            data: {{balance|safe}},
+                        {% else %}
+                            data: [],
+                        {% endif %}
+                        type: 'line'
+                    },
+                    {
+                        label: 'Interest',
+                        borderColor: 'rgb(206,32,32)',
+                        {% if bonus %}
+                            data: {{bonus|safe}},
+                        {% else %}
+                            data: [],
+                        {% endif %}
+                    }
+                ]
+            }
+        });
+    </script>
 {% endblock %}

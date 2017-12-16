@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from .models import Group, GroupMember, Transaction, Ledger, BalanceSnapshot, ExternalAccount, \
-    Notification, PaidUser, Charge, CashOut
+    Notification, PaidUser, Charge, CashOut, Rate
 
 
 class GroupAdmin(admin.ModelAdmin):
@@ -14,8 +14,8 @@ class GroupMembersAdmin(admin.ModelAdmin):
 
 class TransactionAdmin(admin.ModelAdmin):
     list_display = ('full_timestamp', 'profile_id', 'account', 'msisdn', 'external_wallet_id', 'service', 'channel',
-                    'dest_account', 'amount', 'charge', 'currency', 'reference', 'status', 'result_code', 'message',
-                    'processed_timestamp')
+                    'mode', 'dest_account', 'amount', 'charge', 'currency', 'reference', 'status', 'result_code',
+                    'message', 'processed_timestamp')
 
 
 class LedgerAdmin(admin.ModelAdmin):
@@ -48,6 +48,10 @@ class CashOutAdmin(admin.ModelAdmin):
     list_display = ('ext_entity', 'ext_acc_no', 'amount', 'status')
 
 
+class RateAdmin(admin.ModelAdmin):
+    list_display = ('full_timestamp', 'rate')
+
+
 admin.site.register(Group, GroupAdmin)
 admin.site.register(GroupMember, GroupMembersAdmin)
 admin.site.register(Transaction, TransactionAdmin)
@@ -58,3 +62,4 @@ admin.site.register(Notification, NotificationAdmin)
 admin.site.register(PaidUser, PaidUserAdmin)
 admin.site.register(Charge, ChargeAdmin)
 admin.site.register(CashOut, CashOutAdmin)
+admin.site.register(Rate, RateAdmin)

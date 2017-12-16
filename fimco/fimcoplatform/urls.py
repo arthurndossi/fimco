@@ -4,6 +4,7 @@ from . import views
 
 urlpatterns = [
    url(r'^(?P<page>[a-zA-Z]+)/$', views.market_views, name='page'),
+   url(r'^start/trial/$', views.start_trial, name='trial'),
 #    url(r'^markets$', views.market, name='markets'),
    url(r'^exchange/(?P<page>[a-zA-Z]+)/$', views.exchange_view, name='exchange'),
    url(r'^interests/$', views.interests_view, name='interests'),

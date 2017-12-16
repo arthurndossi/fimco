@@ -1,10 +1,40 @@
 {% extends "fimcoplatform/base.html" %}
+{% block links %}
+    <link rel="stylesheet" type="text/css" href="/static/platform/css/platform.css" />
+{% endblock %}
 {% block main %}
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <div class="row">
-                <!-- LEFT -->
-                <div class="col-md-9">
+    <div class="row">
+        <!-- LEFT -->
+        <div class="col-md-9">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row">
+                    {% if messages %}
+                        {% for message in messages %}
+                            {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                                <div class="col-xs-12 col-centered">
+                                    <div class="alert alert-danger margin-bottom-30">
+                                        <button type="button" class="close" data-dismiss="alert">
+                                            <span aria-hidden="true">×</span>
+                                            <span class="sr-only">Close</span>
+                                        </button>
+                                        <p><strong>{{ message }}</strong></p>
+                                    </div>
+                                </div>
+                            {% elif message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
+                                <div class="col-xs-12 col-centered">
+                                    <div class="alert alert-info margin-bottom-30">
+                                        <button type="button" class="close" data-dismiss="alert">
+                                            <span aria-hidden="true">×</span>
+                                            <span class="sr-only">Close</span>
+                                        </button>
+                                        <p><strong>{{ message }}</strong></p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                    </div>
                     <p class="lead">
                         Access to market information includes historical data and is a powerful in the hands of
                         investors to drive their investment decisions. We offer a free limited view of market
@@ -15,19 +45,19 @@
                     <div class="row">
                         <div class="col-md-4">
                             <div class="pricing-table popular">
-                                <div class="plan-title">Standard Plan</div>
-                                <div class="plan-price">TZS 20,000 <span>per month</span></div>
+                                <div class="plan-title">Free (Limited)</div>
+                                <div class="plan-price">Free</div>
                                 <ul class="plan-features">
-                                    <li>20 GB Storage</li>
-                                    <li>- - - - - -</li>
-                                    <li>Unlimited Domains</li>
-                                    <li>- - - - - -</li>
-                                    <li>cPanel Free</li>
-                                    <li>- - - - - -</li>
-                                    <li>SSL Certificate</li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
                                 </ul>
                                 <div class="plan-buy text-center">
-                                    <a class="btn btn-primary" href="#">Sign Up</a>
+                                    <a class="btn btn-primary" href="{% url 'trial' %}">Join now</a>
                                 </div>
                             </div>
                         </div>
@@ -36,13 +66,13 @@
                                 <div class="plan-title">Professional Plan</div>
                                 <div class="plan-price">TZS 30,000 <span>per month</span></div>
                                 <ul class="plan-features">
-                                    <li>20 GB Storage</li>
-                                    <li>- - - - - -</li>
-                                    <li>Unlimited Domains</li>
-                                    <li>- - - - - -</li>
-                                    <li>cPanel Free</li>
-                                    <li>- - - - - -</li>
-                                    <li>Enhanced SSL Security</li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
                                 </ul>
                                 <div class="plan-buy text-center">
                                     <a class="btn btn-primary" href="#">Sign Up</a>
@@ -54,13 +84,13 @@
                                 <div class="plan-title">Business Plan</div>
                                 <div class="plan-price">TZS 40,000 <span>per month</span></div>
                                 <ul class="plan-features">
-                                    <li>20 GB Storage</li>
-                                    <li>- - - - - -</li>
-                                    <li>Unlimited Domains</li>
-                                    <li>- - - - - -</li>
-                                    <li>cPanel Free</li>
-                                    <li>- - - - - -</li>
-                                    <li>Enhanced SSL Security</li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
                                 </ul>
                                 <div class="plan-buy text-center">
                                     <a class="btn btn-primary" href="#">Sign Up</a>
@@ -69,8 +99,12 @@
                         </div>
                     </div>
                 </div>
-                <!-- RIGHT -->
-                <div class="col-md-3">
+            </div>
+        </div>
+        <!-- RIGHT -->
+        <div class="col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-body">
 
                 </div>
             </div>

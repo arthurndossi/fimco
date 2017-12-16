@@ -10,17 +10,17 @@
             {% if messages %}
                 {% for message in messages %}
                     {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
-                        <div class="alert alert-success mb-30">
+                        <div class="alert alert-error mb-30 center">
                             <button type="button" class="close" data-dismiss="alert">
                                 <span aria-hidden="true">×</span>
                                 <span class="sr-only">Close</span>
                             </button>
-                            <h4>Oops! <strong>Try Again!</strong></h4>
+                            <h4>Alert! <strong>Try Again!</strong></h4>
                             <p>{{ message }}</p>
                         </div>
                     {% else %}
                         <div class="col-xs-12">
-                            <div class="alert alert-success mb-30">
+                            <div class="alert alert-success mb-30 center">
                                 <button type="button" class="close" data-dismiss="alert">
                                     <span aria-hidden="true">×</span>
                                     <span class="sr-only">Close</span>

@@ -158,23 +158,6 @@ class CorporateForm1(forms.Form):
             'required': True,
         })
     )
-    website = forms.URLField(
-        max_length=100,
-        widget=forms.URLInput(attrs={
-            'class': 'form-control',
-            'required': True,
-        })
-    )
-    company_acc_name = forms.CharField(
-        min_length=2,
-        max_length=20,
-        validators=[validate_slug],
-        widget=forms.TextInput(attrs={
-            'class': 'form-control',
-            'required': True,
-
-        })
-    )
 
     def clean(self):
         cleaned_data = self.cleaned_data
@@ -185,19 +168,40 @@ class CorporateForm1(forms.Form):
 
 
 class CorporateForm2(forms.Form):
-    id_type = forms.ChoiceField(choices=CORPORATE_IDS)
-    id_number = forms.CharField(
-        widget=forms.TextInput(attrs={
+    license = forms.FileField(
+        widget=forms.ClearableFileInput(attrs={
             'class': 'form-control',
+            'onchange': 'jQuery(this).next("input").val(this.value)',
             'required': True
         })
     )
-    scanned_id = forms.FileField(
-        widget=forms.ClearableFileInput(attrs={'id': 'file', 'class': 'form-control', 'required': True})
+    certificate = forms.FileField(
+        widget=forms.ClearableFileInput(attrs={
+            'class': 'form-control',
+            'onchange': 'jQuery(this).next("input").val(this.value)',
+            'required': True
+        })
     )
 
 
 class CorporateForm3(forms.Form):
+    bot = forms.CharField(
+        min_length=6,
+        max_length=20,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+        })
+    )
+    dse = forms.CharField(
+        min_length=6,
+        max_length=20,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+        })
+    )
+
+
+class CorporateForm4(forms.Form):
     fName = forms.CharField(
         min_length=2,
         max_length=20,
@@ -238,12 +242,25 @@ class CorporateForm3(forms.Form):
             'required': True,
         })
     )
+    id_type = forms.ChoiceField(choices=CORPORATE_IDS)
+    id_number = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'required': True
+        })
+    )
+    user_id = forms.ImageField(
+        widget=forms.ClearableFileInput(attrs={
+            'class': 'form-control',
+            'onchange': 'jQuery(this).next("input").val(this.value)',
+            'required': True
+        })
+    )
     password = forms.CharField(
         validators=[validate_slug],
         widget=forms.PasswordInput(attrs={
             'class': 'form-control',
             'required': True,
-
         })
     )
     verify = forms.CharField(
@@ -251,7 +268,6 @@ class CorporateForm3(forms.Form):
         widget=forms.PasswordInput(attrs={
             'class': 'form-control',
             'required': True,
-
         })
     )
 

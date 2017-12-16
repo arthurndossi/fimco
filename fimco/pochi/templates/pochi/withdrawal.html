@@ -44,7 +44,7 @@
                 {% endfor %}
             {% endif %}
             </div>
-            {% if not bank_account %}
+            {% if bank_account %}
                 <div class="row">
                     <div class="col-lg-8 col-md-10 col-sm-12 col-centered">
                         <div class="alert alert-warning margin-bottom-30">
@@ -56,57 +56,58 @@
                         </div>
                         <div class="panel panel-default">
                             <div class="panel-heading panel-heading-transparent">
-                                <strong>Add new Bank Account</strong>
+                                <strong>Complete Indemnity Form</strong>
                             </div>
                             <div class="panel-body">
-                                <form method="post" action="{% url 'withdraw' %}">
+                                <form id="create_account" method="post" action="{% url 'create_form' %}">
                                     {% csrf_token %}
                                     <div class="row">
                                         <div class="col-md-6 col-xs-8">
-                                            <label>Account holder name *
-                                                <input type="text" class="form-control" name="name" required>
+                                            <label> Account holder name *
+                                                <input type="text" class="required form-control" name="name" required>
                                             </label>
                                         </div>
                                         <div class="col-md-6 col-xs-8">
-                                            <label>Account number *
-                                                <input type="text" class="form-control masked" name="account" data-format="999999999999999">
+                                            <label> Account number *
+                                                <input type="text" class="required form-control masked" name="account" data-format="999999999999999">
                                             </label>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-lg-6 col-md-6 col-sm-8">
-                                            <label>Bank name *
-                                                <input type="text" class="form-control" name="bank">
+                                            <label> Bank name *
+                                                <input type="text" class="required form-control" name="bank">
                                             </label>
                                             <input type="hidden" name="type" value="account" required>
                                         </div>
                                         <div class="col-lg-6 col-md-6 col-sm-8">
                                             <label> Bank branch *
-                                                <input type="text" class="form-control" name="branch" required>
+                                                <input type="text" class="required form-control" name="branch" required>
                                             </label>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-lg-8 col-md-8 col-xs-12">
-                                            <label>Bank address *
+                                            <label> Bank address *
                                                 <textarea rows="4" cols="100%" class="form-control required" name="address" required></textarea>
                                             </label>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-6 col-xs-8">
-                                            <label>Swift code <small>(optional)</small>
+                                            <label> Swift code <small>(optional)</small>
                                                 <input type="text" class="form-control" name="swift">
                                             </label>
                                         </div>
                                         <div class="col-md-6 col-xs-8">
-                                            <label>Alias account name <small>(short name)</small> *
-                                                <input type="text" class="form-control" name="nickname" required>
+                                            <label> Alias account name <small>(short name)</small> *
+                                                <input type="text" class="required form-control" name="nickname" required>
                                             </label>
                                         </div>
                                     </div>
                                     <div class="col-xs-12">
-                                        <input type="submit" class="btn btn-primary" value="Add Account">
+                                        <input type="submit" class="btn btn-primary" value="Download Completed Form"
+                                               id="download" disabled="disabled">
                                     </div>
                                 </form>
                             </div>
@@ -141,10 +142,11 @@
                         <div id="panel-ui-tan-l4" class="panel panel-default">
                             <div class="panel-heading">
                                 <span class="elipsis">
-                                    <strong>{{ bank_account.account_name }}</strong>
+                                    <strong>current registered bank account details</strong>
                                 </span>
                             </div>
                             <div class="panel-body">
+                                <p><strong>Full Name:</strong> {{ bank_account.account_name }}</p>
                                 <p><strong>Bank Name:</strong> {{ bank_account.institution_name }}</p>
                                 <p><strong>Branch Name:</strong> {{ bank_account.institution_branchcode }}</p>
                                 <p><strong>Account Number:</strong> {{ bank_account.account_number }}</p>
@@ -163,7 +165,7 @@
                 <div class="col-lg-8 col-md-10 col-sm-12 col-centered">
                     <div class="panel panel-default">
                         <div class="panel-heading panel-heading-transparent">
-                            <strong>Indemnity Form</strong>
+                            <strong>Blank Indemnity Form</strong>
                         </div>
                         <div class="panel-body">
                             <p>
@@ -174,17 +176,16 @@
                             <div class="row">
                                 <div class="col-xs-6">
                                     <div class="dropdown">
-                                        <button onclick="show_dropdown('download')" class="btn btn-primary">Download Form</button>
-                                        <div id="download" class="dropdown-content">
-                                            {% if buttons %}
-                                                <a href="{% url 'create_form' %}">Download completed form</a>
-                                            {% endif %}
-                                            <a href="{% url 'create_form' %}">Download blank form</a>
-                                        </div>
+                                        <a href="{% url 'create_form' %}" class="btn btn-primary">Download Blank Form</a>
                                     </div>
                                 </div>
                                 <div class="col-xs-6">
-                                    <button class="btn btn-primary">Upload Scanned copy</button>
+                                    <div class="fancy-file-upload">
+                                        <i class="fa fa-upload"></i>
+                                        <input type="file" class="form-control" name="contact[attachment]" onchange="jQuery(this).next('input').val(this.value);" />
+                                        <input type="text" class="form-control" placeholder="Upload Scanned copy" readonly="" />
+                                        <span>Upload Scanned copy</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>

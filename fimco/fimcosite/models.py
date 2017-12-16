@@ -8,7 +8,7 @@ from django.db import models
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-PROFILE_ROOT = os.path.join(MEDIA_ROOT, 'kyc', 'documents')
+PROFILE_ROOT = os.path.join(MEDIA_ROOT, 'users')
 
 telephone = RegexValidator(r'^([+]?(\d{1,3}\s?)|[0])\s?\d+(\s?\-?\d{2,4}){1,3}?$', 'Not a valid phone number.')
 
@@ -27,17 +27,13 @@ class Profile(models.Model):
         ('O', 'OTHER')
     )
     TYPE = (
-        ('I', 'INDIVIDUAL'),
-        ('C', 'CORPORATE')
+        ('I', 'Individual'),
+        ('C', 'Corporate')
     )
     STATUS = (
-        ('APPROVED', 'APPROVED'),
-        ('REJECTED', 'REJECTED'),
-        ('PENDING', 'PENDING')
-    )
-    ACTIVE_STATUS = (
-        (0, 'ACTIVE'),
-        (1, 'INACTIVE')
+        ('APPROVED', 'Approved'),
+        ('REJECTED', 'Rejected'),
+        ('PENDING', 'Pending')
     )
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -48,11 +44,8 @@ class Profile(models.Model):
     dse_cds = models.CharField(max_length=15, null=True)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True)
-    is_staff = models.BooleanField(default=False)
-    is_superuser = models.BooleanField(default=False)
     profile_type = models.CharField(max_length=1, choices=TYPE, default='I')
     profile_id = models.CharField(max_length=10)
-    status = models.IntegerField(choices=ACTIVE_STATUS, default=0)
     approval_status = models.CharField(max_length=10, choices=STATUS, default='PENDING')
 
 
@@ -61,7 +54,6 @@ class CorporateProfile(models.Model):
     address = models.TextField(max_length=500)
     phone_number = models.CharField(max_length=20)
     profile_id = models.CharField(max_length=20)
-    website = models.URLField(max_length=100, default='NA')
 
 
 class KYC(models.Model):
@@ -74,8 +66,8 @@ class KYC(models.Model):
 
 class Account(models.Model):
     ACTIVE_STATUS = (
-        (0, 'ACTIVE'),
-        (1, 'INACTIVE')
+        (1, 'Active'),
+        (0, 'Inactive')
     )
     profile_id = models.CharField(max_length=10, db_index=True, default='NA')
     created_on = models.DateTimeField(auto_now_add=True)

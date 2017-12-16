@@ -1,11 +1,14 @@
 import datetime
 
 from core.utils import render_with_global_data
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Max, Min
 from django.http import JsonResponse
+from django.shortcuts import redirect
 from django.template.defaultfilters import register
 
+from pochi.models import PaidUser
 from .models import ExchangeRate, OvernightInterest, Tbill, Tbond, LiborRate
 
 
@@ -17,6 +20,20 @@ def inverse(rate):
 @login_required
 def market_views(request, page):
     return render_with_global_data(request, 'fimcoplatform/' + page + '.html', {})
+
+
+@login_required
+def start_trial(request):
+    profile = request.user.profile
+    profile_id = profile.profile_id
+    PaidUser.objects.create(
+        profile_id=profile_id,
+        start_date=datetime.datetime.today(),
+        level='STANDARD'
+    )
+    messages.info(request, 'You now have limited access to market information, you can always try the paid version'
+                           ' for unlimited information and unsubscribe at any time.')
+    return redirect(request.META['HTTP_REFERER'])
 
 
 class ExchangeRateDto:

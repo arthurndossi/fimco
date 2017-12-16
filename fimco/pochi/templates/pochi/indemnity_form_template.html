@@ -1,0 +1,28 @@
+{% extends "easy_pdf/base.html" %}
+
+{% block extra_style %}
+    <style type="text/css">
+        body {
+            font-family: "Helvetica", "sans-serif";
+            color: #333333;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div id="content">
+        <div class="main">
+            <h1>Indemnity Form details:</h1>
+            <img src="file:///STATIC_ROOT/img/POCHI.png" />
+        </div>
+    </div>
+    <div>
+        <p>Full Name:           {{ name|default:"" }}</p>
+        <p>Account number:      {{ account|default:"" }}</p>
+        <p>Bank name:           {{ bank|default:"" }}</p>
+        <p>Bank name:           {{ branch|default:"" }}</p>
+        <p>Bank address:        {{ address|default:"" }}</p>
+        <p>Alias acc. name:     {{ nickname|default:"" }}</p>
+        <p>Swift code:          {{ swift|default:"" }}</p>
+    </div>
+{% endblock %}

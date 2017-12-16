@@ -29,7 +29,7 @@
                     {% if next %}
                         <!-- ALERT -->
                         <div class="alert alert-mini alert-danger mb-30">
-                            <p>You need to login to view this page... else create an account in the link below.</p>
+                            <p>You need to login to view this page!</p>
                         </div>
                         <!-- /ALERT -->
                     {% endif %}
@@ -77,7 +77,7 @@
                         <a id="terms" data-toggle="modal" data-target="#termsModal">Terms and Conditions</a>.
                     </p>
                     <div class="mt-30 text-center">
-                        <a href="{% url 'account' %}"><strong>Create Account{{ next }}</strong></a>
+                        <a href="" data-toggle="modal" data-target="#accountTypeModal"><strong>Create Account</strong></a>
                     </div>
                 </div>
             </div>

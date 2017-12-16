@@ -26,6 +26,7 @@ def render_with_global_data(request, page, context):
         pass
 
     _context = {
+        'profile': profile,
         'groups': group_members_obj,
         'paid': paid_user
     }

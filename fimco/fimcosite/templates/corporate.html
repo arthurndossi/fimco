@@ -2,7 +2,7 @@
 
 {% block links %}
     <style>
-        .validate{
+        form{
             margin-bottom: 0;
         }
     </style>
@@ -11,73 +11,340 @@
 {% block content %}
     <section>
         <div class="container">
+            <div class="row">
+            {% if messages %}
+                {% for message in messages %}
+                    {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                        <div class="col-lg-6 col-xs-12 col-centered">
+                            <div class="alert alert-danger margin-bottom-30">
+                                <button type="button" class="close" data-dismiss="alert">
+                                    <span aria-hidden="true">×</span>
+                                    <span class="sr-only">Close</span>
+                                </button>
+                                <p><strong>{{ message }}</strong></p>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="col-lg-6 col-xs-12 col-centered">
+                            <div class="alert alert-success margin-bottom-30">
+                                <button type="button" class="close" data-dismiss="alert">
+                                    <span aria-hidden="true">×</span>
+                                    <span class="sr-only">Close</span>
+                                </button>
+                                <p><strong>{{ message }}</strong></p>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            </div>
             <div class="heading-title text-center">
                 <h3>Corporate Account</h3>
             </div>
-            <div class="card card-default">
-                <div class="card-heading card-heading-transparent">
-                    <h2 class="card-title bold">Step {{ wizard.steps.step1 }} of {{ wizard.steps.count }}</h2>
-                </div>
 
-                <form class="validate" action="{% url 'corporate' %}" method="post" enctype="multipart/form-data" data-success="Sent! Thank you!" data-toastr-position="top-right">
-                {% csrf_token %}
-                    <div class="card-block">
-                        <table>
-                            {{ wizard.management_form }}
-                            {% if wizard.form.forms %}
-                                {{ wizard.form.management_form }}
-                                {% for form in wizard.form.forms %}
-                                    {{ form }}
-                                {% endfor %}
-                            {% else %}
-                                {{ wizard.form }}
-                            {% endif %}
-                        </table>
+            <div class="callout alert alert-border mb-60">
+                <div class="row">
+                    <div class="col-xs-12 pd-10">
+                        <h4>* Requirements</h4>
+                        <p class="font-lato fs-17">The company will be required to submit board <strong>approval letter</strong></p>
+                        <p class="font-lato fs-17">Submit bank indemnity letter stamped by the company's bank</p>
+                        <p class="font-lato fs-17">The company representative must be introduced and approved byy the company in writing</p>
                     </div>
-                    <div class="card-footer">
-                        {% if wizard.steps.prev %}
-                            <button name="wizard_goto_step" type="submit" class="btn btn-primary" value="{{ wizard.steps.first }}">first step</button>
-                            <button name="wizard_goto_step" type="submit" class="btn btn-primary" value="{{ wizard.steps.prev }}">prev step</button>
-                        {% endif %}
-                        <input type="submit" class="btn btn-primary btn-teal" value="Next"/>
-                    </div>
-                </form>
+                </div>
             </div>
-{##}
-{#                                    <div class="card-block">#}
-{#                                        <fieldset>#}
-{#                                            <div class="row">#}
-{#                                                <div class="col-md-6 col-sm-6">#}
-{#                                                    <label for="corporate:name">Company Name <small>(required)</small></label>#}
-{#                                                    <label class="input mb-10">#}
-{#                                                        <i class="ico-append fa fa-building"></i>#}
-{#                                                        {{ cForm.name }}#}
-{#                                                        <b class="tooltip tooltip-bottom-right">Your Company's Name</b>#}
-{#                                                    </label>#}
-{#                                                    {% if cForm.name.errors %}#}
-{#                                                        {% for error in cForm.name.errors %}#}
-{#                                                            <div class="alert alert-mini alert-danger mb-30">#}
-{#                                                                <strong>{{ error|escape }}</strong>#}
-{#                                                            </div>#}
-{#                                                        {% endfor %}#}
-{#                                                    {% endif %}#}
-{#                                                </div>#}
-{#                                                <div class="col-md-6 col-sm-6">#}
-{#                                                    <label for="corporate:address">Address <small>(required)</small></label>#}
-{#                                                    <label class="input mb-10">#}
-{#                                                        <i class="ico-append fa fa-address-card"></i>#}
-{#                                                        {{ cForm.address }}#}
-{#                                                        <b class="tooltip tooltip-bottom-right">Company Address</b>#}
-{#                                                    </label>#}
-{#                                                    {% if cForm.address.errors %}#}
-{#                                                        {% for error in cForm.address.errors %}#}
-{#                                                            <div class="alert alert-mini alert-danger mb-30">#}
-{#                                                                <strong>{{ error|escape }}</strong>#}
-{#                                                            </div>#}
-{#                                                        {% endfor %}#}
-{#                                                    {% endif %}#}
-{#                                                </div>#}
-{#                                            </div>#}
+
+            <ul class="nav nav-tabs nav-button-tabs mb-30">
+                <li class="nav-item"><a class="nav-link active" href="#company" data-toggle="tab">Add New Company</a></li>
+                <li class="nav-item"><a class="nav-link" href="#user" data-toggle="tab">Add User to Existing company</a></li>
+            </ul>
+
+            <div class="tab-content">
+                <div class="tab-pane active" id="company">
+                    <div class="card card-default">
+                        <div class="card-heading card-heading-transparent">
+                            <ul class="process-steps nav nav-justified">
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="#step1" data-toggle="tab">1</a>
+                                    <h5>Company Details</h5>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#step2" data-toggle="tab">2</a>
+                                    <h5>KYC Information</h5>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#step3" data-toggle="tab">3</a>
+                                    <h5>BOT & DSE Form</h5>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#step4" data-toggle="tab">4</a>
+                                    <h5>User Details</h5>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <form action="{% url 'corporate' %}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                            <div class="card-block">
+                                <div class="tab-content mt-60">
+                                    <div role="tabpanel" class="tab-pane active" id="step1">
+                                        <h4>Company Details Form</h4>
+                                        <fieldset>
+                                            <div class="row">
+                                                <div class="col-md-6 col-sm-6">
+                                                    {% if cForm.name.errors %}
+                                                        {% for error in cForm.name.errors %}
+                                                            <div class="alert alert-mini alert-danger mb-30">
+                                                                <strong>{{ error|escape }}</strong>
+                                                            </div>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                    <label>Company Name *</label>
+                                                    {{ cForm.name }}
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6 col-sm-6">
+                                                    {% if cForm.contact.errors %}
+                                                        {% for error in cForm.contact.errors %}
+                                                            <div class="alert alert-mini alert-danger mb-30">
+                                                                <strong>{{ error|escape }}</strong>
+                                                            </div>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                    <label>Telephone *</label>
+                                                    {{ cForm.contact }}
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6 col-sm-6">
+                                                    {% if cForm.address.errors %}
+                                                        {% for error in cForm.address.errors %}
+                                                            <div class="alert alert-mini alert-danger mb-30">
+                                                                <strong>{{ error|escape }}</strong>
+                                                            </div>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                    <label>Address *</label>
+                                                    {{ cForm.address }}
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+
+                                    <div role="tabpanel" class="tab-pane" id="step2">
+                                        <h4>Company KYC Form</h4>
+                                        <fieldset>
+                                            <div class="row">
+                                                <div class="col-md-6 col-sm-6">
+                                                    <div class="fancy-file-upload">
+                                                        <i class="fa fa-upload"></i>
+                                                        {{ kForm.license }}
+                                                        <input type="text" class="form-control" placeholder="Business Licence" readonly="" />
+                                                        <span>Attach Business Licence</span>
+                                                    </div>
+                                                    <small class="text-muted block">Max file size: 10Mb (pdf/jpg/png)</small>
+                                                </div>
+                                                <div class="col-md-6 col-sm-6">
+                                                    <div class="fancy-file-upload">
+                                                        <i class="fa fa-upload"></i>
+                                                        {{ kForm.certificate }}
+                                                        <input type="text" class="form-control" placeholder="TIN Certificate" readonly="" />
+                                                        <span>Attach TIN Certificate</span>
+                                                    </div>
+                                                    <small class="text-muted block">Max file size: 10Mb (pdf/jpg/png)</small>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+
+                                    <div role="tabpanel" class="tab-pane" id="step3">
+                                        <h4>BOT & DSE CDS Accounts Form <small class="text-muted">(optional)</small></h4>
+                                        <fieldset>
+                                            <div class="row">
+                                                <div class="col-md-6 col-sm-6">
+                                                    <label>
+                                                        BOT CDS Account
+                                                        <small class="text-muted">(optional)</small>
+                                                    </label>
+                                                    {{ aForm.bot }}
+                                                </div>
+                                                <div class="col-md-6 col-sm-6">
+                                                    <label>
+                                                        DSE CDS Account
+                                                        <small class="text-muted">(optional)</small>
+                                                    </label>
+                                                    {{ aForm.dse }}
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane" id="step4">
+                                        <h4>Company representative details Form</h4>
+                                        <fieldset>
+                                            <input type="hidden" name="action" value="contact_send" />
+
+                                            <div class="row">
+                                                <div class="col-md-6 col-sm-6">
+                                                    <label>First Name *</label>
+                                                    {{ uForm.fName }}
+                                                </div>
+                                                <div class="col-md-6 col-sm-6">
+                                                    <label>Last Name *</label>
+                                                    {{ uForm.lName }}
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6 col-sm-6">
+                                                    <label>Email *</label>
+                                                    {{ uForm.email }}
+                                                </div>
+                                                <div class="col-md-6 col-sm-6">
+                                                    <label>Phone *</label>
+                                                    {{ uForm.phone }}
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6 col-sm-6">
+                                                    <label>Date of Birth*</label>
+                                                    {{ uForm.dob }}
+                                                </div>
+                                                <div class="col-md-3 col-sm-6">
+                                                    <label>Gender *</label>
+                                                    {{ uForm.gender }}
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6 col-sm-6">
+                                                    <label>Password *</label>
+                                                    {{ uForm.password }}
+                                                </div>
+                                                <div class="col-md-6 col-sm-6">
+                                                    <label>Verify *</label>
+                                                    {{ uForm.verify }}
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-2 col-md-2 col-sm-4">
+                                                    <label>ID Type *</label>
+                                                    {{ uForm.id_type }}
+                                                </div>
+                                                <div class="col-lg-4 col-md-4 col-sm-4">
+                                                    <label>ID Number *</label>
+                                                    {{ uForm.id_number }}
+                                                </div>
+                                                <div class="col-lg-6 col-md-4 col-sm-4">
+                                                    <label></label>
+                                                    <div class="fancy-file-upload">
+                                                        <i class="fa fa-upload"></i>
+                                                        {{ uForm.user_id }}
+                                                        <input type="text" class="form-control" placeholder="upload your ID" readonly="" />
+                                                        <span>Attach your ID</span>
+                                                    </div>
+                                                    <small class="text-muted block">Upload National ID, Passport, Voter ID or Driver license, max file size: 10Mb</small>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button name="wizard_goto_step" type="submit" class="btn btn-primary" value="{{ wizard.steps.first }}">first step</button>
+                                <button name="wizard_goto_step" type="submit" class="btn btn-primary" value="{{ wizard.steps.prev }}">prev step</button>
+                                <input type="submit" class="btn btn-primary btn-teal" value="Next"/>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="user">
+                    <form action="{% url 'register' %}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="card-block">
+                            <h4>Company representative details Form</h4>
+                            <fieldset>
+                                <!-- required [php action request] -->
+                                <input type="hidden" name="action" value="contact_send" />
+
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-6">
+                                        <label>Choose your Company *
+                                            <select>
+                                                {% for option in options %}
+                                                    <option value="{{ option }}">{{ option }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-6">
+                                        <label>First Name *</label>
+                                        {{ uForm.fName }}
+                                    </div>
+                                    <div class="col-md-6 col-sm-6">
+                                        <label>Last Name *</label>
+                                        {{ uForm.lName }}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-6">
+                                        <label>Email *</label>
+                                        {{ uForm.email }}
+                                    </div>
+                                    <div class="col-md-6 col-sm-6">
+                                        <label>Phone *</label>
+                                        {{ uForm.phone }}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-6">
+                                        <label>Date of Birth*</label>
+                                        {{ uForm.dob }}
+                                    </div>
+                                    <div class="col-md-3 col-sm-6">
+                                        <label>Gender *</label>
+                                        {{ uForm.gender }}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-6">
+                                        <label>Password *</label>
+                                        {{ uForm.password }}
+                                    </div>
+                                    <div class="col-md-6 col-sm-6">
+                                        <label>Verify *</label>
+                                        {{ uForm.verify }}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-2 col-md-2 col-sm-4">
+                                        <label>ID Type *</label>
+                                        {{ uForm.id_type }}
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4">
+                                        <label>ID Number *</label>
+                                        {{ uForm.id_number }}
+                                    </div>
+                                    <div class="col-lg-6 col-md-4 col-sm-4">
+                                        <label></label>
+                                        <div class="fancy-file-upload">
+                                            <i class="fa fa-upload"></i>
+                                            {{ uForm.user_id }}
+                                            <input type="text" class="form-control" placeholder="upload your ID" readonly="" />
+                                            <span>Attach your ID</span>
+                                        </div>
+                                        <small class="text-muted block">Upload National ID, Passport, Voter ID or Driver license, max file size: 10Mb</small>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <input type="submit" class="btn btn-primary btn-teal" value="Add User"/>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </section>
+{% endblock %}
+{% block scripts %}
+    <script type="text/javascript" src="/static/pochi/js/corporate.js"></script>
 {% endblock %}

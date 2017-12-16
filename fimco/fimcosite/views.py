@@ -1,4 +1,3 @@
-import os
 import re
 import uuid
 from random import randint
@@ -8,72 +7,105 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.conf import settings
-from django.core.files.storage import FileSystemStorage
-from django.http import JsonResponse
-
+from django.core.mail import EmailMessage, BadHeaderError
+from django.db import transaction
 from django.shortcuts import render, redirect
-from formtools.wizard.views import SessionWizardView
 
+from .forms import RegisterForm, LoginForm, CorporateForm1, CorporateForm2, CorporateForm3, CorporateForm4
 from .models import KYC, CorporateProfile, Account, Profile
-from .forms import RegisterForm, LoginForm
 
 
-def process_form_data(form_list):
-    form_data = [form.cleaned_data for form in form_list]
-    name = form_data[0]['name']
-    contact = form_data[0]['contact']
-    address = form_data[0]['address']
-    website = form_data[0]['website']
-    id_type = form_data[1]['id_type']
-    id_number = form_data[1]['id_number']
-    scanned_id = form_data[1]['scanned_id']
-    fName = form_data[2]['fName'].capitalize()
-    lName = form_data[2]['lName'].capitalize()
-    dob = form_data[2]['dob']
-    gender = form_data[2]['gender']
-    email = form_data[2]['email']
-    phone = form_data[2]['phone'].strip()
-    password = form_data[2]["password"]
-    profile_id = "POC%s" % uuid.uuid4().hex[:6].upper()
-    pin = uuid.uuid4().hex[:4].upper()
-    CorporateProfile.objects.create(
-        company_name=name,
-        address=address,
-        phone_number=contact,
-        website=website
-    )
-    KYC.objects.create(
-        profile_id=CorporateProfile.profile_id,
-        kyc_type=id_type,
-        id_number=id_number,
-        document=scanned_id
-    )
-    user = User.objects.create_user(phone, email, password, first_name=fName, last_name=lName)
-    Profile.objects.create(
-        user=user,
-        dob=dob,
-        gender=gender,
-        bot_cds='NA',
-        dse_cds='NA',
-        profile_id=profile_id,
-        pin=pin
-    )
+@transaction.atomic
+def process_form_data(request):
+    options = CorporateProfile.objects.values_list('company_name', flat=True)
+    if request.POST:
+        form_1 = CorporateForm1(request.POST or None)
+        form_2 = CorporateForm2(request.POST, request.FILES or None)
+        form_3 = CorporateForm3(request.POST or None)
+        form_4 = CorporateForm4(request.POST, request.FILES or None)
 
-    pass
+        form_list = [form_1, form_2, form_3, form_4]
 
+        if form_1.is_valid() and form_2.is_valid() and form_3.is_valid() and form_4.is_valid():
+            form_data = [form.cleaned_data for form in form_list]
 
-class CorporateWizard(SessionWizardView):
-    template_name = 'corporate.html'
-    file_storage = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'companies'))
-    
-    def done(self, form_list, **kwargs):
-        process_form_data(form_list)
-        resp = {
-            'status': 'success',
-            'msg': 'Your corporate account has been created successfully!'
-        }
-        return JsonResponse(resp)
+            name = form_data[0]['name']
+            contact = form_data[0]['contact']
+            address = form_data[0]['address']
+            license = request.FILES[1]['license']
+            certificate = request.FILES[1]['certificate']
+            bot = form_data[2]['bot']
+            dse = form_data[2]['dse']
+            fName = form_data[3]['fName'].capitalize()
+            lName = form_data[3]['lName'].capitalize()
+            dob = form_data[3]['dob']
+            gender = form_data[3]['gender']
+            email = form_data[3]['email']
+            id_type = form_data[3]['id_type']
+            id_number = form_data[3]['id_number']
+            user_id = request.FILES[3]['user_id']
+            phone = form_data[3]['phone'].strip()
+            password = form_data[3]["password"]
+            profile_id = "POC%s" % uuid.uuid4().hex[:6].upper()
+            pin = uuid.uuid4().hex[:4].upper()
+            with transaction.atomic():
+                CorporateProfile.objects.create(
+                    company_name=name,
+                    address=address,
+                    phone_number=contact,
+                    profile_id=profile_id
+                )
+                KYC.objects.create(
+                    profile_id=profile_id,
+                    kyc_type=id_type,
+                    id_number=id_number,
+                    document=user_id
+                )
+                user = User.objects.create_user(phone, email, password, first_name=fName, last_name=lName)
+                Profile.objects.create(
+                    user=user,
+                    dob=dob,
+                    gender=gender,
+                    bot_cds=bot,
+                    dse_cds=dse,
+                    profile_id=profile_id,
+                    profile_type='C',
+                    pin=pin
+                )
+
+                from_email = email
+                message = ''
+                recipient_list = ['admin@fimco.co.tz']
+                subject = 'Company KYC details'
+                try:
+                    mail = EmailMessage(subject, message, from_email, recipient_list)
+                    mail.attach(license.name, license.read(), license.content_type)
+                    mail.attach(certificate.name, certificate.read(), certificate.content_type)
+                    mail.send()
+                except BadHeaderError:
+                    messages.error(request, 'Invalid header found.')
+
+                messages.success(request, 'Your corporate account has been created successfully!')
+                return redirect(request.META['HTTP_REFERER'])
+        else:
+            messages.error(request, 'One or more fields was not filled. Make sure all fields are filled')
+            context = {
+                'cForm': form_1,
+                'kForm': form_2,
+                'aForm': form_3,
+                'uForm': form_4,
+                'options': options
+            }
+            return render(request, 'corporate.html', context)
+
+    context = {
+        'cForm': CorporateForm1(),
+        'kForm': CorporateForm2(),
+        'aForm': CorporateForm3(),
+        'uForm': CorporateForm4(),
+        'options': options
+    }
+    return render(request, 'corporate.html', context)
 
 
 class AnonymousRequired(object):
@@ -237,8 +269,7 @@ def register(request):
             )
             messages.info(
                 request,
-                'Registration successful!,'
-                ' You will receive notification shortly, meanwhile you can sign in using your credentials!'
+                'Your information is being verified and you will receive notification shortly!'
             )
             return redirect(request.META['HTTP_REFERER'])
         else:

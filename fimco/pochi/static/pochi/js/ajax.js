@@ -31,21 +31,37 @@ $( "#main" ).load( "", function() {
   $("#heading").html("");
 });
 
-$('.list-group-item a').click(function () {
-  var id = $(this).attr('href');
-  switch(id) {
-    case 'mmSaveForm':
-      // code
-      break;
-    case 'mmSaveAs':
-      // code
-      break;
-    case 'mmSaveExit':
-      // code
-      break;
-  }
-});
+// $('.list-group-item a').click(function () {
+//   var id = $(this).attr('href');
+//   switch(id) {
+//     case 'mmSaveForm':
+//       // code
+//       break;
+//     case 'mmSaveAs':
+//       // code
+//       break;
+//     case 'mmSaveExit':
+//       // code
+//       break;
+//   }
+// });
 
-function show_dropdown(id_name) {
-    document.getElementById(id_name).classList.toggle("show");
-}
+// function show_dropdown(id_name) {
+//     document.getElementById(id_name).classList.toggle("show");
+// }
+
+var form_element = $('#create_account').find('.required');
+form_element.keyup(function() {
+    var empty = false;
+    form_element.each(function() {
+        if ($(this).val() === '') {
+            empty = true;
+        }
+    });
+
+    if (empty) {
+        $('#download').attr('disabled', 'disabled');
+    } else {
+        $('#download').removeAttr('disabled');
+    }
+});

@@ -37,62 +37,117 @@
 			<aside id="aside">
 				<nav id="sideNav"><!-- MAIN MENU -->
 					<ul class="nav nav-list">
-{#                        <li><!-- home -->#}
-{#                            <a class="dashboard" href="{% url 'pochi' %}">#}
-{#                                <i class="main-icon fa fa-home"></i> <span>Home</span>#}
-{#                            </a>#}
-{#                        </li>#}
+                        <li><!-- home -->
+                            <h3 style="color: #939ea4" class="size-14 margin-top-30">FIMCO Platform</h3>
+                        </li>
                         <li class="active"><!-- pochi -->
                             <a href="#">
                                 <i class="fa fa-menu-arrow pull-right"></i>
-                                <i class="main-icon et-wallet"></i> <span>My POCHI</span>
+                                <i class="main-icon et-wallet"></i>
+                                <span>POCHI</span>
                             </a>
                             <ul>
-                                <li><!-- dashboard -->
-                                    <a href="{% url 'dashboard' %}">
-                                        <i class="main-icon fa fa-dashboard"></i> <span>Dashboard</span>
-                                    </a>
-                                </li>
-                                <li><!-- balance -->
-                                    <a href="{% url 'pochi' %}">
-                                        <i class="main-icon fa fa-credit-card"></i> <span>Balance</span>
-                                    </a>
-                                </li>
-                                <li><!-- statement -->
-                                    <a href="{% url 'statements' %}">
-                                        <i class="main-icon fa fa-file-text-o"></i> <span>Statement</span>
-                                    </a>
-                                </li>
-                                <li><!-- withdraw -->
+                                <li><!-- individual -->
                                     <a href="#">
                                         <i class="fa fa-menu-arrow pull-right"></i>
-                                        <i class="main-icon fa fa-money"></i>
-                                        <span>Fund Transfer</span>
+                                        <i class="main-icon fa fa-user"></i>
+                                        <span>My POCHI</span>
                                     </a>
                                     <ul>
-										<li>
-											<a href="{% url 'pochi2pochi' %}">
-												Pochi to Pochi
-											</a>
-										</li>
-                                        <li>
-											<a href="{% url 'mobile' %}">
-												Mobile Money
-											</a>
-										</li>
-                                        <li>
-											<a href="{% url 'withdraw' %}">
-												Bank Account
-											</a>
-										</li>
+                                        <li><!-- dashboard -->
+                                            <a href="{% url 'dashboard' %}">
+                                                <i class="fa fa-dashboard"></i>
+                                                <span>Dashboard</span>
+                                            </a>
+                                        </li>
+                                        <li><!-- balance -->
+                                            <a href="{% url 'pochi' %}">
+                                                <i class="fa fa-credit-card"></i>
+                                                <span>Balance</span>
+                                            </a>
+                                        </li>
+                                        <li><!-- statement -->
+                                            <a href="{% url 'statements' %}">
+                                                <i class="fa fa-file-text-o"></i>
+                                                <span>Statement</span>
+                                            </a>
+                                        </li>
+                                        <li><!-- withdraw -->
+                                            <a href="#">
+                                                <i class="fa fa-menu-arrow pull-right"></i>
+                                                <i class="fa fa-money"></i>
+                                                <span>Fund Transfer</span>
+                                            </a>
+                                            <ul>
+                                                <li>
+                                                    <a href="{% url 'pochi2pochi' %}">
+                                                        Pochi to Pochi
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="{% url 'mobile' %}">
+                                                        Mobile Money
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="{% url 'withdraw' %}">
+                                                        Bank Account
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li><!-- deposit -->
+                                            <a href="{% url 'deposit' %}">
+                                                <i class="fa fa-credit-card">
+                                                </i> <span>How to Deposit</span>
+                                            </a>
+                                        </li>
                                     </ul>
                                 </li>
-                                <li><!-- deposit -->
-                                    <a href="{% url 'deposit' %}">
-                                        <i class="main-icon fa fa-credit-card"></i> <span>How to Deposit</span>
+                                {% if profile.profile_type != 'C' %}
+                                <li><!-- group -->
+                                    <a href="#">
+                                        <i class="fa fa-menu-arrow pull-right"></i>
+                                        <i class="main-icon fa fa-users"></i><span>Groups</span>
                                     </a>
+                                    <ul>
+                                        <li>
+                                            <a href="{% url 'group' %}">
+                                                <i class="fa fa-plus"></i>
+                                                <span class="label label-info pull-right"></span> <span>New Group</span>
+                                            </a>
+                                        </li>
+                                        {% if groups %}
+                                            {% for group in groups %}
+                                                <li>
+                                                    <a href="#">
+                                                        <i class="fa fa-group"></i>
+                                                        <span class="label label-info pull-right"></span> <span>{{ group.name }}</span>
+                                                    </a>
+                                                    <ul>
+                                                        <li><a href="{% url 'group_dashboard' group.name %}">Dashboard</a></li>
+                                                        <li><a href="{% url 'group_balance' group.name %}">Balance</a></li>
+                                                        {% if group.admin %}
+                                                        <li><a href="{% url 'group_activity' group.name %}">Activity</a></li>
+                                                        {% endif %}
+                                                        <li><a href="{% url 'group_statement' group.name %}">Statement</a></li>
+                                                        <li><a href="{% url 'group_settings' group.name %}">Settings</a></li>
+                                                    </ul>
+                                                </li>
+                                            {% endfor %}
+                                        {% else %}
+                                            <li>
+                                                <a disabled tabindex="-1">
+                                                    <i class="fa fa-ban"></i>
+                                                    <span>None</span>
+                                                </a>
+                                            </li>
+                                        {% endif %}
+                                    </ul>
                                 </li>
+                                {% endif %}
                             </ul>
+
                         {% if paid %}
                         <li><!-- market -->
                             <a href="#">
@@ -147,43 +202,7 @@
                         {% endif %}
 					</ul>
 
-					<h3>POCHI GROUPS</h3>
-					<ul class="nav nav-list">
-                         <li>
-                            <a href="{% url 'group' %}">
-                                <i class="main-icon fa fa-plus"></i>
-                                <span class="label label-info pull-right"></span> <span>New Group</span>
-                            </a>
-                        </li>
-                        {% if groups %}
-                            {% for group in groups %}
-                                <li>
-                                    <a href="#">
-                                        <i class="main-icon fa fa-users"></i>
-                                        <span class="label label-info pull-right"></span> <span>{{ group.name }}</span>
-                                    </a>
-                                    <ul>
-                                        <li><a href="{% url 'group_profile' group.name %}">Dashboard</a></li>
-                                        <li><a href="{% url 'group_profile' group.name %}">Balance</a></li>
-                                        {% if group.admin %}
-                                        <li><a href="{% url 'group_activity' group.name %}">Activity</a></li>
-                                        {% endif %}
-                                        <li><a href="{% url 'group_statement' group.name %}">Statement</a></li>
-                                        <li><a href="{% url 'group_settings' group.name %}">Settings</a></li>
-                                    </ul>
-                                </li>
-                            {% endfor %}
-                        {% else %}
-                            <li>
-                                <a disabled tabindex="-1">
-                                    <i class="main-icon fa fa-ban"></i>
-                                    <span>None</span>
-                                </a>
-                            </li>
-                        {% endif %}
-					</ul>
-
-                    <h3>MORE</h3>
+                    <h3 class="size-14">MORE</h3>
                     <ul class="nav nav-list">
                         <li>
                             <a href="{% url 'index' %}">
@@ -225,7 +244,7 @@
                                data-toggle="dropdown"
                                data-hover="dropdown"
                                data-close-others="true">
-								<img class="user-avatar" alt="" src="/static/pochi/img/noavatar.jpg" height="34" />
+{#								<img class="user-avatar" alt="" src="/static/pochi/img/noavatar.jpg" height="34" />#}
 								<span class="user-name">
 									<span class="hidden-xs">
 										{{ user.get_short_name }}<i class="fa fa-angle-down"></i>
@@ -233,7 +252,7 @@
 								</span>
 							</a>
 							<ul class="dropdown-menu hold-on-click">
-                                <li><a>{{ profile.profile_id }}</a></li>
+                                <li><a>{{ account.account }}</a></li>
                                 <li class="divider"></li>
 								<li>
 									<a href=""><i class="fa fa-envelope"></i> Notifications
@@ -259,7 +278,25 @@
 			<!-- /HEADER -->
 
 			<!-- MIDDLE -->
-			{% block content %}{% endblock %}
+			{% block content %}
+                {% if messages %}
+                    {% for message in messages %}
+                        {% if message.level == DEFAULT_MESSAGE_LEVELS.INFO and message.extra_tags %}
+                            <div class="row">
+                                <div class="col-lg-6 col-xs-12 col-centered">
+                                    <div class="alert alert-info margin-bottom-30">
+                                        <button type="button" class="close" data-dismiss="alert">
+                                            <span aria-hidden="true">×</span>
+                                            <span class="sr-only">Close</span>
+                                        </button>
+                                        <p><strong>{{ message }}</strong></p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+			{% endblock %}
 			<!-- /MIDDLE -->
             {% include 'pochi/modals.html' %}
 		</div>

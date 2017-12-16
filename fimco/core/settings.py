@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'pochi.apps.PochiConfig',
     'fimcoplatform.apps.FimcoPlatformConfig',
     'formtools',
-    'reportlab',
+    'easy_pdf',
 ]
 
 
@@ -85,6 +85,7 @@ DATABASES = {
         'PASSWORD': 'pochi111',
         'HOST': 'fimcocluster-1.cluster-coakgirdcjlf.us-east-1.rds.amazonaws.com',
         'PORT': '3306',
+        'ATOMIC_REQUESTS': True
     }
 }
 
@@ -130,5 +131,3 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
-
-LOGIN_REDIRECT_URL = '/'

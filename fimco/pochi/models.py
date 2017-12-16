@@ -8,7 +8,7 @@ telephone = RegexValidator(r'^([+]?(\d{1,3}\s?)|[0])\s?\d+(\s?\-?\d{2,4}){1,3}?$
 
 class Group(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=30, unique=True)
     group_account = models.CharField(max_length=15, db_index=True)
     balance = models.FloatField(default=0)
 
@@ -22,15 +22,21 @@ class GroupMember(models.Model):
 
 class Transaction(models.Model):
     STATUS = (
-        ('SUCCESS', 'SUCCESS'),
-        ('FAILED', 'FAILED'),
-        ('PENDING', 'PENDING')
+        ('SUCCESS', 'Success'),
+        ('FAILED', 'Failed'),
+        ('PENDING', 'Pending')
     )
     SERVICES = (
-        ('P2P', 'P2P'),
-        ('DEPOSIT', 'DEPOSIT'),
-        ('WITHDRAW', 'WITHDRAW'),
-        ('BONUS', 'BONUS'),
+        ('P2P', 'p2p'),
+        ('DEPOSIT', 'Deposit'),
+        ('WITHDRAW', 'Withdraw'),
+        ('INTEREST', 'Interest'),
+    )
+    MODES = (
+        ('POCHI', 'Pochi'),
+        ('MOBILE', 'Mobile'),
+        ('BANK', 'Bank'),
+        ('CASH', 'Cash'),
     )
     full_timestamp = models.DateTimeField(auto_now_add=True)
     profile_id = models.CharField(max_length=10, db_index=True)
@@ -39,6 +45,7 @@ class Transaction(models.Model):
     external_wallet_id = models.CharField(max_length=25, default='NA')
     service = models.CharField(max_length=8, db_index=True, choices=SERVICES)
     channel = models.CharField(max_length=25, db_index=True, default='NA')
+    mode = models.CharField(max_length=6, db_index=True, choices=MODES, default='POCHI')
     dest_account = models.CharField(max_length=25, db_index=True, default='NA')
     amount = models.DecimalField(max_digits=12, decimal_places=2, default=0)
     charge = models.DecimalField(max_digits=6, decimal_places=2, default=0)
@@ -52,8 +59,8 @@ class Transaction(models.Model):
 
 class Ledger(models.Model):
     TYPES = (
-        ('DEBIT', 'DEBIT'),
-        ('CREDIT', 'CREDIT')
+        ('DEBIT', 'Debit'),
+        ('CREDIT', 'Credit')
     )
     full_timestamp = models.DateTimeField(auto_now_add=True)
     profile_id = models.CharField(max_length=10, db_index=True, default='POC0GL0001')
@@ -100,13 +107,13 @@ class Notification(models.Model):
 
 class PaidUser(models.Model):
     TYPES = (
-        ('STANDARD', 'standard'),
-        ('PREMIUM', 'premium')
+        ('STANDARD', 'Free'),
+        ('PREMIUM', 'Premium')
     )
     profile_id = models.CharField(max_length=20)
     level = models.CharField(max_length=10, choices=TYPES)
     start_date = models.DateTimeField(auto_now_add=True)
-    end_date = models.DateTimeField()
+    end_date = models.DateTimeField(null=True)
 
 
 class Charge(models.Model):
@@ -114,13 +121,18 @@ class Charge(models.Model):
     charge = models.FloatField(default=0)
 
 
+class Rate(models.Model):
+    full_timestamp = models.DateTimeField(auto_now_add=True)
+    rate = models.FloatField(default=0)
+
+
 class CashOut(models.Model):
     STATUS = (
-        ('success', 'SUCCESS'),
-        ('failed', 'FAILED'),
-        ('pending', 'PENDING')
+        ('SUCCESS', 'Success'),
+        ('FAILED', 'Failed'),
+        ('PENDING', 'Pending')
     )
     ext_entity = models.CharField(max_length=100)
     ext_acc_no = models.CharField(max_length=30, default='NA')
     amount = models.FloatField(default=0)
-    status = models.CharField(max_length=8, choices=STATUS, default='pending')
+    status = models.CharField(max_length=8, choices=STATUS, default='PENDING')

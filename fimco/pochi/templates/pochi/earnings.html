@@ -1,0 +1,186 @@
+{% extends "pochi/main.html" %}
+{% block links %}
+    <link href="/static/pochi/css/navyblue.css" rel="stylesheet" type="text/css" />
+{% endblock %}
+{% block content %}
+    <section id="middle">
+        <div id="content" class="dashboard padding-20">
+            <div class="row">
+            {% if messages %}
+                {% for message in messages %}
+                    {% if message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
+                        <div class="col-lg-6 col-xs-12 col-centered">
+                            <div class="alert alert-info margin-bottom-30">
+                                <button type="button" class="close" data-dismiss="alert">
+                                    <span aria-hidden="true">×</span>
+                                    <span class="sr-only">Close</span>
+                                </button>
+                                <p><strong>{{ message }}</strong></p>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <span class="title elipsis">
+                                {% if page == 'rates' %}
+                                    <strong>Rates</strong>
+                                {% elif page == 'daily' %}
+                                    <strong>Daily Earnings</strong>
+                                {% elif page == 'monthly' %}
+                                    <strong>Monthly Earnings</strong>
+                                {% elif page == 'total' %}
+                                    <strong>Total Earnings</strong>
+                                {% endif %}
+                            </span>
+                        </div>
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table table-vertical-middle nomargin">
+                                    <thead>
+                                        <tr>
+                                            {% if page == 'rates' %}
+                                                <th>Date</th>
+                                                <th>Rate</th>
+                                            {% elif page == 'daily' %}
+                                                <th>Date</th>
+                                                <th>Bonus</th>
+                                            {% elif page == 'monthly' %}
+                                                <th>Date</th>
+                                                <th>Bonus</th>
+                                            {% elif page == 'total' %}
+                                                <th>Date</th>
+                                                <th>Total</th>
+                                                <th>Cumulative</th>
+                                            {% endif %}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% if page == 'rates' %}
+                                            {% for rate in rates %}
+                                            <tr>
+                                                <td>{{ rate.full_timestamp }}</td>
+                                                <td>{{ rate.rate }}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        {% elif page == 'daily' %}
+                                            {% for bonus in bonuses %}
+                                            <tr>
+                                                <td>{{ bonus.full_timestamp }}</td>
+                                                <td>{{ bonus.bonus_closing_balance }}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        {% elif page == 'monthly' %}
+                                            {% for bonus in bonuses %}
+                                            <tr>
+                                                <td>{{ bonus.month }}</td>
+                                                <td>{{ bonus.bonus }}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        {% elif page == 'total' %}
+                                            {% for entry in history %}
+                                            <tr>
+                                                <td>{{ entry.time }}</td>
+                                                <td>{{ entry.bonus }}</td>
+                                                <td>{{ entry.cumulative }}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <span class="title elipsis">
+                                {% if page == 'rates' %}
+                                    <strong>Rates Chart</strong>
+                                {% elif page == 'daily' %}
+                                    <strong>Daily Earnings Chart</strong>
+                                {% elif page == 'monthly' %}
+                                    <strong>Monthly Earnings Chart</strong>
+                                {% elif page == 'total' %}
+                                    <strong>Total Earnings Chart</strong>
+                                {% endif %}
+                            </span>
+                        </div>
+                        <div class="panel-body">
+                            {% if page == 'rates' %}
+                                <canvas id="ratesChart"></canvas>
+                            {% elif page == 'daily' %}
+                                <canvas id="dailyEarningsChart"></canvas>
+                            {% elif page == 'monthly' %}
+                                <canvas id="monthlyEarningsChart"></canvas>
+                            {% elif page == 'total' %}
+                                <canvas id="totalEarningsChart"></canvas>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+{% block scripts %}
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+    <script type="text/javascript">
+        {% if page == 'rates' %}
+            var id="ratesChart";
+            var label = 'Rates';
+        {% elif page == 'daily' %}
+            var id="dailyEarningsChart";
+            var label = 'Daily Earnings';
+        {% elif page == 'monthly' %}
+            var id="monthlyEarningsChart";
+            var label = 'Monthly Earnings';
+        {% elif page == 'total' %}
+            var id = "totalEarningsChart";
+            var label = 'Total Earnings';
+        {% endif %}
+        var ctx = document.getElementById(id).getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                {% if page == 'rates' %}
+                    labels: [{% for rate in rates %}'{{rate.full_timestamp}}',{% endfor %}],
+                {% elif page == 'daily' %}
+                    labels: [{% for bonus in bonuses %}'{{bonus.full_timestamp}}',{% endfor %}],
+                {% elif page == 'monthly' %}
+                    labels: [{% for bonus in bonuses %}'{{bonus.month}}',{% endfor %}],
+                {% elif page == 'total' %}
+                    labels: [{% for entry in history %}'{{entry.time}}',{% endfor %}],
+                {% else %}
+                    labels: [],
+                {% endif %}
+                datasets: [
+                    {
+                        label: label,
+                        borderColor: 'rgb(0,42,84)',
+                        {% if page == 'rates' %}
+                            data: [{% for rate in rates %}{{rate.rate}},{% endfor %}],
+                        {% elif page == 'daily' %}
+                            data: [{% for bonus in bonuses %}{{bonus.bonus_closing_balance}},{% endfor %}],
+                        {% elif page == 'monthly' %}
+                            data: [{% for bonus in bonuses %}{{bonus.bonus}},{% endfor %}],
+                        {% elif page == 'total' %}
+                            data: [{% for entry in history %}{{entry.cumulative}},{% endfor %}],
+                        {% else %}
+                            data: [],
+                        {% endif %}
+                        type: 'line'
+                    }
+                ]
+            },
+            options: {}
+        });
+    </script>
+{% endblock %}

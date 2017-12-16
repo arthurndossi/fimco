@@ -5,15 +5,69 @@ from core.utils import render_with_global_data
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.db import transaction
-from django.http import JsonResponse, HttpResponse
+from django.db import transaction, IntegrityError
+from django.db.models import Sum
+from django.db.models.functions import TruncMonth
+from django.http import JsonResponse
 from django.shortcuts import redirect
+from easy_pdf.views import PDFTemplateView
 from fimcosite.forms import EditProfileForm
 from fimcosite.models import Account, Profile
 
-from reportlab.pdfgen import canvas
+from core import demo_settings
+from fimcosite.views import index
+from .models import Transaction, Group, GroupMember, ExternalAccount, Ledger, Charge, CashOut, BalanceSnapshot, Rate, \
+    PaidUser
 
-from .models import Transaction, Group, GroupMember, ExternalAccount, Ledger, BalanceSnapshot, Charge, CashOut
+
+class CumulativeBonusDto:
+    def __init__(self, profile_id, bonus, time, cumulative):
+        self.profile = profile_id
+        self.bonus = bonus
+        self.time = time
+        self.cumulative = cumulative
+
+
+class IndemnityPDF(PDFTemplateView):
+    template_name = 'pochi/indemnity_form_template.html'
+
+    base_url = 'file://' + demo_settings.STATIC_ROOT
+    download_filename = 'indemnity_form.pdf'
+
+    def get_context_data(self, **kwargs):
+        return super(IndemnityPDF, self).get_context_data(
+            pagesize='A4',
+            title='Indemnity Form',
+            **kwargs
+        )
+
+    def post(self, request, *args, **kwargs):
+        if request.POST:
+            name = request.POST['name']
+            account_no = request.POST['account']
+            bank = request.POST['bank']
+            branch = request.POST['branch']
+            address = request.POST['address']
+            nickname = request.POST['nickname']
+            if request.POST['swift']:
+                swift = request.POST['swift']
+            else:
+                swift = None
+            values = {
+                'name': name,
+                'account': account_no,
+                'bank': bank,
+                'branch': branch,
+                'address': address,
+                'nickname': nickname,
+                'swift': swift
+            }
+            context = self.get_context_data(**kwargs)
+            context.update(values)
+
+            return self.render_to_response(context)
+
+        return redirect(request.META['HTTP_REFERER'])
 
 
 @login_required
@@ -38,16 +92,194 @@ def home(request):
         pass
 
     context = {
-        'profile': profile,
         'account': balance_data,
         'groups': group_members_obj
     }
     return render_with_global_data(request, 'pochi/home.html', context)
 
 
+def get_rates():
+    try:
+        all_rates = Rate.objects.all()
+    except Rate.DoesNotExist:
+        all_rates = None
+    if all_rates:
+        last_30_days = datetime.datetime.today() - datetime.timedelta(days=30)
+        rates_30 = all_rates.filter(full_timestamp__gte=last_30_days).only('rate')
+        rates_arr = []
+        for rate in rates_30:
+            rates_arr.append(rate.rate)
+        decimal_array = [float(decimal_value) for decimal_value in rates_arr]
+        rates_list = (", ".join(repr(e) for e in decimal_array))
+        try:
+            today_rate = all_rates.get(full_timestamp__date=datetime.date.today()).rate
+        except Rate.DoesNotExist:
+            today_rate = None
+        if today_rate:
+            context = {
+                'month': rates_list,
+                'today': today_rate
+            }
+        else:
+            context = {
+                'month': rates_list,
+                'today': 'Nil'
+            }
+    else:
+        context = {
+            'month': [],
+            'today': 'Nil'
+        }
+    return context
+
+
+def daily_rates(request):
+    profile_id = request.user.profile.profile_id
+    try:
+        all_daily = BalanceSnapshot.objects.filter(profile_id=profile_id) \
+            .values('full_timestamp', 'bonus_closing_balance')
+    except BalanceSnapshot.DoesNotExist:
+        all_daily = None
+    if all_daily:
+        last_30_days = datetime.datetime.today() - datetime.timedelta(days=30)
+        daily_30 = all_daily.filter(full_timestamp__gte=last_30_days)
+        bonus_arr = []
+        for bonus in daily_30:
+            bonus_arr.append(bonus['bonus_closing_balance'])
+        numeric_array = [float(numeric_value) for numeric_value in bonus_arr]
+        bonus_list = (", ".join(repr(e) for e in numeric_array))
+        try:
+            today_bonus = all_daily.get(full_timestamp__date=datetime.date.today())['bonus_closing_balance']
+        except BalanceSnapshot.DoesNotExist:
+            today_bonus = None
+        if today_bonus:
+            context = {
+                'month': bonus_list,
+                'today': today_bonus
+            }
+        else:
+            context = {
+                'month': bonus_list,
+                'today': 'Nil'
+            }
+    else:
+        context = {
+            'month': [],
+            'today': 'Nil'
+        }
+    return context
+
+
+def get_monthly(request):
+    profile_id = request.user.profile.profile_id
+    try:
+        all_monthly = BalanceSnapshot.objects.filter(profile_id=profile_id) \
+            .annotate(month=TruncMonth('full_timestamp')) \
+            .values('month') \
+            .annotate(bonus=Sum('bonus_closing_balance')) \
+            .values('month', 'bonus')
+    except BalanceSnapshot.DoesNotExist:
+        all_monthly = None
+    if all_monthly:
+        last_12 = all_monthly.reverse()[:12]
+        bonus_arr = []
+        for bonus in last_12:
+            bonus_arr.append(bonus['bonus'])
+        numeric_array = [float(numeric_value) for numeric_value in bonus_arr]
+        bonus_list = (", ".join(repr(e) for e in numeric_array))
+        monthly_bonus = all_monthly.reverse()[:1]
+        context = {
+            'year': bonus_list,
+            'month': monthly_bonus
+        }
+    else:
+        context = {
+            'year': [],
+            'month': 'Nil'
+        }
+    return context
+
+
+def get_total(request):
+    profile_id = request.user.profile.profile_id
+    try:
+        bs = BalanceSnapshot.objects.filter(profile_id=profile_id)
+    except BalanceSnapshot.DoesNotExist:
+        bs = None
+    if bs:
+        bs_arr = []
+        cumulative = 0
+        for individual in bs:
+            cumulative += individual.bonus_closing_balance
+            dto = CumulativeBonusDto(
+                individual.profile_id,
+                individual.bonus_closing_balance,
+                individual.full_timestamp,
+                cumulative
+            )
+            bs_arr.append(dto.cumulative)
+        total_bonuses = bs.aggregate(Sum('bonus_closing_balance'))
+        cumulative_30 = bs_arr[-30:]
+        numeric_array = [float(numeric_value) for numeric_value in cumulative_30]
+        cumulative_list = (", ".join(repr(e) for e in numeric_array))
+        context = {
+            'total': total_bonuses,
+            'month': cumulative_list
+        }
+    else:
+        context = {
+            'month': [],
+            'total': 'Nil'
+        }
+    return context
+
+
 @login_required
-def admin(request):
-    return render_with_global_data(request, 'pochi/admin.html', {})
+def admin(request, name=None):
+    if name:
+        try:
+            group = Group.objects.get(name=name)
+            profile_id = group.name
+        except Group.DoesNotExist:
+            profile_id = None
+    else:
+        profile_id = request.user.profile.profile_id
+
+    rates = get_rates()
+    daily_earnings = daily_rates(request)
+    monthly_earnings = get_monthly(request)
+    total = get_total(request)
+
+    context = {
+        'rates': rates,
+        'daily': daily_earnings,
+        'monthly': monthly_earnings,
+        'total': total
+    }
+
+    if profile_id:
+        snap_obj = BalanceSnapshot.objects.filter(profile_id=profile_id)\
+            .values('closing_balance', 'bonus_closing_balance', 'full_timestamp')
+        bal_list = []
+        bonus_list = []
+        label_list = []
+        for row in snap_obj:
+            temp_label = row['full_timestamp']
+            temp_bal = row['closing_balance']
+            temp_bonus = row['bonus_closing_balance']
+            label_list.append(temp_label.strftime('%d/%m/%Y'))
+            bal_list.append(float(temp_bal))
+            bonus_list.append(float(temp_bonus))
+
+        if name:
+            context.update({'labels': label_list, 'balance': bal_list, 'bonus': bonus_list, 'group': name})
+        else:
+            context.update({'labels': label_list, 'balance': bal_list, 'bonus': bonus_list})
+
+        return render_with_global_data(request, 'pochi/admin.html', context)
+    else:
+        messages.info(request, 'This group has no transactions yet!')
+        return render_with_global_data(request, 'pochi/admin.html', {})
 
 
 @login_required
@@ -75,7 +307,6 @@ def statement(request):
             trans = trans
 
     context = {
-        "profile": profile,
         "transactions": trans,
     }
     return render_with_global_data(request, 'pochi/statement.html', context)
@@ -189,8 +420,37 @@ def confirm_transfer(request):
             request,
             'You have successfully withdrawn TZS' + str(amount) + ' to your ' + institution + ' account ' + phone
         )
-
         return render_with_global_data(request, 'pochi/mobile_withdraw.html', {})
+
+    elif request.session['confirm'] == u'bank':
+        institution = request.session['institution']
+        ext_account_no = request.session['ext_account']
+        identifier = request.session['identifier']
+        pochi_id = request.session['pochi_id']
+        phone = request.session['phone']
+        bal = request.session['bal']
+        amount = request.session['amount']
+        ov = request.session['overdraft']
+
+        del request.session['confirm']
+        del request.session['institution']
+        del request.session['ext_account']
+        del request.session['identifier']
+        del request.session['pochi_id']
+        del request.session['phone']
+        del request.session['bal']
+        del request.session['amount']
+        del request.session['overdraft']
+
+        fund_transfer(request, 'WITHDRAW', 'NA', institution, identifier, pochi_id, ext_account_no, bal, amount, phone,
+                      ov)
+
+        messages.success(
+            request,
+            'You have successfully withdrawn TZS' + str(amount) + ' to your ' + institution + ' account ' + phone
+        )
+        return render_with_global_data(request, 'pochi/withdraw.html', {})
+
     elif request.session['confirm'] == u'P2P':
         src_account = request.session['account_no']
         name = request.session['name']
@@ -239,8 +499,8 @@ def confirm_transfer(request):
             messages.success(request, 'TZS' + str(amount) + ' has been transferred from your account to ' + name + '.')
         else:
             messages.error(request, 'An invalid account was selected.')
-
         return render_with_global_data(request, 'pochi/pochi2pochi.html', {})
+
     elif request.session['confirm'] == u'G2P':
         src_account_no = request.session['account_no']
         name = request.session['name']
@@ -255,7 +515,7 @@ def confirm_transfer(request):
         amount = float(amount)
         bal = float(bal)
         phone = 'NA'
-        src_profile_id = 'NA'
+        src_profile_id = name
 
         del request.session['confirm']
         del request.session['dest_account']
@@ -288,7 +548,8 @@ def confirm_transfer(request):
             pass
 
         if src_account and dest_account:
-            messages.success(request, 'TZS' + str(amount) + ' has been transferred from ' + group_name + ' account to ' + name + '.')
+            messages.success(request, 'TZS' + str(amount) + ' has been transferred from ' + group_name + ' account to '
+                             + name + '.')
         else:
             messages.error(request, 'An invalid account was selected.')
 
@@ -306,9 +567,8 @@ def fund_transfer(request, service, ext_wallet, channel, profile_id, src, dest, 
         charges = Charge.objects.get(service=service).charge
     except Ledger.DoesNotExist:
         charges = 0
-
+    total = amount + charges
     if service == 'P2P':
-        total = amount + charges
         if bal > total or overdraft:
             Transaction.objects.create(
                 profile_id=profile_id,
@@ -318,6 +578,7 @@ def fund_transfer(request, service, ext_wallet, channel, profile_id, src, dest, 
                 service=service,
                 dest_account=dest,
                 amount=amount,
+                charge=charges,
                 status='DONE'
             )
             Ledger.objects.create(
@@ -325,17 +586,22 @@ def fund_transfer(request, service, ext_wallet, channel, profile_id, src, dest, 
                 service=service,
                 amount=amount,
                 o_bal=close_bal,
-                c_bal=close_bal - amount
+                c_bal=close_bal
             )
             Ledger.objects.create(
                 trans_type='CREDIT',
                 service=service,
                 amount=amount,
                 o_bal=close_bal,
-                c_bal=close_bal + amount
+                c_bal=close_bal
+            )
+            BalanceSnapshot.objects.create(
+                profile_id=profile_id,
+                account=src,
+                closing_balance=close_bal - total
             )
     elif service == 'WITHDRAW':
-        if amount <= bal or overdraft:
+        if total <= bal or overdraft:
             Transaction.objects.create(
                 profile_id=profile_id,
                 account=src,
@@ -344,7 +610,8 @@ def fund_transfer(request, service, ext_wallet, channel, profile_id, src, dest, 
                 service=service,
                 channel=channel,
                 dest_account=dest,
-                amount=amount
+                amount=amount,
+                charge=charges
             )
             Ledger.objects.create(
                 profile_id=profile_id,
@@ -352,12 +619,17 @@ def fund_transfer(request, service, ext_wallet, channel, profile_id, src, dest, 
                 service=service,
                 amount=amount,
                 o_bal=close_bal,
-                c_bal=close_bal - amount
+                c_bal=close_bal - total
             )
             CashOut.objects.create(
                 ext_entity=channel,
                 ext_acc_no=ext_wallet,
-                amount=amount
+                amount=total
+            )
+            BalanceSnapshot.objects.create(
+                profile_id=profile_id,
+                account=src,
+                closing_balance=close_bal - total
             )
     elif service == 'DEPOSIT':
         Transaction.objects.create(
@@ -366,7 +638,8 @@ def fund_transfer(request, service, ext_wallet, channel, profile_id, src, dest, 
             msisdn=msisdn,
             external_wallet_id=ext_wallet,
             service='DEPOSIT',
-            amount=amount
+            amount=amount,
+            charge=charges
         )
         Ledger.objects.create(
             profile_id=profile_id,
@@ -375,6 +648,11 @@ def fund_transfer(request, service, ext_wallet, channel, profile_id, src, dest, 
             amount=amount,
             o_bal=close_bal,
             c_bal=close_bal + amount
+        )
+        BalanceSnapshot.objects.create(
+            profile_id=profile_id,
+            account=src,
+            closing_balance=close_bal + amount
         )
 
 
@@ -410,6 +688,9 @@ def pochi2pochi(request, name=None):
         user_name = dest_account = dest_profile_id = None
         if request.POST['dest_mobile']:
             phone = request.POST['dest_mobile']
+            if phone == request.user.username:
+                messages.error(request, 'Sorry!, you cannot transfer money to your own account!')
+                return redirect(request.META['HTTP_REFERER'])
             try:
                 user_obj = User.objects.select_related('profile').get(username=phone)
                 dest_profile_id = user_obj.profile.profile_id
@@ -424,6 +705,9 @@ def pochi2pochi(request, name=None):
 
         elif request.POST['dest_account']:
             dest_account = request.POST['dest_account']
+            if acc == dest_account:
+                messages.error(request, 'Sorry!, you cannot transfer money to your own account!')
+                return redirect(request.META['HTTP_REFERER'])
 
             try:
                 dest_profile_id = Account.objects.get(account=dest_account).profile_id
@@ -445,7 +729,8 @@ def pochi2pochi(request, name=None):
             if amount <= bal and user_name is not None:
                 messages.info(
                     request,
-                    'You are about to transfer TZS' + str(amount) + ' to ' + user_name + '.\r Proceed with the transfer?'
+                    'You are about to transfer TZS' + str(amount) + ' to ' + user_name +
+                    '.\r Proceed with the transfer?'
                 )
 
                 request.session['dest_account'] = dest_account
@@ -545,7 +830,50 @@ def withdraw(request):
             if request.POST['swift']:
                 address = request.POST['address']
 
-            display_buttons = True
+        elif request.POST['type'] == u"bank":
+            amount = float(request.POST['amount'])
+            request.session['confirm'] = request.POST['type']
+
+            try:
+                ext_account = ExternalAccount.objects.get(profile_id=identifier)
+                institution = ext_account.institution_name
+                ext_account_no = ext_account.account_number
+            except ExternalAccount.DoesNotExist:
+                messages.error(request, 'You have not registered your bank account\r\n, '
+                                        'To add an account go to Fund transfer -> Bank Account '
+                                        'and follow instructions on how to open an account')
+                return redirect(request.META['HTTP_REFERER'])
+
+            try:
+
+                _account = Account.objects.get(profile_id=identifier)
+                pochi_id = _account.account
+                bal = _account.balance
+                ov = _account.allow_overdraft
+
+                if amount <= bal:
+                    _account.balance -= amount
+                    _account.save()
+
+                    request.session['institution'] = institution
+                    request.session['ext_account'] = ext_account_no
+                    request.session['identifier'] = identifier
+                    request.session['pochi_id'] = pochi_id
+                    request.session['phone'] = phone
+                    request.session['bal'] = bal
+                    request.session['amount'] = amount
+                    request.session['overdraft'] = ov
+
+                    messages.info(
+                        request,
+                        'You are about to withdraw TZS ' + str(amount) + ' to your ' + ext_account_no + ' '
+                        + institution + ' account!'
+                    )
+                else:
+                    messages.error(request, 'You have insufficient funds to withdraw money from your account!')
+
+            except Account.DoesNotExist:
+                pass
         elif request.POST['type'] == u"mobile":
             amount = float(request.POST['amount'])
             request.session['confirm'] = request.POST['type']
@@ -610,9 +938,9 @@ def deposit(request):
                 try:
                     _account = Account.objects.get(profile_id=src_profile_id)
                     bal = _account.balance
-                    dest_account = _account.account
+                    dst_account = _account.account
 
-                    fund_transfer(request, 'DEPOSIT', 'NA', 'NA', src_profile_id, 'NA', dest_account, bal, amount, phone)
+                    fund_transfer(request, 'DEPOSIT', 'NA', 'NA', src_profile_id, 'NA', dst_account, bal, amount, phone)
 
                     _account.balance += amount
                     _account.save()
@@ -630,8 +958,9 @@ def deposit(request):
             try:
                 _group = Group.objects.get(group_account=this_account)
                 bal = _group.balance
+                name = _group.name
 
-                fund_transfer(request, 'DEPOSIT', 'NA', 'NA', 'NA', 'NA', this_account, bal, amount, 'NA')
+                fund_transfer(request, 'DEPOSIT', 'NA', 'NA', name, 'NA', this_account, bal, amount, 'NA')
 
                 _group.balance += amount
                 _group.save()
@@ -660,28 +989,32 @@ def create_group(request):
         sec_admin = request.POST['admin']
         members = json.loads(member_list)
         grp_acc = uuid.uuid4().hex[:10].upper()
-        Group.objects.create(
-            group_account=grp_acc,
-            name=groupName,
-        )
-        Account.objects.create(
-            account=grp_acc,
-            nickname=groupName,
-        )
-        GroupMember.objects.create(
-            group_account=grp_acc,
-            profile_id=first_admin,
-            admin=1
-        )
-        for member in members:
-            is_admin = 0
-            if member == sec_admin:
-                is_admin = 1
-            GroupMember.objects.create(
-                group_account=grp_acc,
-                profile_id=member,
-                admin=is_admin
-            )
+        try:
+            with transaction.atomic():
+                Group.objects.create(
+                    group_account=grp_acc,
+                    name=groupName,
+                )
+                Account.objects.create(
+                    account=grp_acc,
+                    nickname=groupName,
+                )
+                GroupMember.objects.create(
+                    group_account=grp_acc,
+                    profile_id=first_admin,
+                    admin=1
+                )
+                for member in members:
+                    is_admin = 0
+                    if member == sec_admin:
+                        is_admin = 1
+                    GroupMember.objects.create(
+                        group_account=grp_acc,
+                        profile_id=member,
+                        admin=is_admin
+                    )
+        except IntegrityError:
+            messages.error(request, 'Sorry!, this group name is already in use, try a different name')
             # import httplib, urllib
             # conn = httplib.HTTPSConnection("api.pushover.net:443")
             # conn.request("POST", "/1/messages.json",
@@ -910,23 +1243,168 @@ def exit_group(request, name=None):
     return redirect(request.META['HTTP_REFERER'])
 
 
+@login_required
+def view_data(request, page=None, name=None):
+    if name:
+        try:
+            group = Group.objects.get(name=name)
+            profile_id = group.name
+        except Group.DoesNotExist:
+            profile_id = None
+    else:
+        profile_id = request.user.profile.profile_id
+    if page == 'rates':
+        try:
+            all_rates = Rate.objects.all()
+        except Rate.DoesNotExist:
+            all_rates = None
+        if all_rates:
+            last_30_days = datetime.datetime.today() - datetime.timedelta(days=30)
+            rates_30 = all_rates.filter(full_timestamp__gte=last_30_days).only('rate')
+            rates_arr = []
+            for rate in rates_30:
+                rates_arr.append(rate.rate)
+            decimal_array = [float(decimal_value) for decimal_value in rates_arr]
+            rates_list = (", ".join(repr(e) for e in decimal_array))
+            try:
+                today_rate = all_rates.get(full_timestamp__date=datetime.date.today()).rate
+            except Rate.DoesNotExist:
+                today_rate = None
+            if today_rate:
+                context = {
+                    'page': 'rates',
+                    'rates': all_rates,
+                    'month': rates_list,
+                    'today': today_rate
+                }
+            else:
+                context = {
+                    'page': 'rates',
+                    'rates': all_rates,
+                    'month': rates_list,
+                    'today': 'No rate today'
+                }
+            return render_with_global_data(request, 'pochi/earnings.html', context)
+        else:
+            messages.info(request, 'There are no pochi rates yet! Coming soon')
+            return render_with_global_data(request, 'pochi/earnings.html', {'page': 'rates'})
+    elif page == 'daily':
+        try:
+            all_daily = BalanceSnapshot.objects.filter(profile_id=profile_id)\
+                .values('full_timestamp', 'bonus_closing_balance')
+        except BalanceSnapshot.DoesNotExist:
+            all_daily = None
+        if all_daily:
+            last_30_days = datetime.datetime.today() - datetime.timedelta(days=30)
+            daily_30 = all_daily.filter(full_timestamp__gte=last_30_days)
+            bonus_arr = []
+            for bonus in daily_30:
+                bonus_arr.append(bonus['bonus_closing_balance'])
+            numeric_array = [float(numeric_value) for numeric_value in bonus_arr]
+            bonus_list = (", ".join(repr(e) for e in numeric_array))
+            try:
+                today_bonus = all_daily.get(full_timestamp__date=datetime.date.today())['bonus_closing_balance']
+            except BalanceSnapshot.DoesNotExist:
+                today_bonus = None
+            if today_bonus:
+                context = {
+                    'page': 'daily',
+                    'bonuses': all_daily,
+                    'month': bonus_list,
+                    'today': today_bonus
+                }
+            else:
+                context = {
+                    'page': 'daily',
+                    'bonuses': all_daily,
+                    'month': bonus_list,
+                    'today': 'Nil'
+                }
+            return render_with_global_data(request, 'pochi/earnings.html', context)
+        else:
+            messages.info(request, 'There are no daily rates yet! Coming soon')
+            return render_with_global_data(request, 'pochi/earnings.html', {'page': 'daily'})
+    elif page == 'monthly':
+        try:
+            all_monthly = BalanceSnapshot.objects.filter(profile_id=profile_id)\
+                .annotate(month=TruncMonth('full_timestamp'))\
+                .values('month')\
+                .annotate(bonus=Sum('bonus_closing_balance'))\
+                .values('month', 'bonus')
+        except BalanceSnapshot.DoesNotExist:
+            all_monthly = None
+        if all_monthly:
+            last_12 = all_monthly.reverse()[:12]
+            bonus_arr = []
+            for bonus in last_12:
+                bonus_arr.append(bonus['bonus'])
+            numeric_array = [float(numeric_value) for numeric_value in bonus_arr]
+            bonus_list = (", ".join(repr(e) for e in numeric_array))
+            monthly_bonus = all_monthly.reverse()[:1]
+            context = {
+                'page': 'monthly',
+                'bonuses': all_monthly,
+                'year': bonus_list,
+                'month': monthly_bonus
+            }
+            return render_with_global_data(request, 'pochi/earnings.html', context)
+        else:
+            messages.info(request, 'There are no monthly rates yet! Coming soon')
+            return render_with_global_data(request, 'pochi/earnings.html', {'page': 'monthly'})
+    elif page == 'total':
+        try:
+            bs = BalanceSnapshot.objects.filter(profile_id=profile_id)
+        except BalanceSnapshot.DoesNotExist:
+            bs = None
+        if bs:
+            bs_arr = []
+            cumulative = 0
+            for individual in bs:
+                cumulative += individual.bonus_closing_balance
+                dto = CumulativeBonusDto(
+                    individual.profile_id,
+                    individual.bonus_closing_balance,
+                    individual.full_timestamp,
+                    cumulative
+                )
+                bs_arr.append(dto)
+            total_bonuses = bs.aggregate(Sum('bonus_closing_balance'))
+            cumulative_30 = bs_arr[-30:]
+            context = {
+                'page': 'total',
+                'total': total_bonuses,
+                'history': bs_arr,
+                'month': cumulative_30
+            }
+            return render_with_global_data(request, 'pochi/earnings.html', context)
+        else:
+            messages.info(request, 'No earnings yet! Coming soon')
+            return render_with_global_data(request, 'pochi/earnings.html', {'page': 'total'})
+    else:
+        return redirect(admin)
+
+
+@login_required
 def delete_account(request):
-    pass
-
-
-def create_form(request):
-    # Create the HttpResponse object with the appropriate PDF headers.
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="indemnity.pdf"'
-
-    # Create the PDF object, using the response object as its "file."
-    p = canvas.Canvas(response)
-
-    # Draw things on the PDF. Here's where the PDF generation happens.
-    # See the ReportLab documentation for the full list of functionality.
-    p.drawString(100, 100, "Hello world.")
-
-    # Close the PDF object cleanly, and we're done.
-    p.showPage()
-    p.save()
-    return response
+    profile_id = request.user.profile.profile_id
+    balance = Account.objects.get(profile_id=profile_id).balance
+    if balance != 0:
+        messages.info(request, 'You have to transfer all your funds from POCHI to be able to delete your account!',
+                      extra_tags='main')
+    elif balance == 0:
+        try:
+            subscription = PaidUser.objects.get(profile_id=profile_id)
+        except PaidUser.DoesNotExist:
+            subscription = None
+        if subscription:
+            subscription.delete()
+        try:
+            membership = GroupMember.objects.filter(profile_id=profile_id)
+        except GroupMember.DoesNotExist:
+            membership = None
+        if membership:
+            membership.delete()
+        request.user.is_active = False
+        request.user.save()
+        return redirect(index)
+    return redirect(request.META['HTTP_REFERER'])
