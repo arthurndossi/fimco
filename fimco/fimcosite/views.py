@@ -8,7 +8,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.mail import EmailMessage, BadHeaderError
-from django.db import transaction
+from django.db import transaction, Error
 from django.shortcuts import render, redirect
 
 from .forms import RegisterForm, LoginForm, CorporateForm1, CorporateForm2, CorporateForm3, CorporateForm4
@@ -18,91 +18,143 @@ from .models import KYC, CorporateProfile, Account, Profile
 @transaction.atomic
 def process_form_data(request):
     options = CorporateProfile.objects.values_list('company_name', flat=True)
+    first_tab = 'active'
+    second_tab = ''
     if request.POST:
-        form_1 = CorporateForm1(request.POST or None)
-        form_2 = CorporateForm2(request.POST, request.FILES or None)
-        form_3 = CorporateForm3(request.POST or None)
-        form_4 = CorporateForm4(request.POST, request.FILES or None)
+        if request.POST['new_rep']:
+            form_1 = CorporateForm1(request.POST or None)
+            form_2 = CorporateForm2(request.POST, request.FILES or None)
+            form_3 = CorporateForm3(request.POST or None)
+            form_4 = CorporateForm4(request.POST, request.FILES or None)
 
-        form_list = [form_1, form_2, form_3, form_4]
+            form_list = [form_1, form_2, form_3, form_4]
 
-        if form_1.is_valid() and form_2.is_valid() and form_3.is_valid() and form_4.is_valid():
-            form_data = [form.cleaned_data for form in form_list]
+            if form_1.is_valid() and form_2.is_valid() and form_3.is_valid() and form_4.is_valid():
+                form_data = [form.cleaned_data for form in form_list]
 
-            name = form_data[0]['name']
-            contact = form_data[0]['contact']
-            address = form_data[0]['address']
-            license = request.FILES[1]['license']
-            certificate = request.FILES[1]['certificate']
-            bot = form_data[2]['bot']
-            dse = form_data[2]['dse']
-            fName = form_data[3]['fName'].capitalize()
-            lName = form_data[3]['lName'].capitalize()
-            dob = form_data[3]['dob']
-            gender = form_data[3]['gender']
-            email = form_data[3]['email']
-            id_type = form_data[3]['id_type']
-            id_number = form_data[3]['id_number']
-            user_id = request.FILES[3]['user_id']
-            phone = form_data[3]['phone'].strip()
-            password = form_data[3]["password"]
-            profile_id = "POC%s" % uuid.uuid4().hex[:6].upper()
-            pin = uuid.uuid4().hex[:4].upper()
-            with transaction.atomic():
-                CorporateProfile.objects.create(
-                    company_name=name,
-                    address=address,
-                    phone_number=contact,
-                    profile_id=profile_id
-                )
-                KYC.objects.create(
-                    profile_id=profile_id,
-                    kyc_type=id_type,
-                    id_number=id_number,
-                    document=user_id
-                )
-                user = User.objects.create_user(phone, email, password, first_name=fName, last_name=lName)
-                Profile.objects.create(
-                    user=user,
-                    dob=dob,
-                    gender=gender,
-                    bot_cds=bot,
-                    dse_cds=dse,
-                    profile_id=profile_id,
-                    profile_type='C',
-                    pin=pin
-                )
+                name = form_data[0]['name']
+                contact = form_data[0]['contact']
+                address = form_data[0]['address']
+                license = request.FILES[1]['license']
+                certificate = request.FILES[1]['certificate']
+                bot = form_data[2]['bot']
+                dse = form_data[2]['dse']
+                fName = form_data[3]['fName'].capitalize()
+                lName = form_data[3]['lName'].capitalize()
+                dob = form_data[3]['dob']
+                gender = form_data[3]['gender']
+                email = form_data[3]['email']
+                id_type = form_data[3]['id_type']
+                id_number = form_data[3]['id_number']
+                user_id = request.FILES[3]['user_id']
+                phone = form_data[3]['phone'].strip()
+                password = form_data[3]["password"]
+                profile_id = "POC%s" % uuid.uuid4().hex[:6].upper()
+                pin = uuid.uuid4().hex[:4].upper()
+                with transaction.atomic():
+                    CorporateProfile.objects.create(
+                        company_name=name,
+                        address=address,
+                        phone_number=contact,
+                        profile_id=profile_id
+                    )
+                    KYC.objects.create(
+                        profile_id=profile_id,
+                        kyc_type=id_type,
+                        id_number=id_number,
+                        document=user_id
+                    )
+                    user = User.objects.create_user(phone, email, password, first_name=fName, last_name=lName)
+                    Profile.objects.create(
+                        user=user,
+                        dob=dob,
+                        gender=gender,
+                        bot_cds=bot,
+                        dse_cds=dse,
+                        profile_id=profile_id,
+                        profile_type='C',
+                        pin=pin
+                    )
 
-                from_email = email
-                message = ''
-                recipient_list = ['admin@fimco.co.tz']
-                subject = 'Company KYC details'
-                try:
-                    mail = EmailMessage(subject, message, from_email, recipient_list)
-                    mail.attach(license.name, license.read(), license.content_type)
-                    mail.attach(certificate.name, certificate.read(), certificate.content_type)
-                    mail.send()
-                except BadHeaderError:
-                    messages.error(request, 'Invalid header found.')
+                    from_email = email
+                    message = ''
+                    recipient_list = ['admin@fimco.co.tz']
+                    subject = 'Company KYC details'
+                    try:
+                        mail = EmailMessage(subject, message, from_email, recipient_list)
+                        mail.attach(license.name, license.read(), license.content_type)
+                        mail.attach(certificate.name, certificate.read(), certificate.content_type)
+                        mail.send()
+                    except BadHeaderError:
+                        messages.error(request, 'Invalid header found.')
 
-                messages.success(request, 'Your corporate account has been created successfully!')
-                return redirect(request.META['HTTP_REFERER'])
-        else:
-            messages.error(request, 'One or more fields was not filled. Make sure all fields are filled')
-            context = {
-                'cForm': form_1,
-                'kForm': form_2,
-                'aForm': form_3,
-                'uForm': form_4,
-                'options': options
-            }
-            return render(request, 'corporate.html', context)
+                    messages.success(request, 'Your corporate account has been created successfully!')
+                    return redirect(request.META['HTTP_REFERER'])
+            else:
+                messages.error(request, 'One or more fields was not filled. Make sure all fields are filled')
+                context = {
+                    'cForm': form_1,
+                    'kForm': form_2,
+                    'aForm': form_3,
+                    'uForm': form_4,
+                    'first': first_tab,
+                    'second': second_tab,
+                    'options': options
+                }
+                return render(request, 'corporate.html', context)
+        elif request.POST['add_rep']:
+            form = CorporateForm4(request.POST, request.FILES or None)
+            if form.is_valid():
+                name = request.POST['company']
+                fName = form.cleaned_data['fName'].capitalize()
+                lName = form.cleaned_data['lName'].capitalize()
+                dob = form.cleaned_data['dob']
+                gender = form.cleaned_data['gender']
+                email = form.cleaned_data['email']
+                id_type = form.cleaned_data['id_type']
+                id_number = form.cleaned_data['id_number']
+                user_id = request.FILES[3]['user_id']
+                phone = form.cleaned_data['phone'].strip()
+                password = form.cleaned_data["password"]
 
+                profile_id = None
+                while profile_id is None:
+                    try:
+                        profile_id = CorporateProfile.objects.get(company_name=name).profile_id
+                    except Error:
+                        pass
+                with transaction.atomic():
+                    user = User.objects.create_user(phone, email, password, first_name=fName, last_name=lName)
+                    Profile.objects.create(
+                        user=user,
+                        dob=dob,
+                        gender=gender,
+                        profile_id=profile_id,
+                        profile_type='C',
+                    )
+                    KYC.objects.create(
+                        profile_id=profile_id,
+                        kyc_type=id_type,
+                        id_number=id_number,
+                        document=user_id
+                    )
+                    messages.success(request, 'You have been added successfully to '+name+' corporate account!')
+
+            else:
+                messages.error(request, 'One or more fields was not filled. Make sure all fields are filled')
+                first_tab = ''
+                second_tab = 'active'
+                return render(request, 'corporate.html', {'adForm': form, 'first': first_tab, 'second': second_tab})
+
+            return redirect(request.META['HTTP_REFERER'])
     context = {
         'cForm': CorporateForm1(),
         'kForm': CorporateForm2(),
         'aForm': CorporateForm3(),
         'uForm': CorporateForm4(),
+        'adForm': CorporateForm4(),
+        'first': first_tab,
+        'second': second_tab,
         'options': options
     }
     return render(request, 'corporate.html', context)

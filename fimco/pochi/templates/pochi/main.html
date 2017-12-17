@@ -72,6 +72,7 @@
                                                 <span>Statement</span>
                                             </a>
                                         </li>
+                                        {% if profile.profile_type == 'I' %}
                                         <li><!-- withdraw -->
                                             <a href="#">
                                                 <i class="fa fa-menu-arrow pull-right"></i>
@@ -96,6 +97,14 @@
                                                 </li>
                                             </ul>
                                         </li>
+                                        {% else %}
+                                            <li><!-- withdraw -->
+                                                <a href="{% url 'withdraw' %}">
+                                                    <i class="fa fa-money"></i>
+                                                    <span>Bank Transfer</span>
+                                                </a>
+                                            </li>
+                                        {% endif %}
                                         <li><!-- deposit -->
                                             <a href="{% url 'deposit' %}">
                                                 <i class="fa fa-credit-card">
@@ -104,7 +113,7 @@
                                         </li>
                                     </ul>
                                 </li>
-                                {% if profile.profile_type != 'C' %}
+                                {% if profile.profile_type == 'I' %}
                                 <li><!-- group -->
                                     <a href="#">
                                         <i class="fa fa-menu-arrow pull-right"></i>
@@ -244,7 +253,7 @@
                                data-toggle="dropdown"
                                data-hover="dropdown"
                                data-close-others="true">
-{#								<img class="user-avatar" alt="" src="/static/pochi/img/noavatar.jpg" height="34" />#}
+								<img class="user-avatar" alt="" src="" height="34" />
 								<span class="user-name">
 									<span class="hidden-xs">
 										{{ user.get_short_name }}<i class="fa fa-angle-down"></i>
@@ -252,7 +261,7 @@
 								</span>
 							</a>
 							<ul class="dropdown-menu hold-on-click">
-                                <li><a>{{ account.account }}</a></li>
+                                <li><a>POCHI ID:<br>{{ account.account }}</a></li>
                                 <li class="divider"></li>
 								<li>
 									<a href=""><i class="fa fa-envelope"></i> Notifications
@@ -262,9 +271,12 @@
 								<li>
 									<a href="{% url 'profile_view' %}"><i class="fa fa-cogs"></i> View/Edit profile</a>
 								</li>
-
+                                {% if profile.profile_type == 'C' %}
+                                    <li>
+                                        <a href="{% url 'corporate' %}"><i class="fa fa-cogs"></i> Add User</a>
+                                    </li>
+                                {% endif %}
 								<li class="divider"></li>
-
 								<li>
 									<a href="{% url 'logout' %}"><i class="fa fa-power-off"></i> Log Out</a>
 								</li>

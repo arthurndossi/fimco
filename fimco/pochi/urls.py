@@ -10,6 +10,7 @@ urlpatterns = [
     url(r'^statements$', views.statement, name='statements'),
     url(r'^pochi2pochi', views.pochi2pochi, name='pochi2pochi'),
     url(r'^withdraw$', views.withdraw, name='withdraw'),
+    url(r'^remove/bank$', views.del_bank_acc, name='del_bank'),
     url(r'^how/to/deposit$', views.how_to_deposit, name='deposit'),
     url(r'^deposit$', views.deposit),
     url(r'^mobile/withdraw$', views.mobile, name='mobile'),

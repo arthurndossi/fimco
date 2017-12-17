@@ -143,6 +143,7 @@
 {% endblock %}
 {% block content %}
     <section id="middle">
+        {% if profile.profile_type == 'I' %}
         <div id="content" class="padding-20">
             <div class="panel panel-default">
                 <div class="panel-heading panel-heading-transparent">
@@ -187,6 +188,7 @@
                 </div>
             </div>
         </div>
+        {% endif %}
         <div id="content" class="padding-20">
             <div class="panel panel-default">
                 <div class="panel-heading panel-heading-transparent">
@@ -231,6 +233,7 @@
                 </div>
             </div>
         </div>
+        {% if profile.profile_type == 'I' %}
         <div id="content" class="padding-20">
             <div class="panel panel-default">
                 <div class="panel-heading panel-heading-transparent">
@@ -275,6 +278,7 @@
                 </div>
             </div>
         </div>
+        {% endif %}
         <div id="content" class="padding-20">
             <div class="panel panel-default">
                 <div class="panel-heading panel-heading-transparent">

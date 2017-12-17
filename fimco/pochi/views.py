@@ -973,6 +973,15 @@ def deposit(request):
     return JsonResponse({'message': message})
 
 
+def del_bank_acc(request):
+    profile_id = request.user.profile.profile_id
+    try:
+        ExternalAccount.objects.get(profile_id=profile_id).delete()
+    except ExternalAccount.DoesNotExist:
+        messages.warning(request, 'You have not registered a bank account!')
+    return redirect(withdraw)
+
+
 @login_required
 def new_group(request):
     return render_with_global_data(request, 'pochi/create_group.html', {})

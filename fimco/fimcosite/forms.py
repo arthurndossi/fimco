@@ -26,7 +26,6 @@ CORPORATE_IDS = (
 
 class LoginForm(forms.Form):
     username = forms.CharField(
-        # validators=[validate_slug],
         widget=forms.TextInput(attrs={
             'class': 'form-control',
             'placeholder': 'Enter phone number/email address',
@@ -47,6 +46,7 @@ class RegisterForm(forms.Form):
         max_length=20,
         validators=[alphabetic],
         widget=forms.TextInput(attrs={
+            'class': 'required',
             'required': True
         })
     )
@@ -55,37 +55,39 @@ class RegisterForm(forms.Form):
         max_length=20,
         validators=[alphabetic],
         widget=forms.TextInput(attrs={
+            'class': 'required',
             'required': True
         })
     )
     dob = forms.DateField(
-            widget=forms.DateInput(attrs={
-                'type': 'date',
-                'required': True
-            })
+        widget=forms.DateInput(attrs={
+            'class': 'required',
+            'type': 'date',
+            'required': True
+        })
     )
     gender = forms.ChoiceField(choices=GENDER)
     client_id = forms.CharField(
         widget=forms.TextInput(attrs={
-            'class': 'form-control masked',
-            'data-placeholder': 'X',
+            'class': 'form-control required',
             'required': True
         })
     )
     scanned_id = forms.ImageField(
-        widget=forms.ClearableFileInput(attrs={'id': 'file', 'required': True})
+        widget=forms.ClearableFileInput(attrs={'id': 'file', 'class': 'required', 'required': True})
     )
     id_choice = forms.ChoiceField(choices=ID_TYPES)
     email = forms.EmailField(
         validators=[EmailValidator],
         widget=forms.EmailInput(attrs={
+            'class': 'required',
             'required': True
         })
     )
     phone = forms.CharField(
         validators=[telephone],
         widget=forms.TextInput(attrs={
-            'class': 'form-control masked',
+            'class': 'form-control required masked',
             'data-format': '0999999999',
             'placeholder': 'Enter telephone',
             'required': True
@@ -96,6 +98,7 @@ class RegisterForm(forms.Form):
     password = forms.CharField(
         validators=[validate_slug],
         widget=forms.PasswordInput(attrs={
+            'class': 'required',
             'required': True
 
         })
@@ -103,6 +106,7 @@ class RegisterForm(forms.Form):
     verify = forms.CharField(
         validators=[validate_slug],
         widget=forms.PasswordInput(attrs={
+            'class': 'required',
             'required': True
 
         })
@@ -161,7 +165,7 @@ class CorporateForm1(forms.Form):
 
     def clean(self):
         cleaned_data = self.cleaned_data
-        if User.objects.filter(username=cleaned_data['name']).exists():
+        if 'name' in cleaned_data and User.objects.filter(username=cleaned_data['name']).exists():
             raise forms.ValidationError("This company already exists!")
 
         return cleaned_data
@@ -170,6 +174,7 @@ class CorporateForm1(forms.Form):
 class CorporateForm2(forms.Form):
     license = forms.FileField(
         widget=forms.ClearableFileInput(attrs={
+            'id': 'license',
             'class': 'form-control',
             'onchange': 'jQuery(this).next("input").val(this.value)',
             'required': True
@@ -177,11 +182,26 @@ class CorporateForm2(forms.Form):
     )
     certificate = forms.FileField(
         widget=forms.ClearableFileInput(attrs={
+            'id': 'certificate',
             'class': 'form-control',
             'onchange': 'jQuery(this).next("input").val(this.value)',
             'required': True
         })
     )
+
+    def clean_image(self):
+        license = self.cleaned_data['license']
+        certificate = self.cleaned_data['certificate']
+        if license:
+            if license.file.size > 5 * 1024 * 1024:
+                raise ValidationError("Image file too large ( > 5mb )")
+            return license
+        if certificate:
+            if certificate.file.size > 5 * 1024 * 1024:
+                raise ValidationError("Image file too large ( > 5mb )")
+            return certificate
+        else:
+            raise ValidationError("Couldn't read uploaded image")
 
 
 class CorporateForm3(forms.Form):
@@ -242,7 +262,7 @@ class CorporateForm4(forms.Form):
             'required': True,
         })
     )
-    id_type = forms.ChoiceField(choices=CORPORATE_IDS)
+    id_type = forms.ChoiceField(choices=ID_TYPES)
     id_number = forms.CharField(
         widget=forms.TextInput(attrs={
             'class': 'form-control',
@@ -251,6 +271,7 @@ class CorporateForm4(forms.Form):
     )
     user_id = forms.ImageField(
         widget=forms.ClearableFileInput(attrs={
+            'id': 'userID',
             'class': 'form-control',
             'onchange': 'jQuery(this).next("input").val(this.value)',
             'required': True
@@ -259,6 +280,7 @@ class CorporateForm4(forms.Form):
     password = forms.CharField(
         validators=[validate_slug],
         widget=forms.PasswordInput(attrs={
+            'id': 'repPass',
             'class': 'form-control',
             'required': True,
         })
@@ -266,6 +288,7 @@ class CorporateForm4(forms.Form):
     verify = forms.CharField(
         validators=[validate_slug],
         widget=forms.PasswordInput(attrs={
+            'id': 'repVerify',
             'class': 'form-control',
             'required': True,
         })
@@ -273,7 +296,7 @@ class CorporateForm4(forms.Form):
 
     def clean(self):
         cleaned_data = self.cleaned_data
-        if User.objects.filter(username=cleaned_data['phone']).exists():
+        if 'phone' in cleaned_data and User.objects.filter(username=cleaned_data['phone']).exists():
             raise forms.ValidationError("This phone number is already associated with another user!")
         if 'password' in cleaned_data and 'verify' in cleaned_data and cleaned_data['password'] != cleaned_data['verify']:
             raise forms.ValidationError("Passwords must be identical.")
@@ -345,3 +368,12 @@ class EditProfileForm(forms.Form):
 
         })
     )
+
+    def clean_image(self):
+        image = self.cleaned_data['scanned_id']
+        if image:
+            if image.file.size > 5 * 1024 * 1024:
+                raise ValidationError("Image file too large ( > 5mb )")
+            return image
+        else:
+            raise ValidationError("Couldn't read uploaded image")

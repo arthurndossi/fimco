@@ -5,6 +5,12 @@
         form{
             margin-bottom: 0;
         }
+        .justify{
+            display: -webkit-flex; /* Safari */
+            -webkit-justify-content: space-between; /* Safari 6.1+ */
+            display: flex;
+            justify-content: space-between;
+        }
     </style>
 {% endblock %}
 
@@ -44,22 +50,24 @@
 
             <div class="callout alert alert-border mb-60">
                 <div class="row">
-                    <div class="col-xs-12 pd-10">
-                        <h4>* Requirements</h4>
-                        <p class="font-lato fs-17">The company will be required to submit board <strong>approval letter</strong></p>
-                        <p class="font-lato fs-17">Submit bank indemnity letter stamped by the company's bank</p>
-                        <p class="font-lato fs-17">The company representative must be introduced and approved byy the company in writing</p>
+                    <div class="col-xs-12">
+                        <h4  class="pl-20">* Requirements</h4>
+                        <ul>
+                            <li>The company will be required to submit board <strong>approval letter</strong></li>
+                            <li>Submit bank indemnity letter stamped by the company's bank</li>
+                            <li>The company representative must be introduced and approved by the company in writing</li>
+                        </ul>
                     </div>
                 </div>
             </div>
 
             <ul class="nav nav-tabs nav-button-tabs mb-30">
-                <li class="nav-item"><a class="nav-link active" href="#company" data-toggle="tab">Add New Company</a></li>
-                <li class="nav-item"><a class="nav-link" href="#user" data-toggle="tab">Add User to Existing company</a></li>
+                <li class="nav-item"><a class="nav-link {{ first }}" href="#company" data-toggle="tab">Add New Company</a></li>
+                <li class="nav-item"><a class="nav-link {{ second }}" href="#user" data-toggle="tab">Add User to Existing company</a></li>
             </ul>
 
             <div class="tab-content">
-                <div class="tab-pane active" id="company">
+                <div class="tab-pane {% if first == 'active' %}{{ first }}{% else %}fade{% endif %}" id="company">
                     <div class="card card-default">
                         <div class="card-heading card-heading-transparent">
                             <ul class="process-steps nav nav-justified">
@@ -67,15 +75,15 @@
                                     <a class="nav-link active" href="#step1" data-toggle="tab">1</a>
                                     <h5>Company Details</h5>
                                 </li>
-                                <li class="nav-item">
+                                <li class="nav-item disabled">
                                     <a class="nav-link" href="#step2" data-toggle="tab">2</a>
                                     <h5>KYC Information</h5>
                                 </li>
-                                <li class="nav-item">
+                                <li class="nav-item disabled">
                                     <a class="nav-link" href="#step3" data-toggle="tab">3</a>
                                     <h5>BOT & DSE Form</h5>
                                 </li>
-                                <li class="nav-item">
+                                <li class="nav-item disabled">
                                     <a class="nav-link" href="#step4" data-toggle="tab">4</a>
                                     <h5>User Details</h5>
                                 </li>
@@ -91,6 +99,8 @@
                                         <fieldset>
                                             <div class="row">
                                                 <div class="col-md-6 col-sm-6">
+                                                    <label>Company Name *</label>
+                                                    {{ cForm.name }}
                                                     {% if cForm.name.errors %}
                                                         {% for error in cForm.name.errors %}
                                                             <div class="alert alert-mini alert-danger mb-30">
@@ -98,12 +108,12 @@
                                                             </div>
                                                         {% endfor %}
                                                     {% endif %}
-                                                    <label>Company Name *</label>
-                                                    {{ cForm.name }}
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-6 col-sm-6">
+                                                    <label>Telephone *</label>
+                                                    {{ cForm.contact }}
                                                     {% if cForm.contact.errors %}
                                                         {% for error in cForm.contact.errors %}
                                                             <div class="alert alert-mini alert-danger mb-30">
@@ -111,12 +121,12 @@
                                                             </div>
                                                         {% endfor %}
                                                     {% endif %}
-                                                    <label>Telephone *</label>
-                                                    {{ cForm.contact }}
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-6 col-sm-6">
+                                                    <label>Address *</label>
+                                                    {{ cForm.address }}
                                                     {% if cForm.address.errors %}
                                                         {% for error in cForm.address.errors %}
                                                             <div class="alert alert-mini alert-danger mb-30">
@@ -124,8 +134,6 @@
                                                             </div>
                                                         {% endfor %}
                                                     {% endif %}
-                                                    <label>Address *</label>
-                                                    {{ cForm.address }}
                                                 </div>
                                             </div>
                                         </fieldset>
@@ -142,7 +150,14 @@
                                                         <input type="text" class="form-control" placeholder="Business Licence" readonly="" />
                                                         <span>Attach Business Licence</span>
                                                     </div>
-                                                    <small class="text-muted block">Max file size: 10Mb (pdf/jpg/png)</small>
+                                                    <small class="text-muted block">Max file size: 5Mb (pdf/jpg/png)</small>
+                                                    {% if kForm.license.errors %}
+                                                        {% for error in kForm.license.errors %}
+                                                            <div class="alert alert-mini alert-danger mb-30">
+                                                                <strong>{{ error|escape }}</strong>
+                                                            </div>
+                                                        {% endfor %}
+                                                    {% endif %}
                                                 </div>
                                                 <div class="col-md-6 col-sm-6">
                                                     <div class="fancy-file-upload">
@@ -151,7 +166,14 @@
                                                         <input type="text" class="form-control" placeholder="TIN Certificate" readonly="" />
                                                         <span>Attach TIN Certificate</span>
                                                     </div>
-                                                    <small class="text-muted block">Max file size: 10Mb (pdf/jpg/png)</small>
+                                                    <small class="text-muted block">Max file size: 5Mb (pdf/jpg/png)</small>
+                                                    {% if kForm.certificate.errors %}
+                                                        {% for error in kForm.certificate.errors %}
+                                                            <div class="alert alert-mini alert-danger mb-30">
+                                                                <strong>{{ error|escape }}</strong>
+                                                            </div>
+                                                        {% endfor %}
+                                                    {% endif %}
                                                 </div>
                                             </div>
                                         </fieldset>
@@ -167,6 +189,13 @@
                                                         <small class="text-muted">(optional)</small>
                                                     </label>
                                                     {{ aForm.bot }}
+                                                    {% if aForm.bot.errors %}
+                                                        {% for error in aForm.bot.errors %}
+                                                            <div class="alert alert-mini alert-danger mb-30">
+                                                                <strong>{{ error|escape }}</strong>
+                                                            </div>
+                                                        {% endfor %}
+                                                    {% endif %}
                                                 </div>
                                                 <div class="col-md-6 col-sm-6">
                                                     <label>
@@ -174,6 +203,13 @@
                                                         <small class="text-muted">(optional)</small>
                                                     </label>
                                                     {{ aForm.dse }}
+                                                    {% if aForm.dse.errors %}
+                                                        {% for error in aForm.dse.errors %}
+                                                            <div class="alert alert-mini alert-danger mb-30">
+                                                                <strong>{{ error|escape }}</strong>
+                                                            </div>
+                                                        {% endfor %}
+                                                    {% endif %}
                                                 </div>
                                             </div>
                                         </fieldset>
@@ -181,56 +217,132 @@
                                     <div role="tabpanel" class="tab-pane" id="step4">
                                         <h4>Company representative details Form</h4>
                                         <fieldset>
-                                            <input type="hidden" name="action" value="contact_send" />
+                                            <input type="hidden" name="action" value="first_rep" />
 
                                             <div class="row">
                                                 <div class="col-md-6 col-sm-6">
                                                     <label>First Name *</label>
                                                     {{ uForm.fName }}
+                                                    {% if uForm.fName.errors %}
+                                                        {% for error in uForm.fName.errors %}
+                                                            <div class="alert alert-mini alert-danger mb-30">
+                                                                <strong>{{ error|escape }}</strong>
+                                                            </div>
+                                                        {% endfor %}
+                                                    {% endif %}
                                                 </div>
                                                 <div class="col-md-6 col-sm-6">
                                                     <label>Last Name *</label>
                                                     {{ uForm.lName }}
+                                                    {% if uForm.lName.errors %}
+                                                        {% for error in uForm.lName.errors %}
+                                                            <div class="alert alert-mini alert-danger mb-30">
+                                                                <strong>{{ error|escape }}</strong>
+                                                            </div>
+                                                        {% endfor %}
+                                                    {% endif %}
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-6 col-sm-6">
                                                     <label>Email *</label>
                                                     {{ uForm.email }}
+                                                    {% if uForm.email.errors %}
+                                                        {% for error in uForm.email.errors %}
+                                                            <div class="alert alert-mini alert-danger mb-30">
+                                                                <strong>{{ error|escape }}</strong>
+                                                            </div>
+                                                        {% endfor %}
+                                                    {% endif %}
                                                 </div>
                                                 <div class="col-md-6 col-sm-6">
                                                     <label>Phone *</label>
                                                     {{ uForm.phone }}
+                                                    {% if uForm.phone.errors %}
+                                                        {% for error in uForm.phone.errors %}
+                                                            <div class="alert alert-mini alert-danger mb-30">
+                                                                <strong>{{ error|escape }}</strong>
+                                                            </div>
+                                                        {% endfor %}
+                                                    {% endif %}
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-6 col-sm-6">
                                                     <label>Date of Birth*</label>
                                                     {{ uForm.dob }}
+                                                    {% if uForm.dob.errors %}
+                                                        {% for error in uForm.dob.errors %}
+                                                            <div class="alert alert-mini alert-danger mb-30">
+                                                                <strong>{{ error|escape }}</strong>
+                                                            </div>
+                                                        {% endfor %}
+                                                    {% endif %}
                                                 </div>
                                                 <div class="col-md-3 col-sm-6">
                                                     <label>Gender *</label>
                                                     {{ uForm.gender }}
+                                                    {% if uForm.gender.errors %}
+                                                        {% for error in uForm.gender.errors %}
+                                                            <div class="alert alert-mini alert-danger mb-30">
+                                                                <strong>{{ error|escape }}</strong>
+                                                            </div>
+                                                        {% endfor %}
+                                                    {% endif %}
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-6 col-sm-6">
                                                     <label>Password *</label>
                                                     {{ uForm.password }}
+                                                    {% if uForm.password.errors %}
+                                                        {% for error in uForm.password.errors %}
+                                                            <div class="alert alert-mini alert-danger mb-30">
+                                                                <strong>{{ error|escape }}</strong>
+                                                            </div>
+                                                        {% endfor %}
+                                                    {% endif %}
                                                 </div>
                                                 <div class="col-md-6 col-sm-6">
                                                     <label>Verify *</label>
                                                     {{ uForm.verify }}
+                                                    {% if uForm.verify.errors %}
+                                                        {% for error in uForm.verify.errors %}
+                                                            <div class="alert alert-mini alert-danger mb-30">
+                                                                <strong>{{ error|escape }}</strong>
+                                                            </div>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12">
+                                                    <div class="alert alert-mini mb-30 passMessage" style="display:none">
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-lg-2 col-md-2 col-sm-4">
                                                     <label>ID Type *</label>
                                                     {{ uForm.id_type }}
+                                                    {% if uForm.id_type.errors %}
+                                                        {% for error in uForm.id_type.errors %}
+                                                            <div class="alert alert-mini alert-danger mb-30">
+                                                                <strong>{{ error|escape }}</strong>
+                                                            </div>
+                                                        {% endfor %}
+                                                    {% endif %}
                                                 </div>
                                                 <div class="col-lg-4 col-md-4 col-sm-4">
                                                     <label>ID Number *</label>
                                                     {{ uForm.id_number }}
+                                                    {% if uForm.id_number.errors %}
+                                                        {% for error in uForm.id_number.errors %}
+                                                            <div class="alert alert-mini alert-danger mb-30">
+                                                                <strong>{{ error|escape }}</strong>
+                                                            </div>
+                                                        {% endfor %}
+                                                    {% endif %}
                                                 </div>
                                                 <div class="col-lg-6 col-md-4 col-sm-4">
                                                     <label></label>
@@ -240,7 +352,14 @@
                                                         <input type="text" class="form-control" placeholder="upload your ID" readonly="" />
                                                         <span>Attach your ID</span>
                                                     </div>
-                                                    <small class="text-muted block">Upload National ID, Passport, Voter ID or Driver license, max file size: 10Mb</small>
+                                                    <small class="text-muted block">Upload National ID, Passport, Voter ID or Driver license, max file size: 5Mb</small>
+                                                    {% if uForm.user_id.errors %}
+                                                        {% for error in uForm.user_id.errors %}
+                                                            <div class="alert alert-mini alert-danger mb-30">
+                                                                <strong>{{ error|escape }}</strong>
+                                                            </div>
+                                                        {% endfor %}
+                                                    {% endif %}
                                                 </div>
                                             </div>
                                         </fieldset>
@@ -248,26 +367,26 @@
                                 </div>
                             </div>
                             <div class="card-footer">
-                                <button name="wizard_goto_step" type="submit" class="btn btn-primary" value="{{ wizard.steps.first }}">first step</button>
-                                <button name="wizard_goto_step" type="submit" class="btn btn-primary" value="{{ wizard.steps.prev }}">prev step</button>
-                                <input type="submit" class="btn btn-primary btn-teal" value="Next"/>
+                                <button id="prev" class="btn btn-primary prev-step">Prev step</button>
+                                <button id="next" class="btn btn-primary next-step right">Next step</button>
+                                <input id="co" type="submit" class="btn btn-primary btn-teal" value="Submit"/>
                             </div>
                         </form>
                     </div>
                 </div>
-                <div class="tab-pane fade" id="user">
-                    <form action="{% url 'register' %}" method="post" enctype="multipart/form-data">
+                <div class="tab-pane {% if second == 'active' %}{{ second }}{% else %}fade{% endif %}" id="user">
+                    <form action="{% url 'corporate' %}" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="card-block">
                             <h4>Company representative details Form</h4>
                             <fieldset>
                                 <!-- required [php action request] -->
-                                <input type="hidden" name="action" value="contact_send" />
+                                <input type="hidden" name="action" value="add_rep" />
 
                                 <div class="row">
                                     <div class="col-md-6 col-sm-6">
                                         <label>Choose your Company *
-                                            <select>
+                                            <select name="company">
                                                 {% for option in options %}
                                                     <option value="{{ option }}">{{ option }}</option>
                                                 {% endfor %}
@@ -275,65 +394,147 @@
                                         </label>
                                     </div>
                                 </div>
-
                                 <div class="row">
                                     <div class="col-md-6 col-sm-6">
                                         <label>First Name *</label>
-                                        {{ uForm.fName }}
+                                        {{ adForm.fName }}
+                                        {% if adForm.fName.errors %}
+                                            {% for error in adForm.fName.errors %}
+                                                <div class="alert alert-mini alert-danger mb-30">
+                                                    <strong>{{ error|escape }}</strong>
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}
                                     </div>
                                     <div class="col-md-6 col-sm-6">
                                         <label>Last Name *</label>
-                                        {{ uForm.lName }}
+                                        {{ adForm.lName }}
+                                        {% if adForm.lName.errors %}
+                                            {% for error in adForm.lName.errors %}
+                                                <div class="alert alert-mini alert-danger mb-30">
+                                                    <strong>{{ error|escape }}</strong>
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 col-sm-6">
                                         <label>Email *</label>
-                                        {{ uForm.email }}
+                                        {{ adForm.email }}
+                                        {% if adForm.email.errors %}
+                                            {% for error in adForm.email.errors %}
+                                                <div class="alert alert-mini alert-danger mb-30">
+                                                    <strong>{{ error|escape }}</strong>
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}
                                     </div>
                                     <div class="col-md-6 col-sm-6">
                                         <label>Phone *</label>
-                                        {{ uForm.phone }}
+                                        {{ adForm.phone }}
+                                        {% if adForm.phone.errors %}
+                                            {% for error in adForm.phone.errors %}
+                                                <div class="alert alert-mini alert-danger mb-30">
+                                                    <strong>{{ error|escape }}</strong>
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 col-sm-6">
                                         <label>Date of Birth*</label>
-                                        {{ uForm.dob }}
+                                        {{ adForm.dob }}
+                                        {% if adForm.dob.errors %}
+                                            {% for error in adForm.dob.errors %}
+                                                <div class="alert alert-mini alert-danger mb-30">
+                                                    <strong>{{ error|escape }}</strong>
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}
                                     </div>
                                     <div class="col-md-3 col-sm-6">
                                         <label>Gender *</label>
-                                        {{ uForm.gender }}
+                                        {{ adForm.gender }}
+                                        {% if adForm.gender.errors %}
+                                            {% for error in adForm.gender.errors %}
+                                                <div class="alert alert-mini alert-danger mb-30">
+                                                    <strong>{{ error|escape }}</strong>
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 col-sm-6">
                                         <label>Password *</label>
-                                        {{ uForm.password }}
+                                        {{ adForm.password }}
+                                        {% if adForm.password.errors %}
+                                            {% for error in adForm.password.errors %}
+                                                <div class="alert alert-mini alert-danger mb-30">
+                                                    <strong>{{ error|escape }}</strong>
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}
                                     </div>
                                     <div class="col-md-6 col-sm-6">
                                         <label>Verify *</label>
-                                        {{ uForm.verify }}
+                                        {{ adForm.verify }}
+                                        {% if adForm.verify.errors %}
+                                            {% for error in adForm.verify.errors %}
+                                                <div class="alert alert-mini alert-danger mb-30">
+                                                    <strong>{{ error|escape }}</strong>
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div class="alert alert-mini mb-30 passMessage" style="display:none">
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-lg-2 col-md-2 col-sm-4">
                                         <label>ID Type *</label>
-                                        {{ uForm.id_type }}
+                                        {{ adForm.id_type }}
+                                        {% if adForm.id_type.errors %}
+                                            {% for error in adForm.id_type.errors %}
+                                                <div class="alert alert-mini alert-danger mb-30">
+                                                    <strong>{{ error|escape }}</strong>
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-4">
                                         <label>ID Number *</label>
-                                        {{ uForm.id_number }}
+                                        {{ adForm.id_number }}
+                                        {% if adForm.id_number.errors %}
+                                            {% for error in adForm.id_number.errors %}
+                                                <div class="alert alert-mini alert-danger mb-30">
+                                                    <strong>{{ error|escape }}</strong>
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}
                                     </div>
                                     <div class="col-lg-6 col-md-4 col-sm-4">
                                         <label></label>
                                         <div class="fancy-file-upload">
                                             <i class="fa fa-upload"></i>
-                                            {{ uForm.user_id }}
+                                            {{ adForm.user_id }}
                                             <input type="text" class="form-control" placeholder="upload your ID" readonly="" />
                                             <span>Attach your ID</span>
                                         </div>
-                                        <small class="text-muted block">Upload National ID, Passport, Voter ID or Driver license, max file size: 10Mb</small>
+                                        <small class="text-muted block">Upload National ID, Passport, Voter ID or Driver license, max file size: 5Mb</small>
+                                        {% if adForm.user_id.errors %}
+                                            {% for error in adForm.user_id.errors %}
+                                                <div class="alert alert-mini alert-danger mb-30">
+                                                    <strong>{{ error|escape }}</strong>
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}
                                     </div>
                                 </div>
                             </fieldset>
@@ -346,5 +547,5 @@
     </section>
 {% endblock %}
 {% block scripts %}
-    <script type="text/javascript" src="/static/pochi/js/corporate.js"></script>
+    <script type="text/javascript" src="/static/js/corporate.js"></script>
 {% endblock %}

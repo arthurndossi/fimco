@@ -44,7 +44,7 @@
                 {% endfor %}
             {% endif %}
             </div>
-            {% if bank_account %}
+            {% if not bank_account %}
                 <div class="row">
                     <div class="col-lg-8 col-md-10 col-sm-12 col-centered">
                         <div class="alert alert-warning margin-bottom-30">
@@ -114,6 +114,34 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-lg-8 col-md-10 col-sm-12 col-centered">
+                        <div class="panel panel-default">
+                            <div class="panel-heading panel-heading-transparent">
+                                <strong>Blank Indemnity Form</strong>
+                            </div>
+                            <div class="panel-body">
+                                <p>
+                                    Please download and print this form and submit it to your bank for stamping, then upload the
+                                    stamped form by clicking the 'Upload Scanned copy' button below.
+                                </p>
+                                <hr />
+                                <div class="row" style="display: flex;justify-content: space-between;">
+                                    <div class="dropdown">
+                                        <a href="{% url 'create_form' %}" class="btn btn-primary">Download Blank Form</a>
+                                    </div>
+    {#                                <a href="{{ request.META.HTTP_HOST }}{% url '' %}"></a>#}
+                                    <div class="fancy-file-upload">
+                                        <i class="fa fa-upload"></i>
+                                        <input type="file" class="form-control" name="contact[attachment]" onchange="jQuery(this).next('input').val(this.value);" />
+                                        <input type="text" class="form-control" placeholder="Upload Scanned copy" readonly="" />
+                                        <span>Upload Scanned copy</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             {% else %}
                 <div class="row">
                     <div class="col-md-6 col-xs-12 col-centered">
@@ -156,42 +184,12 @@
                                 {% if address %}
                                 <p><strong>Bank Address:</strong> {{ address }}</p>
                                 {% endif %}
+                                <div><a href="{% url 'del_bank' %}" class="btn btn-primary">Delete Bank Account</a></div>
                             </div>
                         </div>
                     </div>
                 </div>
             {% endif %}
-            <div class="row">
-                <div class="col-lg-8 col-md-10 col-sm-12 col-centered">
-                    <div class="panel panel-default">
-                        <div class="panel-heading panel-heading-transparent">
-                            <strong>Blank Indemnity Form</strong>
-                        </div>
-                        <div class="panel-body">
-                            <p>
-                                Please download and print this form and submit it to your bank for stamping, then upload the
-                                stamped form by clicking the 'Upload Scanned copy' button below.
-                            </p>
-                            <hr />
-                            <div class="row">
-                                <div class="col-xs-6">
-                                    <div class="dropdown">
-                                        <a href="{% url 'create_form' %}" class="btn btn-primary">Download Blank Form</a>
-                                    </div>
-                                </div>
-                                <div class="col-xs-6">
-                                    <div class="fancy-file-upload">
-                                        <i class="fa fa-upload"></i>
-                                        <input type="file" class="form-control" name="contact[attachment]" onchange="jQuery(this).next('input').val(this.value);" />
-                                        <input type="text" class="form-control" placeholder="Upload Scanned copy" readonly="" />
-                                        <span>Upload Scanned copy</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </section>
 {% endblock %}

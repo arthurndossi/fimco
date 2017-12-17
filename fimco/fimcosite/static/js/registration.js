@@ -2,7 +2,8 @@ var id = $('#id_client_id'), choice = $("#id_id_choice");
 
 $('#next, #prev').click(function (e) {
     e.preventDefault();
-   $('#one, #two, #next, #prev').toggle()
+    $(window).scrollTop(0);
+    $('#one, #two, #next, #prev').toggle()
 });
 
 $(":checkbox").change(function() {
@@ -16,17 +17,14 @@ $(":checkbox").change(function() {
 choice.on('change', function() {
     var id_choice = choice.find(":selected").val();
     if (id_choice === 'national'){
-        // id.attr('pattern', '^[A-Z0-9]{8}(-)([A-Z0-9]{5}(-)){2}[A-Z0-9]{2}$');
-        id.attr('data-format', '********-*****-*****-**')
+        id.attr('pattern', '^[A-Z0-9]{8}(-)([A-Z0-9]{5}(-)){2}[A-Z0-9]{2}$');
     }else if (id_choice === 'voting'){
-        // id.attr('pattern', '^(T-)([a-zA-Z0-9]{4}(-)){2}([a-zA-Z0-9]){3}(-)[a-zA-Z0-9]$');
-        id.attr('data-format', 'T-9999-9999-999-9')
+        id.attr('pattern', '^(T-)([a-zA-Z0-9]{4}(-)){2}([a-zA-Z0-9]){3}(-)[a-zA-Z0-9]$');
     }else if (id_choice === 'passport'){
-        // id.attr('pattern', '^[A-Z]{2}[0-9]{6}$');
+        id.attr('pattern', '^[A-Z]{2}[0-9]{6}$');
         id.attr('data-format', 'aa999999')
     }else if (id_choice === 'driving'){
-        // id.attr('pattern', '^\\d{10}$');
-        id.attr('data-format', '9999999999')
+        id.attr('pattern', '^\\d{10}$');
     }
 });
 
@@ -79,3 +77,35 @@ function validatePassword(){
     }
 }
 $("#id_password, #id_verify").keyup(validatePassword);
+
+var form_element = $('#one').find('.required');
+var extra_element = $('#two').find('.required');
+form_element.keyup(function() {
+    var empty = false;
+    form_element.each(function() {
+        if ($(this).val() === '') {
+            empty = true;
+        }
+    });
+
+    if (empty) {
+        $('#next').attr('disabled', 'disabled');
+    } else {
+        $('#next').removeAttr('disabled');
+    }
+});
+
+extra_element.keyup(function() {
+    var empty = false;
+    form_element.each(function() {
+        if ($(this).val() === '') {
+            empty = true;
+        }
+    });
+
+    if (empty) {
+        $('#finish').attr('disabled', 'disabled');
+    } else {
+        $('#finish').removeAttr('disabled');
+    }
+});
