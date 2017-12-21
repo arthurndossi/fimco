@@ -57,7 +57,11 @@
                                     <li></li>
                                 </ul>
                                 <div class="plan-buy text-center">
-                                    <a class="btn btn-primary" href="{% url 'trial' %}">Join now</a>
+                                    {% if paid %}
+                                        <a class="btn btn-primary" href="{% url 'trial' %}" disabled="disabled">Join now</a>
+                                    {% else %}
+                                        <a class="btn btn-primary" href="{% url 'trial' %}">Join now</a>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>

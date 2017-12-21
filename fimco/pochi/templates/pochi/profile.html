@@ -203,7 +203,7 @@
                                     {% if accounts %}
                                         <div class="col-md-4 col-lg-2">
                                             <div class="fancy-form fancy-form-select">
-                                                <select class="form-control select2">
+                                                <select class="form-control select2" title="">
                                                     {% for account in accounts %}
                                                         <option value="{{ account }}">{{ account }}</option>
                                                     {% endfor %}
@@ -243,7 +243,7 @@
                                         </div>
                                         <div class="panel-body">
                                             <div class="fancy-form fancy-form-select">
-                                                <select class="form-control">
+                                                <select class="form-control" title="">
                                                     <option value="none">None</option>
                                                     <option value="tigopesa">TIGO-PESA</option>
                                                     <option value="airtelmoney">AIRTEL-MONEY</option>
@@ -275,7 +275,7 @@
                                         </div>
                                         <div class="panel-body">
                                             <div class="fancy-form fancy-form-select">
-                                                <select class="form-control">
+                                                <select class="form-control" title="">
                                                     <option value="">Select bank</option>
                                                     <option value="1">CRDB</option>
                                                     <option value="2">NMB</option>
@@ -286,8 +286,10 @@
 
                                             <br />
 
-                                            <label>Account number</label>
-                                            <input type="text" class="form-control masked" data-format="999999999999999">
+                                            <label>
+                                                Account number
+                                                <input type="text" class="form-control masked" data-format="999999999999999">
+                                            </label>
 
                                             <br />
                                         </div>

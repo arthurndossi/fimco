@@ -261,7 +261,7 @@
 								</span>
 							</a>
 							<ul class="dropdown-menu hold-on-click">
-                                <li><a>POCHI ID:<br>{{ account.account }}</a></li>
+                                <li><a>POCHI ID:<br>{{ profile.profile_id }}</a></li>
                                 <li class="divider"></li>
 								<li>
 									<a href=""><i class="fa fa-envelope"></i> Notifications
@@ -302,6 +302,7 @@
                                             <span class="sr-only">Close</span>
                                         </button>
                                         <p><strong>{{ message }}</strong></p>
+                                        <button type="button" class="btn btn-info" data-dismiss="alert">OK</button>
                                     </div>
                                 </div>
                             </div>
@@ -310,7 +311,6 @@
                 {% endif %}
 			{% endblock %}
 			<!-- /MIDDLE -->
-            {% include 'pochi/modals.html' %}
 		</div>
 
 		<!-- JAVASCRIPT FILES -->

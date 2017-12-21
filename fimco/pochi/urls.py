@@ -30,5 +30,5 @@ urlpatterns = [
     url(r'^lock$', views.lock, name='lock'),
     url(r'^delete/account$', views.delete_account, name='delete_account'),
     url(r'^confirm/transfer$', views.confirm_transfer, name='confirm'),
-    url(r'^create/form$', views.IndemnityPDF.as_view(), name='create_form'),
+    url(r'^(?P<type>[a-zA-Z]+)/form$', views.IndemnityPDF.as_view(), name='create_form'),
 ]

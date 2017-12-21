@@ -96,3 +96,8 @@ ul.process-steps li a.active, ul.process-steps li a.active:focus, ul.process-ste
     color: #fff !important;
 }
 .contact { color: #001429 !important; }
+
+.col-centered {
+    float: none;
+    margin: auto;
+}

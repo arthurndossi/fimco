@@ -17,61 +17,137 @@
                             <!-- /ALERT -->
                         {% endfor %}
                     {% endif %}
-                    {% if lForm.non_field_errors %}
-                        {% for error in lForm.non_field_errors %}
-                            <!-- ALERT -->
-                            <div class="alert alert-mini alert-danger mb-30">
-                                <strong>{{ error }}</strong>
-                            </div>
-                            <!-- /ALERT -->
-                        {% endfor %}
-                    {% endif %}
-                    {% if next %}
-                        <!-- ALERT -->
-                        <div class="alert alert-mini alert-danger mb-30">
-                            <p>You need to login to view this page!</p>
-                        </div>
-                        <!-- /ALERT -->
-                    {% endif %}
-                    <div class="box-static box-border-top p-30">
-                        <div class="box-title mb-30">
-                            <h2 class="fs-20">I'm already a member</h2>
-                        </div>
-                        {% if next %}
-                        <form class="sky-form" method="post" action="/login/?next={{next}}" autocomplete="off">
-                        {% else %}
-                        <form class="sky-form" method="post" action="{% url 'validate' %}" autocomplete="off">
-                        {% endif %}
-                            <div class="clearfix">
-                                <!-- Phone -->
-                                <label>Email/Phone</label>
-                                <label class="input mb-10">
-                                    <i class="ico-append fa fa-user"></i>
-                                    {{ lForm.username }}
-                                    <b class="tooltip tooltip-bottom-right">Needed to verify your account</b>
-                                </label>
-                                <!-- Password -->
-                                <label>Password</label>
-                                <label class="input mb-10">
-                                    <i class="ico-append fa fa-lock"></i>
-                                    {{ lForm.password }}
-                                    <b class="tooltip tooltip-bottom-right">Type your account password</b>
-                                </label>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 col-sm-6 col-xs-6">
-                                    <!-- Inform Tip -->
-                                    <div class="form-tip pt-20">
-                                        <a class="no-text-decoration fs-13 mt-10 block" href="#">Forgot Password?</a>
+                    <ul class="nav nav-tabs nav-justified">
+                        <li class="nav-item"><a class="nav-link {% if user %}{{ user }}{% endif %}" href="#user" data-toggle="tab">Individual</a></li>
+                        <li class="nav-item"><a class="nav-link {% if corporate %}{{ corporate }}{% endif %}" href="#company" data-toggle="tab">Corporate</a></li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div class="tab-pane {% if user %}{{ user }}{% else %} 'fade'{% endif %}" id="user">
+                            {% if lForm.non_field_errors %}
+                                {% for error in lForm.non_field_errors %}
+                                    <!-- ALERT -->
+                                    <div class="alert alert-mini alert-danger mb-30">
+                                        <strong>{{ error }}</strong>
                                     </div>
+                                    <!-- /ALERT -->
+                                {% endfor %}
+                            {% endif %}
+                            {% if next %}
+                                <!-- ALERT -->
+                                <div class="alert alert-mini alert-danger mb-30">
+                                    <p>You need to login to view this page!</p>
                                 </div>
-                                <div class="col-md-6 col-sm-6 col-xs-6">
-                                    <button class="btn btn-primary" type="submit">LOG IN</button>
-                                    <input type="hidden" name="next" value="{{ next }}" />
+                                <!-- /ALERT -->
+                            {% endif %}
+                            <div class="box-static box-border-top p-30">
+                                <div class="box-title mb-30">
+                                    <h2 class="fs-20">I'm already a member</h2>
                                 </div>
+                                {% if next %}
+                                <form class="sky-form" method="post" action="{% url 'validate' %}?next={{next}}" autocomplete="off">
+                                {% else %}
+                                <form class="sky-form" method="post" action="{% url 'validate' %}" autocomplete="off">
+                                {% endif %}
+                                    <div class="clearfix">
+                                        <!-- Identification -->
+                                        <label>Email/Phone</label>
+                                        <label class="input mb-10">
+                                            <i class="ico-append fa fa-user"></i>
+                                            {{ lForm.username }}
+                                            <b class="tooltip tooltip-bottom-right">Needed to verify your account</b>
+                                        </label>
+                                        <!-- Password -->
+                                        <label>Password</label>
+                                        <label class="input mb-10">
+                                            <i class="ico-append fa fa-lock"></i>
+                                            {{ lForm.password }}
+                                            <b class="tooltip tooltip-bottom-right">Type your account password</b>
+                                        </label>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 col-sm-6 col-xs-6">
+                                            <!-- Inform Tip -->
+                                            <div class="form-tip pt-20">
+                                                <a class="no-text-decoration fs-13 mt-10 block" href="#">Forgot Password?</a>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-sm-6 col-xs-6">
+                                            <button class="btn btn-primary" type="submit">LOG IN</button>
+                                            <input type="hidden" name="next" value="{{ next }}" />
+                                            <input type="hidden" name="user" value="" />
+                                        </div>
+                                    </div>
+                                    {% csrf_token %}
+                                </form>
                             </div>
-                            {% csrf_token %}
-                        </form>
+                        </div>
+                        <div class="tab-pane {% if corporate %}{{ corporate }}{% else %} 'fade'{% endif %}" id="company">
+                            {% if cForm.non_field_errors %}
+                                {% for error in cForm.non_field_errors %}
+                                    <!-- ALERT -->
+                                    <div class="alert alert-mini alert-danger mb-30">
+                                        <strong>{{ error }}</strong>
+                                    </div>
+                                    <!-- /ALERT -->
+                                {% endfor %}
+                            {% endif %}
+                            {% if next %}
+                                <!-- ALERT -->
+                                <div class="alert alert-mini alert-danger mb-30">
+                                    <p>You need to login to view this page!</p>
+                                </div>
+                                <!-- /ALERT -->
+                            {% endif %}
+                            <div class="box-static box-border-top p-30">
+                                <div class="box-title mb-30">
+                                    <h2 class="fs-20">I'm already a member</h2>
+                                </div>
+                                {% if next %}
+                                <form class="sky-form" method="post" action="{% url 'validate' %}?next={{next}}" autocomplete="off">
+                                {% else %}
+                                <form class="sky-form" method="post" action="{% url 'validate' %}" autocomplete="off">
+                                {% endif %}
+                                    <div class="clearfix">
+                                        <!-- POCHI ID -->
+                                        <label>POCHI ID</label>
+                                        <label class="input mb-10">
+                                            <i class="ico-append fa fa-user"></i>
+                                            {{ cForm.id }}
+                                            <b class="tooltip tooltip-bottom-right">Enter your corporate account number</b>
+                                        </label>
+                                        <!-- Identification -->
+                                        <label>Email/Phone</label>
+                                        <label class="input mb-10">
+                                            <i class="ico-append fa fa-user"></i>
+                                            {{ cForm.corp_rep }}
+                                            <b class="tooltip tooltip-bottom-right">Needed to verify your account</b>
+                                        </label>
+                                        <!-- Password -->
+                                        <label>Password</label>
+                                        <label class="input mb-10">
+                                            <i class="ico-append fa fa-lock"></i>
+                                            {{ cForm.password }}
+                                            <b class="tooltip tooltip-bottom-right">Type your password</b>
+                                        </label>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 col-sm-6 col-xs-6">
+                                            <!-- Inform Tip -->
+                                            <div class="form-tip pt-20">
+                                                <a class="no-text-decoration fs-13 mt-10 block" href="#">Forgot Password?</a>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-sm-6 col-xs-6">
+                                            <button class="btn btn-primary" type="submit">LOG IN</button>
+                                            <input type="hidden" name="next" value="{{ next }}" />
+                                            <input type="hidden" name="corporate" value="" />
+                                        </div>
+                                    </div>
+                                    {% csrf_token %}
+                                </form>
+                            </div>
+                        </div>
                     </div>
                     <p>By signing in to FIMCO you are confirming that you have read and understood our
                         <a id="terms" data-toggle="modal" data-target="#termsModal">Terms and Conditions</a>.

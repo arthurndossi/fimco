@@ -1,28 +1,98 @@
 {% extends "easy_pdf/base.html" %}
+{% load static %}
 
 {% block extra_style %}
     <style type="text/css">
+        h1 {
+            text-align: center;
+            font-size: 18px;
+        }
         body {
             font-family: "Helvetica", "sans-serif";
             color: #333333;
+            font-size: 16px;
+        }
+        .center {
+            margin: auto;
+            text-align: center;
+        }
+        .box {
+            border: 2px solid black;
         }
     </style>
+{% endblock %}
+
+{% block page_header %}
+    <img src="{% static "POCHI.png" %}" />
 {% endblock %}
 
 {% block content %}
     <div id="content">
         <div class="main">
-            <h1>Indemnity Form details:</h1>
-            <img src="file:///STATIC_ROOT/img/POCHI.png" />
+            {% if type == 'corporate' %}
+                <h1 class="text-center"><u>BANK INDEMNITY LETTER(Company)</u></h1>
+            {% else %}
+                <h1><u>BANK INDEMNITY LETTER(Individual)</u></h1>
+            {% endif %}
         </div>
     </div>
     <div>
-        <p>Full Name:           {{ name|default:"" }}</p>
+        <p>Name of the account: {{ name|default:"" }}</p>
         <p>Account number:      {{ account|default:"" }}</p>
-        <p>Bank name:           {{ bank|default:"" }}</p>
-        <p>Bank name:           {{ branch|default:"" }}</p>
-        <p>Bank address:        {{ address|default:"" }}</p>
-        <p>Alias acc. name:     {{ nickname|default:"" }}</p>
-        <p>Swift code:          {{ swift|default:"" }}</p>
+        <p>Name of Bank:        {{ bank|default:"" }}</p>
+        <p>Name of Branch:      {{ branch|default:"" }}</p>
+        <p>Bank Address:        {{ address|default:"" }}</p>
+        <p>SWIFT code:          {{ swift|default:"" }}</p>
     </div>
+    {% if type == 'corporate' %}
+        <p><b><u>Signed and stamped on Behalf of the Company (Two Authorised Signatories)</u></b></p>
+        <table>
+            <tr>
+                <td>
+                    <div>
+                        <div>
+                            <p><strong><b>Name:</b></strong></p>
+                            <p><strong><b>Designation:</b></strong></p>
+                            <p><strong><b>Signature:</b></strong></p>
+                            <p><strong><b>Date:</b></strong></p>
+                        </div>
+                        <br>
+                        <div>
+                            <p><strong><b>Name:</b></strong></p>
+                            <p><strong><b>Designation:</b></strong></p>
+                            <p><strong><b>Signature:</b></strong></p>
+                            <p><strong><b>Date:</b></strong></p>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div>
+                        <div class="box center">Bank Stamp</div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    {% else %}
+        <br>
+        <p>I hereby confirm the given information is true, complete and accurate.</p>
+        <table>
+            <tr>
+                <td>
+                    <div>
+                        <p><strong><b>Signature:</b></strong></p>
+                        <p><strong><b>Date:</b></strong></p>
+                    </div>
+                </td>
+                <td>
+                    <div>
+                        <div class="box center" style="width: 50%; right: 0">Bank Stamp</div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    {% endif %}
+{% endblock %}
+{% block page_foot %}
+    FIMCO Limited, Room 205, 2<sup>nd</sup>Floor, Jangid Plaza, Ali Hassan Mwinyi Rd., Dar es salaam.
+
 {% endblock %}

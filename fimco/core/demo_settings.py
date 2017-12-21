@@ -109,6 +109,7 @@ SESSION_COOKIE_AGE = 600
 
 AUTHENTICATION_BACKENDS = (
    'django.contrib.auth.backends.ModelBackend',
+   'fimcosite.backend.CorporateBackend',
 )
 
 # Internationalization

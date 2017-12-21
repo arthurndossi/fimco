@@ -16,6 +16,7 @@
                                     <span class="sr-only">Close</span>
                                 </button>
                                 <p><strong>{{ message }}</strong></p>
+                                <button type="button" class="btn btn-danger" data-dismiss="alert">OK</button>
                             </div>
                         </div>
                     {% elif message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
@@ -27,7 +28,7 @@
                                 </button>
                                 <p><strong>{{ message }}</strong></p>
                                 <a href="{% url 'confirm' %}" class="btn btn-info btn-sm margin-top-10">Proceed transfer</a>
-                                <a href="#" class="btn btn-default btn-sm margin-top-10">Cancel</a>
+                                <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-default btn-sm margin-top-10">Cancel</a>
                             </div>
                         </div>
                     {% else %}
@@ -38,6 +39,7 @@
                                     <span class="sr-only">Close</span>
                                 </button>
                                 <p><strong>{{ message }}</strong></p>
+                                <button type="button" class="btn btn-success" data-dismiss="alert">OK</button>
                             </div>
                         </div>
                     {% endif %}
@@ -59,50 +61,66 @@
                                 <strong>Complete Indemnity Form</strong>
                             </div>
                             <div class="panel-body">
-                                <form id="create_account" method="post" action="{% url 'create_form' %}">
+                                <form id="create_account" method="post" action="{% url 'create_form' 'individual' %}">
                                     {% csrf_token %}
                                     <div class="row">
-                                        <div class="col-md-6 col-xs-8">
-                                            <label> Account holder name *
-                                                <input type="text" class="required form-control" name="name" required>
+                                        <div class="col-md-6 col-sm-6">
+                                            <label>Account holder name *
+                                                {{ bForm.account_name }}
                                             </label>
                                         </div>
-                                        <div class="col-md-6 col-xs-8">
-                                            <label> Account number *
-                                                <input type="text" class="required form-control masked" name="account" data-format="999999999999999">
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-lg-6 col-md-6 col-sm-8">
-                                            <label> Bank name *
-                                                <input type="text" class="required form-control" name="bank">
-                                            </label>
-                                            <input type="hidden" name="type" value="account" required>
-                                        </div>
-                                        <div class="col-lg-6 col-md-6 col-sm-8">
-                                            <label> Bank branch *
-                                                <input type="text" class="required form-control" name="branch" required>
+                                        <div class="col-md-6 col-sm-6">
+                                            <label>Account number *
+                                                {{ bForm.account_no }}
                                             </label>
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-lg-8 col-md-8 col-xs-12">
-                                            <label> Bank address *
-                                                <textarea rows="4" cols="100%" class="form-control required" name="address" required></textarea>
-                                            </label>
+                                        <div class="col-md-6 col-sm-6">
+                                            <label>Bank Name *</label>
+                                            {{ bForm.bank_name }}
+                                            {% if bForm.bank_name.errors %}
+                                                {% for error in bForm.bank_name.errors %}
+                                                    <div class="alert alert-mini alert-danger mb-30">
+                                                        <strong>{{ error|escape }}</strong>
+                                                    </div>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-md-6 col-sm-6">
+                                            <label>Branch Name *</label>
+                                            {{ bForm.branch_name }}
+                                            {% if bForm.branch_name.errors %}
+                                                {% for error in bForm.branch_name.errors %}
+                                                    <div class="alert alert-mini alert-danger mb-30">
+                                                        <strong>{{ error|escape }}</strong>
+                                                    </div>
+                                                {% endfor %}
+                                            {% endif %}
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-6 col-xs-8">
-                                            <label> Swift code <small>(optional)</small>
-                                                <input type="text" class="form-control" name="swift">
-                                            </label>
+                                        <div class="col-md-6 col-sm-6">
+                                            <label>Bank branch address *</label>
+                                            {{ bForm.branch_address }}
+                                            {% if bForm.branch_address.errors %}
+                                                {% for error in bForm.branch_address.errors %}
+                                                    <div class="alert alert-mini alert-danger mb-30">
+                                                        <strong>{{ error|escape }}</strong>
+                                                    </div>
+                                                {% endfor %}
+                                            {% endif %}
                                         </div>
-                                        <div class="col-md-6 col-xs-8">
-                                            <label> Alias account name <small>(short name)</small> *
-                                                <input type="text" class="required form-control" name="nickname" required>
-                                            </label>
+                                        <div class="col-md-6 col-sm-6">
+                                            <label>Swift code </label>
+                                            {{ bForm.swift_code }}
+                                            {% if bForm.swift_code.errors %}
+                                                {% for error in bForm.swift_code.errors %}
+                                                    <div class="alert alert-mini alert-danger mb-30">
+                                                        <strong>{{ error|escape }}</strong>
+                                                    </div>
+                                                {% endfor %}
+                                            {% endif %}
                                         </div>
                                     </div>
                                     <div class="col-xs-12">
@@ -128,7 +146,7 @@
                                 <hr />
                                 <div class="row" style="display: flex;justify-content: space-between;">
                                     <div class="dropdown">
-                                        <a href="{% url 'create_form' %}" class="btn btn-primary">Download Blank Form</a>
+                                        <a href="{% url 'create_form' 'individual' %}" class="btn btn-primary">Download Blank Form</a>
                                     </div>
     {#                                <a href="{{ request.META.HTTP_HOST }}{% url '' %}"></a>#}
                                     <div class="fancy-file-upload">

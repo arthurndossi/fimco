@@ -1,4 +1,4 @@
-    {% extends 'base.html' %}
+{% extends 'base.html' %}
 {% block links %}
     <link rel="stylesheet" type="text/css" href="/static/css/reg.css" />
 {% endblock %}
@@ -10,24 +10,27 @@
             {% if messages %}
                 {% for message in messages %}
                     {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
-                        <div class="alert alert-error mb-30 center">
-                            <button type="button" class="close" data-dismiss="alert">
-                                <span aria-hidden="true">×</span>
-                                <span class="sr-only">Close</span>
-                            </button>
-                            <h4>Alert! <strong>Try Again!</strong></h4>
-                            <p>{{ message }}</p>
+                        <div class="col-xs-12 col-centered">
+                            <div class="alert alert-danger mb-30">
+                                <button type="button" class="close" data-dismiss="alert">
+                                    <span aria-hidden="true">×</span>
+                                    <span class="sr-only">Close</span>
+                                </button>
+                                <h4>Alert! <strong>Try Again!</strong></h4>
+                                <p>{{ message }}</p>
+                                <button type="button" class="btn btn-danger" data-dismiss="alert">OK</button>
+                            </div>
                         </div>
                     {% else %}
-                        <div class="col-xs-12">
-                            <div class="alert alert-success mb-30 center">
+                        <div class="col-xs-12 col-centered">
+                            <div class="alert alert-success mb-30">
                                 <button type="button" class="close" data-dismiss="alert">
                                     <span aria-hidden="true">×</span>
                                     <span class="sr-only">Close</span>
                                 </button>
                                 <h4>Congratulations! <strong>Registration successful!</strong></h4>
                                 <p>{{ message }}</p>
-                                <a href="{% url 'index' %}" class="btn btn-info btn-sm mt-10">OK</a>
+                                <a href="{% url 'index' %}" class="btn btn-success btn-sm mt-10">OK</a>
                             </div>
                         </div>
                     {% endif %}
@@ -42,219 +45,227 @@
                                 <strong>{{ general_error }}</strong>
                             </div>
                         {% endfor %}
-                    {% else %}
-                        <div class="alert alert-mini alert-danger mb-30">
-                            <strong>Please fill all required fields in the form!</strong>
-                        </div>
                     {% endif %}
                     <div class="box-static box-transparent box-bordered p-30">
                         <div class="box-title mb-30">
                             <h2 class="fs-20">Don't have an account yet?</h2>
                         </div>
-                        <form class="m-0 sky-form" action="{% url 'register' %}" method="post" enctype="multipart/form-data" novalidate>
-                            {% csrf_token %}
-                            <fieldset id="one">
-                                <div class="row">
-                                    <div class="col-md-6 col-sm-6">
-                                        <label>First Name <small>(required)</small></label>
-                                        <label class="input mb-10">
-                                            <i class="ico-append fa fa-user"></i>
-                                            {{ rForm.fName }}
-                                            <b class="tooltip tooltip-bottom-right">Your First Name</b>
-                                        </label>
-                                        {% if rForm.fName.errors %}
-                                            {% for error in rForm.fName.errors %}
-                                                <div class="alert alert-mini alert-danger mb-30">
-                                                    <strong>{{ error|escape }}</strong>
-                                                </div>
-                                            {% endfor %}
-                                        {% endif %}
+                        {% if rForm1 %}
+                            <form class="m-0 sky-form" action="{% url 'register' %}" method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <fieldset id="one">
+                                    <div class="row">
+                                        <div class="col-md-6 col-sm-6">
+                                            <label>First Name <small>(required)</small></label>
+                                            <label class="input mb-10">
+                                                <i class="ico-append fa fa-user"></i>
+                                                {{ rForm1.fName }}
+                                                <b class="tooltip tooltip-bottom-right">Your First Name</b>
+                                            </label>
+                                            {% if rForm1.fName.errors %}
+                                                {% for error in rForm1.fName.errors %}
+                                                    <div class="alert alert-mini alert-danger mb-30">
+                                                        <strong>{{ error|escape }}</strong>
+                                                    </div>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-md-6 col-sm-6">
+                                            <label for="register:last_name">Last Name <small>(required)</small></label>
+                                            <label class="input mb-10">
+                                                <i class="ico-append fa fa-user"></i>
+                                                {{ rForm1.lName }}
+                                                <b class="tooltip tooltip-bottom-right">Your Last Name</b>
+                                            </label>
+                                            {% if rForm1.lName.errors %}
+                                                {% for error in rForm1.lName.errors %}
+                                                    <div class="alert alert-mini alert-danger mb-30">
+                                                        <strong>{{ error|escape }}</strong>
+                                                    </div>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
                                     </div>
-                                    <div class="col-md-6 col-sm-6">
-                                        <label for="register:last_name">Last Name <small>(required)</small></label>
-                                        <label class="input mb-10">
-                                            <i class="ico-append fa fa-user"></i>
-                                            {{ rForm.lName }}
-                                            <b class="tooltip tooltip-bottom-right">Your Last Name</b>
-                                        </label>
-                                        {% if rForm.lName.errors %}
-                                            {% for error in rForm.lName.errors %}
-                                                <div class="alert alert-mini alert-danger mb-30">
-                                                    <strong>{{ error|escape }}</strong>
-                                                </div>
-                                            {% endfor %}
-                                        {% endif %}
+                                    <div class="row">
+                                        <div class="col-md-6 col-sm-6">
+                                            <label for="register:dob">Date of Birth <small>(required)</small></label>
+                                            <label class="input mb-10">
+                                                {{ rForm1.dob }}
+                                                <b class="tooltip tooltip-bottom-right">Date of Birth</b>
+                                            </label>
+                                            {% if rForm1.dob.errors %}
+                                                {% for error in rForm1.dob.errors %}
+                                                    <div class="alert alert-mini alert-danger mb-30">
+                                                        <strong>{{ error|escape }}</strong>
+                                                    </div>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-md-6 col-sm-6">
+                                            <label for="register:gender">Gender <small>(required)</small></label>
+                                            <label class="select mb-10">
+                                                {{ rForm1.gender }}
+                                                <i class="ico-append fa fa-venus-mars"></i>
+                                            </label>
+                                            {% if rForm1.gender.errors %}
+                                                {% for error in rForm1.gender.errors %}
+                                                    <div class="alert alert-mini alert-danger mb-30">
+                                                        <strong>{{ error|escape }}</strong>
+                                                    </div>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6 col-sm-6">
-                                        <label for="register:dob">Date of Birth <small>(required)</small></label>
-                                        <label class="input mb-10">
-                                            {{ rForm.dob }}
-                                            <b class="tooltip tooltip-bottom-right">Date of Birth</b>
-                                        </label>
-                                        {% if rForm.dob.errors %}
-                                            {% for error in rForm.dob.errors %}
-                                                <div class="alert alert-mini alert-danger mb-30">
-                                                    <strong>{{ error|escape }}</strong>
-                                                </div>
-                                            {% endfor %}
-                                        {% endif %}
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <label for="register:email">Email <small>(required)</small></label>
+                                            <label class="input mb-10">
+                                                <i class="ico-append fa fa-envelope"></i>
+                                                {{ rForm1.email }}
+                                                <b class="tooltip tooltip-bottom-right">Your Email</b>
+                                            </label>
+                                            {% if rForm1.email.errors %}
+                                                {% for error in rForm.email.errors %}
+                                                    <div class="alert alert-mini alert-danger mb-30">
+                                                        <strong>{{ error|escape }}</strong>
+                                                    </div>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
                                     </div>
-                                    <div class="col-md-6 col-sm-6">
-                                        <label for="register:gender">Gender <small>(required)</small></label>
-                                        <label class="select mb-10">
-                                            {{ rForm.gender }}
-                                            <i class="ico-append fa fa-venus-mars"></i>
-                                        </label>
-                                        {% if rForm.gender.errors %}
-                                            {% for error in rForm.gender.errors %}
-                                                <div class="alert alert-mini alert-danger mb-30">
-                                                    <strong>{{ error|escape }}</strong>
-                                                </div>
-                                            {% endfor %}
-                                        {% endif %}
+                                    <div class="row">
+                                        <div class="col-md-6 col-sm-6">
+                                            <label for="register:phone">Phone <small>(required)</small></label>
+                                            <label class="input mb-10">
+                                                <i class="ico-append fa fa-phone"></i>
+                                                {{ rForm1.phone }}
+                                                <b class="tooltip tooltip-bottom-right">Your Phone</b>
+                                            </label>
+                                            {% if rForm1.phone.errors %}
+                                                {% for error in rForm1.phone.errors %}
+                                                    <div class="alert alert-mini alert-danger mb-30">
+                                                        <strong>{{ error|escape }}</strong>
+                                                    </div>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
                                     </div>
-                                </div>
+                                    <div class="row">
+                                        <div class="col-md-6 col-sm-6">
+                                            <label for="register:pass1">Password <small>(required)</small></label>
+                                            <label class="input mb-10">
+                                                <i class="ico-append fa fa-lock"></i>
+                                                {{ rForm1.password }}
+                                                <b class="tooltip tooltip-bottom-right">Min. 6 characters</b>
+                                            </label>
+                                        </div>
+                                        <div class="col-md-6 col-sm-6">
+                                            <label for="register:pass2">Repeat Password <small>(required)</small></label>
+                                            <label class="input mb-10">
+                                                <i class="ico-append fa fa-lock"></i>
+                                                {{ rForm1.verify }}
+                                                <b class="tooltip tooltip-bottom-right">Type the password again</b>
+                                            </label>
+                                            <div id="pass-message" class="alert alert-mini mb-30" style="display:none">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                </fieldset>
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <label for="register:email">Email <small>(required)</small></label>
-                                        <label class="input mb-10">
-                                            <i class="ico-append fa fa-envelope"></i>
-                                            {{ rForm.email }}
-                                            <b class="tooltip tooltip-bottom-right">Your Email</b>
-                                        </label>
-                                        {% if rForm.email.errors %}
-                                            {% for error in rForm.email.errors %}
-                                                <div class="alert alert-mini alert-danger mb-30">
-                                                    <strong>{{ error|escape }}</strong>
-                                                </div>
-                                            {% endfor %}
-                                        {% endif %}
+                                        <input type="hidden" name="one" value="one">
+                                        <button id="next" class="btn btn-primary float-right" disabled="disabled">
+                                            <i class="fa fa-arrow-right float-right"></i> NEXT
+                                        </button>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-6 col-sm-6">
-                                        <label for="register:phone">Phone <small>(required)</small></label>
-                                        <label class="input mb-10">
-                                            <i class="ico-append fa fa-phone"></i>
-                                            {{ rForm.phone }}
-                                            <b class="tooltip tooltip-bottom-right">Your Phone (optional)</b>
-                                        </label>
-                                        {% if rForm.phone.errors %}
-                                            {% for error in rForm.phone.errors %}
-                                                <div class="alert alert-mini alert-danger mb-30">
-                                                    <strong>{{ error|escape }}</strong>
-                                                </div>
-                                            {% endfor %}
-                                        {% endif %}
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6 col-sm-6">
-                                        <label for="register:pass1">Password <small>(required)</small></label>
-                                        <label class="input mb-10">
-                                            <i class="ico-append fa fa-lock"></i>
-                                            {{ rForm.password }}
-                                            <b class="tooltip tooltip-bottom-right">Min. 6 characters</b>
-                                        </label>
-                                    </div>
-                                    <div class="col-md-6 col-sm-6">
-                                        <label for="register:pass2">Repeat Password <small>(required)</small></label>
-                                        <label class="input mb-10">
-                                            <i class="ico-append fa fa-lock"></i>
-                                            {{ rForm.verify }}
-                                            <b class="tooltip tooltip-bottom-right">Type the password again</b>
-                                        </label>
-                                        <div id="pass-message" class="alert alert-mini mb-30" style="display:none">
+                            </form>
+                        {% elif rForm2 %}
+                            <form class="m-0 sky-form" action="{% url 'register' %}" method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <fieldset id="two">
+                                    <div class="row">
+                                        <div class="col-md-6 col-sm-6">
+                                            <label>Select ID type <small>(required)</small></label>
+                                            <label class="select mb-10">
+                                                <i class="ico-append fa fa-id-card"></i>
+                                                {{ rForm2.id_choice }}
+                                            </label>
+                                        </div>
+                                        <div class="col-md-6 col-sm-6" id="client_input">
+                                            <label for="register:id">Client ID <small>(required)</small></label>
+                                            <label class="input mb-10">
+                                                <i class="ico-append fa fa-id-card-o"></i>
+                                                {{ rForm2.client_id }}
+                                                <b class="tooltip tooltip-bottom-right">Enter your ID</b>
+                                            </label>
+                                            {% if rForm2.client_id.errors %}
+                                                {% for error in rForm2.client_id.errors %}
+                                                    <div class="alert alert-mini alert-danger mb-30">
+                                                        <strong>{{ error|escape }}</strong>
+                                                    </div>
+                                                {% endfor %}
+                                            {% endif %}
                                         </div>
                                     </div>
-                                </div>
-                                <hr />
-                            </fieldset>
-                            <fieldset id="two">
-                                <div class="row">
-                                    <div class="col-md-6 col-sm-6">
-                                        <label>Select ID type <small>(required)</small></label>
-                                        <label class="select mb-10">
-                                            <i class="ico-append fa fa-id-card"></i>
-                                            {{ rForm.id_choice }}
-                                        </label>
-                                    </div>
-                                    <div class="col-md-6 col-sm-6" id="client_input">
-                                        <label for="register:id">Client ID <small>(required)</small></label>
-                                        <label class="input mb-10">
-                                            <i class="ico-append fa fa-id-card-o"></i>
-                                            {{ rForm.client_id }}
-                                            <b class="tooltip tooltip-bottom-right">Enter your ID</b>
-                                        </label>
-                                        {% if rForm.client_id.errors %}
-                                            {% for error in rForm.client_id.errors %}
-                                                <div class="alert alert-mini alert-danger mb-30">
-                                                    <strong>{{ error|escape }}</strong>
+                                    <div class="row">
+                                        <div class="col-md-6 col-sm-6">
+                                            <div class="picture-container">
+                                                <div class="sqr-picture">
+                                                    <img src="/static/img/id-card.png" class="picture-src" id="wizardFilePreview" />
+                                                    {{ rForm2.scanned_id }}
                                                 </div>
-                                            {% endfor %}
-                                        {% endif %}
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6 col-sm-6">
-                                        <div class="picture-container">
-                                            <div class="sqr-picture">
-                                                <img src="/static/img/id-card.png" class="picture-src" id="wizardFilePreview" />
-                                                {{ rForm.scanned_id }}
+                                                <h6>Select your ID (max. size 5MB)</h6>
                                             </div>
-                                            <h6>Select your ID (max. size 5MB)</h6>
+                                            {% if rForm2.scanned_id.errors %}
+                                                {% for error in rForm2.scanned_id.errors %}
+                                                    <div class="alert alert-mini alert-danger mb-30">
+                                                        <strong>{{ error|escape }}</strong>
+                                                    </div>
+                                                {% endfor %}
+                                            {% endif %}
                                         </div>
-                                        {% if rForm.scanned_id.errors %}
-                                            {% for error in rForm.scanned_id.errors %}
-                                                <div class="alert alert-mini alert-danger mb-30">
-                                                    <strong>{{ error|escape }}</strong>
-                                                </div>
-                                            {% endfor %}
-                                        {% endif %}
                                     </div>
-                                </div>
+                                    <div class="row">
+                                        <div class="col-md-6 col-sm-6">
+                                            <label for="register:bot">BOT CDS Account <small>(optional)</small></label>
+                                            <label class="input mb-10">
+                                                <i class="ico-append fa fa-briefcase"></i>
+                                                {{ rForm2.bot_cds }}
+                                                <b class="tooltip tooltip-bottom-right">Enter your account no.</b>
+                                            </label>
+                                        </div>
+                                        <div class="col-md-6 col-sm-6">
+                                            <label for="register:dse">DSE CDS Account <small>(optional)</small></label>
+                                            <label class="input mb-10">
+                                                <i class="ico-append fa fa-briefcase"></i>
+                                                {{ rForm2.dse_cds }}
+                                                <b class="tooltip tooltip-bottom-right">Enter your account no.</b>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <label class="checkbox m-0">
+                                        {{ rForm2.checker }}
+                                        <i></i>I agree to the <a href="#" data-toggle="modal" data-target="#termsModal">Terms of Service</a>
+                                    </label>
+
+                                    <hr />
+
+                                </fieldset>
                                 <div class="row">
-                                    <div class="col-md-6 col-sm-6">
-                                        <label for="register:bot">BOT CDS Account <small>(optional)</small></label>
-                                        <label class="input mb-10">
-                                            <i class="ico-append fa fa-briefcase"></i>
-                                            {{ rForm.bot_cds }}
-                                            <b class="tooltip tooltip-bottom-right">Enter your account no.</b>
-                                        </label>
-                                    </div>
-                                    <div class="col-md-6 col-sm-6">
-                                        <label for="register:dse">DSE CDS Account <small>(optional)</small></label>
-                                        <label class="input mb-10">
-                                            <i class="ico-append fa fa-briefcase"></i>
-                                            {{ rForm.dse_cds }}
-                                            <b class="tooltip tooltip-bottom-right">Enter your account no.</b>
-                                        </label>
+                                    <div class="col-md-12">
+                                        <input type="hidden" name="two" value="two">
+{#                                        <button id="prev" class="btn btn-primary float-left">#}
+{#                                            <i class="fa fa-arrow-left"></i> PREVIOUS#}
+{#                                        </button>#}
+                                        <button type="submit" id="finish" class="btn btn-primary float-right" disabled="disabled">
+                                            <i class="fa fa-check"></i> REGISTER
+                                        </button>
                                     </div>
                                 </div>
-                                <label class="checkbox m-0">
-                                    <input class="checked-agree" type="checkbox" name="checkbox">
-                                    <i></i>I agree to the <a href="#" data-toggle="modal" data-target="#termsModal">Terms of Service</a>
-                                </label>
-
-                                <hr />
-
-                            </fieldset>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <button id="prev" class="btn btn-primary float-left">
-                                        <i class="fa fa-arrow-left"></i> PREVIOUS
-                                    </button>
-                                    <button id="next" class="btn btn-primary float-right" disabled="disabled">
-                                        <i class="fa fa-arrow-right float-right"></i> NEXT
-                                    </button>
-                                    <button type="submit" id="finish" class="btn btn-primary float-right" disabled="disabled">
-                                        <i class="fa fa-check"></i> REGISTER
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
+                            </form>
+                        {% endif %}
                     </div>
                 </div>
             </div>

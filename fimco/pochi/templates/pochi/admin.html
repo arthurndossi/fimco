@@ -23,7 +23,7 @@
 
                 <!-- panel content -->
                 <div class="panel-body">
-                    <canvas id="balInterest" height='400' class="fullwidth"></canvas>
+                    <canvas id="balInterest" class="fullwidth height-400"></canvas>
                 </div>
                 <!-- /panel content -->
             </div>
@@ -40,7 +40,7 @@
                 <a href="{% url 'data' 'rates' %}">
             {% endif %}
                     <!-- BOX -->
-                    <div class="box danger"><!-- default, danger, warning, info, success -->
+                    <div class="box danger grow"><!-- default, danger, warning, info, success -->
                         <div class="box-title"><!-- add .noborder class if box-body is removed -->
                             <h4>POCHI Rates</h4>
                             <small class="block">{{ rates.today }}%</small>
@@ -63,7 +63,7 @@
                 <a href="{% url 'data' 'daily' %}">
             {% endif %}
                     <!-- BOX -->
-                    <div class="box warning"><!-- default, danger, warning, info, success -->
+                    <div class="box warning grow"><!-- default, danger, warning, info, success -->
                         <div class="box-title"><!-- add .noborder class if box-body is removed -->
                             <h4>Daily Earnings</h4>
                             <small class="block">TZS {{ daily.today }}/=</small>
@@ -86,7 +86,7 @@
                 <a href="{% url 'data' 'monthly' %}">
             {% endif %}
                     <!-- BOX -->
-                    <div class="box default"><!-- default, danger, warning, info, success -->
+                    <div class="box default grow"><!-- default, danger, warning, info, success -->
                         <div class="box-title"><!-- add .noborder class if box-body is removed -->
                             <h4>Monthly earnings</h4>
                             {% for m in monthly.month %}
@@ -111,7 +111,7 @@
                 <a href="{% url 'data' 'total' %}">
             {% endif %}
                     <!-- BOX -->
-                    <div class="box success"><!-- default, danger, warning, info, success -->
+                    <div class="box success grow"><!-- default, danger, warning, info, success -->
                         <div class="box-title"><!-- add .noborder class if box-body is removed -->
                             <h4>Total Earnings</h4>
                             <small class="block">TZS {{ total.total.bonus_closing_balance__sum }}/=</small>

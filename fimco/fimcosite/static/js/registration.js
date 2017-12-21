@@ -1,41 +1,80 @@
-var id = $('#id_client_id'), choice = $("#id_id_choice");
+$(document).ready(function () {
+    var id = $('#id_client_id'), choice = $("#id_id_choice"),
+        uploadField = $("#file"), checkbox = $('#checker'),
+        empty = false, form_element = $('#one').find('.required');
 
-$('#next, #prev').click(function (e) {
-    e.preventDefault();
-    $(window).scrollTop(0);
-    $('#one, #two, #next, #prev').toggle()
-});
+    id.attr('pattern', '^[A-Z\\d]{8}(-)([A-Z\\d]{5}(-)){2}[A-Z\\d]{2}$');
 
-$(":checkbox").change(function() {
-    if(this.checked) {
-        $("#finish").show()
-    }else{
-        $("#finish").hide()
+    choice.on('change', function() {
+        var id_choice = choice.find(":selected").val();
+        if (id_choice === 'national'){
+            id.attr('pattern', '^[A-Z\\d]{8}(-)([A-Z\\d]{5}(-)){2}[A-Z\\d]{2}$');
+        }else if (id_choice === 'voting'){
+            id.attr('pattern', '^(T-)([a-zA-Z\\d]{4}(-)){2}([a-zA-Z\\d]){3}(-)[a-zA-Z\\d]$');
+        }else if (id_choice === 'passport'){
+            id.attr('pattern', '^[A-Z]{2}[\\d]{6}$');
+        }else if (id_choice === 'driving'){
+            id.attr('pattern', '^\\d{10}$');
+        }
+    });
+
+    form_element.each(function() {
+        if ($(this).val() === '') {
+            empty = true;
+        }
+    });
+    if (empty) {
+        $('#next').attr('disabled', 'disabled');
+    } else {
+        $('#next').removeAttr('disabled');
     }
-});
 
-choice.on('change', function() {
-    var id_choice = choice.find(":selected").val();
-    if (id_choice === 'national'){
-        id.attr('pattern', '^[A-Z0-9]{8}(-)([A-Z0-9]{5}(-)){2}[A-Z0-9]{2}$');
-    }else if (id_choice === 'voting'){
-        id.attr('pattern', '^(T-)([a-zA-Z0-9]{4}(-)){2}([a-zA-Z0-9]){3}(-)[a-zA-Z0-9]$');
-    }else if (id_choice === 'passport'){
-        id.attr('pattern', '^[A-Z]{2}[0-9]{6}$');
-        id.attr('data-format', 'aa999999')
-    }else if (id_choice === 'driving'){
-        id.attr('pattern', '^\\d{10}$');
-    }
-});
+    form_element.keyup(function() {
+        var empty = false, alert = $(".alert");
+        form_element.each(function() {
+            if ($(this).val() === '') {
+                empty = true;
+            }
+            if (alert.length > 0){
+                alert.hide();
+            }
+        });
 
-// Prepare the preview for profile picture
-$("#picture, #file").change(function(){
-    if (this.id === 'picture') {
-        readURL(this, 'wizardPicturePreview');
+        if (empty) {
+            $('#next').attr('disabled', 'disabled');
+        } else {
+            $('#next').removeAttr('disabled');
+        }
+    });
+
+    if (checkbox.is(':checked')){
+        if (uploadField.val() !== '' && id.val() !== '') {
+            $('#finish').removeAttr('disabled')
+        } else {
+            $('#finish').attr('disabled', 'disabled');
+        }
     }
-    else if (this.id === 'file') {
+
+    checkbox.change(function(){
+        if (uploadField.val() !== '' && id.val() !== '' && checkbox.is(':checked')) {
+            $('#finish').removeAttr('disabled');
+        } else {
+            $('#finish').attr('disabled', 'disabled');
+        }
+    });
+
+    $("#id_password, #id_verify").keyup(validatePassword);
+
+    uploadField.change(function(){
         readURL(this, 'wizardFilePreview');
-    }
+        if(this.files[0].size > 5242880){
+           alert("File is too big!");
+           this.value = "";
+        }
+        if (alert.length > 0){
+            alert.hide();
+        }
+    });
 });
 
 //Function to show image before upload
@@ -50,62 +89,21 @@ function readURL(input, id) {
     }
 }
 
-var uploadField = $("#file");
-
-uploadField.onchange = function() {
-    if(this.files[0].size > 5242880){
-       alert("File is too big!");
-       this.value = "";
-    }
-};
-
-var password = $("#id_password"),
-		msg = $("#pass-message"),
-    confirm_password = $("#id_verify");
-
 function validatePassword(){
-    if(password.val() !== confirm_password.val()) {
-        if(msg.hasClass("alert-success")){
-            msg.removeClass("alert-success");
+    var password = $("#id_password"),
+		msg = $("#pass-message"),
+        confirm_password = $("#id_verify");
+    if(password.val() !== '' && confirm_password.val() !== ''){
+        if(password.val() !== confirm_password.val()) {
+            if(msg.hasClass("alert-success")){
+                msg.removeClass("alert-success");
+            }
+            msg.addClass("alert-danger").html("Passwords Don't Match").show();
+        } else {
+            if(msg.hasClass("alert-danger")){
+                msg.removeClass("alert-danger");
+            }
+            msg.addClass("alert-success").html("Passwords Match").show();
         }
-        msg.addClass("alert-danger").html("Passwords Don't Match").show();
-    } else {
-        if(msg.hasClass("alert-danger")){
-            msg.removeClass("alert-danger");
-        }
-        msg.addClass("alert-success").html("Passwords Match").show();
     }
 }
-$("#id_password, #id_verify").keyup(validatePassword);
-
-var form_element = $('#one').find('.required');
-var extra_element = $('#two').find('.required');
-form_element.keyup(function() {
-    var empty = false;
-    form_element.each(function() {
-        if ($(this).val() === '') {
-            empty = true;
-        }
-    });
-
-    if (empty) {
-        $('#next').attr('disabled', 'disabled');
-    } else {
-        $('#next').removeAttr('disabled');
-    }
-});
-
-extra_element.keyup(function() {
-    var empty = false;
-    form_element.each(function() {
-        if ($(this).val() === '') {
-            empty = true;
-        }
-    });
-
-    if (empty) {
-        $('#finish').attr('disabled', 'disabled');
-    } else {
-        $('#finish').removeAttr('disabled');
-    }
-});

@@ -13,6 +13,7 @@
                                     <span class="sr-only">Close</span>
                                 </button>
                                 <p><strong>{{ message }}</strong></p>
+                                <button type="button" class="btn btn-danger" data-dismiss="alert">OK</button>
                             </div>
                         </div>
                     {% elif message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
@@ -24,7 +25,7 @@
                                 </button>
                                 <p><strong>{{ message }}</strong></p>
                                 <a href="{% url 'confirm' %}" class="btn btn-info btn-sm margin-top-10">Proceed transfer</a>
-                                <a href="#" class="btn btn-default btn-sm margin-top-10">Cancel</a>
+                                <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-default btn-sm margin-top-10">Cancel</a>
                             </div>
                         </div>
                     {% else %}
@@ -35,6 +36,7 @@
                                     <span class="sr-only">Close</span>
                                 </button>
                                 <p><strong>{{ message }}</strong></p>
+                                <button type="button" class="btn btn-success" data-dismiss="alert">OK</button>
                             </div>
                         </div>
                     {% endif %}

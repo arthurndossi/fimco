@@ -3,19 +3,22 @@ import uuid
 
 from core.utils import render_with_global_data
 from django.contrib import messages
+from django.contrib.auth import user_logged_out
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db import transaction, IntegrityError
 from django.db.models import Sum
 from django.db.models.functions import TruncMonth
+from django.dispatch import receiver
 from django.http import JsonResponse
 from django.shortcuts import redirect
 from easy_pdf.views import PDFTemplateView
-from fimcosite.forms import EditProfileForm
+from fimcosite.forms import EditProfileForm, BankAccountForm
 from fimcosite.models import Account, Profile
 
 from core import demo_settings
 from fimcosite.views import index
+
 from .models import Transaction, Group, GroupMember, ExternalAccount, Ledger, Charge, CashOut, BalanceSnapshot, Rate, \
     PaidUser
 
@@ -43,29 +46,29 @@ class IndemnityPDF(PDFTemplateView):
 
     def post(self, request, *args, **kwargs):
         if request.POST:
-            name = request.POST['name']
-            account_no = request.POST['account']
-            bank = request.POST['bank']
-            branch = request.POST['branch']
-            address = request.POST['address']
-            nickname = request.POST['nickname']
-            if request.POST['swift']:
-                swift = request.POST['swift']
-            else:
-                swift = None
-            values = {
-                'name': name,
-                'account': account_no,
-                'bank': bank,
-                'branch': branch,
-                'address': address,
-                'nickname': nickname,
-                'swift': swift
-            }
-            context = self.get_context_data(**kwargs)
-            context.update(values)
+            form = BankAccountForm(request.POST or None)
+            if form.is_valid():
+                name = form.cleaned_data['account_name']
+                account_no = form.cleaned_data['account_no']
+                bank = form.cleaned_data['bank_name']
+                branch = form.cleaned_data['branch_name']
+                address = form.cleaned_data['bank_address']
+                if form.cleaned_data['swift']:
+                    swift = form.cleaned_data['swift']
+                else:
+                    swift = None
+                values = {
+                    'name': name,
+                    'account': account_no,
+                    'bank': bank,
+                    'branch': branch,
+                    'address': address,
+                    'swift': swift
+                }
+                context = self.get_context_data(**kwargs)
+                context.update(values)
 
-            return self.render_to_response(context)
+                return self.render_to_response(context)
 
         return redirect(request.META['HTTP_REFERER'])
 
@@ -81,6 +84,7 @@ def home(request):
     group_members_obj = []
     try:
         group_account_obj = GroupMember.objects.filter(profile_id=profile.profile_id).only('group_account')
+
         for group in group_account_obj:
             try:
                 grp_name = Group.objects.get(group_account=group.group_account).name
@@ -91,7 +95,14 @@ def home(request):
     except GroupMember.DoesNotExist:
         pass
 
+    try:
+        transactions = Transaction.objects.filter(profile_id=profile.profile_id, status='PENDING')\
+            .values('full_timestamp', 'service', 'channel', 'mode', 'amount', 'charge')
+    except Transaction.DoesNotExist:
+        transactions = None
+
     context = {
+        'pendings': transactions,
         'account': balance_data,
         'groups': group_members_obj
     }
@@ -442,6 +453,8 @@ def confirm_transfer(request):
         del request.session['amount']
         del request.session['overdraft']
 
+        ext_account = ExternalAccount.objects.get(profile_id=identifier)
+
         fund_transfer(request, 'WITHDRAW', 'NA', institution, identifier, pochi_id, ext_account_no, bal, amount, phone,
                       ov)
 
@@ -449,7 +462,7 @@ def confirm_transfer(request):
             request,
             'You have successfully withdrawn TZS' + str(amount) + ' to your ' + institution + ' account ' + phone
         )
-        return render_with_global_data(request, 'pochi/withdraw.html', {})
+        return render_with_global_data(request, 'pochi/withdrawal.html', {'bank_account': ext_account})
 
     elif request.session['confirm'] == u'P2P':
         src_account = request.session['account_no']
@@ -578,7 +591,6 @@ def fund_transfer(request, service, ext_wallet, channel, profile_id, src, dest, 
                 service=service,
                 dest_account=dest,
                 amount=amount,
-                charge=charges,
                 status='DONE'
             )
             Ledger.objects.create(
@@ -638,8 +650,7 @@ def fund_transfer(request, service, ext_wallet, channel, profile_id, src, dest, 
             msisdn=msisdn,
             external_wallet_id=ext_wallet,
             service='DEPOSIT',
-            amount=amount,
-            charge=charges
+            amount=amount
         )
         Ledger.objects.create(
             profile_id=profile_id,
@@ -705,7 +716,7 @@ def pochi2pochi(request, name=None):
 
         elif request.POST['dest_account']:
             dest_account = request.POST['dest_account']
-            if acc == dest_account:
+            if acc.account == dest_account:
                 messages.error(request, 'Sorry!, you cannot transfer money to your own account!')
                 return redirect(request.META['HTTP_REFERER'])
 
@@ -716,7 +727,7 @@ def pochi2pochi(request, name=None):
 
             if dest_profile_id:
                 try:
-                    user_obj = User.objects.select_related('profile').filter(profile_id=dest_profile_id)
+                    user_obj = User.objects.get(profile__profile_id=dest_profile_id)
                     user_name = user_obj.get_full_name()
                 except Profile.DoesNotExist:
                     user_name = None
@@ -912,7 +923,8 @@ def withdraw(request):
         'bank_account': external_account,
         'address': address,
         'swift': swift,
-        'buttons': display_buttons
+        'buttons': display_buttons,
+        'bForm': BankAccountForm
     }
     return render_with_global_data(request, 'pochi/withdrawal.html', context)
 
@@ -1041,8 +1053,8 @@ def edit_group(request):
     return render_with_global_data(request, 'pochi/edit_group.html', {})
 
 
-@login_required
-def lock(request):
+@receiver(user_logged_out)
+def lock(request, **kwargs):
     return render_with_global_data(request, 'pochi/lock.html', {})
 
 
@@ -1175,12 +1187,14 @@ def group_statement(request, name=None):
 @login_required
 def group_profile(request, name=None):
     this_account = group_transactions = None
+    statements = None
     try:
         this_group = Group.objects.get(name=name)
         grp_acc = this_group.group_account
         try:
-            group_transactions = Transaction.objects.filter(account=grp_acc)\
-                .values('service', 'channel', 'dest_account', 'currency', 'amount', 'charge', 'status', 'message')
+            statements = Transaction.objects.filter(account=grp_acc).exists()
+            group_transactions = Transaction.objects.filter(account=grp_acc, status='PENDING')\
+                .values('full_timestamp', 'service', 'channel', 'mode', 'amount', 'charge')
         except Transaction.DoesNotExist:
             group_transactions = None
     except Account.DoesNotExist:
@@ -1193,7 +1207,8 @@ def group_profile(request, name=None):
     context = {
         'group': name,
         'account': this_account,
-        'statement': group_transactions
+        'statement': statements,
+        'pendings': group_transactions
     }
     return render_with_global_data(request, 'pochi/group_profile.html', context)
 

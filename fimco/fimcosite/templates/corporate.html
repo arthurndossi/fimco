@@ -28,6 +28,7 @@
                                     <span class="sr-only">Close</span>
                                 </button>
                                 <p><strong>{{ message }}</strong></p>
+                                <button type="button" class="btn btn-danger" data-dismiss="alert">OK</button>
                             </div>
                         </div>
                     {% else %}
@@ -38,6 +39,7 @@
                                     <span class="sr-only">Close</span>
                                 </button>
                                 <p><strong>{{ message }}</strong></p>
+                                <button type="button" class="btn btn-success" data-dismiss="alert">OK</button>
                             </div>
                         </div>
                     {% endif %}
@@ -51,7 +53,7 @@
             <div class="callout alert alert-border mb-60">
                 <div class="row">
                     <div class="col-xs-12">
-                        <h4  class="pl-20">* Requirements</h4>
+                        <h4 class="pl-20">* Requirements</h4>
                         <ul>
                             <li>The company will be required to submit board <strong>approval letter</strong></li>
                             <li>Submit bank indemnity letter stamped by the company's bank</li>
@@ -62,40 +64,50 @@
             </div>
 
             <ul class="nav nav-tabs nav-button-tabs mb-30">
-                <li class="nav-item"><a class="nav-link {{ first }}" href="#company" data-toggle="tab">Add New Company</a></li>
-                <li class="nav-item"><a class="nav-link {{ second }}" href="#user" data-toggle="tab">Add User to Existing company</a></li>
+                <li class="nav-item"><a class="nav-link {% if first %}{{ first }}{% endif %}" href="#company" data-toggle="tab">Add New Company</a></li>
+                <li class="nav-item"><a class="nav-link {% if second %}{{ second }}{% endif %}" href="#user" data-toggle="tab">Add User to Existing company</a></li>
             </ul>
 
             <div class="tab-content">
-                <div class="tab-pane {% if first == 'active' %}{{ first }}{% else %}fade{% endif %}" id="company">
+                <div class="tab-pane {% if first %}{{ first }}{% else %}'fade'{% endif %}" id="company">
                     <div class="card card-default">
                         <div class="card-heading card-heading-transparent">
                             <ul class="process-steps nav nav-justified">
                                 <li class="nav-item">
-                                    <a class="nav-link active" href="#step1" data-toggle="tab">1</a>
+                                    <a class="nav-link {% if step1 %}{{ step1 }}{% endif %}" href="#step1" data-toggle="tab">1</a>
                                     <h5>Company Details</h5>
                                 </li>
                                 <li class="nav-item disabled">
-                                    <a class="nav-link" href="#step2" data-toggle="tab">2</a>
-                                    <h5>KYC Information</h5>
-                                </li>
-                                <li class="nav-item disabled">
-                                    <a class="nav-link" href="#step3" data-toggle="tab">3</a>
+                                    <a class="nav-link {% if step2 %}{{ step2 }}{% endif %}" href="#step2" data-toggle="tab">2</a>
                                     <h5>BOT & DSE Form</h5>
                                 </li>
                                 <li class="nav-item disabled">
-                                    <a class="nav-link" href="#step4" data-toggle="tab">4</a>
+                                    <a class="nav-link {% if step3 %}{{ step3 }}{% endif %}" href="#step3" data-toggle="tab">3</a>
                                     <h5>User Details</h5>
+                                </li>
+                                <li class="nav-item disabled">
+                                    <a class="nav-link {% if step4 %}{{ step4 }}{% endif %}" href="#step4" data-toggle="tab">4</a>
+                                    <h5>KYC Information</h5>
+                                </li>
+                                <li class="nav-item disabled">
+                                    <a class="nav-link {% if step5 %}{{ step5 }}{% endif %}" href="#step5" data-toggle="tab">5</a>
+                                    <h5>Bank Indemnity Form</h5>
                                 </li>
                             </ul>
                         </div>
-
-                        <form action="{% url 'corporate' %}" method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
-                            <div class="card-block">
-                                <div class="tab-content mt-60">
-                                    <div role="tabpanel" class="tab-pane active" id="step1">
-                                        <h4>Company Details Form</h4>
+                        <div class="card-block">
+                            <div class="tab-content mt-60">
+                                <div role="tabpanel" class="tab-pane {% if step1 %}{{ step1 }}{% endif %}" id="step1">
+                                    <h4 class="text-center">Company Details Form</h4>
+                                    <form action="{% url 'corporate' %}" method="post" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                        {% if cForm.non_field_errors %}
+                                            {% for general_error in cForm.non_field_errors %}
+                                                <div class="alert alert-mini alert-danger mb-30">
+                                                    <strong>{{ general_error }}</strong>
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}
                                         <fieldset>
                                             <div class="row">
                                                 <div class="col-md-6 col-sm-6">
@@ -109,10 +121,8 @@
                                                         {% endfor %}
                                                     {% endif %}
                                                 </div>
-                                            </div>
-                                            <div class="row">
                                                 <div class="col-md-6 col-sm-6">
-                                                    <label>Telephone *</label>
+                                                    <label>Contact *</label>
                                                     {{ cForm.contact }}
                                                     {% if cForm.contact.errors %}
                                                         {% for error in cForm.contact.errors %}
@@ -136,11 +146,22 @@
                                                     {% endif %}
                                                 </div>
                                             </div>
+                                            <input type="submit" class="btn btn-primary btn-teal float-right" value="Next step"/>
                                         </fieldset>
-                                    </div>
+                                    </form>
+                                </div>
 
-                                    <div role="tabpanel" class="tab-pane" id="step2">
-                                        <h4>Company KYC Form</h4>
+                                <div role="tabpanel" class="tab-pane {% if step4 %}{{ step4 }}{% endif %}" id="step4">
+                                    <h4 class="text-center">Company KYC Form</h4>
+                                    <form action="{% url 'corporate' %}" method="post" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                        {% if kForm.non_field_errors %}
+                                            {% for general_error in kForm.non_field_errors %}
+                                                <div class="alert alert-mini alert-danger mb-30">
+                                                    <strong>{{ general_error }}</strong>
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}
                                         <fieldset>
                                             <div class="row">
                                                 <div class="col-md-6 col-sm-6">
@@ -176,11 +197,66 @@
                                                     {% endif %}
                                                 </div>
                                             </div>
+                                            <div class="row">
+                                                <div class="col-lg-2 col-md-2 col-sm-4">
+                                                    <label>ID Type *</label>
+                                                    {{ kForm.id_type }}
+                                                    {% if kForm.id_type.errors %}
+                                                        {% for error in kForm.id_type.errors %}
+                                                            <div class="alert alert-mini alert-danger mb-30">
+                                                                <strong>{{ error|escape }}</strong>
+                                                            </div>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </div>
+                                                <div class="col-lg-4 col-md-4 col-sm-4">
+                                                    <label>ID Number *</label>
+                                                    {{ kForm.id_number }}
+                                                    {% if kForm.id_number.errors %}
+                                                        {% for error in kForm.id_number.errors %}
+                                                            <div class="alert alert-mini alert-danger mb-30">
+                                                                <strong>{{ error|escape }}</strong>
+                                                            </div>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </div>
+                                                <div class="col-lg-6 col-md-4 col-sm-4">
+                                                    <label></label>
+                                                    <div class="fancy-file-upload">
+                                                        <i class="fa fa-upload"></i>
+                                                        {{ kForm.user_id }}
+                                                        <input type="text" class="form-control" placeholder="upload your ID" readonly="" />
+                                                        <span>Attach your ID</span>
+                                                    </div>
+                                                    <small class="text-muted block">Upload National ID, Passport, Voter ID or Driver license, max file size: 5Mb</small>
+                                                    {% if kForm.user_id.errors %}
+                                                        {% for error in kForm.user_id.errors %}
+                                                            <div class="alert alert-mini alert-danger mb-30">
+                                                                <strong>{{ error|escape }}</strong>
+                                                            </div>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <label class="checkbox m-0">
+                                                {{ kForm.checker }}
+                                                <i></i>I agree to the <a href="#" data-toggle="modal" data-target="#termsModal">Terms of Service</a>
+                                            </label>
+                                            <div class="justify">
+                                                <button class="btn btn-primary prev-step">Prev step</button>
+                                                <input type="submit" class="btn btn-primary btn-teal" value="Submit"/>
+                                            </div>
                                         </fieldset>
-                                    </div>
+                                    </form>
+                                </div>
 
-                                    <div role="tabpanel" class="tab-pane" id="step3">
-                                        <h4>BOT & DSE CDS Accounts Form <small class="text-muted">(optional)</small></h4>
+                                <div role="tabpanel" class="tab-pane {% if step2 %}{{ step2 }}{% endif %}" id="step2">
+                                    <h4 class="text-center">
+                                        BOT & DSE CDS Accounts Form
+                                        <small class="text-muted">(optional)</small>
+                                    </h4>
+                                    <form action="{% url 'corporate' %}" method="post" enctype="multipart/form-data">
+                                    {% csrf_token %}
                                         <fieldset>
                                             <div class="row">
                                                 <div class="col-md-6 col-sm-6">
@@ -212,13 +288,27 @@
                                                     {% endif %}
                                                 </div>
                                             </div>
+                                            <div class="justify">
+                                                <button class="btn btn-primary prev-step">Prev step</button>
+                                                <input type="submit" class="btn btn-primary btn-teal" value="Next step"/>
+                                            </div>
                                         </fieldset>
-                                    </div>
-                                    <div role="tabpanel" class="tab-pane" id="step4">
-                                        <h4>Company representative details Form</h4>
-                                        <fieldset>
-                                            <input type="hidden" name="action" value="first_rep" />
+                                    </form>
+                                </div>
 
+                                <div role="tabpanel" class="tab-pane {% if step3 %}{{ step3 }}{% endif %}" id="step3">
+                                    <h4 class="text-center">Company representative details Form</h4>
+                                    <form action="{% url 'corporate' %}" method="post" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                        {% if uForm.non_field_errors %}
+                                            {% for general_error in uForm.non_field_errors %}
+                                                <div class="alert alert-mini alert-danger mb-30">
+                                                    <strong>{{ general_error }}</strong>
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}
+                                        <fieldset>
+                                            <input type="hidden" name="new" value="" />
                                             <div class="row">
                                                 <div class="col-md-6 col-sm-6">
                                                     <label>First Name *</label>
@@ -321,40 +411,71 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                        </fieldset>
+                                        <div class="justify">
+                                            <button class="btn btn-primary prev-step">Prev step</button>
+                                            <input type="submit" class="btn btn-primary btn-teal" value="Next step"/>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div role="tabpanel" class="tab-pane {% if step5 %}{{ step5 }}{% endif %}" id="step5">
+                                    <h4 class="text-center">Bank Indemnity Form</h4>
+                                    <form action="{% url 'create_form' 'corporate' %}" method="post" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                        <fieldset>
                                             <div class="row">
-                                                <div class="col-lg-2 col-md-2 col-sm-4">
-                                                    <label>ID Type *</label>
-                                                    {{ uForm.id_type }}
-                                                    {% if uForm.id_type.errors %}
-                                                        {% for error in uForm.id_type.errors %}
+                                                <div class="col-md-6 col-sm-6">
+                                                    <label>Account holder name *
+                                                        {{ bForm.account_name }}
+                                                    </label>
+                                                </div>
+                                                <div class="col-md-6 col-sm-6">
+                                                    <label>Account number *
+                                                        {{ bForm.account_no }}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6 col-sm-6">
+                                                    <label>Bank Name *</label>
+                                                    {{ bForm.bank_name }}
+                                                    {% if bForm.bank_name.errors %}
+                                                        {% for error in bForm.bank_name.errors %}
                                                             <div class="alert alert-mini alert-danger mb-30">
                                                                 <strong>{{ error|escape }}</strong>
                                                             </div>
                                                         {% endfor %}
                                                     {% endif %}
                                                 </div>
-                                                <div class="col-lg-4 col-md-4 col-sm-4">
-                                                    <label>ID Number *</label>
-                                                    {{ uForm.id_number }}
-                                                    {% if uForm.id_number.errors %}
-                                                        {% for error in uForm.id_number.errors %}
+                                                <div class="col-md-6 col-sm-6">
+                                                    <label>Branch Name *</label>
+                                                    {{ bForm.branch_name }}
+                                                    {% if bForm.branch_name.errors %}
+                                                        {% for error in bForm.branch_name.errors %}
                                                             <div class="alert alert-mini alert-danger mb-30">
                                                                 <strong>{{ error|escape }}</strong>
                                                             </div>
                                                         {% endfor %}
                                                     {% endif %}
                                                 </div>
-                                                <div class="col-lg-6 col-md-4 col-sm-4">
-                                                    <label></label>
-                                                    <div class="fancy-file-upload">
-                                                        <i class="fa fa-upload"></i>
-                                                        {{ uForm.user_id }}
-                                                        <input type="text" class="form-control" placeholder="upload your ID" readonly="" />
-                                                        <span>Attach your ID</span>
-                                                    </div>
-                                                    <small class="text-muted block">Upload National ID, Passport, Voter ID or Driver license, max file size: 5Mb</small>
-                                                    {% if uForm.user_id.errors %}
-                                                        {% for error in uForm.user_id.errors %}
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6 col-sm-6">
+                                                    <label>Bank branch address *</label>
+                                                    {{ bForm.branch_address }}
+                                                    {% if bForm.branch_address.errors %}
+                                                        {% for error in bForm.branch_address.errors %}
+                                                            <div class="alert alert-mini alert-danger mb-30">
+                                                                <strong>{{ error|escape }}</strong>
+                                                            </div>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </div>
+                                                <div class="col-md-6 col-sm-6">
+                                                    <label>Swift code </label>
+                                                    {{ bForm.swift_code }}
+                                                    {% if bForm.swift_code.errors %}
+                                                        {% for error in bForm.swift_code.errors %}
                                                             <div class="alert alert-mini alert-danger mb-30">
                                                                 <strong>{{ error|escape }}</strong>
                                                             </div>
@@ -363,184 +484,185 @@
                                                 </div>
                                             </div>
                                         </fieldset>
-                                    </div>
+                                        <div class="justify">
+                                            <a href="{% url 'create_form' 'corporate' %}" class="btn btn-primary">Download blank form</a>
+                                            <input type="submit" class="btn btn-primary btn-teal" value="Download completed form"/>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
-                            <div class="card-footer">
-                                <button id="prev" class="btn btn-primary prev-step">Prev step</button>
-                                <button id="next" class="btn btn-primary next-step right">Next step</button>
-                                <input id="co" type="submit" class="btn btn-primary btn-teal" value="Submit"/>
-                            </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
-                <div class="tab-pane {% if second == 'active' %}{{ second }}{% else %}fade{% endif %}" id="user">
-                    <form action="{% url 'corporate' %}" method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <div class="card-block">
-                            <h4>Company representative details Form</h4>
-                            <fieldset>
-                                <!-- required [php action request] -->
-                                <input type="hidden" name="action" value="add_rep" />
-
-                                <div class="row">
-                                    <div class="col-md-6 col-sm-6">
-                                        <label>Choose your Company *
-                                            <select name="company">
-                                                {% for option in options %}
-                                                    <option value="{{ option }}">{{ option }}</option>
-                                                {% endfor %}
-                                            </select>
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6 col-sm-6">
-                                        <label>First Name *</label>
-                                        {{ adForm.fName }}
-                                        {% if adForm.fName.errors %}
-                                            {% for error in adForm.fName.errors %}
-                                                <div class="alert alert-mini alert-danger mb-30">
-                                                    <strong>{{ error|escape }}</strong>
-                                                </div>
-                                            {% endfor %}
-                                        {% endif %}
-                                    </div>
-                                    <div class="col-md-6 col-sm-6">
-                                        <label>Last Name *</label>
-                                        {{ adForm.lName }}
-                                        {% if adForm.lName.errors %}
-                                            {% for error in adForm.lName.errors %}
-                                                <div class="alert alert-mini alert-danger mb-30">
-                                                    <strong>{{ error|escape }}</strong>
-                                                </div>
-                                            {% endfor %}
-                                        {% endif %}
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6 col-sm-6">
-                                        <label>Email *</label>
-                                        {{ adForm.email }}
-                                        {% if adForm.email.errors %}
-                                            {% for error in adForm.email.errors %}
-                                                <div class="alert alert-mini alert-danger mb-30">
-                                                    <strong>{{ error|escape }}</strong>
-                                                </div>
-                                            {% endfor %}
-                                        {% endif %}
-                                    </div>
-                                    <div class="col-md-6 col-sm-6">
-                                        <label>Phone *</label>
-                                        {{ adForm.phone }}
-                                        {% if adForm.phone.errors %}
-                                            {% for error in adForm.phone.errors %}
-                                                <div class="alert alert-mini alert-danger mb-30">
-                                                    <strong>{{ error|escape }}</strong>
-                                                </div>
-                                            {% endfor %}
-                                        {% endif %}
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6 col-sm-6">
-                                        <label>Date of Birth*</label>
-                                        {{ adForm.dob }}
-                                        {% if adForm.dob.errors %}
-                                            {% for error in adForm.dob.errors %}
-                                                <div class="alert alert-mini alert-danger mb-30">
-                                                    <strong>{{ error|escape }}</strong>
-                                                </div>
-                                            {% endfor %}
-                                        {% endif %}
-                                    </div>
-                                    <div class="col-md-3 col-sm-6">
-                                        <label>Gender *</label>
-                                        {{ adForm.gender }}
-                                        {% if adForm.gender.errors %}
-                                            {% for error in adForm.gender.errors %}
-                                                <div class="alert alert-mini alert-danger mb-30">
-                                                    <strong>{{ error|escape }}</strong>
-                                                </div>
-                                            {% endfor %}
-                                        {% endif %}
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6 col-sm-6">
-                                        <label>Password *</label>
-                                        {{ adForm.password }}
-                                        {% if adForm.password.errors %}
-                                            {% for error in adForm.password.errors %}
-                                                <div class="alert alert-mini alert-danger mb-30">
-                                                    <strong>{{ error|escape }}</strong>
-                                                </div>
-                                            {% endfor %}
-                                        {% endif %}
-                                    </div>
-                                    <div class="col-md-6 col-sm-6">
-                                        <label>Verify *</label>
-                                        {{ adForm.verify }}
-                                        {% if adForm.verify.errors %}
-                                            {% for error in adForm.verify.errors %}
-                                                <div class="alert alert-mini alert-danger mb-30">
-                                                    <strong>{{ error|escape }}</strong>
-                                                </div>
-                                            {% endfor %}
-                                        {% endif %}
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-xs-12">
-                                        <div class="alert alert-mini mb-30 passMessage" style="display:none">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-2 col-md-2 col-sm-4">
-                                        <label>ID Type *</label>
-                                        {{ adForm.id_type }}
-                                        {% if adForm.id_type.errors %}
-                                            {% for error in adForm.id_type.errors %}
-                                                <div class="alert alert-mini alert-danger mb-30">
-                                                    <strong>{{ error|escape }}</strong>
-                                                </div>
-                                            {% endfor %}
-                                        {% endif %}
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-4">
-                                        <label>ID Number *</label>
-                                        {{ adForm.id_number }}
-                                        {% if adForm.id_number.errors %}
-                                            {% for error in adForm.id_number.errors %}
-                                                <div class="alert alert-mini alert-danger mb-30">
-                                                    <strong>{{ error|escape }}</strong>
-                                                </div>
-                                            {% endfor %}
-                                        {% endif %}
-                                    </div>
-                                    <div class="col-lg-6 col-md-4 col-sm-4">
-                                        <label></label>
-                                        <div class="fancy-file-upload">
-                                            <i class="fa fa-upload"></i>
-                                            {{ adForm.user_id }}
-                                            <input type="text" class="form-control" placeholder="upload your ID" readonly="" />
-                                            <span>Attach your ID</span>
-                                        </div>
-                                        <small class="text-muted block">Upload National ID, Passport, Voter ID or Driver license, max file size: 5Mb</small>
-                                        {% if adForm.user_id.errors %}
-                                            {% for error in adForm.user_id.errors %}
-                                                <div class="alert alert-mini alert-danger mb-30">
-                                                    <strong>{{ error|escape }}</strong>
-                                                </div>
-                                            {% endfor %}
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            </fieldset>
-                            <input type="submit" class="btn btn-primary btn-teal" value="Add User"/>
+                <div class="tab-pane {% if second %}{{ second }}{% else %}'fade'{% endif %}" id="user">
+                    <div class="card card-default">
+                        <div class="card-heading card-heading-transparent">
+                            <h4 class="text-center">Company representative details Form</h4>
                         </div>
-                    </form>
+                        <div class="card-block">
+                            <form action="{% url 'corporate' %}" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                                <fieldset>
+                                    <input type="hidden" name="add_rep" value="" />
+                                    <div class="row">
+                                        <div class="col-md-6 col-sm-6">
+                                            <label>Choose your Company *
+                                                <select name="company">
+                                                    {% for option in options %}
+                                                        <option value="{{ option }}">{{ option }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 col-sm-6">
+                                            <label>First Name *</label>
+                                            {{ adForm.fName }}
+                                            {% if adForm.fName.errors %}
+                                                {% for error in adForm.fName.errors %}
+                                                    <div class="alert alert-mini alert-danger mb-30">
+                                                        <strong>{{ error|escape }}</strong>
+                                                    </div>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-md-6 col-sm-6">
+                                            <label>Last Name *</label>
+                                            {{ adForm.lName }}
+                                            {% if adForm.lName.errors %}
+                                                {% for error in adForm.lName.errors %}
+                                                    <div class="alert alert-mini alert-danger mb-30">
+                                                        <strong>{{ error|escape }}</strong>
+                                                    </div>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 col-sm-6">
+                                            <label>Email *</label>
+                                            {{ adForm.email }}
+                                            {% if adForm.email.errors %}
+                                                {% for error in adForm.email.errors %}
+                                                    <div class="alert alert-mini alert-danger mb-30">
+                                                        <strong>{{ error|escape }}</strong>
+                                                    </div>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-md-6 col-sm-6">
+                                            <label>Phone *</label>
+                                            {{ adForm.phone }}
+                                            {% if adForm.phone.errors %}
+                                                {% for error in adForm.phone.errors %}
+                                                    <div class="alert alert-mini alert-danger mb-30">
+                                                        <strong>{{ error|escape }}</strong>
+                                                    </div>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 col-sm-6">
+                                            <label>Date of Birth*</label>
+                                            {{ adForm.dob }}
+                                            {% if adForm.dob.errors %}
+                                                {% for error in adForm.dob.errors %}
+                                                    <div class="alert alert-mini alert-danger mb-30">
+                                                        <strong>{{ error|escape }}</strong>
+                                                    </div>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-md-3 col-sm-6">
+                                            <label>Gender *</label>
+                                            {{ adForm.gender }}
+                                            {% if adForm.gender.errors %}
+                                                {% for error in adForm.gender.errors %}
+                                                    <div class="alert alert-mini alert-danger mb-30">
+                                                        <strong>{{ error|escape }}</strong>
+                                                    </div>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 col-sm-6">
+                                            <label>Password *</label>
+                                            {{ adForm.password }}
+                                            {% if adForm.password.errors %}
+                                                {% for error in adForm.password.errors %}
+                                                    <div class="alert alert-mini alert-danger mb-30">
+                                                        <strong>{{ error|escape }}</strong>
+                                                    </div>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-md-6 col-sm-6">
+                                            <label>Verify *</label>
+                                            {{ adForm.verify }}
+                                            {% if adForm.verify.errors %}
+                                                {% for error in adForm.verify.errors %}
+                                                    <div class="alert alert-mini alert-danger mb-30">
+                                                        <strong>{{ error|escape }}</strong>
+                                                    </div>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <div class="alert alert-mini mb-30 passMessage" style="display:none">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-2 col-md-2 col-sm-4">
+                                            <label>ID Type *</label>
+                                            {{ adForm.id_type }}
+                                            {% if adForm.id_type.errors %}
+                                                {% for error in adForm.id_type.errors %}
+                                                    <div class="alert alert-mini alert-danger mb-30">
+                                                        <strong>{{ error|escape }}</strong>
+                                                    </div>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-4">
+                                            <label>ID Number *</label>
+                                            {{ adForm.id_number }}
+                                            {% if adForm.id_number.errors %}
+                                                {% for error in adForm.id_number.errors %}
+                                                    <div class="alert alert-mini alert-danger mb-30">
+                                                        <strong>{{ error|escape }}</strong>
+                                                    </div>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-lg-6 col-md-4 col-sm-4">
+                                            <label></label>
+                                            <div class="fancy-file-upload">
+                                                <i class="fa fa-upload"></i>
+                                                {{ adForm.user_id }}
+                                                <input type="text" class="form-control" placeholder="upload your ID" readonly="" />
+                                                <span>Attach your ID</span>
+                                            </div>
+                                            <small class="text-muted block">Upload National ID, Passport, Voter ID or Driver license, max file size: 5Mb</small>
+                                            {% if adForm.add_user_id.errors %}
+                                                {% for error in adForm.add_user_id.errors %}
+                                                    <div class="alert alert-mini alert-danger mb-30">
+                                                        <strong>{{ error|escape }}</strong>
+                                                    </div>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </fieldset>
+                                <input type="submit" class="btn btn-primary btn-teal" value="Add User"/>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
