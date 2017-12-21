@@ -139,7 +139,7 @@ def process_form_data(request):
 
                 request.session['fName'] = fName
                 request.session['lName'] = lName
-                request.session['dob'] = dob
+                request.session['dob'] = dob.isoformat()
                 request.session['gender'] = gender
                 request.session['email'] = email
                 request.session['phone'] = phone
@@ -163,7 +163,7 @@ def process_form_data(request):
                     'options': options
                 }
                 return render(request, 'corporate.html', context)
-        elif 'license' in request.POST:
+        elif 'id_type' in request.POST:
             form = CorporateForm4(request.POST, request.FILES or None)
             if form.is_valid():
                 id_type = form.cleaned_data['id_type']

@@ -245,6 +245,7 @@ class CorporateForm2(forms.Form):
         max_length=20,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
+            'required': False
         })
     )
     dse = forms.CharField(
@@ -252,6 +253,7 @@ class CorporateForm2(forms.Form):
         max_length=20,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
+            'required': False
         })
     )
 
