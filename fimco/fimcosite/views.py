@@ -9,6 +9,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.mail import EmailMessage, BadHeaderError
 from django.db import transaction, Error
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
 from django.shortcuts import render, redirect
 
 from .backend import CorporateBackend
@@ -33,6 +35,13 @@ class AnonymousRequired(object):
 
 def anonymous_required(view_function, redirect_to=None):
     return AnonymousRequired(view_function, redirect_to)
+
+
+@receiver(pre_save, sender=Profile)
+def user_handler(sender, instance, **kwargs):
+    profile = Profile.objects.filter(user__username=instance.user__username, profile_type='C')
+    if profile:
+        raise ValueError('Cannot create this Profile, you already have one registered in the system!')
 
 
 def index(request):
@@ -201,9 +210,12 @@ def process_form_data(request):
                         id_number=id_number,
                         document=user_id
                     )
-                    user = User.objects.create_user(phone, email, password, first_name=fName, last_name=lName)
                     Profile.objects.create(
-                        user=user,
+                        user__first_name=fName,
+                        user__lastname=lName,
+                        user__email=email,
+                        user__username=phone,
+                        user__password=password,
                         dob=dob,
                         gender=gender,
                         bot_cds=bot,
@@ -219,15 +231,15 @@ def process_form_data(request):
 
                     from_email = email
                     message = ''
-                    recipient_list = ['admin@fimco.co.tz']
+                    recipient_list = ['ivan@fimco.co.tz']
                     subject = 'Company KYC details'
-                    try:
-                        mail = EmailMessage(subject, message, from_email, recipient_list)
-                        mail.attach(license.name, license.read(), license.content_type)
-                        mail.attach(certificate.name, certificate.read(), certificate.content_type)
-                        mail.send()
-                    except BadHeaderError:
-                        messages.error(request, 'Invalid header found.')
+                    # try:
+                    #     mail = EmailMessage(subject, message, from_email, recipient_list)
+                    #     mail.attach(license.name, license.read(), license.content_type)
+                    #     mail.attach(certificate.name, certificate.read(), certificate.content_type)
+                    #     mail.send()
+                    # except BadHeaderError:
+                    #     messages.error(request, 'Invalid header found.')
 
                     messages.success(request, 'Your corporate account has been created successfully!')
                     context = {
@@ -269,9 +281,12 @@ def process_form_data(request):
                         pass
                 account_no = create_account(profile_id)
                 with transaction.atomic():
-                    user = User.objects.create_user(phone, email, password, first_name=fName, last_name=lName)
                     Profile.objects.create(
-                        user=user,
+                        user__first_name=fName,
+                        user__lastname=lName,
+                        user__email=email,
+                        user__username=phone,
+                        user__password=password,
                         dob=dob,
                         gender=gender,
                         profile_id=profile_id,
@@ -466,9 +481,13 @@ def register(request):
 
             profile_id = "POC%s" % uuid.uuid4().hex[:6].upper()
             pin = uuid.uuid4().hex[:4].upper()
-            user = User.objects.create_user(phone, email, password, first_name=fName, last_name=lName, is_active=0)
             profile = Profile.objects.create(
-                user=user,
+                user__first_name=fName,
+                user__lastname=lName,
+                user__email=email,
+                user__username=phone,
+                user__password=password,
+                user__is_active=0,
                 dob=dob,
                 gender=gender,
                 bot_cds=bot,

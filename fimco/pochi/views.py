@@ -53,8 +53,8 @@ class IndemnityPDF(PDFTemplateView):
                 bank = form.cleaned_data['bank_name']
                 branch = form.cleaned_data['branch_name']
                 address = form.cleaned_data['bank_address']
-                if form.cleaned_data['swift']:
-                    swift = form.cleaned_data['swift']
+                if form.cleaned_data['swift_code']:
+                    swift = form.cleaned_data['swift_code']
                 else:
                     swift = None
                 values = {

@@ -18,50 +18,50 @@ $(document).ready(function () {
         }
     });
 
-    form_element.each(function() {
-        if ($(this).val() === '') {
-            empty = true;
-        }
-    });
-    if (empty) {
-        $('#next').attr('disabled', 'disabled');
-    } else {
-        $('#next').removeAttr('disabled');
-    }
+    // form_element.each(function() {
+    //     if ($(this).val() === '') {
+    //         empty = true;
+    //     }
+    // });
+    // if (empty) {
+    //     $('#next').attr('disabled', 'disabled');
+    // } else {
+    //     $('#next').removeAttr('disabled');
+    // }
 
     form_element.keyup(function() {
-        var empty = false, alert = $(".alert");
+        var alert = $(".alert");
         form_element.each(function() {
-            if ($(this).val() === '') {
-                empty = true;
-            }
+            // if ($(this).val() === '') {
+            //     empty = true;
+            // }
             if (alert.length > 0){
                 alert.hide();
             }
         });
 
-        if (empty) {
-            $('#next').attr('disabled', 'disabled');
-        } else {
-            $('#next').removeAttr('disabled');
-        }
+        // if (empty) {
+        //     $('#next').attr('disabled', 'disabled');
+        // } else {
+        //     $('#next').removeAttr('disabled');
+        // }
     });
 
-    if (checkbox.is(':checked')){
-        if (uploadField.val() !== '' && id.val() !== '') {
-            $('#finish').removeAttr('disabled')
-        } else {
-            $('#finish').attr('disabled', 'disabled');
-        }
-    }
+    // if (checkbox.is(':checked')){
+    //     if (uploadField.val() !== '' && id.val() !== '') {
+    //         $('#finish').removeAttr('disabled')
+    //     } else {
+    //         $('#finish').attr('disabled', 'disabled');
+    //     }
+    // }
 
-    checkbox.change(function(){
-        if (uploadField.val() !== '' && id.val() !== '' && checkbox.is(':checked')) {
-            $('#finish').removeAttr('disabled');
-        } else {
-            $('#finish').attr('disabled', 'disabled');
-        }
-    });
+    // checkbox.change(function(){
+    //     if (uploadField.val() !== '' && id.val() !== '' && checkbox.is(':checked')) {
+    //         $('#finish').removeAttr('disabled');
+    //     } else {
+    //         $('#finish').attr('disabled', 'disabled');
+    //     }
+    // });
 
     $("#id_password, #id_verify").keyup(validatePassword);
 

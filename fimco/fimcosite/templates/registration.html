@@ -51,7 +51,7 @@
                             <h2 class="fs-20">Don't have an account yet?</h2>
                         </div>
                         {% if rForm1 %}
-                            <form class="m-0 sky-form" action="{% url 'register' %}" method="post" enctype="multipart/form-data">
+                            <form class="m-0 sky-form validate" action="{% url 'register' %}" method="post" enctype="multipart/form-data">
                                 {% csrf_token %}
                                 <fieldset id="one">
                                     <div class="row">
@@ -175,14 +175,14 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <input type="hidden" name="one" value="one">
-                                        <button id="next" class="btn btn-primary float-right" disabled="disabled">
+                                        <button id="next" class="btn btn-primary float-right">
                                             <i class="fa fa-arrow-right float-right"></i> NEXT
                                         </button>
                                     </div>
                                 </div>
                             </form>
                         {% elif rForm2 %}
-                            <form class="m-0 sky-form" action="{% url 'register' %}" method="post" enctype="multipart/form-data">
+                            <form class="m-0 sky-form validate" action="{% url 'register' %}" method="post" enctype="multipart/form-data">
                                 {% csrf_token %}
                                 <fieldset id="two">
                                     <div class="row">
@@ -256,10 +256,10 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <input type="hidden" name="two" value="two">
-{#                                        <button id="prev" class="btn btn-primary float-left">#}
-{#                                            <i class="fa fa-arrow-left"></i> PREVIOUS#}
-{#                                        </button>#}
-                                        <button type="submit" id="finish" class="btn btn-primary float-right" disabled="disabled">
+                                        <button id="prev" class="btn btn-primary float-left">
+                                            <i class="fa fa-arrow-left"></i> PREVIOUS
+                                        </button>
+                                        <button type="submit" id="finish" class="btn btn-primary float-right">
                                             <i class="fa fa-check"></i> REGISTER
                                         </button>
                                     </div>
