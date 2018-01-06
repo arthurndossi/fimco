@@ -57,13 +57,13 @@
 							<img src="/static/img/FIMCO-Weblogo.jpg" alt=""/>
 						</a>
 
-                        <ul class="float-right nav nav-pills nav-second-main">
-                            <li>
-                                <a href="{% url 'site' 'contact' %}" class="contact text-center" data-toggle="tooltip" data-placement="bottom" title="Contact Us">
-                                    <i class="fa fa-phone fa-lg"></i>
-                                </a>
-                            </li>
-						</ul>
+{#                        <ul class="float-right nav nav-pills nav-second-main">#}
+{#                            <li>#}
+{#                                <a href="{% url 'site' 'contact' %}" class="contact text-center" data-toggle="tooltip" data-placement="bottom" title="Contact Us">#}
+{#                                    <i class="fa fa-phone fa-lg"></i>#}
+{#                                </a>#}
+{#                            </li>#}
+{#						</ul>#}
 
 						<div class="navbar-collapse collapse nav-main-collapse">
                             <nav class="nav-main">
@@ -82,7 +82,7 @@
                                             <li><a href="{% url 'site' 'about' %}#values">Our values</a></li>
                                             <li><a href="{% url 'site' 'about' %}#mission">Our mission</a></li>
                                             <li><a href="{% url 'site' 'about' %}#vision">Our vision</a></li>
-                                            <li><a href="{% url 'site' 'about' %}#founders">Our people</a></li>
+                                            <li><a href="{% url 'site' 'about' %}#founders">Our founders</a></li>
                                             <li class="divider"></li>
                                             <li><a href="{% url 'site' 'about' %}#approach">Our Investment Approach</a></li>
                                         </ul>
@@ -92,19 +92,26 @@
                                             WHAT WE OFFER
                                         </a>
                                         <ul class="dropdown-menu">
-                                            <li><a href="{% url 'info' 'pochi' %}">POCHI</a></li>
+{#                                            <li><a href="{% url 'info' 'pochi' %}">POCHI</a></li>#}
+                                            <li><a href="{% url 'site' 'advisory' %}">Advisory</a></li>
                                             <li><a href="{% url 'site' 'brokerage' %}">Brokerage</a></li>
                                             <li><a href="{% url 'site' 'fund' %}">Fund Management</a></li>
-                                            <li><a href="{% url 'info' 'market' %}">Market Information</a></li>
+{#                                            <li><a href="{% url 'info' 'market' %}">Market Information</a></li>#}
                                         </ul>
                                     </li>
+{#                                    <li class="dropdown">#}
+{#                                        <a class="dropdown-toggle">#}
+{#                                            NEWS & INSIGHTS#}
+{#                                        </a>#}
+{#                                        <ul class="dropdown-menu">#}
+{#                                            <li><a href="{% url 'site' 'blog' %}">Blog</a></li>#}
+{#                                        </ul>#}
+{#                                    </li>#}
                                     <li class="dropdown">
-                                        <a class="dropdown-toggle">
-                                            NEWS & INSIGHTS
+                                        <a href="{% url 'site' 'contact' %}" class="text-center" data-toggle="tooltip" data-placement="bottom" title="Contact Us">
+                                            <span>CONTACT US </span>
+{#                                            <i class="fa fa-phone fa-lg"></i>#}
                                         </a>
-                                        <ul class="dropdown-menu">
-                                            <li><a href="{% url 'site' 'blog' %}">Blog</a></li>
-                                        </ul>
                                     </li>
                                 </ul>
                             </nav>
@@ -126,46 +133,61 @@
                                 <!-- Footer Logo -->
 							    <img class="footer-logo footer-2" src="/static/img/fimco-footer.png" alt="" />
                             </div>
-                            <div class="col-md-6 col-sm-6">
-                                <ul class="float-right m-0 list-inline mobile-block">
-                                    <li><a href="{% url 'site' 'terms' %}">Terms &amp; Conditions</a></li>
+{#                            <div class="col-md-6 col-sm-6">#}
+{#                                <ul class="float-right m-0 list-inline mobile-block">#}
+{#                                    <li><a href="{% url 'site' 'terms' %}">Terms &amp; Conditions</a></li>#}
 {#                                    <li>&bull;</li>#}
 {#                                    <li><a href="#">Privacy</a></li>#}
-                                </ul>
-                                Copyright &copy; 2017 FIMCO Limited. All Rights Reserved.<br>
+{#                                </ul>#}
+{#                                Copyright &copy; {% now "Y" %} FIMCO Limited. All Rights Reserved.#}
+{#                                FIMCO Limited is an authorised financial services provider<br>#}
+{#                                licensed by the Capital Market Security Authority.#}
+{#                            </div>#}
+                            <div class="col-md-5 col-sm-5">
                                 FIMCO Limited is an authorised financial services provider<br>
                                 licensed by the Capital Market Security Authority.
                             </div>
-                            <div class="col-md-4 col-sm-4 hidden-xs-down">
-                                <!-- Social Icons -->
-                                <div class="ml-50 clearfix">
-                                    <a href="#" class="social-icon social-icon-sm social-icon-transparent social-facebook float-left" data-toggle="tooltip" data-placement="top" title="Facebook">
-                                        <i class="icon-facebook"></i>
-                                        <i class="icon-facebook"></i>
-                                    </a>
-
-                                    <a href="#" class="social-icon social-icon-sm social-icon-transparent social-twitter float-left" data-toggle="tooltip" data-placement="top" title="Twitter">
-                                        <i class="icon-twitter"></i>
-                                        <i class="icon-twitter"></i>
-                                    </a>
-
-                                    <a href="#" class="social-icon social-icon-sm social-icon-transparent social-gplus float-left" data-toggle="tooltip" data-placement="top" title="Google plus">
-                                        <i class="icon-gplus"></i>
-                                        <i class="icon-gplus"></i>
-                                    </a>
-
-                                    <a href="#" class="social-icon social-icon-sm social-icon-transparent social-linkedin float-left" data-toggle="tooltip" data-placement="top" title="Linkedin">
-                                        <i class="icon-linkedin"></i>
-                                        <i class="icon-linkedin"></i>
-                                    </a>
-
-                                    <a href="#" class="social-icon social-icon-sm social-icon-transparent social-rss float-left" data-toggle="tooltip" data-placement="top" title="Rss">
-                                        <i class="icon-rss"></i>
-                                        <i class="icon-rss"></i>
-                                    </a>
-                                </div>
-                                <!-- /Social Icons -->
+                            <div class="col-md-5 col-sm-5">
+{#                                <ul class="float-right m-0 list-inline mobile-block">#}
+{#                                    <li><a href="{% url 'site' 'terms' %}">Terms &amp; Conditions</a></li>#}
+{#                                    <li>&bull;</li>#}
+{#                                    <li><a href="#">Privacy</a></li>#}
+{#                                </ul>#}
+                                Copyright &copy; {% now "Y" %} FIMCO Limited. All Rights Reserved.<br>
+                                <a href="{% url 'site' 'terms' %}">Terms &amp; Conditions</a>
+{#                                FIMCO Limited is an authorised financial services provider<br>#}
+{#                                licensed by the Capital Market Security Authority.#}
                             </div>
+{#                            <div class="col-md-4 col-sm-4 hidden-xs-down">#}
+                                <!-- Social Icons -->
+{#                                <div class="ml-50 clearfix">#}
+{#                                    <a href="#" class="social-icon social-icon-sm social-icon-transparent social-facebook float-left" data-toggle="tooltip" data-placement="top" title="Facebook">#}
+{#                                        <i class="icon-facebook"></i>#}
+{#                                        <i class="icon-facebook"></i>#}
+{#                                    </a>#}
+{##}
+{#                                    <a href="#" class="social-icon social-icon-sm social-icon-transparent social-twitter float-left" data-toggle="tooltip" data-placement="top" title="Twitter">#}
+{#                                        <i class="icon-twitter"></i>#}
+{#                                        <i class="icon-twitter"></i>#}
+{#                                    </a>#}
+{##}
+{#                                    <a href="#" class="social-icon social-icon-sm social-icon-transparent social-gplus float-left" data-toggle="tooltip" data-placement="top" title="Google plus">#}
+{#                                        <i class="icon-gplus"></i>#}
+{#                                        <i class="icon-gplus"></i>#}
+{#                                    </a>#}
+{##}
+{#                                    <a href="#" class="social-icon social-icon-sm social-icon-transparent social-linkedin float-left" data-toggle="tooltip" data-placement="top" title="Linkedin">#}
+{#                                        <i class="icon-linkedin"></i>#}
+{#                                        <i class="icon-linkedin"></i>#}
+{#                                    </a>#}
+{##}
+{#                                    <a href="#" class="social-icon social-icon-sm social-icon-transparent social-rss float-left" data-toggle="tooltip" data-placement="top" title="Rss">#}
+{#                                        <i class="icon-rss"></i>#}
+{#                                        <i class="icon-rss"></i>#}
+{#                                    </a>#}
+{#                                </div>#}
+                                <!-- /Social Icons -->
+{#                            </div>#}
                         </div>
 					</div>
 				</div>

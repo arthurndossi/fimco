@@ -55,11 +55,6 @@
                                                 {% endif %}
                                             {% endif %}
                                         {% endfor %}
-                                        <li>
-                                            <a href="#administrators" data-toggle="tab">
-                                                Administrators
-                                            </a>
-                                        </li>
                                     </ul>
                                 </div>
                                 <!-- tabs content -->
@@ -94,16 +89,41 @@
                                                         <div class="tab-content transparent">
                                                             <div id="tab1_nobg" class="tab-pane active">
                                                                 {% for member in members %}
-                                                                    <div>
-                                                                        <i class="fa fa-user"></i>
-                                                                        <p class="inline-block">
-                                                                        {{ member }}
-                                                                        </p>
-                                                                    </div>
+                                                                    {% for administrator in administrators %}
+                                                                        {% if member == administrator %}
+                                                                            <i class="fa fa-user-secret"></i>
+                                                                            <p class="inline-block">
+                                                                                {{ administrator }}
+                                                                                <span class="label label-success">Admin</span>
+                                                                            </p>
+                                                                            {% if administrator %}
+                                                                            <a href="">Remove Admin</a>
+                                                                            {% endif %}
+                                                                        {% else %}
+                                                                            <div>
+                                                                                <i class="fa fa-user"></i>
+                                                                                <p class="inline-block">{{ member }}</p>
+                                                                                {% if administrator %}
+                                                                                <a href="">Add Admin</a>
+                                                                                {% endif %}
+                                                                            </div>
+                                                                        {% endif %}
+                                                                    {% endfor %}
                                                                 {% endfor %}
                                                             </div>
                                                             <div id="tab2_nobg" class="tab-pane">
-                                                                <a href="{% url 'exit_group' group %}" class="btn btn-primary">Exit</a>
+                                                                {% for member in members %}
+                                                                    {% for administrator in administrators %}
+                                                                        {% if member == administrator %}
+                                                                            <a href="{% url 'delete_group' group %}" class="btn btn-primary">Delete group</a>
+                                                                        {% endif %}
+                                                                        {% if member == administrator and administrators.count <= 1 %}
+                                                                            <a disabled tabindex="-1" class="btn btn-primary">Exit</a>
+                                                                        {% else %}
+                                                                            <a href="{% url 'exit_group' group %}" class="btn btn-primary">Exit</a>
+                                                                        {% endif %}
+                                                                    {% endfor %}
+                                                                {% endfor %}
                                                             </div>
                                                         </div>
                                                     </div>
@@ -192,24 +212,6 @@
                                                 {% endif %}
                                             {% endif %}
                                         {% endfor %}
-
-                                        <div id="administrators" class="tab-pane">
-                                            <div class="panel panel-default">
-                                                <div class="panel-heading panel-heading-transparent">
-                                                    <strong>List of administrators</strong>
-                                                </div>
-                                                <div class="panel panel-body">
-                                                    <div class="row">
-                                                        <div class="col-xs-12">
-                                                            {% for administrator in administrators %}
-                                                                <i class="fa fa-user-secret"></i>
-                                                                <p class="inline-block">{{ administrator }}</p>
-                                                            {% endfor %}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                             </div>

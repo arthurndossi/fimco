@@ -15,7 +15,7 @@ from django.shortcuts import render, redirect
 
 from .backend import CorporateBackend
 from .forms import RegisterForm1, RegisterForm2, IndividualLoginForm, CorporateLoginForm, CorporateForm1, \
-    CorporateForm2, CorporateForm3, CorporateForm4, BankAccountForm
+    CorporateForm2, CorporateForm3, CorporateForm4, BankAccountForm, UserCorporateForm
 from .models import KYC, CorporateProfile, Account, Profile
 
 
@@ -39,7 +39,11 @@ def anonymous_required(view_function, redirect_to=None):
 
 @receiver(pre_save, sender=Profile)
 def user_handler(sender, instance, **kwargs):
-    profile = Profile.objects.filter(user__username=instance.user__username, profile_type='C')
+    print instance.user
+    if instance.profile_type == 'C':
+        profile = Profile.objects.filter(user__username=instance.user.username, profile_type='C').exists()
+    else:
+        profile = Profile.objects.filter(user__username=instance.user.username, profile_type='I').exists()
     if profile:
         raise ValueError('Cannot create this Profile, you already have one registered in the system!')
 
@@ -78,34 +82,78 @@ def process_form_data(request):
     options = CorporateProfile.objects.values_list('company_name', flat=True)
     tab = 'active'
     step = 'active'
+    logged_in = False
     if request.POST:
+        if 'login' in request.POST:
+            form = CorporateLoginForm(request.POST or None)
+            if form.is_valid():
+                pochi_id = form.cleaned_data["id"]
+                username = form.cleaned_data["corp_rep"]
+                password = form.cleaned_data["password"]
+                if re.match(r"[^@]+@[^@]+\.[^@]+", username):
+                    try:
+                        user = User.objects.get(email=username)
+                        if user.check_password(password):
+                            user = user
+                        else:
+                            user = None
+                    except User.DoesNotExist:
+                        user = None
+                elif re.match(r'^([+]?(\d{1,3}\s?)|[0])\s?\d+(\s?-?\d{2,4}){1,3}?$', username):
+                    user = CorporateBackend.authenticate(username, password, pochi_id)
+                else:
+                    raise forms.ValidationError("Not a valid email or phone number!")
+
+                if user:
+                    login(request, user)
+                    logged_in = True
+                    company = CorporateProfile.objects.get(profile_id=pochi_id).company_name
+                    members = Profile.objects.filter(profile_id=pochi_id).values_list('user__username', flat=True)
+                    corporate_users = []
+                    for member in members:
+                        user_obj = User.objects.select_related('profile').get(username=member)
+                        corporate_user = user_obj.get_full_name()
+                        corporate_users.append(corporate_user)
+                    context = {
+                        'second': tab,
+                        'cForm': form,
+                        'company': company,
+                        'users': corporate_users,
+                        'logged_in': logged_in
+                    }
+                    return render(request, 'corporate.html', context)
+                else:
+                    messages.add_message(request, messages.ERROR, 'Incorrect credentials!')
+                    return render(request, 'login.html', {'second': tab, 'cForm': form, 'logged_in': logged_in})
+            else:
+                return render(request, 'login.html', {'second': tab, 'cForm': form, 'logged_in': logged_in})
         if 'name' in request.POST:
             form = CorporateForm1(request.POST or None)
             if form.is_valid():
                 name = form.cleaned_data['name']
-                contact = form.cleaned_data['contact']
+                place = form.cleaned_data['place']
+                street = form.cleaned_data['street']
                 address = form.cleaned_data['address']
+                location = form.cleaned_data['location']
 
                 request.session['name'] = name
-                request.session['contact'] = contact
+                request.session['place'] = place
+                request.session['street'] = street
+                request.session['location'] = location
                 request.session['address'] = address
                 context = {
                     'aForm': CorporateForm2(),
                     'first': tab,
                     'step2': step,
-                    'options': options
+                    'logged_in': logged_in
                 }
                 return render(request, 'corporate.html', context)
             else:
-                messages.error(
-                    request,
-                    'Please fill all the fields!'
-                )
                 context = {
                     'cForm': form,
                     'first': tab,
                     'step1': step,
-                    'options': options
+                    'logged_in': logged_in
                 }
                 return render(request, 'corporate.html', context)
         elif 'bot' in request.POST:
@@ -120,19 +168,15 @@ def process_form_data(request):
                     'uForm': CorporateForm3(),
                     'first': tab,
                     'step3': step,
-                    'options': options
+                    'logged_in': logged_in
                 }
                 return render(request, 'corporate.html', context)
             else:
-                messages.error(
-                    request,
-                    'Please fill all the fields!'
-                )
                 context = {
                     'aForm': form,
                     'first': tab,
                     'step2': step,
-                    'options': options
+                    'logged_in': logged_in
                 }
                 return render(request, 'corporate.html', context)
         elif 'new' in request.POST:
@@ -157,19 +201,15 @@ def process_form_data(request):
                     'kForm': CorporateForm4(),
                     'first': tab,
                     'step4': step,
-                    'options': options
+                    'logged_in': logged_in
                 }
                 return render(request, 'corporate.html', context)
             else:
-                messages.error(
-                    request,
-                    'Please fill all required fields!'
-                )
                 context = {
                     'uForm': form,
                     'first': tab,
                     'step3': step,
-                    'options': options
+                    'logged_in': logged_in
                 }
                 return render(request, 'corporate.html', context)
         elif 'id_type' in request.POST:
@@ -182,7 +222,9 @@ def process_form_data(request):
                 user_id = request.FILES['user_id']
 
                 name = request.session['name']
-                contact = request.session['contact']
+                place = request.session['place']
+                street = request.session['street']
+                location = request.session['location']
                 address = request.session['address']
                 bot = request.session['bot']
                 dse = request.session['dse']
@@ -194,36 +236,31 @@ def process_form_data(request):
                 phone = request.session['phone']
                 password = request.session['password']
 
+                company_address = address + '\r' + place + '\r' + street + '\r' + location
+
                 profile_id = "CP%s" % uuid.uuid4().hex[:6].upper()
                 pin = uuid.uuid4().hex[:4].upper()
                 account_no = create_account(profile_id)
+
                 with transaction.atomic():
                     CorporateProfile.objects.create(
                         company_name=name,
-                        address=address,
-                        phone_number=contact,
+                        address=company_address,
                         profile_id=profile_id
                     )
+
                     KYC.objects.create(
                         profile_id=profile_id,
                         kyc_type=id_type,
                         id_number=id_number,
                         document=user_id
                     )
-                    Profile.objects.create(
-                        user__first_name=fName,
-                        user__lastname=lName,
-                        user__email=email,
-                        user__username=phone,
-                        user__password=password,
-                        dob=dob,
-                        gender=gender,
-                        bot_cds=bot,
-                        dse_cds=dse,
-                        profile_id=profile_id,
-                        profile_type='C',
-                        pin=pin
-                    )
+
+                    user = User(phone, email, password, first_name=fName, last_name=lName, is_active=0)
+                    profile = Profile(user=user, profile_id=profile_id, dob=dob, gender=gender, bot_cds=bot,
+                                      dse_cds=dse, profile_type='C', pin=pin)
+                    profile.save()
+
                     Account.objects.create(
                         profile_id=profile_id,
                         account=account_no
@@ -246,16 +283,15 @@ def process_form_data(request):
                         'bForm': BankAccountForm,
                         'first': tab,
                         'step5': step,
-                        'options': options
+                        'logged_in': logged_in
                     }
                     return render(request, 'corporate.html', context)
             else:
-                messages.error(request, 'Make sure all fields are filled. Max file upload size is 5 MB')
                 context = {
                     'kForm': form,
                     'first': tab,
                     'step4': step,
-                    'options': options
+                    'logged_in': logged_in
                 }
                 return render(request, 'corporate.html', context)
         elif 'add_rep' in request.POST:
@@ -269,7 +305,7 @@ def process_form_data(request):
                 email = form.cleaned_data['email']
                 id_type = form.cleaned_data['id_type']
                 id_number = form.cleaned_data['id_number']
-                user_id = request.FILES[3]['user_id']
+                user_id = request.FILES['user_id']
                 phone = form.cleaned_data['phone'].strip()
                 password = form.cleaned_data["password"]
 
@@ -279,32 +315,20 @@ def process_form_data(request):
                         profile_id = CorporateProfile.objects.get(company_name=name).profile_id
                     except Error:
                         pass
-                account_no = create_account(profile_id)
+
                 with transaction.atomic():
-                    Profile.objects.create(
-                        user__first_name=fName,
-                        user__lastname=lName,
-                        user__email=email,
-                        user__username=phone,
-                        user__password=password,
-                        dob=dob,
-                        gender=gender,
-                        profile_id=profile_id,
-                        profile_type='C',
-                    )
+                    user = User(phone, email, password, first_name=fName, last_name=lName, is_active=0)
+                    profile = Profile(user=user, dob=dob, gender=gender, profile_type='C', profile_id=profile_id)
+                    profile.save()
+
                     KYC.objects.create(
                         profile_id=profile_id,
                         kyc_type=id_type,
                         id_number=id_number,
                         document=user_id
                     )
-                    Account.objects.create(
-                        profile_id=profile_id,
-                        account=account_no
-                    )
+
                     messages.success(request, 'You have been added successfully to '+name+' corporate account!')
-            else:
-                messages.error(request, 'One or more fields was not filled. Make sure all fields are filled')
 
             return render(request, 'corporate.html', {'adForm': form, 'second': tab})
     context = {
@@ -312,10 +336,11 @@ def process_form_data(request):
         'aForm': CorporateForm2(),
         'uForm': CorporateForm3(),
         'kForm': CorporateForm4(),
-        'adForm': CorporateForm4(prefix='ad'),
+        'lForm': CorporateLoginForm(),
+        'adForm': UserCorporateForm(prefix='ad'),
         'first': tab,
         'step1': step,
-        'options': options
+        'logged_in': logged_in
     }
     return render(request, 'corporate.html', context)
 
@@ -352,7 +377,8 @@ def validate_credentials(request, form, username, password, _next, category, poc
 
     if user:
         login(request, user)
-        if _next == "/":
+        current_url = request.resolver_match.url_name
+        if _next == "/" or "pochi" not in current_url:
             from pochi.views import home
             return redirect(home)
         else:
@@ -443,10 +469,6 @@ def register(request):
                 request.session['password'] = password
                 return render(request, 'registration.html', {'rForm2': RegisterForm2()})
             else:
-                messages.error(
-                    request,
-                    'Please fill all required fields!'
-                )
                 return render(request, 'registration.html', {'rForm1': form})
         elif 'two' in request.POST:
             form = RegisterForm2(request.POST, request.FILES or None)
@@ -457,10 +479,6 @@ def register(request):
                 bot = form.cleaned_data['bot_cds']
                 dse = form.cleaned_data['dse_cds']
             else:
-                messages.error(
-                    request,
-                    'Please fill all required fields!'
-                )
                 return render(request, 'registration.html', {'rForm2': form})
 
             fName = request.session['fName']
@@ -481,36 +499,32 @@ def register(request):
 
             profile_id = "POC%s" % uuid.uuid4().hex[:6].upper()
             pin = uuid.uuid4().hex[:4].upper()
-            profile = Profile.objects.create(
-                user__first_name=fName,
-                user__lastname=lName,
-                user__email=email,
-                user__username=phone,
-                user__password=password,
-                user__is_active=0,
-                dob=dob,
-                gender=gender,
-                bot_cds=bot,
-                dse_cds=dse,
-                profile_id=profile_id,
-                pin=pin
-            )
-            account_no = create_account(profile.profile_id)
-            KYC.objects.create(
-                profile_id=profile.profile_id,
-                kyc_type=id_choice,
-                id_number=client_id,
-                document=scanned_id
-            )
-            Account.objects.create(
-                profile_id=profile.profile_id,
-                account=account_no
-            )
-            messages.info(
-                request,
-                'Your information is being verified and you will receive notification shortly!'
-            )
-            return redirect(request.META['HTTP_REFERER'])
+            account_no = create_account(profile_id)
+
+            with transaction.atomic():
+                user = User.objects.create_user(phone, email, password, first_name=fName, last_name=lName, is_active=0)
+                profile = Profile(user=user, profile_id=profile_id, dob=dob, gender=gender, bot_cds=bot,
+                                  dse_cds=dse, profile_type='I', pin=pin)
+                profile.save()
+                user.save()
+
+                KYC.objects.create(
+                    profile_id=profile_id,
+                    kyc_type=id_choice,
+                    id_number=client_id,
+                    document=scanned_id
+                )
+
+                Account.objects.create(
+                    profile_id=profile_id,
+                    account=account_no
+                )
+
+                messages.info(
+                    request,
+                    'Your information is being verified and you will receive notification shortly!'
+                )
+                return redirect(request.META['HTTP_REFERER'])
 
     return redirect(account)
 

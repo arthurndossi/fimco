@@ -9,38 +9,31 @@
             <div class="row">
             {% if messages %}
                 {% for message in messages %}
-                    {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
-                        <div class="col-xs-12 col-centered">
-                            <div class="alert alert-danger mb-30">
-                                <button type="button" class="close" data-dismiss="alert">
-                                    <span aria-hidden="true">×</span>
-                                    <span class="sr-only">Close</span>
-                                </button>
-                                <h4>Alert! <strong>Try Again!</strong></h4>
-                                <p>{{ message }}</p>
-                                <button type="button" class="btn btn-danger" data-dismiss="alert">OK</button>
-                            </div>
+                    <div class="col-xs-12 col-centered">
+                        <div class="alert alert-success mb-30">
+                            <button type="button" class="close" data-dismiss="alert">
+                                <span aria-hidden="true">×</span>
+                                <span class="sr-only">Close</span>
+                            </button>
+                            <h4>Congratulations! <strong>Registration successful!</strong></h4>
+                            <p>{{ message }}</p>
+                            <a href="{% url 'index' %}" class="btn btn-success btn-sm mt-10">OK</a>
                         </div>
-                    {% else %}
-                        <div class="col-xs-12 col-centered">
-                            <div class="alert alert-success mb-30">
-                                <button type="button" class="close" data-dismiss="alert">
-                                    <span aria-hidden="true">×</span>
-                                    <span class="sr-only">Close</span>
-                                </button>
-                                <h4>Congratulations! <strong>Registration successful!</strong></h4>
-                                <p>{{ message }}</p>
-                                <a href="{% url 'index' %}" class="btn btn-success btn-sm mt-10">OK</a>
-                            </div>
-                        </div>
-                    {% endif %}
+                    </div>
                 {% endfor %}
             {% endif %}
             </div>
             <div class="row">
                 <div class="col-md-6 col-sm-6 offset-md-3 offset-sm-3">
-                    {% if rForm.non_field_errors %}
-                        {% for general_error in rForm.non_field_errors %}
+                    {% if rForm1.non_field_errors %}
+                        {% for general_error in rForm1.non_field_errors %}
+                            <div class="alert alert-mini alert-danger mb-30">
+                                <strong>{{ general_error }}</strong>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    {% if rForm2.non_field_errors %}
+                        {% for general_error in rForm2.non_field_errors %}
                             <div class="alert alert-mini alert-danger mb-30">
                                 <strong>{{ general_error }}</strong>
                             </div>
@@ -51,7 +44,7 @@
                             <h2 class="fs-20">Don't have an account yet?</h2>
                         </div>
                         {% if rForm1 %}
-                            <form class="m-0 sky-form validate" action="{% url 'register' %}" method="post" enctype="multipart/form-data">
+                            <form class="m-0 sky-form" action="{% url 'register' %}" method="post" enctype="multipart/form-data">
                                 {% csrf_token %}
                                 <fieldset id="one">
                                     <div class="row">
@@ -125,7 +118,7 @@
                                                 <b class="tooltip tooltip-bottom-right">Your Email</b>
                                             </label>
                                             {% if rForm1.email.errors %}
-                                                {% for error in rForm.email.errors %}
+                                                {% for error in rForm1.email.errors %}
                                                     <div class="alert alert-mini alert-danger mb-30">
                                                         <strong>{{ error|escape }}</strong>
                                                     </div>
@@ -182,7 +175,7 @@
                                 </div>
                             </form>
                         {% elif rForm2 %}
-                            <form class="m-0 sky-form validate" action="{% url 'register' %}" method="post" enctype="multipart/form-data">
+                            <form class="m-0 sky-form" action="{% url 'register' %}" method="post" enctype="multipart/form-data">
                                 {% csrf_token %}
                                 <fieldset id="two">
                                     <div class="row">
@@ -256,9 +249,9 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <input type="hidden" name="two" value="two">
-                                        <button id="prev" class="btn btn-primary float-left">
-                                            <i class="fa fa-arrow-left"></i> PREVIOUS
-                                        </button>
+{#                                        <button id="prev" class="btn btn-primary float-left">#}
+{#                                            <i class="fa fa-arrow-left"></i> PREVIOUS#}
+{#                                        </button>#}
                                         <button type="submit" id="finish" class="btn btn-primary float-right">
                                             <i class="fa fa-check"></i> REGISTER
                                         </button>

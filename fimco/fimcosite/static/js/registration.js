@@ -1,7 +1,6 @@
 $(document).ready(function () {
     var id = $('#id_client_id'), choice = $("#id_id_choice"),
-        uploadField = $("#file"), checkbox = $('#checker'),
-        empty = false, form_element = $('#one').find('.required');
+        uploadField = $("#file"), form_element = $('#one').find('.required');
 
     id.attr('pattern', '^[A-Z\\d]{8}(-)([A-Z\\d]{5}(-)){2}[A-Z\\d]{2}$');
 
@@ -18,50 +17,14 @@ $(document).ready(function () {
         }
     });
 
-    // form_element.each(function() {
-    //     if ($(this).val() === '') {
-    //         empty = true;
-    //     }
-    // });
-    // if (empty) {
-    //     $('#next').attr('disabled', 'disabled');
-    // } else {
-    //     $('#next').removeAttr('disabled');
-    // }
-
     form_element.keyup(function() {
         var alert = $(".alert");
         form_element.each(function() {
-            // if ($(this).val() === '') {
-            //     empty = true;
-            // }
             if (alert.length > 0){
                 alert.hide();
             }
         });
-
-        // if (empty) {
-        //     $('#next').attr('disabled', 'disabled');
-        // } else {
-        //     $('#next').removeAttr('disabled');
-        // }
     });
-
-    // if (checkbox.is(':checked')){
-    //     if (uploadField.val() !== '' && id.val() !== '') {
-    //         $('#finish').removeAttr('disabled')
-    //     } else {
-    //         $('#finish').attr('disabled', 'disabled');
-    //     }
-    // }
-
-    // checkbox.change(function(){
-    //     if (uploadField.val() !== '' && id.val() !== '' && checkbox.is(':checked')) {
-    //         $('#finish').removeAttr('disabled');
-    //     } else {
-    //         $('#finish').attr('disabled', 'disabled');
-    //     }
-    // });
 
     $("#id_password, #id_verify").keyup(validatePassword);
 

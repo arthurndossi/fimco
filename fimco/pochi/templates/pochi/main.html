@@ -137,7 +137,7 @@
                                                         <li><a href="{% url 'group_dashboard' group.name %}">Dashboard</a></li>
                                                         <li><a href="{% url 'group_balance' group.name %}">Balance</a></li>
                                                         {% if group.admin %}
-                                                        <li><a href="{% url 'group_activity' group.name %}">Activity</a></li>
+                                                        <li><a href="{% url 'group_activity' group.name %}">Funds Transfer</a></li>
                                                         {% endif %}
                                                         <li><a href="{% url 'group_statement' group.name %}">Statement</a></li>
                                                         <li><a href="{% url 'group_settings' group.name %}">Settings</a></li>
@@ -213,12 +213,14 @@
 
                     <h3 class="size-14">MORE</h3>
                     <ul class="nav nav-list">
+                        {% if profile.profile_type == 'I' %}
                         <li>
                             <a href="{% url 'index' %}">
                                 <i class="main-icon fa fa-trash-o"></i>
                                 <span class="label label-info pull-right"></span><span>Delete POCHI account</span>
                             </a>
                         </li>
+                        {% endif %}
                         <li>
                             <a href="{% url 'index' %}">
                                 <i class="main-icon fa fa-link"></i>
@@ -226,6 +228,15 @@
                             </a>
                         </li>
                     </ul>
+
+                    {% if profile.profile_type == 'C' %}
+                        <h3 class="size-14">{{ company }}</h3>
+                        <ul class="nav nav-list">
+                            {% for user in users %}
+                                <li>{{ user }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
 				</nav>
 				<span id="asidebg"><!-- aside fixed background --></span>
 			</aside>

@@ -133,6 +133,9 @@ class RegisterForm1(forms.Form):
                 field.widget.attrs.update({
                     'autofocus': 'autofocus'
                 })
+                classes = field.widget.attrs.get('class', '')
+                classes += ' errors'
+                field.widget.attrs['class'] = classes
                 break
 
     def clean(self):
@@ -201,23 +204,36 @@ class CorporateForm1(forms.Form):
             'required': True,
         })
     )
-    contact = forms.CharField(
-        min_length=10,
-        max_length=13,
-        validators=[telephone],
+    place = forms.CharField(
+        max_length=50,
         widget=forms.TextInput(attrs={
-            'class': 'form-control masked',
-            'data-format': '0999999999',
-            'placeholder': 'Enter telephone',
-            'type': 'tel',
+            'class': 'form-control',
             'required': True,
+            'style': 'display: inline; width: auto'
+        })
+    )
+    street = forms.CharField(
+        max_length=50,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'required': True,
+            'style': 'display: inline; width: auto'
         })
     )
     address = forms.CharField(
-        max_length=500,
-        widget=forms.Textarea(attrs={
+        max_length=50,
+        widget=forms.TextInput(attrs={
             'class': 'form-control',
             'required': True,
+            'style': 'display: inline; width: auto'
+        })
+    )
+    location = forms.CharField(
+        max_length=50,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'required': True,
+            'style': 'display: inline; width: auto'
         })
     )
 
@@ -243,6 +259,7 @@ class CorporateForm2(forms.Form):
     bot = forms.CharField(
         min_length=6,
         max_length=20,
+        required=False,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
             'required': False
@@ -251,6 +268,7 @@ class CorporateForm2(forms.Form):
     dse = forms.CharField(
         min_length=6,
         max_length=20,
+        required=False,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
             'required': False
@@ -393,7 +411,118 @@ class CorporateForm4(forms.Form):
         if identity:
             if identity.file.size > 5 * 1024 * 1024:
                 raise ValidationError("Image file too large ( > 5mb )")
-            return certificate
+            return identity
+        else:
+            raise ValidationError("Couldn't read uploaded image")
+
+
+class UserCorporateForm(forms.Form):
+    fName = forms.CharField(
+        min_length=2,
+        max_length=20,
+        validators=[alphabetic],
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'required': True,
+        })
+    )
+    lName = forms.CharField(
+        min_length=2,
+        max_length=20,
+        validators=[alphabetic],
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'required': True,
+        })
+    )
+    dob = forms.DateField(widget=forms.DateInput(attrs={
+        'class': 'form-control',
+        'type': 'date',
+        'required': True,
+    }))
+    gender = forms.ChoiceField(choices=GENDER)
+    email = forms.EmailField(
+        validators=[EmailValidator],
+        widget=forms.EmailInput(attrs={
+            'class': 'form-control',
+            'required': True,
+        })
+    )
+    phone = forms.CharField(
+        validators=[telephone],
+        widget=forms.TextInput(attrs={
+            'class': 'form-control masked',
+            'data-format': '0999999999',
+            'placeholder': 'Enter telephone',
+            'required': True,
+        })
+    )
+    password = forms.CharField(
+        validators=[validate_slug],
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'required': True,
+        })
+    )
+    verify = forms.CharField(
+        validators=[validate_slug],
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'required': True,
+        })
+    )
+    id_type = forms.ChoiceField(choices=ID_TYPES)
+    id_number = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'required': True
+        })
+    )
+    user_id = forms.ImageField(
+        widget=forms.ClearableFileInput(attrs={
+            'class': 'form-control',
+            'onchange': 'jQuery(this).next("input").val(this.value)',
+            'required': True
+        })
+    )
+    checker = forms.BooleanField(
+        required=True,
+        widget=CheckboxInput(attrs={
+            'class': 'checked-agree',
+            'id': 'checker'
+        })
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(UserCorporateForm, self).__init__(*args, **kwargs)
+
+        for _, field in self.fields.iteritems():
+            if field in self.errors:
+                field.widget.attrs.update({
+                    'autofocus': 'autofocus'
+                })
+                break
+
+    def clean(self):
+        cleaned_data = self.cleaned_data
+        if 'phone' in cleaned_data and Profile.objects.filter(user__username=cleaned_data['phone'], profile_type='C')\
+                .exists():
+            raise forms.ValidationError("This phone number is already associated with another user!")
+        if 'email' in cleaned_data and Profile.objects.filter(user__email=cleaned_data['email'], profile_type='C')\
+                .exists():
+            raise forms.ValidationError("This email is already associated with another user!")
+        if 'password' in cleaned_data and 'verify' in cleaned_data\
+                and cleaned_data['password'] != cleaned_data['verify']:
+            raise forms.ValidationError("Passwords must be identical.")
+
+        return cleaned_data
+
+    def clean_image(self):
+        identity = self.cleaned_data['user_id']
+        if identity:
+            if identity.file.size > 5 * 1024 * 1024:
+                raise ValidationError("Image file too large ( > 5mb )")
+            return identity
         else:
             raise ValidationError("Couldn't read uploaded image")
 
@@ -404,6 +533,7 @@ class BankAccountForm(forms.Form):
         max_length=50,
         validators=[alphabetic],
         widget=forms.TextInput(attrs={
+            'class': 'form-control required',
             'required': True,
         })
     )

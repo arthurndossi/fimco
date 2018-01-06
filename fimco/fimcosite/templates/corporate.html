@@ -20,29 +20,16 @@
             <div class="row">
             {% if messages %}
                 {% for message in messages %}
-                    {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
-                        <div class="col-lg-6 col-xs-12 col-centered">
-                            <div class="alert alert-danger margin-bottom-30">
-                                <button type="button" class="close" data-dismiss="alert">
-                                    <span aria-hidden="true">×</span>
-                                    <span class="sr-only">Close</span>
-                                </button>
-                                <p><strong>{{ message }}</strong></p>
-                                <button type="button" class="btn btn-danger" data-dismiss="alert">OK</button>
-                            </div>
+                    <div class="col-lg-6 col-xs-12 col-centered">
+                        <div class="alert alert-success margin-bottom-30">
+                            <button type="button" class="close" data-dismiss="alert">
+                                <span aria-hidden="true">×</span>
+                                <span class="sr-only">Close</span>
+                            </button>
+                            <p><strong>{{ message }}</strong></p>
+                            <button type="button" class="btn btn-success" data-dismiss="alert">OK</button>
                         </div>
-                    {% else %}
-                        <div class="col-lg-6 col-xs-12 col-centered">
-                            <div class="alert alert-success margin-bottom-30">
-                                <button type="button" class="close" data-dismiss="alert">
-                                    <span aria-hidden="true">×</span>
-                                    <span class="sr-only">Close</span>
-                                </button>
-                                <p><strong>{{ message }}</strong></p>
-                                <button type="button" class="btn btn-success" data-dismiss="alert">OK</button>
-                            </div>
-                        </div>
-                    {% endif %}
+                    </div>
                 {% endfor %}
             {% endif %}
             </div>
@@ -99,7 +86,7 @@
                             <div class="tab-content mt-60">
                                 <div role="tabpanel" class="tab-pane {% if step1 %}{{ step1 }}{% endif %}" id="step1">
                                     <h4 class="text-center">Company Details Form</h4>
-                                    <form class="validate" action="{% url 'corporate' %}" method="post" enctype="multipart/form-data">
+                                    <form class="" action="{% url 'corporate' %}" method="post" enctype="multipart/form-data">
                                     {% csrf_token %}
                                         {% if cForm.non_field_errors %}
                                             {% for general_error in cForm.non_field_errors %}
@@ -121,31 +108,60 @@
                                                         {% endfor %}
                                                     {% endif %}
                                                 </div>
-                                                <div class="col-md-6 col-sm-6">
-                                                    <label>Contact *</label>
-                                                    {{ cForm.contact }}
-                                                    {% if cForm.contact.errors %}
-                                                        {% for error in cForm.contact.errors %}
-                                                            <div class="alert alert-mini alert-danger mb-30">
-                                                                <strong>{{ error|escape }}</strong>
-                                                            </div>
-                                                        {% endfor %}
-                                                    {% endif %}
-                                                </div>
                                             </div>
-                                            <div class="row">
-                                                <div class="col-md-6 col-sm-6">
-                                                    <label>Address *</label>
-                                                    {{ cForm.address }}
-                                                    {% if cForm.address.errors %}
-                                                        {% for error in cForm.address.errors %}
-                                                            <div class="alert alert-mini alert-danger mb-30">
-                                                                <strong>{{ error|escape }}</strong>
-                                                            </div>
-                                                        {% endfor %}
-                                                    {% endif %}
+                                            <fieldset>
+                                                <label>Company Address:</label>
+                                                <div class="row">
+                                                    <div class="col-md-6 col-sm-6">
+                                                        <label>Building no./Plot no.
+                                                            {{ cForm.place }}
+                                                        </label>
+                                                        {% if cForm.place.errors %}
+                                                            {% for error in cForm.place.errors %}
+                                                                <div class="alert alert-mini alert-danger mb-30">
+                                                                    <strong>{{ error|escape }}</strong>
+                                                                </div>
+                                                            {% endfor %}
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="col-md-6 col-sm-6">
+                                                        <label>Road/Street
+                                                            {{ cForm.street }}
+                                                        </label>
+                                                        {% if cForm.street.errors %}
+                                                            {% for error in cForm.street.errors %}
+                                                                <div class="alert alert-mini alert-danger mb-30">
+                                                                    <strong>{{ error|escape }}</strong>
+                                                                </div>
+                                                            {% endfor %}
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="col-md-6 col-sm-6">
+                                                        <label>P.O. BOX
+                                                            {{ cForm.address }}
+                                                        </label>
+                                                        {% if cForm.address.errors %}
+                                                            {% for error in cForm.address.errors %}
+                                                                <div class="alert alert-mini alert-danger mb-30">
+                                                                    <strong>{{ error|escape }}</strong>
+                                                                </div>
+                                                            {% endfor %}
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="col-md-6 col-sm-6">
+                                                        <label>Town/City
+                                                            {{ cForm.location }}
+                                                        </label>
+                                                        {% if cForm.location.errors %}
+                                                            {% for error in cForm.location.errors %}
+                                                                <div class="alert alert-mini alert-danger mb-30">
+                                                                    <strong>{{ error|escape }}</strong>
+                                                                </div>
+                                                            {% endfor %}
+                                                        {% endif %}
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            </fieldset>
                                             <input type="submit" class="btn btn-primary btn-teal float-right" value="Next step"/>
                                         </fieldset>
                                     </form>
@@ -153,7 +169,7 @@
 
                                 <div role="tabpanel" class="tab-pane {% if step4 %}{{ step4 }}{% endif %}" id="step4">
                                     <h4 class="text-center">Company KYC Form</h4>
-                                    <form class="validate" action="{% url 'corporate' %}" method="post" enctype="multipart/form-data">
+                                    <form class="" action="{% url 'corporate' %}" method="post" enctype="multipart/form-data">
                                     {% csrf_token %}
                                         {% if kForm.non_field_errors %}
                                             {% for general_error in kForm.non_field_errors %}
@@ -243,7 +259,7 @@
                                                 <i></i>I agree to the <a href="#" data-toggle="modal" data-target="#termsModal">Terms of Service</a>
                                             </label>
                                             <div class="justify">
-                                                <button class="btn btn-primary prev-step">Prev step</button>
+{#                                                <button class="btn btn-primary prev-step">Prev step</button>#}
                                                 <input type="submit" class="btn btn-primary btn-teal" value="Submit"/>
                                             </div>
                                         </fieldset>
@@ -255,7 +271,7 @@
                                         BOT & DSE CDS Accounts Form
                                         <small class="text-muted">(optional)</small>
                                     </h4>
-                                    <form class="validate" action="{% url 'corporate' %}" method="post" enctype="multipart/form-data">
+                                    <form class="" action="{% url 'corporate' %}" method="post" enctype="multipart/form-data">
                                     {% csrf_token %}
                                         <fieldset>
                                             <div class="row">
@@ -289,7 +305,7 @@
                                                 </div>
                                             </div>
                                             <div class="justify">
-                                                <button class="btn btn-primary prev-step">Prev step</button>
+{#                                                <button class="btn btn-primary prev-step">Prev step</button>#}
                                                 <input type="submit" class="btn btn-primary btn-teal" value="Next step"/>
                                             </div>
                                         </fieldset>
@@ -298,7 +314,7 @@
 
                                 <div role="tabpanel" class="tab-pane {% if step3 %}{{ step3 }}{% endif %}" id="step3">
                                     <h4 class="text-center">Company representative details Form</h4>
-                                    <form class="validate" action="{% url 'corporate' %}" method="post" enctype="multipart/form-data">
+                                    <form class="" action="{% url 'corporate' %}" method="post" enctype="multipart/form-data">
                                     {% csrf_token %}
                                         {% if uForm.non_field_errors %}
                                             {% for general_error in uForm.non_field_errors %}
@@ -413,14 +429,14 @@
                                             </div>
                                         </fieldset>
                                         <div class="justify">
-                                            <button class="btn btn-primary prev-step">Prev step</button>
+{#                                            <button class="btn btn-primary prev-step">Prev step</button>#}
                                             <input type="submit" class="btn btn-primary btn-teal" value="Next step"/>
                                         </div>
                                     </form>
                                 </div>
                                 <div role="tabpanel" class="tab-pane {% if step5 %}{{ step5 }}{% endif %}" id="step5">
                                     <h4 class="text-center">Bank Indemnity Form</h4>
-                                    <form class="validate" action="{% url 'create_form' 'corporate' %}" method="post" enctype="multipart/form-data">
+                                    <form class="" action="{% url 'create_form' 'corporate' %}" method="post" enctype="multipart/form-data">
                                     {% csrf_token %}
                                         <fieldset>
                                             <div class="row">
@@ -495,24 +511,32 @@
                     </div>
                 </div>
                 <div class="tab-pane {% if second %}{{ second }}{% else %}'fade'{% endif %}" id="user">
+                {% if logged_in %}
                     <div class="card card-default">
                         <div class="card-heading card-heading-transparent">
                             <h4 class="text-center">Company representative details Form</h4>
                         </div>
                         <div class="card-block">
-                            <form class="validate" action="{% url 'corporate' %}" method="post" enctype="multipart/form-data">
+                            <form class="" action="{% url 'corporate' %}" method="post" enctype="multipart/form-data">
                             {% csrf_token %}
+                                {% if uForm.non_field_errors %}
+                                    {% for general_error in uForm.non_field_errors %}
+                                        <div class="alert alert-mini alert-danger mb-30">
+                                            <strong>{{ general_error }}</strong>
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+                                <h3>{{ company }}</h3>
+                                <h4>Registered representatives for {{ company }}</h4>
+                                <ul>
+                                    {% for user in users %}
+                                        <li>{{ user }}</li>
+                                    {% endfor %}
+                                </ul>
                                 <fieldset>
                                     <input type="hidden" name="add_rep" value="" />
                                     <div class="row">
                                         <div class="col-md-6 col-sm-6">
-                                            <label>Choose your Company *
-                                                <select name="company">
-                                                    {% for option in options %}
-                                                        <option value="{{ option }}">{{ option }}</option>
-                                                    {% endfor %}
-                                                </select>
-                                            </label>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -641,7 +665,7 @@
                                             {% endif %}
                                         </div>
                                         <div class="col-lg-6 col-md-4 col-sm-4">
-                                            <label></label>
+                                            <label>Upload ID *</label>
                                             <div class="fancy-file-upload">
                                                 <i class="fa fa-upload"></i>
                                                 {{ adForm.user_id }}
@@ -659,10 +683,75 @@
                                         </div>
                                     </div>
                                 </fieldset>
-                                <input type="submit" class="btn btn-primary btn-teal" value="Add User"/>
+                                <input type="submit" class="btn btn-primary btn-teal float-right" value="Add User"/>
                             </form>
                         </div>
                     </div>
+                {% else %}
+                    <div class="row">
+                        <div class="col-lg-4 col-md-4 col-xs-6 col-centered">
+                            <div class="box-static box-border-top p-3 pt-0">
+                                <!-- login form -->
+                                <form action="{% url 'corporate' %}" method="post" class="sky-form boxed">
+                                    {% csrf_token %}
+                                    <header><i class="fa fa-users"></i> Sign In</header>
+                                    {% if lForm.non_field_errors %}
+                                        {% for error in lForm.non_field_errors %}
+                                            <!-- ALERT -->
+                                            <div class="alert alert-mini alert-danger mb-30">
+                                                <strong>{{ error }}</strong>
+                                            </div>
+                                            <!-- /ALERT -->
+                                        {% endfor %}
+                                    {% endif %}
+
+                                    <!--
+                                    <div class="alert alert-danger noborder text-center weight-400 nomargin noradius">
+                                        Invalid Email or Password!
+                                    </div>
+
+                                    <div class="alert alert-warning noborder text-center weight-400 nomargin noradius">
+                                        Account Inactive!
+                                    </div>
+
+                                    <div class="alert alert-default noborder text-center weight-400 nomargin noradius">
+                                        <strong>Too many failures!</strong> <br />
+                                        Please wait: <span class="inlineCountdown" data-seconds="180"></span>
+                                    </div>
+                                    -->
+
+                                    <fieldset class="m-0">
+                                        <label class="label">POCHI ID</label>
+                                        <label class="input">
+{#                                            <i class="icon-append fa fa-envelope"></i>#}
+                                            {{ lForm.id }}
+                                            <span class="tooltip tooltip-top-right">Enter your corporate account number</span>
+                                        </label>
+                                        <label class="label">E-mail/Phone</label>
+                                        <label class="input">
+{#                                            <i class="icon-append fa fa-user"></i>#}
+                                            {{ lForm.corp_rep }}
+                                            <span class="tooltip tooltip-top-right">Username - email/phone</span>
+                                        </label>
+                                        <label class="label">Password</label>
+                                        <label class="input">
+{#                                            <i class="icon-append fa fa-lock"></i>#}
+                                            {{ lForm.password }}
+                                            <b class="tooltip tooltip-top-right">Type your Password</b>
+                                        </label>
+                                    </fieldset>
+
+                                    <footer>
+                                        <button type="submit" class="btn btn-primary pull-right">Sign In</button>
+                                        <input type="hidden" name="corporate" value="" />
+                                    </footer>
+                                </form>
+                                <!-- /login form -->
+                            </div>
+                            <hr />
+                        </div>
+                    </div>
+                {% endif %}
                 </div>
             </div>
         </div>

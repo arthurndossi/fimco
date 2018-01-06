@@ -101,3 +101,5 @@ ul.process-steps li a.active, ul.process-steps li a.active:focus, ul.process-ste
     float: none;
     margin: auto;
 }
+
+.form-control {border: 1px solid rgba(0,0,0,.15)}

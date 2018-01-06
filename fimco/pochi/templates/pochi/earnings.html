@@ -1,5 +1,6 @@
 {% extends "pochi/main.html" %}
 {% block links %}
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/dt-1.10.16/r-2.2.1/sc-1.4.3/datatables.min.css"/>
     <link href="/static/pochi/css/navyblue.css" rel="stylesheet" type="text/css" />
 {% endblock %}
 {% block content %}
@@ -41,18 +42,18 @@
                         </div>
                         <div class="panel-body">
                             <div class="table-responsive">
-                                <table class="table table-vertical-middle nomargin">
+                                <table id="earningsTable" class="table table-vertical-middle nomargin">
                                     <thead>
                                         <tr>
                                             {% if page == 'rates' %}
-                                                <th>Date</th>
+                                                <th>Month</th>
                                                 <th>Rate</th>
                                             {% elif page == 'daily' %}
                                                 <th>Date</th>
-                                                <th>Bonus</th>
+                                                <th>Earnings</th>
                                             {% elif page == 'monthly' %}
                                                 <th>Date</th>
-                                                <th>Bonus</th>
+                                                <th>Earnings</th>
                                             {% elif page == 'total' %}
                                                 <th>Date</th>
                                                 <th>Total</th>
@@ -63,32 +64,39 @@
                                     <tbody>
                                         {% if page == 'rates' %}
                                             {% for rate in rates %}
+                                                {{ rate|safe|escape }}
                                             <tr>
-                                                <td>{{ rate.full_timestamp }}</td>
+                                                <td>{{ rate.full_timestamp|date:'F' }}</td>
                                                 <td>{{ rate.rate }}</td>
                                             </tr>
                                             {% endfor %}
                                         {% elif page == 'daily' %}
                                             {% for bonus in bonuses %}
                                             <tr>
-                                                <td>{{ bonus.full_timestamp }}</td>
-                                                <td>{{ bonus.bonus_closing_balance }}</td>
+                                                <td>{{ bonus.full_timestamp|date:'d/M/Y' }}</td>
+                                                <td>TZS {{ bonus.bonus_closing_balance }}</td>
                                             </tr>
                                             {% endfor %}
                                         {% elif page == 'monthly' %}
                                             {% for bonus in bonuses %}
                                             <tr>
                                                 <td>{{ bonus.month }}</td>
-                                                <td>{{ bonus.bonus }}</td>
+                                                <td>TZS {{ bonus.bonus }}</td>
                                             </tr>
                                             {% endfor %}
                                         {% elif page == 'total' %}
                                             {% for entry in history %}
-                                            <tr>
-                                                <td>{{ entry.time }}</td>
-                                                <td>{{ entry.bonus }}</td>
-                                                <td>{{ entry.cumulative }}</td>
-                                            </tr>
+                                                {% if entry.date|date:"m/Y" == now|date:"m/Y" %}
+                                                    <tr>
+                                                        <td>As of {{ entry.time|date:"dS F" }}</td>
+                                                        <td>TZS {{ entry.cumulative }}</td>
+                                                    </tr>
+                                                {% else %}
+                                                    <tr>
+                                                        <td>{{ entry.time|date:"F" }}</td>
+                                                        <td>TZS {{ entry.cumulative }}</td>
+                                                    </tr>
+                                                {% endif %}
                                             {% endfor %}
                                         {% endif %}
                                     </tbody>
@@ -128,10 +136,42 @@
                     </div>
                 </div>
             </div>
+            <div class="panel panel-default fixed-panel">
+                <div class="panel-body">
+                    <div class="row">
+                        <form method="get">
+                            <div class="col-lg-9 col-md-8 col-sm-8">
+                                <label>
+                                    <input type="text"
+                                           class="form-control rangepicker"
+                                           name="{{ page }}_range"
+                                           value=""
+                                           data-format="yyyy-mm-dd"
+                                           data-from="2018-01-01"
+                                           data-to="2018-12-31">
+                                </label>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-4">
+                                <input type="hidden" name="interest" value="{{ page }}">
+                                <input type="submit" class="btn btn-primary" value="GO">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% if group %}
+                <a href="{% url 'group_dashboard' group %}" id="fixed-btn" class="btn btn-primary"><i class="fa fa-arrow-left"></i>Dashboard</a>
+            {% else %}
+                <a href="{% url 'dashboard' %}" id="fixed-btn" class="btn btn-primary"><i class="fa fa-arrow-left"></i>Dashboard</a>
+            {% endif %}
         </div>
     </section>
 {% endblock %}
 {% block scripts %}
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs/dt-1.10.16/r-2.2.1/sc-1.4.3/datatables.min.js">
+    </script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
     <script type="text/javascript">
         {% if page == 'rates' %}
@@ -152,13 +192,13 @@
             type: 'line',
             data: {
                 {% if page == 'rates' %}
-                    labels: [{% for rate in rates %}'{{rate.full_timestamp}}',{% endfor %}],
+                    labels: [{% for rate in rates %}'{{rate.full_timestamp|date:'d/M'}}',{% endfor %}],
                 {% elif page == 'daily' %}
-                    labels: [{% for bonus in bonuses %}'{{bonus.full_timestamp}}',{% endfor %}],
+                    labels: [{% for bonus in bonuses %}'{{bonus.full_timestamp|date:'d/M'}}',{% endfor %}],
                 {% elif page == 'monthly' %}
                     labels: [{% for bonus in bonuses %}'{{bonus.month}}',{% endfor %}],
                 {% elif page == 'total' %}
-                    labels: [{% for entry in history %}'{{entry.time}}',{% endfor %}],
+                    labels: [{% for entry in history %}'{{entry.time|date:'F'}}',{% endfor %}],
                 {% else %}
                     labels: [],
                 {% endif %}
@@ -182,6 +222,17 @@
                 ]
             },
             options: {}
+        });
+
+        $('#earningsTable').dataTable({
+            scrollY:        "50vh",
+            scrollCollapse: true,
+            deferRender:    true,
+            scroller:       true
+        });
+
+        $(document).ready(function() {
+            $('input[name="{{ page }}_range"]').daterangepicker();
         });
     </script>
 {% endblock %}

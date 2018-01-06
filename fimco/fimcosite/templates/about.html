@@ -98,27 +98,27 @@
                     </div>
                     <hr />
                     <!-- SOCIAL ICONS -->
-                    <div class="hidden-xs-down text-center">
-                        <a href="#" class="social-icon social-icon-border social-facebook" data-toggle="tooltip" data-placement="top" title="Facebook">
-                            <i class="icon-facebook"></i>
-                            <i class="icon-facebook"></i>
-                        </a>
-
-                        <a href="#" class="social-icon social-icon-border social-twitter" data-toggle="tooltip" data-placement="top" title="Twitter">
-                            <i class="icon-twitter"></i>
-                            <i class="icon-twitter"></i>
-                        </a>
-
-                        <a href="#" class="social-icon social-icon-border social-gplus" data-toggle="tooltip" data-placement="top" title="Google plus">
-                            <i class="icon-gplus"></i>
-                            <i class="icon-gplus"></i>
-                        </a>
-
-                        <a href="#" class="social-icon social-icon-border social-linkedin" data-toggle="tooltip" data-placement="top" title="Linkedin">
-                            <i class="icon-linkedin"></i>
-                            <i class="icon-linkedin"></i>
-                        </a>
-                    </div>
+{#                    <div class="hidden-xs-down text-center">#}
+{#                        <a href="#" class="social-icon social-icon-border social-facebook" data-toggle="tooltip" data-placement="top" title="Facebook">#}
+{#                            <i class="icon-facebook"></i>#}
+{#                            <i class="icon-facebook"></i>#}
+{#                        </a>#}
+{##}
+{#                        <a href="#" class="social-icon social-icon-border social-twitter" data-toggle="tooltip" data-placement="top" title="Twitter">#}
+{#                            <i class="icon-twitter"></i>#}
+{#                            <i class="icon-twitter"></i>#}
+{#                        </a>#}
+{##}
+{#                        <a href="#" class="social-icon social-icon-border social-gplus" data-toggle="tooltip" data-placement="top" title="Google plus">#}
+{#                            <i class="icon-gplus"></i>#}
+{#                            <i class="icon-gplus"></i>#}
+{#                        </a>#}
+{##}
+{#                        <a href="#" class="social-icon social-icon-border social-linkedin" data-toggle="tooltip" data-placement="top" title="Linkedin">#}
+{#                            <i class="icon-linkedin"></i>#}
+{#                            <i class="icon-linkedin"></i>#}
+{#                        </a>#}
+{#                    </div>#}
                 </div>
                 <!-- /RIGHT -->
             </div>
@@ -174,7 +174,7 @@
     <!-- / -->
     <!-- PARALLAX -->
     <header class="text-center mb-10" id="founders">
-        <h3>OUR PEOPLE</h3>
+        <h3>OUR FOUNDERS</h3>
     </header>
     <hr class="mb-60" />
     <section class="parallax parallax-2" id="section3">
@@ -187,7 +187,7 @@
                         <div class="front">
                             <div class="box1 box-default">
                                 <div class="box-icon-title">
-                                    <img class="img-fluid" src="" alt="" />
+                                    <img class="img-fluid" src="/static/img/mafuru.jpg" alt="" />
                                     <h2>Lawrence Mafuru</h2>
                                     <small>Chairman</small>
                                 </div>
@@ -198,20 +198,25 @@
                                 <h4 class="m-0">Lawrence Mafuru</h4>
                                 <small>Chairman</small>
                                 <hr />
-                                <p>Nullam id dolor id nibh ultricies vehicula ut id elit. Integer posuere erat a ante venenatis dapibus posuere</p>
+                                <p>
+                                    Lawrence is a seasoned Certified Chartered Banker from the Chartered Institute of Bankers
+                                    London and a Certified Financial Markets Dealer by ACI Financial Markets.
+                                </p>
+{#                                <hr />#}
+{#                                <a href="#" class="social-icon social-icon-sm social-facebook">#}
+{#                                    <i class="fa fa-facebook"></i>#}
+{#                                    <i class="fa fa-facebook"></i>#}
+{#                                </a>#}
+{#                                <a href="#" class="social-icon social-icon-sm social-twitter">#}
+{#                                    <i class="fa fa-twitter"></i>#}
+{#                                    <i class="fa fa-twitter"></i>#}
+{#                                </a>#}
+{#                                <a href="#" class="social-icon social-icon-sm social-linkedin">#}
+{#                                    <i class="fa fa-linkedin"></i>#}
+{#                                    <i class="fa fa-linkedin"></i>#}
+{#                                </a>#}
                                 <hr />
-                                <a href="#" class="social-icon social-icon-sm social-facebook">
-                                    <i class="fa fa-facebook"></i>
-                                    <i class="fa fa-facebook"></i>
-                                </a>
-                                <a href="#" class="social-icon social-icon-sm social-twitter">
-                                    <i class="fa fa-twitter"></i>
-                                    <i class="fa fa-twitter"></i>
-                                </a>
-                                <a href="#" class="social-icon social-icon-sm social-linkedin">
-                                    <i class="fa fa-linkedin"></i>
-                                    <i class="fa fa-linkedin"></i>
-                                </a>
+                                <a href="{% url 'site' 'lawrence' %}" class="btn btn-translucid btn-lg btn-block">VIEW PROFILE</a>
                             </div>
                         </div>
                     </div>
@@ -223,31 +228,36 @@
                         <div class="front">
                             <div class="box1 box-default">
                                 <div class="box-icon-title">
-                                    <img class="img-fluid" src="" alt="" />
+                                    <img class="img-fluid" src="/static/img/ivan.jpg" alt="" />
                                     <h2>Ivan Tarimo</h2>
-                                    <small>Director</small>
+                                    <small>CEO</small>
                                 </div>
                             </div>
                         </div>
                         <div class="back">
                             <div class="box2 box-default">
                                 <h4 class="m-0">Ivan Tarimo</h4>
-                                <small>Director</small>
+                                <small>CEO</small>
                                 <hr />
-                                <p>Nullam id dolor id nibh ultricies vehicula ut id elit. Integer posuere erat a ante venenatis dapibus posuere</p>
+                                <p>
+                                    Ivan is an economist with over 10 years experience in the financial services industry particularly financial markets and
+                                    also a Certified Financial Markets Dealer by ACI Financial Markets.
+                                </p>
+{#                                <hr />#}
+{#                                <a href="#" class="social-icon social-icon-sm social-facebook">#}
+{#                                    <i class="fa fa-facebook"></i>#}
+{#                                    <i class="fa fa-facebook"></i>#}
+{#                                </a>#}
+{#                                <a href="#" class="social-icon social-icon-sm social-twitter">#}
+{#                                    <i class="fa fa-twitter"></i>#}
+{#                                    <i class="fa fa-twitter"></i>#}
+{#                                </a>#}
+{#                                <a href="#" class="social-icon social-icon-sm social-linkedin">#}
+{#                                    <i class="fa fa-linkedin"></i>#}
+{#                                    <i class="fa fa-linkedin"></i>#}
+{#                                </a>#}
                                 <hr />
-                                <a href="#" class="social-icon social-icon-sm social-facebook">
-                                    <i class="fa fa-facebook"></i>
-                                    <i class="fa fa-facebook"></i>
-                                </a>
-                                <a href="#" class="social-icon social-icon-sm social-twitter">
-                                    <i class="fa fa-twitter"></i>
-                                    <i class="fa fa-twitter"></i>
-                                </a>
-                                <a href="#" class="social-icon social-icon-sm social-linkedin">
-                                    <i class="fa fa-linkedin"></i>
-                                    <i class="fa fa-linkedin"></i>
-                                </a>
+                                <a href="{% url 'site' 'ivan' %}" class="btn btn-translucid btn-lg btn-block">VIEW PROFILE</a>
                             </div>
                         </div>
                     </div>
@@ -259,7 +269,7 @@
                         <div class="front">
                             <div class="box1 box-default">
                                 <div class="box-icon-title">
-                                    <img class="img-fluid" src="" alt="" />
+                                    <img class="img-fluid" src="/static/img/sameer.jpg" alt="" />
                                     <h2>Sameer Hirji</h2>
                                     <small>Director</small>
                                 </div>
@@ -270,20 +280,26 @@
                                 <h4 class="m-0">Sameer Hirji</h4>
                                 <small>Director</small>
                                 <hr />
-                                <p>Nullam id dolor id nibh ultricies vehicula ut id elit. Integer posuere erat a ante venenatis dapibus posuere</p>
+                                <p>
+                                    Sameer is a co-founder and a Group Executive Director of Selcom Tanzania.
+                                    He worked in the telecommunications sector in the Tanzanian market before embarking on
+                                    a revolutionary journey into the fin-tech sphere.
+                                </p>
+{#                                <hr />#}
+{#                                <a href="#" class="social-icon social-icon-sm social-facebook">#}
+{#                                    <i class="fa fa-facebook"></i>#}
+{#                                    <i class="fa fa-facebook"></i>#}
+{#                                </a>#}
+{#                                <a href="#" class="social-icon social-icon-sm social-twitter">#}
+{#                                    <i class="fa fa-twitter"></i>#}
+{#                                    <i class="fa fa-twitter"></i>#}
+{#                                </a>#}
+{#                                <a href="#" class="social-icon social-icon-sm social-linkedin">#}
+{#                                    <i class="fa fa-linkedin"></i>#}
+{#                                    <i class="fa fa-linkedin"></i>#}
+{#                                </a>#}
                                 <hr />
-                                <a href="#" class="social-icon social-icon-sm social-facebook">
-                                    <i class="fa fa-facebook"></i>
-                                    <i class="fa fa-facebook"></i>
-                                </a>
-                                <a href="#" class="social-icon social-icon-sm social-twitter">
-                                    <i class="fa fa-twitter"></i>
-                                    <i class="fa fa-twitter"></i>
-                                </a>
-                                <a href="#" class="social-icon social-icon-sm social-linkedin">
-                                    <i class="fa fa-linkedin"></i>
-                                    <i class="fa fa-linkedin"></i>
-                                </a>
+                                <a href="{% url 'site' 'sameer' %}" class="btn btn-translucid btn-lg btn-block">VIEW PROFILE</a>
                             </div>
                         </div>
                     </div>

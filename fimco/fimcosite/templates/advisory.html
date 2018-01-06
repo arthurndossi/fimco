@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block links %}
+    <link href="/static/css/about.css" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block content %}
+    <section>
+        <div class="container">
+            <div class="row">
+                <!-- LEFT -->
+                <div class="col-md-9">
+                    <div class="heading-title">
+                        <h2>Advisory</h2>
+                    </div>
+                    <p>
+                        Across all these services we partner firmly with the client and give them a unique vantage point
+                        of their transactions in a way that will help them save time, energy and costs that may otherwise
+                        accrue (silently) from going it alone from the go.
+                    </p>
+                    <p>
+                        We also assist the banks we work with to receive transactions and proposals that are palatable
+                        to them, and reduce the amount of time and resources that banks must expend before arriving at
+                        the decision of whether or not they should do certain transactions.
+                    </p>
+                    <p>
+                        <a href="{% url 'site' 'contact' %}">Contact us</a> to explore how we can help your business.
+                    </p>
+                </div>
+                <!-- /LEFT -->
+
+                <!-- RIGHT -->
+                <div class="col-md-3">
+                    <div class="box-static box-border-top mb-60">
+                        <div class="box-title">
+                            <h4>Our process</h4>
+                        </div>
+                        <ul class="list-unstyled list-icons p-15 pb-0">
+                            <li class="mb-20">
+                                <i class="fa fa-check text-success fs-18"></i>
+                                <span class="block bold fs-18">Register open CSD</span>
+                                <small>Must have a CSD, we will easily get you one.</small>
+                            </li>
+                            <li class="mb-20">
+                                <i class="fa fa-check text-success fs-18"></i>
+                                <span class="block bold fs-18">Initiate transactions</span>
+                                <small>Tell us how much you’re looking to invest and we shall tell you how!</small>
+                            </li>
+                            <li class="mb-20">
+                                <i class="fa fa-check text-success fs-18"></i>
+                                <span class="block bold fs-18">Fund Transfer</span>
+                                <small>Transfer cash to our investment trust account and let us handle the rest</small>
+                            </li>
+                            <li class="mb-20">
+                                <i class="fa fa-check text-success fs-18"></i>
+                                <span class="block bold fs-18">Settlement</span>
+                                <small>Shares credited to CSD and funds settled</small>
+                            </li>
+                        </ul>
+                        <hr />
+                    </div>
+                </div>
+                <!-- /RIGHT -->
+            </div>
+        </div>
+    </section>
+{% endblock %}

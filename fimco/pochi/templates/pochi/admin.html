@@ -35,7 +35,7 @@
             <!-- Rate Box -->
             <div class="col-md-3 col-sm-6">
             {% if group %}
-                <a href="{% url 'group_data' 'rates' group %}">
+                <a href="{% url 'group_data' group 'rates' %}">
             {% else %}
                 <a href="{% url 'data' 'rates' %}">
             {% endif %}
@@ -48,7 +48,7 @@
                         </div>
                         <div class="box-body text-center">
                             <span class="sparkline" data-plugin-options='{"type":"bar","barColor":"#ffffff","height":"35px","width":"100%","zeroAxis":"false","barSpacing":"2"}'>
-                                {{ rates.month }}
+                                {{ rates.year }}
                             </span>
                         </div>
                     </div>
@@ -58,7 +58,7 @@
             <!-- Daily Box -->
             <div class="col-md-3 col-sm-6">
             {% if group %}
-                <a href="{% url 'group_data' 'daily' group %}">
+                <a href="{% url 'group_data' group 'daily' %}">
             {% else %}
                 <a href="{% url 'data' 'daily' %}">
             {% endif %}
@@ -81,7 +81,7 @@
             <!-- Monthly Box -->
             <div class="col-md-3 col-sm-6">
             {% if group %}
-                <a href="{% url 'group_data' 'monthly' group %}">
+                <a href="{% url 'group_data' group 'monthly' %}">
             {% else %}
                 <a href="{% url 'data' 'monthly' %}">
             {% endif %}
@@ -89,9 +89,7 @@
                     <div class="box default grow"><!-- default, danger, warning, info, success -->
                         <div class="box-title"><!-- add .noborder class if box-body is removed -->
                             <h4>Monthly earnings</h4>
-                            {% for m in monthly.month %}
-                            <small class="block">TZS {{ m.bonus }}/=</small>
-                            {% endfor %}
+                            <small class="block">TZS {{ monthly.bonus }}/=</small>
     {#                        <i class="fa fa-shopping-cart"></i>#}
                         </div>
                         <div class="box-body text-center">
@@ -106,7 +104,7 @@
             <!-- Total Box -->
             <div class="col-md-3 col-sm-6">
             {% if group %}
-                <a href="{% url 'group_data' 'total' group %}">
+                <a href="{% url 'group_data' group 'total' %}">
             {% else %}
                 <a href="{% url 'data' 'total' %}">
             {% endif %}

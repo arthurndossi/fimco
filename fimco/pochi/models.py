@@ -67,7 +67,7 @@ class Ledger(models.Model):
     account = models.CharField(max_length=15, db_index=True, default='GL0001')
     trans_type = models.CharField(max_length=10, choices=TYPES)
     service = models.CharField(max_length=25, db_index=True)  # DEPOSIT, WITHDRAW, BONUS, P2P
-    channel = models.CharField(max_length=25, db_index=True, default='NA')
+    channel = models.CharField(max_length=25, db_index=True, default='NA') #system
     amount = models.DecimalField(max_digits=12, decimal_places=2, default=0)
     currency = models.CharField(max_length=3, default='TZS')
     reference = models.CharField(max_length=15, db_index=True, default='NA')
@@ -122,7 +122,7 @@ class Charge(models.Model):
 
 
 class Rate(models.Model):
-    full_timestamp = models.DateTimeField(auto_now_add=True)
+    full_timestamp = models.DateField(auto_now_add=True)
     rate = models.FloatField(default=0)
 
 

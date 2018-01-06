@@ -6,7 +6,7 @@
             {% if messages %}
                 {% for message in messages %}
                     {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
-                        <div class="col-lg-6 col-xs-12">
+                        <div class="col-lg-6 col-xs-12 col-centered">
                             <div class="alert alert-danger margin-bottom-30">
                                 <button type="button" class="close" data-dismiss="alert">
                                     <span aria-hidden="true">×</span>
@@ -17,7 +17,7 @@
                             </div>
                         </div>
                     {% elif message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
-                        <div class="col-lg-6 col-xs-12">
+                        <div class="col-lg-6 col-xs-12 col-centered">
                             <div class="alert alert-info margin-bottom-30">
                                 <button type="button" class="close" data-dismiss="alert">
                                     <span aria-hidden="true">×</span>
@@ -29,7 +29,7 @@
                             </div>
                         </div>
                     {% else %}
-                        <div class="col-lg-6 col-xs-12">
+                        <div class="col-lg-6 col-xs-12 col-centered">
                             <div class="alert alert-success margin-bottom-30">
                                 <button type="button" class="close" data-dismiss="alert">
                                     <span aria-hidden="true">×</span>
@@ -44,7 +44,7 @@
             {% endif %}
             </div>
             <div class="row">
-                <div class="col-lg-6">
+                <div class="col-lg-6 col-centered">
                     <form class="payment" method="post" action="{% url 'pochi2pochi' %}">
                         {% csrf_token %}
                         <div class="panel panel-default">

@@ -54,3 +54,35 @@
 .statement {
 	border-bottom: 2px solid #333;
 }
+
+/** Go To Dashboard
+ **************************************************************** **/
+#fixed-btn {
+	/*font-size:38px;*/
+	/*line-height:33px;*/
+	position: fixed;
+	right: 10px; bottom: 20px;
+	text-align: center;
+	text-decoration:none;
+	z-index: 1000;
+
+	-webkit-transition: all 0.2s;
+	   -moz-transition: all 0.2s;
+		 -o-transition: all 0.2s;
+			transition: all 0.2s;
+}
+
+/** Fixed Range panel
+ **************************************************************** **/
+.fixed-panel {
+	position: fixed;
+	left: 40%; top: 7%;
+	text-align: center;
+	text-decoration:none;
+	z-index: 1000;
+
+	-webkit-transition: all 0.2s;
+	   -moz-transition: all 0.2s;
+		 -o-transition: all 0.2s;
+			transition: all 0.2s;
+}

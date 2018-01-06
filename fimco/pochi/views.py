@@ -24,8 +24,7 @@ from .models import Transaction, Group, GroupMember, ExternalAccount, Ledger, Ch
 
 
 class CumulativeBonusDto:
-    def __init__(self, profile_id, bonus, time, cumulative):
-        self.profile = profile_id
+    def __init__(self, bonus, time, cumulative):
         self.bonus = bonus
         self.time = time
         self.cumulative = cumulative
@@ -115,30 +114,30 @@ def get_rates():
     except Rate.DoesNotExist:
         all_rates = None
     if all_rates:
-        last_30_days = datetime.datetime.today() - datetime.timedelta(days=30)
-        rates_30 = all_rates.filter(full_timestamp__gte=last_30_days).only('rate')
+        now = datetime.datetime.now()
+        this_year_rates = all_rates.filter(full_timestamp__year=now.year).only('rate')
         rates_arr = []
-        for rate in rates_30:
+        for rate in this_year_rates:
             rates_arr.append(rate.rate)
         decimal_array = [float(decimal_value) for decimal_value in rates_arr]
         rates_list = (", ".join(repr(e) for e in decimal_array))
         try:
-            today_rate = all_rates.get(full_timestamp__date=datetime.date.today()).rate
+            month_rate = all_rates.get(full_timestamp__month=now.month).rate
         except Rate.DoesNotExist:
-            today_rate = None
-        if today_rate:
+            month_rate = None
+        if month_rate:
             context = {
-                'month': rates_list,
-                'today': today_rate
+                'year': rates_list,
+                'today': month_rate
             }
         else:
             context = {
-                'month': rates_list,
+                'year': rates_list,
                 'today': 'Nil'
             }
     else:
         context = {
-            'month': [],
+            'year': [],
             'today': 'Nil'
         }
     return context
@@ -171,12 +170,12 @@ def daily_rates(request):
         else:
             context = {
                 'month': bonus_list,
-                'today': 'Nil'
+                'today': 0
             }
     else:
         context = {
             'month': [],
-            'today': 'Nil'
+            'today': 0
         }
     return context
 
@@ -206,7 +205,7 @@ def get_monthly(request):
     else:
         context = {
             'year': [],
-            'month': 'Nil'
+            'month': 0
         }
     return context
 
@@ -214,24 +213,27 @@ def get_monthly(request):
 def get_total(request):
     profile_id = request.user.profile.profile_id
     try:
-        bs = BalanceSnapshot.objects.filter(profile_id=profile_id)
+        bs = BalanceSnapshot.objects.filter(profile_id=profile_id) \
+            .annotate(month=TruncMonth('full_timestamp')) \
+            .values('month') \
+            .annotate(bonus=Sum('bonus_closing_balance')) \
+            .values('month', 'bonus')
     except BalanceSnapshot.DoesNotExist:
         bs = None
     if bs:
         bs_arr = []
         cumulative = 0
         for individual in bs:
-            cumulative += individual.bonus_closing_balance
+            cumulative += individual['bonus']
             dto = CumulativeBonusDto(
-                individual.profile_id,
-                individual.bonus_closing_balance,
-                individual.full_timestamp,
+                individual['bonus'],
+                individual['month'],
                 cumulative
             )
             bs_arr.append(dto.cumulative)
-        total_bonuses = bs.aggregate(Sum('bonus_closing_balance'))
-        cumulative_30 = bs_arr[-30:]
-        numeric_array = [float(numeric_value) for numeric_value in cumulative_30]
+        total_bonuses = bs.aggregate(Sum('bonus'))
+        cumulative_year_bonuses = bs_arr[-12:]
+        numeric_array = [float(numeric_value) for numeric_value in cumulative_year_bonuses]
         cumulative_list = (", ".join(repr(e) for e in numeric_array))
         context = {
             'total': total_bonuses,
@@ -240,7 +242,7 @@ def get_total(request):
     else:
         context = {
             'month': [],
-            'total': 'Nil'
+            'total': 0
         }
     return context
 
@@ -1029,9 +1031,15 @@ def create_group(request):
                     is_admin = 0
                     if member == sec_admin:
                         is_admin = 1
+                    try:
+                        profile_id = Profile.objects.get(user__username=member).profile_id
+                    except Profile.DoesNotExist:
+                        profile_id = None
+                    if profile_id is None:
+                        continue
                     GroupMember.objects.create(
                         group_account=grp_acc,
-                        profile_id=member,
+                        profile_id=profile_id,
                         admin=is_admin
                     )
         except IntegrityError:
@@ -1283,35 +1291,38 @@ def view_data(request, page=None, name=None):
         except Rate.DoesNotExist:
             all_rates = None
         if all_rates:
-            last_30_days = datetime.datetime.today() - datetime.timedelta(days=30)
-            rates_30 = all_rates.filter(full_timestamp__gte=last_30_days).only('rate')
+            now = datetime.datetime.now()
+            this_year_rates = all_rates.filter(full_timestamp__year=now.year).only('rate')
             rates_arr = []
-            for rate in rates_30:
+            for rate in this_year_rates:
                 rates_arr.append(rate.rate)
             decimal_array = [float(decimal_value) for decimal_value in rates_arr]
             rates_list = (", ".join(repr(e) for e in decimal_array))
             try:
-                today_rate = all_rates.get(full_timestamp__date=datetime.date.today()).rate
+                today_rate = all_rates.get(full_timestamp__month=now.month).rate
             except Rate.DoesNotExist:
                 today_rate = None
+            print all_rates
             if today_rate:
                 context = {
                     'page': 'rates',
+                    'group': name,
                     'rates': all_rates,
-                    'month': rates_list,
+                    'year': rates_list,
                     'today': today_rate
                 }
             else:
                 context = {
                     'page': 'rates',
+                    'group': name,
                     'rates': all_rates,
-                    'month': rates_list,
+                    'year': rates_list,
                     'today': 'No rate today'
                 }
             return render_with_global_data(request, 'pochi/earnings.html', context)
         else:
             messages.info(request, 'There are no pochi rates yet! Coming soon')
-            return render_with_global_data(request, 'pochi/earnings.html', {'page': 'rates'})
+            return render_with_global_data(request, 'pochi/earnings.html', {'page': 'rates', 'group': name})
     elif page == 'daily':
         try:
             all_daily = BalanceSnapshot.objects.filter(profile_id=profile_id)\
@@ -1333,6 +1344,7 @@ def view_data(request, page=None, name=None):
             if today_bonus:
                 context = {
                     'page': 'daily',
+                    'group': name,
                     'bonuses': all_daily,
                     'month': bonus_list,
                     'today': today_bonus
@@ -1340,6 +1352,7 @@ def view_data(request, page=None, name=None):
             else:
                 context = {
                     'page': 'daily',
+                    'group': name,
                     'bonuses': all_daily,
                     'month': bonus_list,
                     'today': 'Nil'
@@ -1347,7 +1360,7 @@ def view_data(request, page=None, name=None):
             return render_with_global_data(request, 'pochi/earnings.html', context)
         else:
             messages.info(request, 'There are no daily rates yet! Coming soon')
-            return render_with_global_data(request, 'pochi/earnings.html', {'page': 'daily'})
+            return render_with_global_data(request, 'pochi/earnings.html', {'page': 'daily', 'group': name})
     elif page == 'monthly':
         try:
             all_monthly = BalanceSnapshot.objects.filter(profile_id=profile_id)\
@@ -1367,6 +1380,7 @@ def view_data(request, page=None, name=None):
             monthly_bonus = all_monthly.reverse()[:1]
             context = {
                 'page': 'monthly',
+                'group': name,
                 'bonuses': all_monthly,
                 'year': bonus_list,
                 'month': monthly_bonus
@@ -1374,36 +1388,40 @@ def view_data(request, page=None, name=None):
             return render_with_global_data(request, 'pochi/earnings.html', context)
         else:
             messages.info(request, 'There are no monthly rates yet! Coming soon')
-            return render_with_global_data(request, 'pochi/earnings.html', {'page': 'monthly'})
+            return render_with_global_data(request, 'pochi/earnings.html', {'page': 'monthly', 'group': name})
     elif page == 'total':
         try:
-            bs = BalanceSnapshot.objects.filter(profile_id=profile_id)
+            bs = BalanceSnapshot.objects.filter(profile_id=profile_id)\
+                .annotate(month=TruncMonth('full_timestamp'))\
+                .values('month')\
+                .annotate(bonus=Sum('bonus_closing_balance'))\
+                .values('month', 'bonus')
         except BalanceSnapshot.DoesNotExist:
             bs = None
         if bs:
             bs_arr = []
             cumulative = 0
             for individual in bs:
-                cumulative += individual.bonus_closing_balance
+                cumulative += individual['bonus']
                 dto = CumulativeBonusDto(
-                    individual.profile_id,
-                    individual.bonus_closing_balance,
-                    individual.full_timestamp,
+                    individual['bonus'],
+                    individual['month'],
                     cumulative
                 )
                 bs_arr.append(dto)
-            total_bonuses = bs.aggregate(Sum('bonus_closing_balance'))
-            cumulative_30 = bs_arr[-30:]
+            total_bonuses = bs.aggregate(Sum('bonus'))
+            cumulative_year_bonuses = bs_arr[-12:]
             context = {
                 'page': 'total',
                 'total': total_bonuses,
                 'history': bs_arr,
-                'month': cumulative_30
+                'month': cumulative_year_bonuses,
+                'now': datetime.datetime.now()
             }
             return render_with_global_data(request, 'pochi/earnings.html', context)
         else:
             messages.info(request, 'No earnings yet! Coming soon')
-            return render_with_global_data(request, 'pochi/earnings.html', {'page': 'total'})
+            return render_with_global_data(request, 'pochi/earnings.html', {'page': 'total', 'group': name})
     else:
         return redirect(admin)
 

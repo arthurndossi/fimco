@@ -5,7 +5,8 @@ from .models import CorporateProfile, Profile
 
 class CorporateBackend:
 
-    def authenticate(self, username=None, password=None, pochi=None):
+    @staticmethod
+    def authenticate(username=None, password=None, pochi=None):
 
         try:
             company = CorporateProfile.objects.get(profile_id=pochi)

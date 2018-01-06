@@ -16,6 +16,7 @@
 
 .box {
     margin: 0 10px 20px;
+  z-index: 100;
 }
 
 #aside nav h3 {
