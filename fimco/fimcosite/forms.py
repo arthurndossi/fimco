@@ -103,7 +103,7 @@ class RegisterForm1(forms.Form):
         validators=[telephone],
         widget=forms.TextInput(attrs={
             'class': 'form-control masked required',
-            'data-format': '0999999999',
+            'data-format': '+255999999999',
             'placeholder': 'Enter telephone',
             'required': True
         })
@@ -142,12 +142,20 @@ class RegisterForm1(forms.Form):
         cleaned_data = self.cleaned_data
         if 'phone' in cleaned_data and Profile.objects.filter(user__username=cleaned_data['phone'], profile_type='I')\
                 .exists():
+            self.fields['phone'].widget.attrs['autofocus'] = 'autofocus'
+            self.fields['phone'].widget.attrs['class'] = 'error'
             raise forms.ValidationError("This phone number is already associated with another user!")
         if 'email' in cleaned_data and Profile.objects.filter(user__email=cleaned_data['email'], profile_type='I')\
                 .exists():
+            self.fields['email'].widget.attrs['autofocus'] = 'autofocus'
+            self.fields['email'].widget.attrs['class'] = 'error'
+            self.add_error('email', 'Provide another email')
             raise forms.ValidationError("This email is already associated with another user!")
         if 'password' in cleaned_data and 'verify' in cleaned_data\
                 and cleaned_data['password'] != cleaned_data['verify']:
+            self.fields['password'].widget.attrs['autofocus'] = 'autofocus'
+            self.fields['password'].widget.attrs['class'] = 'error'
+            self.fields['verify'].widget.attrs['class'] = 'error'
             raise forms.ValidationError("Passwords must be identical.")
 
         return cleaned_data
@@ -187,6 +195,8 @@ class RegisterForm2(forms.Form):
     def clean_image(self):
         image = self.cleaned_data['scanned_id']
         if image:
+            self.fields['scanned_id'].widget.attrs['autofocus'] = 'autofocus'
+            self.fields['scanned_id'].widget.attrs['class'] = 'error'
             if image.file.size > 5 * 1024 * 1024:
                 raise ValidationError("Image file too large ( > 5mb )")
             return image
@@ -312,7 +322,7 @@ class CorporateForm3(forms.Form):
         validators=[telephone],
         widget=forms.TextInput(attrs={
             'class': 'form-control masked',
-            'data-format': '0999999999',
+            'data-format': '+255999999999',
             'placeholder': 'Enter telephone',
             'required': True,
         })
@@ -452,7 +462,7 @@ class UserCorporateForm(forms.Form):
         validators=[telephone],
         widget=forms.TextInput(attrs={
             'class': 'form-control masked',
-            'data-format': '0999999999',
+            'data-format': '+255999999999',
             'placeholder': 'Enter telephone',
             'required': True,
         })
@@ -624,7 +634,7 @@ class EditProfileForm(forms.Form):
         validators=[telephone],
         widget=forms.TextInput(attrs={
             'class': 'form-control masked',
-            'data-format': '0999999999',
+            'data-format': '+255999999999',
             'placeholder': 'Enter telephone',
             'required': True,
         })

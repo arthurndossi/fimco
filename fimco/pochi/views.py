@@ -331,20 +331,18 @@ def account(request):
         user = request.user.profile
         institution = request.POST['institution']
         name = request.POST['name'].upper()
-        nickname = request.POST['nickname']
         account_num = request.POST['account']
         account_type = request.POST['type']
         ExternalAccount.objects.create(
             profile_id=user.profile_id,
             account_name=name,
             account_number=account_num,
-            nickname=nickname,
             institution_name=institution,
             account_type=account_type
         )
         messages.success(
             request,
-            'You have successfully added '+nickname+' account!'
+            'You have successfully added '+name+' account!'
         )
     return render_with_global_data(request, 'pochi/account.html', {})
 
@@ -823,20 +821,18 @@ def withdraw(request):
         if request.POST['type'] == u"account":
             institution = request.POST['institution']
             bank_name = request.POST['name'].upper()
-            nickname = request.POST['nickname']
             account_num = request.POST['account']
             account_type = request.POST['type']
             ExternalAccount.objects.create(
                 profile_id=identifier,
                 account_name=bank_name,
                 account_number=account_num,
-                nickname=nickname,
                 institution_name=institution,
                 account_type=account_type
             )
             messages.success(
                 request,
-                'You have successfully added ' + nickname + ' account!'
+                'You have successfully added ' + bank_name + ' account!'
             )
             if request.POST['swift']:
                 swift = request.POST['swift']

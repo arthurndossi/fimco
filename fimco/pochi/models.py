@@ -91,7 +91,6 @@ class ExternalAccount(models.Model):
     profile_id = models.CharField(max_length=10, db_index=True)
     account_name = models.CharField(max_length=150)
     account_number = models.CharField(max_length=30, default='NA')
-    nickname = models.CharField(max_length=30, default='NA')
     institution_name = models.CharField(max_length=100)  # Mpesa, TIGO PESA, CRDB BANK
     institution_branchcode = models.CharField(max_length=30, default='NA')
     institution_code = models.CharField(max_length=30, default='NA')

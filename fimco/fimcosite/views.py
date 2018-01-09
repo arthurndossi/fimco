@@ -7,16 +7,26 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.core.files.storage import FileSystemStorage
 from django.core.mail import EmailMessage, BadHeaderError
 from django.db import transaction, Error
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.shortcuts import render, redirect
+from formtools.wizard.views import SessionWizardView
 
 from .backend import CorporateBackend
 from .forms import RegisterForm1, RegisterForm2, IndividualLoginForm, CorporateLoginForm, CorporateForm1, \
     CorporateForm2, CorporateForm3, CorporateForm4, BankAccountForm, UserCorporateForm
-from .models import KYC, CorporateProfile, Account, Profile
+from .models import KYC, CorporateProfile, Account, Profile, MEDIA_ROOT
+
+
+class CorporateWizard(SessionWizardView):
+    def done(self, form_list, **kwargs):
+        pass
+
+    form_list = [CorporateForm1, CorporateForm2, CorporateForm3, CorporateForm4]
+    file_storage = FileSystemStorage(location=MEDIA_ROOT)
 
 
 class AnonymousRequired(object):
@@ -79,7 +89,6 @@ def account(request):
 
 @transaction.atomic
 def process_form_data(request):
-    options = CorporateProfile.objects.values_list('company_name', flat=True)
     tab = 'active'
     step = 'active'
     logged_in = False
@@ -145,7 +154,8 @@ def process_form_data(request):
                     'aForm': CorporateForm2(),
                     'first': tab,
                     'step2': step,
-                    'logged_in': logged_in
+                    'logged_in': logged_in,
+                    'disabled': 'disabled'
                 }
                 return render(request, 'corporate.html', context)
             else:
@@ -153,7 +163,8 @@ def process_form_data(request):
                     'cForm': form,
                     'first': tab,
                     'step1': step,
-                    'logged_in': logged_in
+                    'logged_in': logged_in,
+                    'disabled': 'disabled'
                 }
                 return render(request, 'corporate.html', context)
         elif 'bot' in request.POST:
@@ -168,7 +179,8 @@ def process_form_data(request):
                     'uForm': CorporateForm3(),
                     'first': tab,
                     'step3': step,
-                    'logged_in': logged_in
+                    'logged_in': logged_in,
+                    'disabled': 'disabled'
                 }
                 return render(request, 'corporate.html', context)
             else:
@@ -176,7 +188,8 @@ def process_form_data(request):
                     'aForm': form,
                     'first': tab,
                     'step2': step,
-                    'logged_in': logged_in
+                    'logged_in': logged_in,
+                    'disabled': 'disabled'
                 }
                 return render(request, 'corporate.html', context)
         elif 'new' in request.POST:
@@ -201,7 +214,8 @@ def process_form_data(request):
                     'kForm': CorporateForm4(),
                     'first': tab,
                     'step4': step,
-                    'logged_in': logged_in
+                    'logged_in': logged_in,
+                    'disabled': 'disabled'
                 }
                 return render(request, 'corporate.html', context)
             else:
@@ -209,7 +223,8 @@ def process_form_data(request):
                     'uForm': form,
                     'first': tab,
                     'step3': step,
-                    'logged_in': logged_in
+                    'logged_in': logged_in,
+                    'disabled': 'disabled'
                 }
                 return render(request, 'corporate.html', context)
         elif 'id_type' in request.POST:
@@ -260,6 +275,7 @@ def process_form_data(request):
                     profile = Profile(user=user, profile_id=profile_id, dob=dob, gender=gender, bot_cds=bot,
                                       dse_cds=dse, profile_type='C', pin=pin)
                     profile.save()
+                    user.save()
 
                     Account.objects.create(
                         profile_id=profile_id,
@@ -281,9 +297,7 @@ def process_form_data(request):
                     messages.success(request, 'Your corporate account has been created successfully!')
                     context = {
                         'bForm': BankAccountForm,
-                        'first': tab,
-                        'step5': step,
-                        'logged_in': logged_in
+                        'done': True,
                     }
                     return render(request, 'corporate.html', context)
             else:
@@ -291,7 +305,8 @@ def process_form_data(request):
                     'kForm': form,
                     'first': tab,
                     'step4': step,
-                    'logged_in': logged_in
+                    'logged_in': logged_in,
+                    'disabled': 'disabled'
                 }
                 return render(request, 'corporate.html', context)
         elif 'add_rep' in request.POST:
@@ -320,6 +335,7 @@ def process_form_data(request):
                     user = User(phone, email, password, first_name=fName, last_name=lName, is_active=0)
                     profile = Profile(user=user, dob=dob, gender=gender, profile_type='C', profile_id=profile_id)
                     profile.save()
+                    user.save()
 
                     KYC.objects.create(
                         profile_id=profile_id,

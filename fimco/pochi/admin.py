@@ -28,7 +28,7 @@ class BalanceSnapshotAdmin(admin.ModelAdmin):
 
 
 class ExternalAccountAdmin(admin.ModelAdmin):
-    list_display = ('profile_id', 'account_name', 'account_number', 'nickname', 'institution_name',
+    list_display = ('profile_id', 'account_name', 'account_number', 'institution_name',
                     'institution_branchcode', 'institution_code', 'account_type')
 
 

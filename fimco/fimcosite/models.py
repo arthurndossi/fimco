@@ -46,13 +46,11 @@ class Profile(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     profile_type = models.CharField(max_length=1, choices=TYPE, default='I')
     profile_id = models.CharField(max_length=10)
-    approval_status = models.CharField(max_length=10, choices=STATUS, default='PENDING')
 
 
 class CorporateProfile(models.Model):
     company_name = models.CharField(max_length=100)
     address = models.TextField(max_length=500)
-    phone_number = models.CharField(max_length=20)
     profile_id = models.CharField(max_length=20)
 
 

@@ -1,0 +1,411 @@
+{% extends 'base.html' %}
+{% block links %}
+    <link rel="stylesheet" type="text/css" href="/static/css/reg.css" />
+{% endblock %}
+{% block content %}
+    <!-- REGISTER -->
+    <section>
+        <div class="container">
+            <div class="row">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="col-xs-12 col-centered">
+                        <div class="alert alert-success mb-30">
+                            <button type="button" class="close" data-dismiss="alert">
+                                <span aria-hidden="true">×</span>
+                                <span class="sr-only">Close</span>
+                            </button>
+                            <h4>Congratulations! <strong>Registration successful!</strong></h4>
+                            <p>{{ message }}</p>
+                            <a href="{% url 'index' %}" class="btn btn-success btn-sm mt-10">OK</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="card card-default">
+                        <div class="card-heading card-heading-transparent">
+                            <ul class="process-steps nav nav-justified">
+                                <li class="nav-item">
+                                    <a class="nav-link {% if step1 %}{{ step1 }}{% endif %}" href="#step1" data-toggle="tab">1</a>
+                                    <h5>Company Details</h5>
+                                </li>
+                                <li class="nav-item disabled">
+                                    <a class="nav-link {% if step2 %}{{ step2 }}{% endif %}" href="#step2" data-toggle="tab">2</a>
+                                    <h5>BOT & DSE Form</h5>
+                                </li>
+                                <li class="nav-item disabled">
+                                    <a class="nav-link {% if step3 %}{{ step3 }}{% endif %}" href="#step3" data-toggle="tab">3</a>
+                                    <h5>User Details</h5>
+                                </li>
+                                <li class="nav-item disabled">
+                                    <a class="nav-link {% if step4 %}{{ step4 }}{% endif %}" href="#step4" data-toggle="tab">4</a>
+                                    <h5>KYC Information</h5>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="card-block">
+                            <div class="tab-content mt-60">
+                                <form action="" method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                {{ wizard.management_form }}
+                                {% if wizard.form.forms %}
+                                    {{ wizard.form.management_form }}
+                                    {% for form in wizard.form.forms %}
+                                        {{ form }}
+                                    {% endfor %}
+                                {% else %}
+{#                                    {{ wizard.form }}#}
+{#                                {% endif %}#}
+                                {% if wizard.steps.current == wizard.steps.first %}
+                                    <div role="tabpanel" class="tab-pane active" id="step1">
+                                        <h4 class="text-center">Company Details Form</h4>
+                                        {% if wizard.form.non_field_errors %}
+                                            {% for general_error in wizard.form.non_field_errors %}
+                                                <div class="alert alert-mini alert-danger mb-30">
+                                                    <strong>{{ general_error }}</strong>
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}
+                                        <fieldset>
+                                            <div class="row">
+                                                <div class="col-md-6 col-sm-6">
+                                                    <label>Company Name *</label>
+                                                    {{ wizard.form.name }}
+                                                    {% if wizard.form.name.errors %}
+                                                        {% for error in wizard.form.name.errors %}
+                                                            <div class="alert alert-mini alert-danger mb-30">
+                                                                <strong>{{ error|escape }}</strong>
+                                                            </div>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <fieldset>
+                                                <label>Company Address:</label>
+                                                <div class="row">
+                                                    <div class="col-md-6 col-sm-6">
+                                                        <label>Building no./Plot no.
+                                                            {{ wizard.form.place }}
+                                                        </label>
+                                                        {% if wizard.form.place.errors %}
+                                                            {% for error in wizard.form.place.errors %}
+                                                                <div class="alert alert-mini alert-danger mb-30">
+                                                                    <strong>{{ error|escape }}</strong>
+                                                                </div>
+                                                            {% endfor %}
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="col-md-6 col-sm-6">
+                                                        <label>Road/Street
+                                                            {{ wizard.form.street }}
+                                                        </label>
+                                                        {% if wizard.form.street.errors %}
+                                                            {% for error in wizard.form.street.errors %}
+                                                                <div class="alert alert-mini alert-danger mb-30">
+                                                                    <strong>{{ error|escape }}</strong>
+                                                                </div>
+                                                            {% endfor %}
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="col-md-6 col-sm-6">
+                                                        <label>P.O. BOX
+                                                            {{ wizard.form.address }}
+                                                        </label>
+                                                        {% if wizard.form.address.errors %}
+                                                            {% for error in wizard.form.address.errors %}
+                                                                <div class="alert alert-mini alert-danger mb-30">
+                                                                    <strong>{{ error|escape }}</strong>
+                                                                </div>
+                                                            {% endfor %}
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="col-md-6 col-sm-6">
+                                                        <label>Town/City
+                                                            {{ wizard.form.location }}
+                                                        </label>
+                                                        {% if wizard.form.location.errors %}
+                                                            {% for error in wizard.form.location.errors %}
+                                                                <div class="alert alert-mini alert-danger mb-30">
+                                                                    <strong>{{ error|escape }}</strong>
+                                                                </div>
+                                                            {% endfor %}
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                        </fieldset>
+                                    </div>
+                                {% elif wizard.steps.current == 1 %}
+                                    <div role="tabpanel" class="tab-pane active" id="step2">
+                                        <h4 class="text-center">
+                                            BOT & DSE CDS Accounts Form
+                                            <small class="text-muted">(optional)</small>
+                                        </h4>
+                                        <fieldset>
+                                            <div class="row">
+                                                <div class="col-md-6 col-sm-6">
+                                                    <label>
+                                                        BOT CDS Account
+                                                        <small class="text-muted">(optional)</small>
+                                                    </label>
+                                                    {{ wizard.form.bot }}
+                                                    {% if wizard.form.bot.errors %}
+                                                        {% for error in wizard.form.bot.errors %}
+                                                            <div class="alert alert-mini alert-danger mb-30">
+                                                                <strong>{{ error|escape }}</strong>
+                                                            </div>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </div>
+                                                <div class="col-md-6 col-sm-6">
+                                                    <label>
+                                                        DSE CDS Account
+                                                        <small class="text-muted">(optional)</small>
+                                                    </label>
+                                                    {{ wizard.form.dse }}
+                                                    {% if wizard.form.dse.errors %}
+                                                        {% for error in wizard.form.dse.errors %}
+                                                            <div class="alert alert-mini alert-danger mb-30">
+                                                                <strong>{{ error|escape }}</strong>
+                                                            </div>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                {% elif wizard.steps.current == 2 %}
+                                    <div role="tabpanel" class="tab-pane active" id="step3">
+                                        <h4 class="text-center">Company representative details Form</h4>
+                                        {% if wizard.form.non_field_errors %}
+                                            {% for general_error in wizard.form.non_field_errors %}
+                                                <div class="alert alert-mini alert-danger mb-30">
+                                                    <strong>{{ general_error }}</strong>
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}
+                                        <fieldset>
+                                            <input type="hidden" name="new" value="" />
+                                            <div class="row">
+                                                <div class="col-md-6 col-sm-6">
+                                                    <label>First Name *</label>
+                                                    {{ wizard.form.fName }}
+                                                    {% if wizard.form.fName.errors %}
+                                                        {% for error in wizard.form.fName.errors %}
+                                                            <div class="alert alert-mini alert-danger mb-30">
+                                                                <strong>{{ error|escape }}</strong>
+                                                            </div>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </div>
+                                                <div class="col-md-6 col-sm-6">
+                                                    <label>Last Name *</label>
+                                                    {{ wizard.form.lName }}
+                                                    {% if wizard.form.lName.errors %}
+                                                        {% for error in wizard.form.lName.errors %}
+                                                            <div class="alert alert-mini alert-danger mb-30">
+                                                                <strong>{{ error|escape }}</strong>
+                                                            </div>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6 col-sm-6">
+                                                    <label>Email *</label>
+                                                    {{ wizard.form.email }}
+                                                    {% if wizard.form.email.errors %}
+                                                        {% for error in wizard.form.email.errors %}
+                                                            <div class="alert alert-mini alert-danger mb-30">
+                                                                <strong>{{ error|escape }}</strong>
+                                                            </div>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </div>
+                                                <div class="col-md-6 col-sm-6">
+                                                    <label>Phone *</label>
+                                                    {{ wizard.form.phone }}
+                                                    {% if wizard.form.phone.errors %}
+                                                        {% for error in wizard.form.phone.errors %}
+                                                            <div class="alert alert-mini alert-danger mb-30">
+                                                                <strong>{{ error|escape }}</strong>
+                                                            </div>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6 col-sm-6">
+                                                    <label>Date of Birth*</label>
+                                                    {{ wizard.form.dob }}
+                                                    {% if wizard.form.dob.errors %}
+                                                        {% for error in wizard.form.dob.errors %}
+                                                            <div class="alert alert-mini alert-danger mb-30">
+                                                                <strong>{{ error|escape }}</strong>
+                                                            </div>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </div>
+                                                <div class="col-md-3 col-sm-6">
+                                                    <label>Gender *</label>
+                                                    {{ wizard.form.gender }}
+                                                    {% if wizard.form.gender.errors %}
+                                                        {% for error in wizard.form.gender.errors %}
+                                                            <div class="alert alert-mini alert-danger mb-30">
+                                                                <strong>{{ error|escape }}</strong>
+                                                            </div>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6 col-sm-6">
+                                                    <label>Password *</label>
+                                                    {{ wizard.form.password }}
+                                                    {% if wizard.form.password.errors %}
+                                                        {% for error in wizard.form.password.errors %}
+                                                            <div class="alert alert-mini alert-danger mb-30">
+                                                                <strong>{{ error|escape }}</strong>
+                                                            </div>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </div>
+                                                <div class="col-md-6 col-sm-6">
+                                                    <label>Verify *</label>
+                                                    {{ wizard.form.verify }}
+                                                    {% if wizard.form.verify.errors %}
+                                                        {% for error in wizard.form.verify.errors %}
+                                                            <div class="alert alert-mini alert-danger mb-30">
+                                                                <strong>{{ error|escape }}</strong>
+                                                            </div>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12">
+                                                    <div class="alert alert-mini mb-30 passMessage" style="display:none">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                {% elif wizard.steps.current == wizard.steps.last %}
+                                    <div role="tabpanel" class="tab-pane active" id="step4">
+                                        <h4 class="text-center">Company KYC Form</h4>
+                                        {% if wizard.form.non_field_errors %}
+                                            {% for general_error in wizard.form.non_field_errors %}
+                                                <div class="alert alert-mini alert-danger mb-30">
+                                                    <strong>{{ general_error }}</strong>
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}
+                                        <fieldset>
+                                            <div class="row">
+                                                <div class="col-md-6 col-sm-6">
+                                                    <div class="fancy-file-upload">
+                                                        <i class="fa fa-upload"></i>
+                                                        {{ wizard.form.license }}
+                                                        <input type="text" class="form-control" placeholder="Business Licence" readonly="" />
+                                                        <span>Attach Business Licence</span>
+                                                    </div>
+                                                    <small class="text-muted block">Max file size: 5Mb (pdf/jpg/png)</small>
+                                                    {% if wizard.form.license.errors %}
+                                                        {% for error in wizard.form.license.errors %}
+                                                            <div class="alert alert-mini alert-danger mb-30">
+                                                                <strong>{{ error|escape }}</strong>
+                                                            </div>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </div>
+                                                <div class="col-md-6 col-sm-6">
+                                                    <div class="fancy-file-upload">
+                                                        <i class="fa fa-upload"></i>
+                                                        {{ wizard.form.certificate }}
+                                                        <input type="text" class="form-control" placeholder="TIN Certificate" readonly="" />
+                                                        <span>Attach TIN Certificate</span>
+                                                    </div>
+                                                    <small class="text-muted block">Max file size: 5Mb (pdf/jpg/png)</small>
+                                                    {% if wizard.form.certificate.errors %}
+                                                        {% for error in wizard.form.certificate.errors %}
+                                                            <div class="alert alert-mini alert-danger mb-30">
+                                                                <strong>{{ error|escape }}</strong>
+                                                            </div>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-2 col-md-2 col-sm-4">
+                                                    <label>ID Type *</label>
+                                                    {{ wizard.form.id_type }}
+                                                    {% if wizard.form.id_type.errors %}
+                                                        {% for error in wizard.form.id_type.errors %}
+                                                            <div class="alert alert-mini alert-danger mb-30">
+                                                                <strong>{{ error|escape }}</strong>
+                                                            </div>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </div>
+                                                <div class="col-lg-4 col-md-4 col-sm-4">
+                                                    <label>ID Number *</label>
+                                                    {{ wizard.form.id_number }}
+                                                    {% if wizard.form.id_number.errors %}
+                                                        {% for error in wizard.form.id_number.errors %}
+                                                            <div class="alert alert-mini alert-danger mb-30">
+                                                                <strong>{{ error|escape }}</strong>
+                                                            </div>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </div>
+                                                <div class="col-lg-6 col-md-4 col-sm-4">
+                                                    <label></label>
+                                                    <div class="fancy-file-upload">
+                                                        <i class="fa fa-upload"></i>
+                                                        {{ wizard.form.user_id }}
+                                                        <input type="text" class="form-control" placeholder="upload your ID" readonly="" />
+                                                        <span>Attach your ID</span>
+                                                    </div>
+                                                    <small class="text-muted block">Upload National ID, Passport, Voter ID or Driver license, max file size: 5Mb</small>
+                                                    {% if wizard.form.user_id.errors %}
+                                                        {% for error in wizard.form.user_id.errors %}
+                                                            <div class="alert alert-mini alert-danger mb-30">
+                                                                <strong>{{ error|escape }}</strong>
+                                                            </div>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <label class="checkbox m-0">
+                                                {{ wizard.form.checker }}
+                                                <i></i>I agree to the <a href="#" data-toggle="modal" data-target="#termsModal">Terms of Service</a>
+                                            </label>
+                                        </fieldset>
+                                    </div>
+                                {% endif %}
+                            {% if wizard.steps.prev %}
+                                <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.first }}">Start</button>
+                                <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}">Previous</button>
+                            {% endif %}
+                            {% if wizard.steps.current == wizard.steps.last %}
+                                <input type="submit" value="Done!"/>
+                            {% else %}
+                                <input type="submit" class="btn btn-primary btn-teal float-right" value="Next step"/>
+                            {% endif %}
+                                {% endif %}
+                            </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block scripts %}
+    <script src="/static/js/registration.js"></script>
+{% endblock %}

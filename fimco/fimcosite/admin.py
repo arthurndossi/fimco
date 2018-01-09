@@ -6,7 +6,7 @@ from .models import Profile, CorporateProfile, KYC, Account
 
 
 class CorporateProfileAdmin(admin.ModelAdmin):
-    list_display = ('company_name', 'address', 'phone_number', 'profile_id')
+    list_display = ('company_name', 'address', 'profile_id')
 
 
 class KYCAdmin(admin.ModelAdmin):
@@ -28,7 +28,7 @@ class ProfileInline(admin.StackedInline):
 # Define a new User admin
 class FimcoUserAdmin(UserAdmin):
     inlines = (ProfileInline, )
-    list_filter = ('is_staff', 'is_superuser', 'is_active', 'profile__approval_status', 'profile__profile_type')
+    list_filter = ('is_staff', 'is_superuser', 'is_active', 'profile__profile_type')
 
     def get_inline_instances(self, request, obj=None):
         if not obj:
