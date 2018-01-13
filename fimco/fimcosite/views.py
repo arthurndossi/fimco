@@ -464,4 +464,4 @@ def log_out(request):
 
 
 def inquiry(request):
-    return None
+    return redirect(request.META['HTTP_REFERER'])
