@@ -1,0 +1,28 @@
+i.ico-color {
+    background-color:#002A54;
+}
+.ico-color:hover {
+    background-color:#002A54;
+    border-color:#001429;
+}
+.description {
+    display: block;
+    font-size: 14px;
+    text-transform: uppercase;
+    line-height: 1.563;
+    padding-left: 0;
+}
+.phone {
+    display: block;
+    font-size: 20px;
+    line-height: 1.2;
+    color: #001429;
+    padding-left: 0;
+    text-decoration: none;
+}
+.box-static.box-border-top {
+    border-top: rgba(0,20,41,0.7) 3px solid;
+}
+.fancy-file-upload.fancy-file-primary>span.button {
+    background-color: #002A54;
+}

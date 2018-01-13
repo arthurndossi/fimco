@@ -461,3 +461,7 @@ def log_out(request):
     from django.contrib.auth import logout
     logout(request)
     return redirect(index)
+
+
+def inquiry(request):
+    return None

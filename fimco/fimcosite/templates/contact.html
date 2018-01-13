@@ -1,32 +1,6 @@
 {% extends "base.html" %}
 {% block links %}
-    <style>
-        i.ico-color {
-            background-color:#002A54;
-        }
-        .ico-color:hover {
-            background-color:#002A54;
-            border-color:#001429;
-        }
-        .description {
-            display: block;
-            font-size: 14px;
-            text-transform: uppercase;
-            line-height: 1.563;
-            padding-left: 0;
-        }
-        .phone {
-            display: block;
-            font-size: 20px;
-            line-height: 1.2;
-            color: #001429;
-            padding-left: 0;
-            text-decoration: none;
-        }
-        .box-static.box-border-top {
-            border-top: rgba(0,20,41,0.7) 3px solid;
-        }
-    </style>
+    <link href="/static/css/contact.css" rel="stylesheet" type="text/css"/>
 {% endblock %}
 {% block content %}
     <!-- -->
@@ -114,7 +88,7 @@
                         </div><!-- /Alert Mandatory -->
 
 
-                        <form action="php/contact.php" method="post" enctype="multipart/form-data">
+                        <form action="{% url 'inquiry' %}" method="post" enctype="multipart/form-data">
                             <fieldset>
                                 <input type="hidden" name="action" value="contact_send" />
                                 <div class="row">
@@ -132,7 +106,7 @@
                                         </div>
                                 </div>
                                 <div class="row">
-                                        <div class="col-md-8">
+                                        <div class="col-md-12">
                                             <label for="contact:subject">Subject *</label>
                                             <input required type="text" value="" class="form-control" name="contact[subject][required]" id="contact:subject">
                                         </div>
@@ -150,11 +124,13 @@
                                 <div class="row">
                                         <div class="col-md-12">
                                             <label for="contact:attachment"> Attachment, if any...</label>
-
-                                            <!-- custom file upload -->
-                                            <input class="custom-file-upload" type="file" name="contact[attachment]" id="contact:attachment" data-btn-text="Select a File" />
-                                            <small class="text-muted block">Max file size: 10Mb (zip/pdf/jpg/png)</small>
-
+                                            <div class="fancy-file-upload fancy-file-primary">
+                                                <i class="fa fa-upload"></i>
+                                                <input type="file" class="form-control" name="contact[attachment]" onchange="jQuery(this).next('input').val(this.value);" />
+                                                <input type="text" class="form-control" placeholder="no file selected" readonly="" />
+                                                <span class="button">Choose File</span>
+                                                <small class="text-muted block">Max file size: 10Mb (zip/pdf/jpg/png)</small>
+                                            </div>
                                         </div>
                                 </div>
                             </fieldset>

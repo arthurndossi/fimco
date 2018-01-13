@@ -78,12 +78,44 @@ ul.process-steps li a.active, ul.process-steps li a.active:focus, ul.process-ste
 }
 
 .WebProduct-Content {
-    /*min-width: 448px;*/
-    /*max-width: 448px;*/
     min-width: 548px!important;
     font-size: 20px !important;
     font-weight: 100 !important;
     line-height: 1.3 !important;
+}
+
+/*@media only screen and (min-width:768px) and (max-width: 1024px) {*/
+    /*.WebProduct-SubTitle {*/
+        /*min-width: 0!important;*/
+    /*}*/
+    /*.WebProduct-Content {*/
+        /*text-align: center;*/
+        /*min-width: 330px!important;*/
+        /*max-height: 330px!important;*/
+    /*}*/
+/*}*/
+
+@media only screen and (min-width:482px) and (max-width: 768px) {
+    .WebProduct-SubTitle {
+        min-width: 414px!important;
+    }
+    .WebProduct-Content {
+        min-width: 414px!important;
+    }
+}
+
+@media only screen and (max-width: 482px) {
+    .WebProduct-Content {
+        margin-top: 20px;
+        min-width: 448px!important;
+    }
+}
+
+@media only screen and (max-width: 414px) {
+    .WebProduct-Content {
+        margin-top: 20px;
+        min-width: 208px !important;
+    }
 }
 
 .WebProduct-SubTitle {
