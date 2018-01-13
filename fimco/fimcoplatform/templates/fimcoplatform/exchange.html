@@ -1,14 +1,6 @@
 {% extends "fimcoplatform/base.html" %}
 {% block links %}
-    <style>
-    @media only screen and (max-width: 320px) {
-
-       .elipsis {
-          font-size: .8em;
-       }
-
-    }
-    </style>
+    <link href="/static/platform/css/exchange.css" rel="stylesheet" type="text/css" />
 {% endblock %}
 {% block main %}
     <div class="row">
@@ -24,36 +16,15 @@
                     <h4 class="uppercase margin-bottom-0">Currency <strong>Calculator</strong></h4>
                     <hr class="margin-top-0" />
                     <div class="row margin-bottom-10">
-                        <div class="col-md-3 col-xs-8 nopadding-right">
-                            <input id="base_rate" type="text" value="1" min="0" class="form-control">
-                        </div>
-                        <div class="col-md-2 col-xs-4 nopadding-left">
-                            <select id="base" class="form-control select2">
-                                {% for exchange in data %}
-                                    <option value="{{ exchange.counter_currency }}"
-                                        {% if exchange.counter_currency == 'TZS' %}selected{% endif %}>
-                                        {{ exchange.counter_currency }}
-                                    </option>
-                                {% endfor %}
-                            </select>
-                            <div><p> 1 TZS = {{ exchange.current_rate }} USD</p></div>
-                        </div>
-                        <div class="col-md-1 col-xs-12 text-center padding-15">
-                            <a id="exchange" class="btn btn-3d btn-primary"><i class="fa fa-exchange"></i></a>
-                        </div>
-                        <div class="col-md-4 col-xs-8 nopadding-right">
-                            <input id="counter_rate" type="text" min="0" class="form-control">
-                        </div>
-                        <div class="col-md-2 col-xs-4 nopadding-left">
-                            <select id="counter" class="form-control select2">
-                                {% for exchange in data %}
-                                    <option value="{{ exchange.counter_currency }}"
-                                        {% if exchange.counter_currency == 'USD' %}selected{% endif %}>
-                                        {{ exchange.counter_currency }}
-                                    </option>
-                                {% endfor %}
-                            </select>
-{#                            <div><p> 1 USD = {% inverse exchange.current_rate %} TZS</p></div>#}
+                        <div class="col-xs-12">
+                            <div id="currency-widget" class="box box-border-shadow">
+                                <div id="currency-widget-inner" class="boxheader">
+                                    <b class="HSlabel">Currency Converter</b>
+                                </div>
+                                <div class="box-body">
+                                    <script type="text/javascript" src="https://fx-rate.net/converter.php?size=short&layout=horizontal"></script>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <h4 class="uppercase margin-bottom-0">Currency <strong>Table</strong></h4>
@@ -71,7 +42,7 @@
                                     <th>2-Day Trend</th>
                                 </tr>
                             </thead>
-                            <tbody>l
+                            <tbody>
                                 {% for exchange in data %}
                                 <tr>
                                     <td>

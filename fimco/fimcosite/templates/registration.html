@@ -25,15 +25,8 @@
             </div>
             <div class="row">
                 <div class="col-md-6 col-sm-6 offset-md-3 offset-sm-3">
-                    {% if rForm1.non_field_errors %}
-                        {% for general_error in rForm1.non_field_errors %}
-                            <div class="alert alert-mini alert-danger mb-30">
-                                <strong>{{ general_error }}</strong>
-                            </div>
-                        {% endfor %}
-                    {% endif %}
-                    {% if rForm2.non_field_errors %}
-                        {% for general_error in rForm2.non_field_errors %}
+                    {% if wizard.form.non_field_errors %}
+                        {% for general_error in wizard.form.non_field_errors %}
                             <div class="alert alert-mini alert-danger mb-30">
                                 <strong>{{ general_error }}</strong>
                             </div>
@@ -43,20 +36,21 @@
                         <div class="box-title mb-30">
                             <h2 class="fs-20">Don't have an account yet?</h2>
                         </div>
-                        {% if rForm1 %}
-                            <form class="m-0 sky-form" action="{% url 'register' %}" method="post" enctype="multipart/form-data">
-                                {% csrf_token %}
+                        <form class="m-0 sky-form" action="{% url 'account' %}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                            {{ wizard.management_form }}
+                            {% if wizard.steps.current == wizard.steps.first %}
                                 <fieldset id="one">
                                     <div class="row">
                                         <div class="col-md-6 col-sm-6">
                                             <label>First Name <small>(required)</small></label>
                                             <label class="input mb-10">
                                                 <i class="ico-append fa fa-user"></i>
-                                                {{ rForm1.fName }}
+                                                {{ wizard.form.fName }}
                                                 <b class="tooltip tooltip-bottom-right">Your First Name</b>
                                             </label>
-                                            {% if rForm1.fName.errors %}
-                                                {% for error in rForm1.fName.errors %}
+                                            {% if wizard.form.fName.errors %}
+                                                {% for error in wizard.form.fName.errors %}
                                                     <div class="alert alert-mini alert-danger mb-30">
                                                         <strong>{{ error|escape }}</strong>
                                                     </div>
@@ -67,11 +61,11 @@
                                             <label for="register:last_name">Last Name <small>(required)</small></label>
                                             <label class="input mb-10">
                                                 <i class="ico-append fa fa-user"></i>
-                                                {{ rForm1.lName }}
+                                                {{ wizard.form.lName }}
                                                 <b class="tooltip tooltip-bottom-right">Your Last Name</b>
                                             </label>
-                                            {% if rForm1.lName.errors %}
-                                                {% for error in rForm1.lName.errors %}
+                                            {% if wizard.form.lName.errors %}
+                                                {% for error in wizard.form.lName.errors %}
                                                     <div class="alert alert-mini alert-danger mb-30">
                                                         <strong>{{ error|escape }}</strong>
                                                     </div>
@@ -83,11 +77,11 @@
                                         <div class="col-md-6 col-sm-6">
                                             <label for="register:dob">Date of Birth <small>(required)</small></label>
                                             <label class="input mb-10">
-                                                {{ rForm1.dob }}
+                                                {{ wizard.form.dob }}
                                                 <b class="tooltip tooltip-bottom-right">Date of Birth</b>
                                             </label>
-                                            {% if rForm1.dob.errors %}
-                                                {% for error in rForm1.dob.errors %}
+                                            {% if wizard.form.dob.errors %}
+                                                {% for error in wizard.form.dob.errors %}
                                                     <div class="alert alert-mini alert-danger mb-30">
                                                         <strong>{{ error|escape }}</strong>
                                                     </div>
@@ -97,11 +91,11 @@
                                         <div class="col-md-6 col-sm-6">
                                             <label for="register:gender">Gender <small>(required)</small></label>
                                             <label class="select mb-10">
-                                                {{ rForm1.gender }}
+                                                {{ wizard.form.gender }}
                                                 <i class="ico-append fa fa-venus-mars"></i>
                                             </label>
-                                            {% if rForm1.gender.errors %}
-                                                {% for error in rForm1.gender.errors %}
+                                            {% if wizard.form.gender.errors %}
+                                                {% for error in wizard.form.gender.errors %}
                                                     <div class="alert alert-mini alert-danger mb-30">
                                                         <strong>{{ error|escape }}</strong>
                                                     </div>
@@ -114,11 +108,11 @@
                                             <label for="register:email">Email <small>(required)</small></label>
                                             <label class="input mb-10">
                                                 <i class="ico-append fa fa-envelope"></i>
-                                                {{ rForm1.email }}
+                                                {{ wizard.form.email }}
                                                 <b class="tooltip tooltip-bottom-right">Your Email</b>
                                             </label>
-                                            {% if rForm1.email.errors %}
-                                                {% for error in rForm1.email.errors %}
+                                            {% if wizard.form.email.errors %}
+                                                {% for error in wizard.form.email.errors %}
                                                     <div class="alert alert-mini alert-danger mb-30">
                                                         <strong>{{ error|escape }}</strong>
                                                     </div>
@@ -131,11 +125,11 @@
                                             <label for="register:phone">Phone <small>(required)</small></label>
                                             <label class="input mb-10">
                                                 <i class="ico-append fa fa-phone"></i>
-                                                {{ rForm1.phone }}
+                                                {{ wizard.form.phone }}
                                                 <b class="tooltip tooltip-bottom-right">Your Phone</b>
                                             </label>
-                                            {% if rForm1.phone.errors %}
-                                                {% for error in rForm1.phone.errors %}
+                                            {% if wizard.form.phone.errors %}
+                                                {% for error in wizard.form.phone.errors %}
                                                     <div class="alert alert-mini alert-danger mb-30">
                                                         <strong>{{ error|escape }}</strong>
                                                     </div>
@@ -148,7 +142,7 @@
                                             <label for="register:pass1">Password <small>(required)</small></label>
                                             <label class="input mb-10">
                                                 <i class="ico-append fa fa-lock"></i>
-                                                {{ rForm1.password }}
+                                                {{ wizard.form.password }}
                                                 <b class="tooltip tooltip-bottom-right">Min. 6 characters</b>
                                             </label>
                                         </div>
@@ -156,7 +150,7 @@
                                             <label for="register:pass2">Repeat Password <small>(required)</small></label>
                                             <label class="input mb-10">
                                                 <i class="ico-append fa fa-lock"></i>
-                                                {{ rForm1.verify }}
+                                                {{ wizard.form.verify }}
                                                 <b class="tooltip tooltip-bottom-right">Type the password again</b>
                                             </label>
                                             <div id="pass-message" class="alert alert-mini mb-30" style="display:none">
@@ -165,36 +159,26 @@
                                     </div>
                                     <hr />
                                 </fieldset>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <input type="hidden" name="one" value="one">
-                                        <button id="next" class="btn btn-primary float-right">
-                                            <i class="fa fa-arrow-right float-right"></i> NEXT
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
-                        {% elif rForm2 %}
-                            <form class="m-0 sky-form" action="{% url 'register' %}" method="post" enctype="multipart/form-data">
-                                {% csrf_token %}
+                            {% elif wizard.steps.current == wizard.steps.last %}
                                 <fieldset id="two">
                                     <div class="row">
                                         <div class="col-md-6 col-sm-6">
                                             <label>Select ID type <small>(required)</small></label>
                                             <label class="select mb-10">
                                                 <i class="ico-append fa fa-id-card"></i>
-                                                {{ rForm2.id_choice }}
+                                                {{ wizard.form.id_choice }}
                                             </label>
                                         </div>
                                         <div class="col-md-6 col-sm-6" id="client_input">
                                             <label for="register:id">Client ID <small>(required)</small></label>
                                             <label class="input mb-10">
                                                 <i class="ico-append fa fa-id-card-o"></i>
-                                                {{ rForm2.client_id }}
+                                                {{ wizard.form.client_id }}
                                                 <b class="tooltip tooltip-bottom-right">Enter your ID</b>
                                             </label>
-                                            {% if rForm2.client_id.errors %}
-                                                {% for error in rForm2.client_id.errors %}
+                                            <h6 id="hint"></h6>
+                                            {% if wizard.form.client_id.errors %}
+                                                {% for error in wizard.form.client_id.errors %}
                                                     <div class="alert alert-mini alert-danger mb-30">
                                                         <strong>{{ error|escape }}</strong>
                                                     </div>
@@ -207,12 +191,12 @@
                                             <div class="picture-container">
                                                 <div class="sqr-picture">
                                                     <img src="/static/img/id-card.png" class="picture-src" id="wizardFilePreview" />
-                                                    {{ rForm2.scanned_id }}
+                                                    {{ wizard.form.scanned_id }}
                                                 </div>
                                                 <h6>Select your ID (max. size 5MB)</h6>
                                             </div>
-                                            {% if rForm2.scanned_id.errors %}
-                                                {% for error in rForm2.scanned_id.errors %}
+                                            {% if wizard.form.scanned_id.errors %}
+                                                {% for error in wizard.form.scanned_id.errors %}
                                                     <div class="alert alert-mini alert-danger mb-30">
                                                         <strong>{{ error|escape }}</strong>
                                                     </div>
@@ -225,7 +209,7 @@
                                             <label for="register:bot">BOT CDS Account <small>(optional)</small></label>
                                             <label class="input mb-10">
                                                 <i class="ico-append fa fa-briefcase"></i>
-                                                {{ rForm2.bot_cds }}
+                                                {{ wizard.form.bot_cds }}
                                                 <b class="tooltip tooltip-bottom-right">Enter your account no.</b>
                                             </label>
                                         </div>
@@ -233,32 +217,31 @@
                                             <label for="register:dse">DSE CDS Account <small>(optional)</small></label>
                                             <label class="input mb-10">
                                                 <i class="ico-append fa fa-briefcase"></i>
-                                                {{ rForm2.dse_cds }}
+                                                {{ wizard.form.dse_cds }}
                                                 <b class="tooltip tooltip-bottom-right">Enter your account no.</b>
                                             </label>
                                         </div>
                                     </div>
                                     <label class="checkbox m-0">
-                                        {{ rForm2.checker }}
+                                        {{ wizard.form.checker }}
                                         <i></i>I agree to the <a href="#" data-toggle="modal" data-target="#termsModal">Terms of Service</a>
                                     </label>
 
                                     <hr />
 
                                 </fieldset>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <input type="hidden" name="two" value="two">
-{#                                        <button id="prev" class="btn btn-primary float-left">#}
-{#                                            <i class="fa fa-arrow-left"></i> PREVIOUS#}
-{#                                        </button>#}
-                                        <button type="submit" id="finish" class="btn btn-primary float-right">
-                                            <i class="fa fa-check"></i> REGISTER
-                                        </button>
-                                    </div>
+                            {% endif %}
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    {% if wizard.steps.prev %}
+                                        <button name="wizard_goto_step" type="submit" class="btn btn-primary btn-teal" value="{{ wizard.steps.prev }}">PREVIOUS</button>
+                                    {% endif %}
+                                    {% if wizard.steps.current == wizard.steps.last %}
+                                        <input type="submit" class="btn btn-primary btn-teal float-right" value="REGISTER"/>
+                                    {% endif %}
                                 </div>
-                            </form>
-                        {% endif %}
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>

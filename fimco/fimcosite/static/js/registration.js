@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    var id = $('#id_client_id'), choice = $("#id_id_choice"),
+    var id = $('#id_client_id'), choice = $("#id_id_choice"), hint = $("#hint"),
         uploadField = $("#file"), form_element = $('#one').find('.required');
 
     id.attr('pattern', '^[A-Z\\d]{8}(-)([A-Z\\d]{5}(-)){2}[A-Z\\d]{2}$');
@@ -8,12 +8,16 @@ $(document).ready(function () {
         var id_choice = choice.find(":selected").val();
         if (id_choice === 'national'){
             id.attr('pattern', '^[A-Z\\d]{8}(-)([A-Z\\d]{5}(-)){2}[A-Z\\d]{2}$');
+            hint.html("Format should be (XXXXXXXX-XXXXX-XXXXX-XX)")
         }else if (id_choice === 'voting'){
             id.attr('pattern', '^(T-)([a-zA-Z\\d]{4}(-)){2}([a-zA-Z\\d]){3}(-)[a-zA-Z\\d]$');
+            hint.html("Format should be (T-XXXX-XXXX-XXX-X)")
         }else if (id_choice === 'passport'){
             id.attr('pattern', '^[A-Z]{2}[\\d]{6}$');
+            hint.html("Format should be (ABXXXXXX)")
         }else if (id_choice === 'driving'){
             id.attr('pattern', '^\\d{10}$');
+            hint.html("Format should be (XXXXXXXXXX)")
         }
     });
 

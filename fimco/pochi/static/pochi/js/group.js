@@ -3,7 +3,7 @@
  */
 $(document).ready(function() {
     // The maximum number of options
-    var MAX_OPTIONS = 5;
+    var MAX_OPTIONS = 10000000000;
     var form = jQuery('.form-horizontal, .add-member');
 
     if (form.find(':visible[name="option[]"]').length < 2) {
@@ -20,9 +20,9 @@ $(document).ready(function() {
         fields: {
             'option[]': {
                 validators: {
-                    notEmpty: {
-                        message: 'Add POCHI member ID, cannot be empty'
-                    },
+                    // notEmpty: {
+                    //     message: 'Add POCHI member ID, cannot be empty'
+                    // },
                     stringLength: {
                         max: 20,
                         message: 'The option must be less than 20 characters long'
@@ -47,15 +47,22 @@ $(document).ready(function() {
                                 duplicateRemoved.push(obj[i]);
                             }
 
-                            if (duplicateRemoved.length === 0) {
+                            // if (duplicateRemoved.length === 0) {
+                            //     return {
+                            //         valid: false,
+                            //         message: 'You must fill at least one pochi member ID'
+                            //     };
+                            // } else if (duplicateRemoved.length !== notEmptyCount) {
+                            //     return {
+                            //         valid: false,
+                            //         message: 'This Mobile Number is already selected, please enter another number!'
+                            //     };
+                            // }
+
+                            if (duplicateRemoved.length !== notEmptyCount) {
                                 return {
                                     valid: false,
-                                    message: 'You must fill at least one pochi member ID'
-                                };
-                            } else if (duplicateRemoved.length !== notEmptyCount) {
-                                return {
-                                    valid: false,
-                                    message: 'The pochi member ID must be unique'
+                                    message: 'This Mobile Number is already selected, please enter another number!'
                                 };
                             }
 

@@ -11,7 +11,15 @@
                 {% for message in messages %}
                     {% if message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
                         <div class="col-lg-6 col-xs-12 col-centered">
-                            <p><strong>{{ message }}</strong></p>
+                            {% if page == 'rates' %}
+                                <p><strong>{{ message }}</strong></p>
+                            {% elif page == 'daily' %}
+                                <p><strong>You have not earned anything yet. Please invest to earn!</strong></p>
+                            {% elif page == 'monthly' %}
+                                <p><strong>You have not earned anything yet. Please invest to earn!</strong></p>
+                            {% elif page == 'total' %}
+                                <p><strong>You have not earned anything yet. Please invest to earn!</strong></p>
+                            {% endif %}
                         </div>
                     {% endif %}
                 {% endfor %}
@@ -74,9 +82,8 @@
                                     <tbody>
                                         {% if page == 'rates' %}
                                             {% for rate in rates %}
-                                                {{ rate|safe|escape }}
                                             <tr>
-                                                <td>{{ rate.full_timestamp|date:'F' }}</td>
+                                                <td>{{ rate.full_timestamp|date:'M Y' }}</td>
                                                 <td>{{ rate.rate }}</td>
                                             </tr>
                                             {% endfor %}
@@ -183,7 +190,7 @@
             type: 'line',
             data: {
                 {% if page == 'rates' %}
-                    labels: [{% for rate in rates %}'{{rate.full_timestamp|date:'d/M'}}',{% endfor %}],
+                    labels: [{% for rate in rates %}'{{rate.full_timestamp|date:'d/m/Y'}}',{% endfor %}],
                 {% elif page == 'daily' %}
                     labels: [{% for bonus in bonuses %}'{{bonus.full_timestamp|date:'d/M'}}',{% endfor %}],
                 {% elif page == 'monthly' %}

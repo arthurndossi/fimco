@@ -18,6 +18,7 @@ a.no-text-decoration {
 .btn-primary {
   background-color: #002A54;
   border-color: #001f3d;
+  margin-bottom: 0;
 }
 
 .btn-primary:hover, .btn-primary:active {

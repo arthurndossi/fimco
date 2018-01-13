@@ -40,7 +40,9 @@ INSTALLED_APPS = [
     'fimcosite.apps.FimcositeConfig',
     'pochi.apps.PochiConfig',
     'fimcoplatform.apps.FimcoPlatformConfig',
+    'formtools',
     'easy_pdf',
+    'djmoney'
 ]
 
 

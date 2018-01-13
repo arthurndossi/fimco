@@ -8,19 +8,27 @@
             <div class="sheet">
                 <div class="row">
                     <p class="lead">Current balance</p>
-                    <p class="balance"> TZS {{ account.balance }}</p>
+                    {% if account.balance %}
+                        <p class="lead"> TZS {{ account.balance }}</p>
+                    {% else %}
+                        <p class="lead"> TZS 0.0</p>
+                    {% endif %}
                 </div>
                 <div class="row">
                     <div class="col-xs-6 headerDivider">
                         <p class="lead">Available</p>
-                        <p class="lead"> TZS {{ account.balance }}</p>
+                        {% if account.balance %}
+                            <p class="lead"> TZS {{ account.balance }}</p>
+                        {% else %}
+                            <p class="lead"> TZS 0.0</p>
+                        {% endif %}
                     </div>
                     <div class="col-xs-6">
                         <p class="lead">Monthly Interest to-date</p>
-                        {% if account.ts_balance %}
-                        <p class="lead"> TZS {{ account.ts_balance }}</p>
+                        {% if account.balance %}
+                            <p class="lead"> TZS {{ account.balance }}</p>
                         {% else %}
-                        <p class="lead"> TZS 0.0</p>
+                            <p class="lead"> TZS 0.0</p>
                         {% endif %}
                     </div>
                 </div>

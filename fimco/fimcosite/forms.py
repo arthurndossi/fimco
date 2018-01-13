@@ -219,7 +219,8 @@ class CorporateForm1(forms.Form):
         widget=forms.TextInput(attrs={
             'class': 'form-control',
             'required': True,
-            'style': 'display: inline; width: auto'
+            'style': 'display: inline; width: auto',
+            'placeholder': 'Building no./Plot no.'
         })
     )
     street = forms.CharField(
@@ -227,7 +228,8 @@ class CorporateForm1(forms.Form):
         widget=forms.TextInput(attrs={
             'class': 'form-control',
             'required': True,
-            'style': 'display: inline; width: auto'
+            'style': 'display: inline; width: auto',
+            'placeholder': 'Road/Street'
         })
     )
     address = forms.CharField(
@@ -235,7 +237,8 @@ class CorporateForm1(forms.Form):
         widget=forms.TextInput(attrs={
             'class': 'form-control',
             'required': True,
-            'style': 'display: inline; width: auto'
+            'style': 'display: inline; width: auto',
+            'placeholder': 'P.O. BOX'
         })
     )
     location = forms.CharField(
@@ -243,7 +246,8 @@ class CorporateForm1(forms.Form):
         widget=forms.TextInput(attrs={
             'class': 'form-control',
             'required': True,
-            'style': 'display: inline; width: auto'
+            'style': 'display: inline; width: auto',
+            'placeholder': 'Town/City'
         })
     )
 

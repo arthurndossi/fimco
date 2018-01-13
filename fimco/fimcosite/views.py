@@ -12,21 +12,13 @@ from django.core.mail import EmailMessage, BadHeaderError
 from django.db import transaction, Error
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, render_to_response
 from formtools.wizard.views import SessionWizardView
 
 from .backend import CorporateBackend
 from .forms import RegisterForm1, RegisterForm2, IndividualLoginForm, CorporateLoginForm, CorporateForm1, \
     CorporateForm2, CorporateForm3, CorporateForm4, BankAccountForm, UserCorporateForm
 from .models import KYC, CorporateProfile, Account, Profile, MEDIA_ROOT
-
-
-class CorporateWizard(SessionWizardView):
-    def done(self, form_list, **kwargs):
-        pass
-
-    form_list = [CorporateForm1, CorporateForm2, CorporateForm3, CorporateForm4]
-    file_storage = FileSystemStorage(location=MEDIA_ROOT)
 
 
 class AnonymousRequired(object):
@@ -45,6 +37,76 @@ class AnonymousRequired(object):
 
 def anonymous_required(view_function, redirect_to=None):
     return AnonymousRequired(view_function, redirect_to)
+
+
+class RegistrationWizard(SessionWizardView):
+    form_list = [RegisterForm1, RegisterForm2]
+    file_storage = FileSystemStorage(location=MEDIA_ROOT)
+    template_name = "registration.html"
+
+    # @anonymous_required
+    # def get_context_data(self, form, **kwargs):
+    #     context = super(RegistrationWizard, self).get_context_data(form=form, **kwargs)
+    #     return context
+
+    def done(self, form_list, **kwargs):
+        form_data = register(self.request, form_list)
+        context = {
+            'form_data': form_data
+        }
+        return render_to_response('registration.html', context)
+
+
+class CorporateWizard(SessionWizardView):
+    form_list = [CorporateForm1, CorporateForm2, CorporateForm3, CorporateForm4]
+    file_storage = FileSystemStorage(location=MEDIA_ROOT)
+    template_name = "corporate.html"
+
+    tab = 'active'
+    logged_in = False
+
+    def get_context_data(self, form, **kwargs):
+        context = super(CorporateWizard, self).get_context_data(form=form, **kwargs)
+        if self.steps.current == self.steps.first:
+            extra = {
+                'lForm': CorporateLoginForm(),
+                'adForm': UserCorporateForm(prefix='ad'),
+                'first': self.tab,
+                'logged_in': self.logged_in
+            }
+            context.update(extra)
+        elif self.steps.index == 1:
+            extra = {
+                'first': self.tab,
+                'disabled': 'disabled',
+                'logged_in': self.logged_in
+            }
+            context.update(extra)
+        elif self.steps.index == 2:
+            extra = {
+                'first': self.tab,
+                'disabled': 'disabled',
+                'logged_in': self.logged_in
+            }
+            context.update(extra)
+        elif self.steps.index == 3:
+            extra = {
+                'first': self.tab,
+                'disabled': 'disabled',
+                'logged_in': self.logged_in
+            }
+            context.update(extra)
+        return context
+
+    def done(self, form_list, **kwargs):
+        form_data = process_form_data(self.request, form_list)
+        context = {
+            'bForm': BankAccountForm,
+            'done': True,
+            'message': True,
+            'form_data': form_data
+        }
+        return render_to_response('corporate.html', context)
 
 
 @receiver(pre_save, sender=Profile)
@@ -79,286 +141,171 @@ def general_view(request, page):
     return render(request, page+'.html', {})
 
 
-@anonymous_required
-def account(request):
-    context = {
-        'rForm1': RegisterForm1()
-    }
-    return render(request, 'registration.html', context)
-
-
 @transaction.atomic
-def process_form_data(request):
+def process_form_data(request, form_list):
+    form_data = [form.cleaned_data for form in form_list]
+
+    name = form_data[0]['name']
+    place = form_data[0]['place']
+    street = form_data[0]['street']
+    address = form_data[0]['address']
+    location = form_data[0]['location']
+
+    bot = form_data[1]['bot']
+    dse = form_data[1]['dse']
+
+    fName = form_data[2]['fName'].capitalize()
+    lName = form_data[2]['lName'].capitalize()
+    dob = form_data[2]['dob']
+    gender = form_data[2]['gender']
+    email = form_data[2]['email']
+    phone = form_data[2]['phone'].strip().replace('+255', '0')
+    password = form_data[2]["password"]
+
+    id_type = form_data[3]['id_type']
+    id_number = form_data[3]['id_number']
+    license = form_data[3]['license']
+    certificate = form_data[3]['certificate']
+    user_id = form_data[3]['user_id']
+
+    company_address = address + '\r' + place + '\r' + street + '\r' + location
+
+    profile_id = "CP%s" % uuid.uuid4().hex[:6].upper()
+    pin = uuid.uuid4().hex[:4].upper()
+    account_no = create_account(profile_id)
+
+    with transaction.atomic():
+        CorporateProfile.objects.create(
+            company_name=name,
+            address=company_address,
+            profile_id=profile_id
+        )
+
+        KYC.objects.create(
+            profile_id=profile_id,
+            kyc_type=id_type,
+            id_number=id_number,
+            document=user_id
+        )
+
+        from django.db import IntegrityError
+        try:
+            user = User.objects.create_user(phone, email, password, first_name=fName, last_name=lName, is_active=0)
+            profile = Profile(user=user, profile_id=profile_id, dob=dob, gender=gender, bot_cds=bot,
+                              dse_cds=dse, profile_type='C', pin=pin)
+            profile.save()
+        except IntegrityError:
+            messages.error(request, "This username is already registered with another user!")
+
+        Account.objects.create(
+            profile_id=profile_id,
+            account=account_no
+        )
+
+        from_email = email
+        message = ''
+        recipient_list = ['ivan@fimco.co.tz']
+        subject = 'Company KYC details'
+        # try:
+        #     mail = EmailMessage(subject, message, from_email, recipient_list)
+        #     mail.attach(license.name, license.read(), license.content_type)
+        #     mail.attach(certificate.name, certificate.read(), certificate.content_type)
+        #     mail.send()
+        # except BadHeaderError:
+        #     messages.error(request, 'Invalid header found.')
+
+        return form_data
+
+
+def add_user_corporate(request):
     tab = 'active'
-    step = 'active'
     logged_in = False
-    if request.POST:
-        if 'login' in request.POST:
-            form = CorporateLoginForm(request.POST or None)
-            if form.is_valid():
-                pochi_id = form.cleaned_data["id"]
-                username = form.cleaned_data["corp_rep"]
-                password = form.cleaned_data["password"]
-                if re.match(r"[^@]+@[^@]+\.[^@]+", username):
-                    try:
-                        user = User.objects.get(email=username)
-                        if user.check_password(password):
-                            user = user
-                        else:
-                            user = None
-                    except User.DoesNotExist:
+
+    if 'login' in request.POST:
+        form = CorporateLoginForm(request.POST or None)
+        if form.is_valid():
+            pochi_id = form.cleaned_data["id"]
+            username = form.cleaned_data["corp_rep"]
+            password = form.cleaned_data["password"]
+            if re.match(r"[^@]+@[^@]+\.[^@]+", username):
+                try:
+                    user = User.objects.get(email=username)
+                    if user.check_password(password):
+                        user = user
+                    else:
                         user = None
-                elif re.match(r'^([+]?(\d{1,3}\s?)|[0])\s?\d+(\s?-?\d{2,4}){1,3}?$', username):
-                    user = CorporateBackend.authenticate(username, password, pochi_id)
-                else:
-                    raise forms.ValidationError("Not a valid email or phone number!")
-
-                if user:
-                    login(request, user)
-                    logged_in = True
-                    company = CorporateProfile.objects.get(profile_id=pochi_id).company_name
-                    members = Profile.objects.filter(profile_id=pochi_id).values_list('user__username', flat=True)
-                    corporate_users = []
-                    for member in members:
-                        user_obj = User.objects.select_related('profile').get(username=member)
-                        corporate_user = user_obj.get_full_name()
-                        corporate_users.append(corporate_user)
-                    context = {
-                        'second': tab,
-                        'cForm': form,
-                        'company': company,
-                        'users': corporate_users,
-                        'logged_in': logged_in
-                    }
-                    return render(request, 'corporate.html', context)
-                else:
-                    messages.add_message(request, messages.ERROR, 'Incorrect credentials!')
-                    return render(request, 'login.html', {'second': tab, 'cForm': form, 'logged_in': logged_in})
+                except User.DoesNotExist:
+                    user = None
+            elif re.match(r'^([+]?(\d{1,3}\s?)|[0])\s?\d+(\s?-?\d{2,4}){1,3}?$', username):
+                user = CorporateBackend.authenticate(username, password, pochi_id)
             else:
-                return render(request, 'login.html', {'second': tab, 'cForm': form, 'logged_in': logged_in})
-        if 'name' in request.POST:
-            form = CorporateForm1(request.POST or None)
-            if form.is_valid():
-                name = form.cleaned_data['name']
-                place = form.cleaned_data['place']
-                street = form.cleaned_data['street']
-                address = form.cleaned_data['address']
-                location = form.cleaned_data['location']
+                raise forms.ValidationError("Not a valid email or phone number!")
 
-                request.session['name'] = name
-                request.session['place'] = place
-                request.session['street'] = street
-                request.session['location'] = location
-                request.session['address'] = address
+            if user:
+                login(request, user)
+                logged_in = True
+                company = CorporateProfile.objects.get(profile_id=pochi_id).company_name
+                members = Profile.objects.filter(profile_id=pochi_id).values_list('user__username', flat=True)
+                corporate_users = []
+                for member in members:
+                    user_obj = User.objects.select_related('profile').get(username=member)
+                    corporate_user = user_obj.get_full_name()
+                    corporate_users.append(corporate_user)
                 context = {
-                    'aForm': CorporateForm2(),
-                    'first': tab,
-                    'step2': step,
-                    'logged_in': logged_in,
-                    'disabled': 'disabled'
-                }
-                return render(request, 'corporate.html', context)
-            else:
-                context = {
+                    'second': tab,
                     'cForm': form,
-                    'first': tab,
-                    'step1': step,
-                    'logged_in': logged_in,
-                    'disabled': 'disabled'
-                }
-                return render(request, 'corporate.html', context)
-        elif 'bot' in request.POST:
-            form = CorporateForm2(request.POST or None)
-            if form.is_valid():
-                bot = form.cleaned_data['bot']
-                dse = form.cleaned_data['dse']
-
-                request.session['bot'] = bot
-                request.session['dse'] = dse
-                context = {
-                    'uForm': CorporateForm3(),
-                    'first': tab,
-                    'step3': step,
-                    'logged_in': logged_in,
-                    'disabled': 'disabled'
+                    'company': company,
+                    'users': corporate_users,
+                    'logged_in': logged_in
                 }
                 return render(request, 'corporate.html', context)
             else:
+                messages.add_message(request, messages.ERROR, 'Incorrect credentials!')
                 context = {
-                    'aForm': form,
-                    'first': tab,
-                    'step2': step,
-                    'logged_in': logged_in,
-                    'disabled': 'disabled'
+                    'second': tab,
+                    'cForm': form,
+                    'logged_in': logged_in
                 }
-                return render(request, 'corporate.html', context)
-        elif 'new' in request.POST:
-            form = CorporateForm3(request.POST or None)
-            if form.is_valid():
-                fName = form.cleaned_data['fName'].capitalize()
-                lName = form.cleaned_data['lName'].capitalize()
-                dob = form.cleaned_data['dob']
-                gender = form.cleaned_data['gender']
-                email = form.cleaned_data['email']
-                phone = form.cleaned_data['phone'].strip()
-                password = form.cleaned_data["password"]
+                return render(request, 'login.html', context)
+        else:
+            return render(request, 'login.html', {'second': tab, 'cForm': form, 'logged_in': logged_in})
+    elif 'add_rep' in request.POST:
+        form = CorporateForm4(request.POST, request.FILES or None)
+        if form.is_valid():
+            name = request.POST['company']
+            fName = form.cleaned_data['fName'].capitalize()
+            lName = form.cleaned_data['lName'].capitalize()
+            dob = form.cleaned_data['dob']
+            gender = form.cleaned_data['gender']
+            email = form.cleaned_data['email']
+            id_type = form.cleaned_data['id_type']
+            id_number = form.cleaned_data['id_number']
+            user_id = request.FILES['user_id']
+            phone = form.cleaned_data['phone'].strip().replace('+255', '0')
+            password = form.cleaned_data["password"]
 
-                request.session['fName'] = fName
-                request.session['lName'] = lName
-                request.session['dob'] = dob.isoformat()
-                request.session['gender'] = gender
-                request.session['email'] = email
-                request.session['phone'] = phone
-                request.session['password'] = password
-                context = {
-                    'kForm': CorporateForm4(),
-                    'first': tab,
-                    'step4': step,
-                    'logged_in': logged_in,
-                    'disabled': 'disabled'
-                }
-                return render(request, 'corporate.html', context)
-            else:
-                context = {
-                    'uForm': form,
-                    'first': tab,
-                    'step3': step,
-                    'logged_in': logged_in,
-                    'disabled': 'disabled'
-                }
-                return render(request, 'corporate.html', context)
-        elif 'id_type' in request.POST:
-            form = CorporateForm4(request.POST, request.FILES or None)
-            if form.is_valid():
-                id_type = form.cleaned_data['id_type']
-                id_number = form.cleaned_data['id_number']
-                license = request.FILES['license']
-                certificate = request.FILES['certificate']
-                user_id = request.FILES['user_id']
+            profile_id = None
+            while profile_id is None:
+                try:
+                    profile_id = CorporateProfile.objects.get(company_name=name).profile_id
+                except Error:
+                    pass
 
-                name = request.session['name']
-                place = request.session['place']
-                street = request.session['street']
-                location = request.session['location']
-                address = request.session['address']
-                bot = request.session['bot']
-                dse = request.session['dse']
-                fName = request.session['fName']
-                lName = request.session['lName']
-                dob = request.session['dob']
-                gender = request.session['gender']
-                email = request.session['email']
-                phone = request.session['phone']
-                password = request.session['password']
+            with transaction.atomic():
+                user = User.objects.create_user(phone, email, password, first_name=fName, last_name=lName, is_active=0)
+                profile = Profile(user=user, dob=dob, gender=gender, profile_type='C', profile_id=profile_id)
+                profile.save()
 
-                company_address = address + '\r' + place + '\r' + street + '\r' + location
+                KYC.objects.create(
+                    profile_id=profile_id,
+                    kyc_type=id_type,
+                    id_number=id_number,
+                    document=user_id
+                )
 
-                profile_id = "CP%s" % uuid.uuid4().hex[:6].upper()
-                pin = uuid.uuid4().hex[:4].upper()
-                account_no = create_account(profile_id)
+                messages.success(request, 'You have been added successfully to ' + name + ' corporate account!')
 
-                with transaction.atomic():
-                    CorporateProfile.objects.create(
-                        company_name=name,
-                        address=company_address,
-                        profile_id=profile_id
-                    )
-
-                    KYC.objects.create(
-                        profile_id=profile_id,
-                        kyc_type=id_type,
-                        id_number=id_number,
-                        document=user_id
-                    )
-
-                    user = User(phone, email, password, first_name=fName, last_name=lName, is_active=0)
-                    profile = Profile(user=user, profile_id=profile_id, dob=dob, gender=gender, bot_cds=bot,
-                                      dse_cds=dse, profile_type='C', pin=pin)
-                    profile.save()
-                    user.save()
-
-                    Account.objects.create(
-                        profile_id=profile_id,
-                        account=account_no
-                    )
-
-                    from_email = email
-                    message = ''
-                    recipient_list = ['ivan@fimco.co.tz']
-                    subject = 'Company KYC details'
-                    # try:
-                    #     mail = EmailMessage(subject, message, from_email, recipient_list)
-                    #     mail.attach(license.name, license.read(), license.content_type)
-                    #     mail.attach(certificate.name, certificate.read(), certificate.content_type)
-                    #     mail.send()
-                    # except BadHeaderError:
-                    #     messages.error(request, 'Invalid header found.')
-
-                    messages.success(request, 'Your corporate account has been created successfully!')
-                    context = {
-                        'bForm': BankAccountForm,
-                        'done': True,
-                    }
-                    return render(request, 'corporate.html', context)
-            else:
-                context = {
-                    'kForm': form,
-                    'first': tab,
-                    'step4': step,
-                    'logged_in': logged_in,
-                    'disabled': 'disabled'
-                }
-                return render(request, 'corporate.html', context)
-        elif 'add_rep' in request.POST:
-            form = CorporateForm4(request.POST, request.FILES or None)
-            if form.is_valid():
-                name = request.POST['company']
-                fName = form.cleaned_data['fName'].capitalize()
-                lName = form.cleaned_data['lName'].capitalize()
-                dob = form.cleaned_data['dob']
-                gender = form.cleaned_data['gender']
-                email = form.cleaned_data['email']
-                id_type = form.cleaned_data['id_type']
-                id_number = form.cleaned_data['id_number']
-                user_id = request.FILES['user_id']
-                phone = form.cleaned_data['phone'].strip()
-                password = form.cleaned_data["password"]
-
-                profile_id = None
-                while profile_id is None:
-                    try:
-                        profile_id = CorporateProfile.objects.get(company_name=name).profile_id
-                    except Error:
-                        pass
-
-                with transaction.atomic():
-                    user = User(phone, email, password, first_name=fName, last_name=lName, is_active=0)
-                    profile = Profile(user=user, dob=dob, gender=gender, profile_type='C', profile_id=profile_id)
-                    profile.save()
-                    user.save()
-
-                    KYC.objects.create(
-                        profile_id=profile_id,
-                        kyc_type=id_type,
-                        id_number=id_number,
-                        document=user_id
-                    )
-
-                    messages.success(request, 'You have been added successfully to '+name+' corporate account!')
-
-            return render(request, 'corporate.html', {'adForm': form, 'second': tab})
-    context = {
-        'cForm': CorporateForm1(),
-        'aForm': CorporateForm2(),
-        'uForm': CorporateForm3(),
-        'kForm': CorporateForm4(),
-        'lForm': CorporateLoginForm(),
-        'adForm': UserCorporateForm(prefix='ad'),
-        'first': tab,
-        'step1': step,
-        'logged_in': logged_in
-    }
-    return render(request, 'corporate.html', context)
+        return render(request, 'corporate.html', {'adForm': form, 'second': tab})
 
 
 @anonymous_required
@@ -463,86 +410,50 @@ def create_account(profile_id):
     return account_no
 
 
-def register(request):
-    if request.method == 'POST':
-        if 'one' in request.POST:
-            form = RegisterForm1(request.POST or None)
-            if form.is_valid():
-                fName = form.cleaned_data['fName'].capitalize()
-                lName = form.cleaned_data['lName'].capitalize()
-                dob = form.cleaned_data['dob']
-                gender = form.cleaned_data['gender']
-                email = form.cleaned_data['email']
-                phone = form.cleaned_data['phone'].strip()
-                password = form.cleaned_data["password"]
+def register(request, form_list):
+    form_data = [form.cleaned_data for form in form_list]
 
-                request.session['fName'] = fName
-                request.session['lName'] = lName
-                request.session['dob'] = dob.isoformat()
-                request.session['gender'] = gender
-                request.session['email'] = email
-                request.session['phone'] = phone
-                request.session['password'] = password
-                return render(request, 'registration.html', {'rForm2': RegisterForm2()})
-            else:
-                return render(request, 'registration.html', {'rForm1': form})
-        elif 'two' in request.POST:
-            form = RegisterForm2(request.POST, request.FILES or None)
-            if form.is_valid():
-                id_choice = form.cleaned_data['id_choice']
-                client_id = form.cleaned_data['client_id']
-                scanned_id = form.cleaned_data['scanned_id']
-                bot = form.cleaned_data['bot_cds']
-                dse = form.cleaned_data['dse_cds']
-            else:
-                return render(request, 'registration.html', {'rForm2': form})
+    fName = form_data[0]['fName'].capitalize()
+    lName = form_data[0]['lName'].capitalize()
+    dob = form_data[0]['dob']
+    gender = form_data[0]['gender']
+    email = form_data[0]['email']
+    phone = form_data[0]['phone'].strip().replace('+255', '0')
+    password = form_data[0]["password"]
 
-            fName = request.session['fName']
-            lName = request.session['lName']
-            dob = request.session['dob']
-            gender = request.session['gender']
-            email = request.session['email']
-            phone = request.session['phone']
-            password = request.session['password']
+    id_choice = form_data[1]['id_choice']
+    client_id = form_data[1]['client_id']
+    scanned_id = form_data[1]['scanned_id']
+    bot = form_data[1]['bot_cds']
+    dse = form_data[1]['dse_cds']
 
-            del request.session['fName']
-            del request.session['lName']
-            del request.session['dob']
-            del request.session['gender']
-            del request.session['email']
-            del request.session['phone']
-            del request.session['password']
+    profile_id = "POC%s" % uuid.uuid4().hex[:6].upper()
+    pin = uuid.uuid4().hex[:4].upper()
+    account_no = create_account(profile_id)
 
-            profile_id = "POC%s" % uuid.uuid4().hex[:6].upper()
-            pin = uuid.uuid4().hex[:4].upper()
-            account_no = create_account(profile_id)
+    with transaction.atomic():
+        user = User.objects.create_user(phone, email, password, first_name=fName, last_name=lName, is_active=0)
+        profile = Profile(user=user, profile_id=profile_id, dob=dob, gender=gender, bot_cds=bot,
+                          dse_cds=dse, profile_type='I', pin=pin)
+        profile.save()
 
-            with transaction.atomic():
-                user = User.objects.create_user(phone, email, password, first_name=fName, last_name=lName, is_active=0)
-                profile = Profile(user=user, profile_id=profile_id, dob=dob, gender=gender, bot_cds=bot,
-                                  dse_cds=dse, profile_type='I', pin=pin)
-                profile.save()
-                user.save()
+        KYC.objects.create(
+            profile_id=profile_id,
+            kyc_type=id_choice,
+            id_number=client_id,
+            document=scanned_id
+        )
 
-                KYC.objects.create(
-                    profile_id=profile_id,
-                    kyc_type=id_choice,
-                    id_number=client_id,
-                    document=scanned_id
-                )
+        Account.objects.create(
+            profile_id=profile_id,
+            account=account_no
+        )
 
-                Account.objects.create(
-                    profile_id=profile_id,
-                    account=account_no
-                )
-
-                messages.info(
-                    request,
-                    'Your information is being verified and you will receive notification shortly!'
-                )
-                return redirect(request.META['HTTP_REFERER'])
-
-    return redirect(account)
+        messages.info(
+            request,
+            'Your information is being verified and you will receive notification shortly!'
+        )
+        return form_data
 
 
 @login_required

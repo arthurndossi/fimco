@@ -23,3 +23,60 @@
 .dropdown a:hover {background-color: #f1f1f1}
 
 .show {display:block;}
+
+@media only screen and (max-width: 320px) {
+   .elipsis {
+      font-size: .8em;
+   }
+}
+
+#currency-widget {
+    /*width:474px;*/
+    background-color: #fff;
+    border:2px solid #888;
+    text-align:center;
+    /*padding:0;*/
+    /*margin:0 auto*/
+}
+
+#currency-widget-inner {
+    /*margin:0;*/
+    /*padding: 3px 0 2px 0;*/
+    /*text-align:center;*/
+    /*background-color:#ccc;*/
+    /*border:1px solid #888;*/
+    /*width:472px;*/
+}
+
+.HSlabel {
+    font-weight:bold;
+    text-decoration:none;
+    color:#000000;
+}
+
+.box {
+   margin: 40px;
+   box-shadow: 5px 5px 10px #535353;
+   border: 1px silver;
+   border-radius: 4px;
+   position: relative;
+   width: 500px;
+   height: 400px;
+   overflow: hidden;
+   /* limit size with min/max-width/height*/
+   min-height: 100px;
+   min-width: 200px;
+   max-width: 999px;
+   max-height: 800px;
+ }
+
+.boxheader {
+    background: #535353;
+    color: white;
+    padding: 5px;
+}
+
+.boxbody {
+    font-size: 24pt;
+    padding: 20px;
+}

@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% block links %}
+    <link rel="stylesheet" type="text/css" href="/static/css/reg.css" />
+{% endblock %}
+{% block content %}
+    <!-- REGISTER -->
+    <section>
+        <div class="container">
+            <div class="row">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="col-xs-12 col-centered">
+                        <div class="alert alert-success mb-30">
+                            <h4>Congratulations! <strong>Registration successful!</strong></h4>
+                            <p>{{ message }}</p>
+                            <a href="{% url 'index' %}" class="btn btn-success btn-sm mt-10">OK</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            </div>
+            {% if form_data %}
+            <div class="row">
+                <div class="col-md-6 col-sm-6 offset-md-3 offset-sm-3">
+                    <div class="box-static box-transparent box-bordered p-30">
+                        <div class="box-title mb-30">
+                            <h2 class="fs-20">Account Information</h2>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6">
+                                <label>Full Name </label>
+                                    {{ wizard.form.fName }} {{ wizard.form.lName }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6">
+                                <label for="register:dob">Date of Birth </label>
+                                    {{ wizard.form.dob }}
+                            </div>
+                            <div class="col-md-6 col-sm-6">
+                                <label for="register:gender">Gender </label>
+                                    {{ wizard.form.gender }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="register:email">Email </label>
+                                    {{ wizard.form.email }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6">
+                                <label for="register:phone">Phone </label>
+                                    {{ wizard.form.phone }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6">
+                                <label for="register:pass1">Password </label>
+                                    {{ wizard.form.password }}
+                            </div>
+                            <div class="col-md-6 col-sm-6">
+                                <label for="register:pass2">Repeat Password </label>
+                                    {{ wizard.form.verify }}
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6">
+                                <label>Select ID type </label>
+                                    {{ wizard.form.id_choice }}
+                            </div>
+                            <div class="col-md-6 col-sm-6" id="client_input">
+                                <label for="register:id">Client ID </label>
+                                    {{ wizard.form.client_id }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6">
+                                <label for="register:bot">Identification</label>
+                                {{ wizard.form.scanned_id }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6">
+                                <label for="register:bot">BOT CDS Account <small>(optional)</small></label>
+                                    {{ wizard.form.bot_cds }}
+                            </div>
+                            <div class="col-md-6 col-sm-6">
+                                <label for="register:dse">DSE CDS Account <small>(optional)</small></label>
+                                    {{ wizard.form.dse_cds }}
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <input type="submit" class="btn btn-primary btn-teal float-right" value="OK"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+{% endblock %}
+
+{% block scripts %}
+    <script src="/static/js/registration.js"></script>
+{% endblock %}

@@ -63,4 +63,7 @@ $(document).ready(function() {
             $('#base_input').val(conversion_value)
         }
     })
+
+    $('.HSselectBox').removeClass('HSselectBox').addClass('form-control form-control-sm');
+    // $('.HStextarea').addClass('form-control');
 });
