@@ -95,7 +95,26 @@ ul.process-steps li a.active, ul.process-steps li a.active:focus, ul.process-ste
     /*}*/
 /*}*/
 
-@media only screen and (min-width:482px) and (max-width: 768px) {
+@media only screen and (min-width: 640px) and (orientation: landscape) {
+    .tp-static-layers {
+        display: none;
+    }
+    .tp-parallax-wrap {
+        left: 20%!important;
+    }
+    .WebProduct-Title {
+        line-height: 32px!important;
+        font-weight: 100!important;
+        font-size: 30px!important;
+        top: -40px;
+    }
+    .WebProduct-Content {
+        margin-top: 20px;
+        min-width: 448px!important;
+    }
+}
+
+@media only screen and (max-width: 768px) {
     .WebProduct-SubTitle {
         min-width: 414px!important;
     }
@@ -105,6 +124,9 @@ ul.process-steps li a.active, ul.process-steps li a.active:focus, ul.process-ste
 }
 
 @media only screen and (max-width: 482px) {
+    .tp-static-layers {
+        display: none;
+    }
     .WebProduct-Content {
         margin-top: 20px;
         min-width: 448px!important;
@@ -112,6 +134,9 @@ ul.process-steps li a.active, ul.process-steps li a.active:focus, ul.process-ste
 }
 
 @media only screen and (max-width: 414px) {
+    .tp-static-layers {
+        display: none;
+    }
     .WebProduct-Content {
         margin-top: 20px;
         min-width: 208px !important;

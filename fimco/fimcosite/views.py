@@ -17,7 +17,7 @@ from formtools.wizard.views import SessionWizardView
 
 from .backend import CorporateBackend
 from .forms import RegisterForm1, RegisterForm2, IndividualLoginForm, CorporateLoginForm, CorporateForm1, \
-    CorporateForm2, CorporateForm3, CorporateForm4, BankAccountForm, UserCorporateForm
+    CorporateForm2, CorporateForm3, CorporateForm4, BankAccountForm, UserCorporateForm, EnquiryForm
 from .models import KYC, CorporateProfile, Account, Profile, MEDIA_ROOT
 
 
@@ -138,7 +138,11 @@ def info(request, page):
 
 
 def general_view(request, page):
-    return render(request, page+'.html', {})
+    if page == 'contact':
+        context = {'iForm': EnquiryForm}
+    else:
+        context = {}
+    return render(request, page+'.html', context)
 
 
 @transaction.atomic
@@ -464,4 +468,26 @@ def log_out(request):
 
 
 def inquiry(request):
+    if request.POST:
+        form = EnquiryForm(request.POST or None)
+        if form.is_valid():
+            name = form.cleaned_data["name"]
+            email = form.cleaned_data["email"]
+            phone = form.cleaned_data["phone"]
+            subject = form.cleaned_data["subject"]
+            message = form.cleaned_data["message"]
+            attachment = form.cleaned_data["attachment"]
+
+            from_email = email
+            msg = name+'\r\n'+phone+'\r\n'+message
+            recipient_list = ['arthur@selcom.net']  # ivan@fimco.co.tz
+            try:
+                mail = EmailMessage(subject, msg, from_email, recipient_list)
+                mail.attach(attachment.name, attachment.read(), attachment.content_type)
+                mail.send()
+            except BadHeaderError:
+                messages.error(request, 'Invalid header found.')
+
+            messages.success(request, "Your message is sent successfully!")
+
     return redirect(request.META['HTTP_REFERER'])

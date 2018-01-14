@@ -37,6 +37,34 @@
             <div class="row mt-30">
                 <!-- FORM -->
                 <div class="col-md-8 col-sm-8">
+                    <div class="row">
+                    {% if messages %}
+                        {% for message in messages %}
+                            {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                                <div class="col-lg-6 col-xs-12 col-centered">
+                                    <div class="alert alert-danger mb-30 text-center">
+                                        <p><strong>{{ message }}</strong></p>
+                                        <button type="button" class="btn btn-danger mt-10" data-dismiss="alert">OK</button>
+                                    </div>
+                                </div>
+                            {% elif message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
+                                <div class="col-lg-6 col-xs-12 col-centered">
+                                    <div class="alert alert-info mb-30 text-center">
+                                        <p><strong>{{ message }}</strong>
+                                        <button type="button" class="btn btn-success mt-10" data-dismiss="alert">OK</button>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <div class="col-lg-6 col-xs-12 col-centered">
+                                    <div class="alert alert-success mb-30 text-center">
+                                        <p>{{ message }}</p>
+                                        <button type="button" class="btn btn-success mt-10" data-dismiss="alert">OK</button>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                    </div>
                     <!-- BOX 1 -->
                     <div class="box-static box-border-top p-30">
 
@@ -94,21 +122,21 @@
                                 <div class="row">
                                         <div class="col-md-4">
                                             <label for="contact:name">Full Name *</label>
-                                            <input required type="text" value="" class="form-control" name="contact[name][required]" id="contact:name">
+                                            {{ iForm.name }}
                                         </div>
                                         <div class="col-md-4">
                                             <label for="contact:email">E-mail Address *</label>
-                                            <input required type="email" value="" class="form-control" name="contact[email][required]" id="contact:email">
+                                            {{ iForm.email }}
                                         </div>
                                         <div class="col-md-4">
                                             <label for="contact:phone">Phone *</label>
-                                            <input type="text" value="" class="form-control" name="contact[phone][required]" id="contact:phone">
+                                            {{ iForm.email }}
                                         </div>
                                 </div>
                                 <div class="row">
                                         <div class="col-md-12">
                                             <label for="contact:subject">Subject *</label>
-                                            <input required type="text" value="" class="form-control" name="contact[subject][required]" id="contact:subject">
+                                            {{ iForm.subject }}
                                         </div>
 {#                                        <div class="col-md-4">#}
 {#                                            <label for="contact:id">POCHI ID<small> (optional)</small></label>#}
@@ -118,7 +146,7 @@
                                 <div class="row">
                                         <div class="col-md-12">
                                             <label for="contact:message">Message *</label>
-                                            <textarea required maxlength="10000" rows="8" class="form-control" name="contact[message][required]" id="contact:message"></textarea>
+                                            {{ iForm.message }}
                                         </div>
                                 </div>
                                 <div class="row">
@@ -126,10 +154,10 @@
                                             <label for="contact:attachment"> Attachment, if any...</label>
                                             <div class="fancy-file-upload fancy-file-primary">
                                                 <i class="fa fa-upload"></i>
-                                                <input type="file" class="form-control" name="contact[attachment]" onchange="jQuery(this).next('input').val(this.value);" />
+                                                {{ iForm.attachment }}
                                                 <input type="text" class="form-control" placeholder="no file selected" readonly="" />
                                                 <span class="button">Choose File</span>
-                                                <small class="text-muted block">Max file size: 10Mb (zip/pdf/jpg/png)</small>
+                                                <small class="text-muted block">Max file size: 5Mb (pdf/jpg/png)</small>
                                             </div>
                                         </div>
                                 </div>

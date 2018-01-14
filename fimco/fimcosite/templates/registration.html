@@ -176,7 +176,7 @@
                                                 {{ wizard.form.client_id }}
                                                 <b class="tooltip tooltip-bottom-right">Enter your ID</b>
                                             </label>
-                                            <h6 id="hint"></h6>
+                                            <small class="text-muted block" id="hint"></small>
                                             {% if wizard.form.client_id.errors %}
                                                 {% for error in wizard.form.client_id.errors %}
                                                     <div class="alert alert-mini alert-danger mb-30">

@@ -26,6 +26,75 @@ CORPORATE_IDS = (
 )
 
 
+class EnquiryForm(forms.Form):
+    name = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'name': 'contact[name][required]',
+            'id': 'contact:name',
+            'required': True
+        })
+    )
+    email = forms.EmailField(
+        validators=[EmailValidator],
+        widget=forms.EmailInput(attrs={
+            'class': 'form-control',
+            'name': 'contact[email][required]',
+            'id': 'contact:email',
+            'required': True
+        })
+    )
+    phone = forms.CharField(
+        validators=[telephone],
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'name': 'contact[phone][required]',
+            'id': 'contact:phone',
+            'data-format': '+255999999999',
+            'required': True
+        })
+    )
+    subject = forms.CharField(
+        max_length=100,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'name': 'contact[subject][required]',
+            'id': 'contact:subject',
+            'required': True
+        })
+    )
+    message = forms.CharField(
+        max_length=1000,
+        widget=forms.Textarea(attrs={
+            'class': 'form-control',
+            'name': 'contact[message][required]',
+            'id': 'contact:message',
+            'rows': '10',
+            'required': True
+        })
+    )
+    attachment = forms.FileField(
+        widget=forms.ClearableFileInput(attrs={
+            'name': 'contact[attachment][required]',
+            'class': 'form-control',
+            'id': 'contact:attachment',
+            'onchange': 'jQuery(this).next("input").val(this.value)',
+            'required': True
+        })
+    )
+
+    def clean_image(self):
+        image = self.cleaned_data['attachment']
+        if image:
+            self.fields['attachment'].widget.attrs['autofocus'] = 'autofocus'
+            self.fields['attachment'].widget.attrs['class'] = 'error'
+            if image.file.size > 5 * 1024 * 1024:
+                raise ValidationError("Image file too large ( > 5mb )")
+            return image
+        else:
+            raise ValidationError("Couldn't read uploaded image")
+
+
 class IndividualLoginForm(forms.Form):
     username = forms.CharField(
         widget=forms.TextInput(attrs={

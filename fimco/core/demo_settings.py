@@ -114,6 +114,12 @@ AUTHENTICATION_BACKENDS = (
    'fimcosite.backend.CorporateBackend',
 )
 
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'arthur@selcom.net'
+EMAIL_HOST_PASSWORD = '2373Maliasili'
+
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
 
