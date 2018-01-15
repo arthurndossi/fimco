@@ -47,7 +47,7 @@ class EnquiryForm(forms.Form):
     phone = forms.CharField(
         validators=[telephone],
         widget=forms.TextInput(attrs={
-            'class': 'form-control',
+            'class': 'form-control masked',
             'name': 'contact[phone][required]',
             'id': 'contact:phone',
             'data-format': '+255999999999',

@@ -1,5 +1,4 @@
 {% extends "easy_pdf/base.html" %}
-{% load static %}
 
 {% block extra_style %}
     <style type="text/css">
@@ -18,13 +17,14 @@
         }
         .box {
             border: 2px solid black;
+            padding-bottom: 180px;
         }
     </style>
 {% endblock %}
 
-{% block page_header %}
-    <img src="{% static "POCHI.png" %}" />
-{% endblock %}
+{#{% block page_header %}#}
+{#    <img src="/home/ubuntu/site/FIMCO/fimco/static/img/POCHI.png" width="200" height="200" />#}
+{#{% endblock %}#}
 
 {% block content %}
     <div id="content">
@@ -66,8 +66,8 @@
                     </div>
                 </td>
                 <td>
-                    <div>
-                        <div class="box center">Bank Stamp</div>
+                    <div class="box">
+                        <div class="center">Bank Stamp</div>
                     </div>
                 </td>
             </tr>
@@ -84,8 +84,8 @@
                     </div>
                 </td>
                 <td>
-                    <div>
-                        <div class="box center" style="width: 50%; right: 0">Bank Stamp</div>
+                    <div class="box">
+                        <div class="center" style="width: 50%; right: 0">Bank Stamp</div>
                     </div>
                 </td>
             </tr>
@@ -93,6 +93,5 @@
     {% endif %}
 {% endblock %}
 {% block page_foot %}
-    FIMCO Limited, Room 205, 2<sup>nd</sup>Floor, Jangid Plaza, Ali Hassan Mwinyi Rd., Dar es salaam.
-
+    <p>FIMCO Limited, Room 205, 2<sup>nd</sup>Floor, Jangid Plaza, Ali Hassan Mwinyi Rd., Dar es salaam.</p>
 {% endblock %}

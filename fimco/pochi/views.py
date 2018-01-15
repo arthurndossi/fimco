@@ -706,7 +706,7 @@ def pochi2pochi(request, name=None):
                 user_obj = User.objects.select_related('profile').get(username=phone)
                 dest_profile_id = user_obj.profile.profile_id
                 user_name = user_obj.get_full_name()
-            except Profile.DoesNotExist:
+            except User.DoesNotExist:
                 user_name = None
 
             try:
