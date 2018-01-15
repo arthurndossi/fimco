@@ -192,14 +192,11 @@ def process_form_data(request, form_list):
             document=user_id
         )
 
-        from django.db import IntegrityError
-        try:
-            user = User.objects.create_user(phone, email, password, first_name=fName, last_name=lName, is_active=0)
-            profile = Profile(user=user, profile_id=profile_id, dob=dob, gender=gender, bot_cds=bot,
-                              dse_cds=dse, profile_type='C', pin=pin)
-            profile.save()
-        except IntegrityError:
-            messages.error(request, "This username is already registered with another user!")
+        user = User(username=phone, email=email, password=password, first_name=fName, last_name=lName, is_active=0)
+        profile = Profile(user=user, profile_id=profile_id, dob=dob, gender=gender, bot_cds=bot,
+                          dse_cds=dse, profile_type='C', pin=pin)
+        profile.save()
+        user.save()
 
         Account.objects.create(
             profile_id=profile_id,
@@ -296,9 +293,10 @@ def add_user_corporate(request):
                     pass
 
             with transaction.atomic():
-                user = User.objects.create_user(phone, email, password, first_name=fName, last_name=lName, is_active=0)
+                user = User(username=phone, email=email, password=password, first_name=fName, last_name=lName, is_active=0)
                 profile = Profile(user=user, dob=dob, gender=gender, profile_type='C', profile_id=profile_id)
                 profile.save()
+                user.save()
 
                 KYC.objects.create(
                     profile_id=profile_id,
@@ -343,7 +341,7 @@ def validate_credentials(request, form, username, password, _next, category, poc
         raise forms.ValidationError("Not a valid email or phone number!")
 
     if user:
-        login(request, user)
+        login(request, user, backend='django.contrib.auth.backends.ModelBackend')
         current_url = request.resolver_match.url_name
         if _next == "/" or "pochi" not in current_url:
             from pochi.views import home
@@ -436,10 +434,11 @@ def register(request, form_list):
     account_no = create_account(profile_id)
 
     with transaction.atomic():
-        user = User.objects.create_user(phone, email, password, first_name=fName, last_name=lName, is_active=0)
+        user = User(username=phone, email=email, password=password, first_name=fName, last_name=lName, is_active=0)
         profile = Profile(user=user, profile_id=profile_id, dob=dob, gender=gender, bot_cds=bot,
                           dse_cds=dse, profile_type='I', pin=pin)
         profile.save()
+        user.save()
 
         KYC.objects.create(
             profile_id=profile_id,

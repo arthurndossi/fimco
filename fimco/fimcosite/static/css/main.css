@@ -109,7 +109,7 @@ ul.process-steps li a.active, ul.process-steps li a.active:focus, ul.process-ste
         top: -40px;
     }
     .WebProduct-Content {
-        margin-top: 20px;
+        margin-top: 40px!important;
         min-width: 448px!important;
     }
 }
@@ -134,6 +134,10 @@ ul.process-steps li a.active, ul.process-steps li a.active:focus, ul.process-ste
 }
 
 @media only screen and (max-width: 414px) {
+    .tp-parallax-wrap {
+        left: 20%!important;
+    }
+
     .tp-static-layers {
         display: none;
     }
