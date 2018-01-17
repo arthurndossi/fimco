@@ -8,32 +8,37 @@ jQuery(document).ready(function() {
         revapi66 = jQuery("#rev_slider_72_1").show().revolution({
             sliderType:"standard",
             jsFileLocation:plugin_path + "slider.revolution.v5/js/",
-            sliderLayout:"fullscreen",
+            sliderLayout:"auto",
             dottedOverlay:"none",
-            delay:9000,
+            delay:3000,
             navigation: {
                 keyboardNavigation:"on",
-                keyboard_direction: "vertical",
+                keyboard_direction: "horizontal",
                 mouseScrollNavigation:"on",
                 onHoverStop:"off",
+                arrows: {
+                    enable: true,
+                    hide_onmobile: true
+                },
                 touch:{
                     touchenabled:"on",
+                    touchOnDesktop:"on",
                     swipe_threshold: 75,
                     swipe_min_touches: 1,
-                    swipe_direction: "vertical",
+                    swipe_direction: "horizontal",
                     drag_block_vertical: false
                 },
                 bullets: {
                     enable:true,
                     hide_onmobile:true,
-                    hide_under:1024,
-                    style:"hephaistos",
+                    // hide_under:1024,
+                    // style:"hephaistos",
                     hide_onleave:false,
-                    direction:"vertical",
-                    h_align:"right",
+                    direction:"horizontal",
+                    h_align:"center",
                     v_align:"center",
-                    h_offset:30,
-                    v_offset:0,
+                    h_offset:0,
+                    v_offset:250,
                     space:5,
                     tmp:''
                 }

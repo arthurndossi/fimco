@@ -193,10 +193,10 @@ def process_form_data(request, form_list):
         )
 
         user = User(username=phone, email=email, password=password, first_name=fName, last_name=lName, is_active=0)
+        user.save()
         profile = Profile(user=user, profile_id=profile_id, dob=dob, gender=gender, bot_cds=bot,
                           dse_cds=dse, profile_type='C', pin=pin)
         profile.save()
-        user.save()
 
         Account.objects.create(
             profile_id=profile_id,
@@ -243,7 +243,7 @@ def add_user_corporate(request):
                 raise forms.ValidationError("Not a valid email or phone number!")
 
             if user:
-                login(request, user)
+                login(request, user, backend='django.contrib.auth.backends.ModelBackend')
                 logged_in = True
                 company = CorporateProfile.objects.get(profile_id=pochi_id).company_name
                 members = Profile.objects.filter(profile_id=pochi_id).values_list('user__username', flat=True)
@@ -254,7 +254,7 @@ def add_user_corporate(request):
                     corporate_users.append(corporate_user)
                 context = {
                     'second': tab,
-                    'cForm': form,
+                    'adForm': UserCorporateForm,
                     'company': company,
                     'users': corporate_users,
                     'logged_in': logged_in
@@ -294,9 +294,9 @@ def add_user_corporate(request):
 
             with transaction.atomic():
                 user = User(username=phone, email=email, password=password, first_name=fName, last_name=lName, is_active=0)
+                user.save()
                 profile = Profile(user=user, dob=dob, gender=gender, profile_type='C', profile_id=profile_id)
                 profile.save()
-                user.save()
 
                 KYC.objects.create(
                     profile_id=profile_id,
@@ -435,10 +435,10 @@ def register(request, form_list):
 
     with transaction.atomic():
         user = User(username=phone, email=email, password=password, first_name=fName, last_name=lName, is_active=0)
+        user.save()
         profile = Profile(user=user, profile_id=profile_id, dob=dob, gender=gender, bot_cds=bot,
                           dse_cds=dse, profile_type='I', pin=pin)
         profile.save()
-        user.save()
 
         KYC.objects.create(
             profile_id=profile_id,

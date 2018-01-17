@@ -115,7 +115,7 @@
                                                                 {% for member in members %}
                                                                     {% for administrator in administrators %}
                                                                         {% if member == administrator %}
-                                                                            <a href="{% url 'delete_group' group %}" class="btn btn-primary">Delete group</a>
+                                                                            <a href="" class="btn btn-primary">Delete group</a>  <!--  url 'delete_group' group  -->
                                                                         {% endif %}
                                                                         {% if member == administrator and administrators.count <= 1 %}
                                                                             <a disabled tabindex="-1" class="btn btn-primary">Exit</a>

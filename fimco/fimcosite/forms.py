@@ -1,8 +1,9 @@
 from django import forms
+from django.contrib.auth.models import User
 from django.core.validators import *
 from django.forms import CheckboxInput
 
-from .models import Profile, CorporateProfile
+from .models import CorporateProfile
 
 alphabetic = RegexValidator(r'^[a-zA-Z\s]*$', 'Only alphabetic characters are allowed.')
 telephone = RegexValidator(r'^([+]?(\d{1,3}\s?)|[0])\s?\d+(\s?\-?\d{2,4}){1,3}?$', 'Not a valid phone number.')
@@ -83,7 +84,7 @@ class EnquiryForm(forms.Form):
         })
     )
 
-    def clean_image(self):
+    def clean_attachment(self):
         image = self.cleaned_data['attachment']
         if image:
             self.fields['attachment'].widget.attrs['autofocus'] = 'autofocus'
@@ -92,6 +93,8 @@ class EnquiryForm(forms.Form):
                 raise ValidationError("Image file too large ( > 5mb )")
             return image
         else:
+            self.fields['attachment'].widget.attrs['autofocus'] = 'autofocus'
+            self.fields['attachment'].widget.attrs['class'] = 'error'
             raise ValidationError("Couldn't read uploaded image")
 
 
@@ -119,10 +122,11 @@ class CorporateLoginForm(forms.Form):
             'required': True
         })
     )
-    corp_rep = forms.CharField(
-        widget=forms.TextInput(attrs={
+    corp_rep = forms.EmailField(
+        validators=[EmailValidator],
+        widget=forms.EmailInput(attrs={
             'class': 'form-control',
-            'placeholder': 'Enter phone number/email address',
+            'placeholder': 'Enter email address',
             'required': True
         })
     )
@@ -208,26 +212,23 @@ class RegisterForm1(forms.Form):
                 break
 
     def clean(self):
-        cleaned_data = self.cleaned_data
-        if 'phone' in cleaned_data and Profile.objects.filter(user__username=cleaned_data['phone'], profile_type='I')\
-                .exists():
+        clean_data = self.cleaned_data
+        if 'phone' in clean_data and User.objects.filter(username=clean_data['phone']).exists():
             self.fields['phone'].widget.attrs['autofocus'] = 'autofocus'
             self.fields['phone'].widget.attrs['class'] = 'error'
             raise forms.ValidationError("This phone number is already associated with another user!")
-        if 'email' in cleaned_data and Profile.objects.filter(user__email=cleaned_data['email'], profile_type='I')\
-                .exists():
+        if 'email' in clean_data and User.objects.filter(email=clean_data['email']).exists():
             self.fields['email'].widget.attrs['autofocus'] = 'autofocus'
             self.fields['email'].widget.attrs['class'] = 'error'
             self.add_error('email', 'Provide another email')
             raise forms.ValidationError("This email is already associated with another user!")
-        if 'password' in cleaned_data and 'verify' in cleaned_data\
-                and cleaned_data['password'] != cleaned_data['verify']:
+        if 'password' in clean_data and 'verify' in clean_data and clean_data['password'] != clean_data['verify']:
             self.fields['password'].widget.attrs['autofocus'] = 'autofocus'
             self.fields['password'].widget.attrs['class'] = 'error'
             self.fields['verify'].widget.attrs['class'] = 'error'
             raise forms.ValidationError("Passwords must be identical.")
 
-        return cleaned_data
+        return clean_data
 
 
 class RegisterForm2(forms.Form):
@@ -261,7 +262,7 @@ class RegisterForm2(forms.Form):
                 })
                 break
 
-    def clean_image(self):
+    def clean_scanned_id(self):
         image = self.cleaned_data['scanned_id']
         if image:
             self.fields['scanned_id'].widget.attrs['autofocus'] = 'autofocus'
@@ -333,7 +334,9 @@ class CorporateForm1(forms.Form):
     def clean(self):
         cleaned_data = self.cleaned_data
         if 'name' in cleaned_data and CorporateProfile.objects.filter(company_name=cleaned_data['name']).exists():
-            raise forms.ValidationError("This company already exists!")
+            self.fields['name'].widget.attrs['autofocus'] = 'autofocus'
+            self.fields['name'].widget.attrs['class'] = 'error'
+            raise forms.ValidationError("This company name already exists!")
 
         return cleaned_data
 
@@ -426,18 +429,23 @@ class CorporateForm3(forms.Form):
                 break
 
     def clean(self):
-        cleaned_data = self.cleaned_data
-        if 'phone' in cleaned_data and Profile.objects.filter(user__username=cleaned_data['phone'], profile_type='C')\
-                .exists():
+        clean_data = self.cleaned_data
+        if 'phone' in clean_data and User.objects.filter(username=clean_data['phone']).exists():
+            self.fields['phone'].widget.attrs['autofocus'] = 'autofocus'
+            self.fields['phone'].widget.attrs['class'] = 'error'
             raise forms.ValidationError("This phone number is already associated with another user!")
-        if 'email' in cleaned_data and Profile.objects.filter(user__email=cleaned_data['email'], profile_type='C')\
-                .exists():
+        if 'email' in clean_data and User.objects.filter(email=clean_data['email']).exists():
+            self.fields['email'].widget.attrs['autofocus'] = 'autofocus'
+            self.fields['email'].widget.attrs['class'] = 'error'
+            self.add_error('email', 'Provide another email')
             raise forms.ValidationError("This email is already associated with another user!")
-        if 'password' in cleaned_data and 'verify' in cleaned_data\
-                and cleaned_data['password'] != cleaned_data['verify']:
+        if 'password' in clean_data and 'verify' in clean_data and clean_data['password'] != clean_data['verify']:
+            self.fields['password'].widget.attrs['autofocus'] = 'autofocus'
+            self.fields['password'].widget.attrs['class'] = 'error'
+            self.fields['verify'].widget.attrs['class'] = 'error'
             raise forms.ValidationError("Passwords must be identical.")
 
-        return cleaned_data
+        return clean_data
 
 
 class CorporateForm4(forms.Form):
@@ -479,23 +487,43 @@ class CorporateForm4(forms.Form):
         })
     )
 
-    def clean_image(self):
+    def clean_license(self):
         license = self.cleaned_data['license']
-        certificate = self.cleaned_data['certificate']
-        identity = self.cleaned_data['user_id']
         if license:
             if license.file.size > 5 * 1024 * 1024:
+                self.fields['certificate'].widget.attrs['autofocus'] = 'autofocus'
+                self.fields['certificate'].widget.attrs['class'] = 'error'
                 raise ValidationError("Image file too large ( > 5mb )")
             return license
+        else:
+            self.fields['certificate'].widget.attrs['autofocus'] = 'autofocus'
+            self.fields['certificate'].widget.attrs['class'] = 'error'
+            raise ValidationError("Couldn't read uploaded image")
+
+    def clean_certificate(self):
+        certificate = self.cleaned_data['certificate']
         if certificate:
             if certificate.file.size > 5 * 1024 * 1024:
+                self.fields['certificate'].widget.attrs['autofocus'] = 'autofocus'
+                self.fields['certificate'].widget.attrs['class'] = 'error'
                 raise ValidationError("Image file too large ( > 5mb )")
             return certificate
+        else:
+            self.fields['certificate'].widget.attrs['autofocus'] = 'autofocus'
+            self.fields['certificate'].widget.attrs['class'] = 'error'
+            raise ValidationError("Couldn't read uploaded image")
+
+    def clean_user_id(self):
+        identity = self.cleaned_data['user_id']
         if identity:
             if identity.file.size > 5 * 1024 * 1024:
+                self.fields['user_id'].widget.attrs['autofocus'] = 'autofocus'
+                self.fields['user_id'].widget.attrs['class'] = 'error'
                 raise ValidationError("Image file too large ( > 5mb )")
             return identity
         else:
+            self.fields['user_id'].widget.attrs['autofocus'] = 'autofocus'
+            self.fields['user_id'].widget.attrs['class'] = 'error'
             raise ValidationError("Couldn't read uploaded image")
 
 
@@ -587,26 +615,35 @@ class UserCorporateForm(forms.Form):
                 break
 
     def clean(self):
-        cleaned_data = self.cleaned_data
-        if 'phone' in cleaned_data and Profile.objects.filter(user__username=cleaned_data['phone'], profile_type='C')\
-                .exists():
+        clean_data = self.cleaned_data
+        if 'phone' in clean_data and User.objects.filter(username=clean_data['phone']).exists():
+            self.fields['phone'].widget.attrs['autofocus'] = 'autofocus'
+            self.fields['phone'].widget.attrs['class'] = 'error'
             raise forms.ValidationError("This phone number is already associated with another user!")
-        if 'email' in cleaned_data and Profile.objects.filter(user__email=cleaned_data['email'], profile_type='C')\
-                .exists():
+        if 'email' in clean_data and User.objects.filter(email=clean_data['email']).exists():
+            self.fields['email'].widget.attrs['autofocus'] = 'autofocus'
+            self.fields['email'].widget.attrs['class'] = 'error'
+            self.add_error('email', 'Provide another email')
             raise forms.ValidationError("This email is already associated with another user!")
-        if 'password' in cleaned_data and 'verify' in cleaned_data\
-                and cleaned_data['password'] != cleaned_data['verify']:
+        if 'password' in clean_data and 'verify' in clean_data and clean_data['password'] != clean_data['verify']:
+            self.fields['password'].widget.attrs['autofocus'] = 'autofocus'
+            self.fields['password'].widget.attrs['class'] = 'error'
+            self.fields['verify'].widget.attrs['class'] = 'error'
             raise forms.ValidationError("Passwords must be identical.")
 
-        return cleaned_data
+        return clean_data
 
-    def clean_image(self):
+    def clean_user_id(self):
         identity = self.cleaned_data['user_id']
         if identity:
             if identity.file.size > 5 * 1024 * 1024:
+                self.fields['user_id'].widget.attrs['autofocus'] = 'autofocus'
+                self.fields['user_id'].widget.attrs['class'] = 'error'
                 raise ValidationError("Image file too large ( > 5mb )")
             return identity
         else:
+            self.fields['user_id'].widget.attrs['autofocus'] = 'autofocus'
+            self.fields['user_id'].widget.attrs['class'] = 'error'
             raise ValidationError("Couldn't read uploaded image")
 
 
@@ -729,11 +766,34 @@ class EditProfileForm(forms.Form):
         })
     )
 
-    def clean_image(self):
+    def clean(self):
+        clean_data = self.cleaned_data
+        if 'phone' in clean_data and User.objects.filter(username=clean_data['phone']).exists():
+            self.fields['phone'].widget.attrs['autofocus'] = 'autofocus'
+            self.fields['phone'].widget.attrs['class'] = 'error'
+            raise forms.ValidationError("This phone number is already associated with another user!")
+        if 'email' in clean_data and User.objects.filter(email=clean_data['email']).exists():
+            self.fields['email'].widget.attrs['autofocus'] = 'autofocus'
+            self.fields['email'].widget.attrs['class'] = 'error'
+            self.add_error('email', 'Provide another email')
+            raise forms.ValidationError("This email is already associated with another user!")
+        if 'password' in clean_data and 'verify' in clean_data and clean_data['password'] != clean_data['verify']:
+            self.fields['password'].widget.attrs['autofocus'] = 'autofocus'
+            self.fields['password'].widget.attrs['class'] = 'error'
+            self.fields['verify'].widget.attrs['class'] = 'error'
+            raise forms.ValidationError("Passwords must be identical.")
+
+        return clean_data
+
+    def clean_scanned_id(self):
         image = self.cleaned_data['scanned_id']
         if image:
             if image.file.size > 5 * 1024 * 1024:
+                self.fields['scanned_id'].widget.attrs['autofocus'] = 'autofocus'
+                self.fields['scanned_id'].widget.attrs['class'] = 'error'
                 raise ValidationError("Image file too large ( > 5mb )")
             return image
         else:
+            self.fields['scanned_id'].widget.attrs['autofocus'] = 'autofocus'
+            self.fields['scanned_id'].widget.attrs['class'] = 'error'
             raise ValidationError("Couldn't read uploaded image")

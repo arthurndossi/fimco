@@ -23,8 +23,10 @@
                 <div class="col-md-6 col-sm-6 offset-md-3 offset-sm-3">
                     {% if wizard.form.non_field_errors %}
                         {% for general_error in wizard.form.non_field_errors %}
-                            <div class="alert alert-mini alert-danger mb-30">
-                                <strong>{{ general_error }}</strong>
+                            <div class="col-lg-6 col-xs-12 col-centered">
+                                <div class="alert alert-mini alert-danger mb-30 text-center">
+                                    <strong>{{ general_error }}</strong>
+                                </div>
                             </div>
                         {% endfor %}
                     {% endif %}

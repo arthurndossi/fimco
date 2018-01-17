@@ -106,8 +106,10 @@
                                                 <h4 class="text-center">Company Details Form</h4>
                                                 {% if wizard.form.non_field_errors %}
                                                     {% for general_error in wizard.form.non_field_errors %}
-                                                        <div class="alert alert-mini alert-danger mb-30">
-                                                            <strong>{{ general_error }}</strong>
+                                                        <div class="col-lg-6 col-xs-12 col-centered">
+                                                            <div class="alert alert-mini alert-danger mb-30 text-center">
+                                                                <strong>{{ general_error }}</strong>
+                                                            </div>
                                                         </div>
                                                     {% endfor %}
                                                 {% endif %}
@@ -226,8 +228,10 @@
                                                 <h4 class="text-center">Company representative details Form</h4>
                                                 {% if wizard.form.non_field_errors %}
                                                     {% for general_error in wizard.form.non_field_errors %}
-                                                        <div class="alert alert-mini alert-danger mb-30">
-                                                            <strong>{{ general_error }}</strong>
+                                                        <div class="col-lg-6 col-xs-12 col-centered">
+                                                            <div class="alert alert-mini alert-danger mb-30 text-center">
+                                                                <strong>{{ general_error }}</strong>
+                                                            </div>
                                                         </div>
                                                     {% endfor %}
                                                 {% endif %}
@@ -261,6 +265,7 @@
                                                         <div class="col-md-6 col-sm-6">
                                                             <label>Email *</label>
                                                             {{ wizard.form.email }}
+                                                            <small class="text-muted">(Enter the company's email address)</small>
                                                             {% if wizard.form.email.errors %}
                                                                 {% for error in wizard.form.email.errors %}
                                                                     <div class="alert alert-mini alert-danger mb-30">
@@ -272,6 +277,7 @@
                                                         <div class="col-md-6 col-sm-6">
                                                             <label>Phone *</label>
                                                             {{ wizard.form.phone }}
+                                                            <small class="text-muted">(Enter the company's phone number)</small>
                                                             {% if wizard.form.phone.errors %}
                                                                 {% for error in wizard.form.phone.errors %}
                                                                     <div class="alert alert-mini alert-danger mb-30">
@@ -342,8 +348,10 @@
                                                 <h4 class="text-center">Company KYC Form</h4>
                                                 {% if wizard.form.non_field_errors %}
                                                     {% for general_error in wizard.form.non_field_errors %}
-                                                        <div class="alert alert-mini alert-danger mb-30">
-                                                            <strong>{{ general_error }}</strong>
+                                                        <div class="col-lg-6 col-xs-12 col-centered">
+                                                            <div class="alert alert-mini alert-danger mb-30 text-center">
+                                                                <strong>{{ general_error }}</strong>
+                                                            </div>
                                                         </div>
                                                     {% endfor %}
                                                 {% endif %}
@@ -432,11 +440,11 @@
                                             </div>
                                         {% endif %}
                                         {% if wizard.steps.prev %}
-                                            <button name="wizard_goto_step" type="submit" class="btn btn-primary btn-teal" value="{{ wizard.steps.first }}">Start</button>
+                                            <button name="wizard_goto_step" type="submit" class="btn btn-primary btn-teal" value="{{ wizard.steps.first }}">Start Again</button>
                                             <button name="wizard_goto_step" type="submit" class="btn btn-primary btn-teal" value="{{ wizard.steps.prev }}">Previous</button>
                                         {% endif %}
                                         {% if wizard.steps.current == wizard.steps.last %}
-                                            <input type="submit" class="btn btn-primary btn-teal float-right" value="Done!"/>
+                                            <input type="submit" class="btn btn-primary btn-teal float-right" value="Complete Registration!"/>
                                         {% else %}
                                             <input type="submit" class="btn btn-primary btn-teal float-right" value="Next step"/>
                                         {% endif %}
@@ -454,18 +462,20 @@
                             <div class="card-block">
                                 <form class="" action="{% url 'add_user' %}" method="post" enctype="multipart/form-data">
                                 {% csrf_token %}
-                                    {% if uForm.non_field_errors %}
-                                        {% for general_error in uForm.non_field_errors %}
-                                            <div class="alert alert-mini alert-danger mb-30">
-                                                <strong>{{ general_error }}</strong>
+                                    {% if adForm.non_field_errors %}
+                                        {% for general_error in adForm.non_field_errors %}
+                                            <div class="col-lg-6 col-xs-12 col-centered">
+                                                <div class="alert alert-mini alert-danger mb-30 text-center">
+                                                    <strong>{{ general_error }}</strong>
+                                                </div>
                                             </div>
                                         {% endfor %}
                                     {% endif %}
-                                    <h3>{{ company }}</h3>
+                                    <h2><span class="badge badge-primary">{{ company }}</span></h2>
                                     <h4>Registered representatives for {{ company }}</h4>
-                                    <ul>
+                                    <ul class="list-group">
                                         {% for user in users %}
-                                            <li>{{ user }}</li>
+                                            <li class="list-group-item">{{ user }}</li>
                                         {% endfor %}
                                     </ul>
                                     <fieldset>
@@ -662,11 +672,11 @@
                                                 {{ lForm.id }}
                                                 <span class="tooltip tooltip-top-right">Enter your corporate account number</span>
                                             </label>
-                                            <label class="label">E-mail/Phone</label>
+                                            <label class="label">E-mail</label>
                                             <label class="input">
     {#                                            <i class="icon-append fa fa-user"></i>#}
                                                 {{ lForm.corp_rep }}
-                                                <span class="tooltip tooltip-top-right">Username - email/phone</span>
+                                                <span class="tooltip tooltip-top-right">Username/e-mail address</span>
                                             </label>
                                             <label class="label">Password</label>
                                             <label class="input">
@@ -678,7 +688,7 @@
 
                                         <footer>
                                             <button type="submit" class="btn btn-primary pull-right">Sign In</button>
-                                            <input type="hidden" name="corporate" value="" />
+                                            <input type="hidden" name="login" value="" />
                                         </footer>
                                     </form>
                                     <!-- /login form -->
@@ -694,145 +704,170 @@
                     {% if message %}
                         <div class="col-lg-6 col-xs-12 col-centered">
                             <div class="alert alert-success margin-bottom-30 text-center">
-                                <p><strong>Your corporate account has been created successfully!</strong></p>
-                                <button type="button" class="btn btn-success" data-dismiss="alert">OK</button>
+                                <p>
+                                    <strong>
+                                        Your corporate account has been created successfully!
+                                        Preview your details and proceed to <b>complete registration by filling the
+                                        indemnity form below!</b>
+                                    </strong>
+                                </p>
                             </div>
                         </div>
                     {% endif %}
-                    <div class="row">
-                        <!-- tabs -->
-                        <div class="col-md-3 col-sm-3 p-0">
-                            <ul class="nav nav-tabs nav-stacked flex-column">
-                                <li class="nav-item">
-                                    <a class="nav-link active" href="#tab_a" data-toggle="tab">
-{#                                        <span class="badge badge-warning float-right">3</span>#}
-                                        Company Profile
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#tab_b" data-toggle="tab">
-                                        KYC Information
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#tab_c" data-toggle="tab">
-                                        User Profile
-                                    </a>
-                                </li>
-                            </ul>
+                </div>
+                <div class="row">
+                    <div class="card card-default">
+                        <div class="card-heading">
+                            <h4>Preview your corporate details</h4>
                         </div>
-                        <!-- tabs content -->
-                        <div class="col-md-9 col-sm-9 p-0">
-                            <div class="tab-content tab-stacked">
-                                <div id="tab_a" class="tab-pane active">
-                                    <h4>Company Information</h4>
-                                    <p><strong>Company Name: </strong>{{ form_data.0.name }}</p>
-                                    <p><strong>Company Address: </strong></p>
-                                    Building/Plot No. {{ form_data.0.place }}<br>
-                                    P.O. BOX {{ form_data.0.address }}<br>
-                                    {{ form_data.0.street }} St.,<br>
-                                    {{ form_data.0.location }}.<br>
-                                    <p><strong>Company Account: </strong></p>
-                                    {% if form_data.1.bot != '' %}<p>BOT CDS number {{ form_data.1.bot }}</p>{% endif %}
-                                    {% if form_data.1.dse != '' %}<p>DSE CDS number {{ form_data.1.bot }}</p>{% endif %}
-                                    {% if form_data.1.bot == '' and form_data.1.dse == '' %}<p>No Accounts!</p>{% endif %}
-                                </div>
+                        <div class="card-block">
+                            <!-- tabs -->
+                            <div class="col-md-3 col-sm-3 p-0">
+                                <ul class="nav nav-tabs nav-stacked flex-column">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" href="#tab_a" data-toggle="tab">
+                                            Company Profile
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#tab_b" data-toggle="tab">
+                                            KYC Information
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#tab_c" data-toggle="tab">
+                                            User Profile
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!-- tabs content -->
+                            <div class="col-md-9 col-sm-9 p-0">
+                                <div class="tab-content tab-stacked">
+                                    <div id="tab_a" class="tab-pane active">
+                                        <h4>Company Information</h4>
+                                        <p><strong>Company Name: </strong>{{ form_data.0.name }}</p>
+                                        <p>
+                                            <strong>Company Address: </strong><br>
+                                            Building/Plot No. {{ form_data.0.place }}<br>
+                                            P.O. BOX {{ form_data.0.address }}<br>
+                                            {{ form_data.0.street }} St.,<br>
+                                            {{ form_data.0.location }}.<br>
+                                        </p>
+                                        <p>
+                                            <strong>Company Account: </strong><br>
+                                            {% if form_data.1.bot != '' %}BOT CDS number {{ form_data.1.bot }}<br>{% endif %}
+                                            {% if form_data.1.dse != '' %}DSE CDS number {{ form_data.1.bot }}<br>{% endif %}
+                                            {% if form_data.1.bot == '' and form_data.1.dse == '' %}No Accounts!{% endif %}
+                                        </p>
+                                    </div>
 
-                                <div id="tab_b" class="tab-pane">
-                                    <h4>Company KYC Information</h4>
-                                    <p><strong>Business Licence: </strong>{{ form_data.3.license }}</p>
-                                    <p><strong>TIN Certificate: </strong>{{ form_data.3.certificate }}</p>
-                                </div>
+                                    <div id="tab_b" class="tab-pane">
+                                        <h4>Company KYC Information</h4>
+                                        <p><strong>Business Licence: </strong>{{ form_data.3.license }}</p>
+                                        <p><strong>TIN Certificate: </strong>{{ form_data.3.certificate }}</p>
+                                    </div>
 
-                                <div id="tab_c" class="tab-pane">
-                                    <h4>User Information</h4>
-                                    <p><strong>Full Name: </strong>{{ form_data.2.fName }} {{ form_data.2.lName }}</p>
-                                    <p><strong>Phone number: </strong>{{ form_data.2.phone }}</p>
-                                    <p><strong>Email: </strong>{{ form_data.2.email }}</p>
-                                    <p><strong>Gender: </strong>{{ form_data.2.gender }}</p>
-                                    <p><strong>Date of Birth: </strong>{{ form_data.2.dob|date:"d/M/Y" }}</p>
-                                    <p><strong>Identification: </strong>{{ form_data.3.id_type }} {{ form_data.3.id_number }}</p>
-                                    <p><strong>Attachment: </strong>{{ form_data.3.user_id }}</p>
+                                    <div id="tab_c" class="tab-pane">
+                                        <h4>User Information</h4>
+                                        <p><strong>Full Name: </strong>{{ form_data.2.fName }} {{ form_data.2.lName }}</p>
+                                        <p><strong>Phone number: </strong>{{ form_data.2.phone }}</p>
+                                        <p><strong>Email: </strong>{{ form_data.2.email }}</p>
+                                        <p><strong>Gender: </strong>{{ form_data.2.gender }}</p>
+                                        <p><strong>Date of Birth: </strong>{{ form_data.2.dob|date:"d/M/Y" }}</p>
+                                        <p><strong>Identification: </strong>{{ form_data.3.id_type }} {{ form_data.3.id_number }}</p>
+                                        <p><strong>Attachment: </strong>{{ form_data.3.user_id }}</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-lg-8 col-md-8 col-sm-10 col-xs-12 col-centered">
-                        <h4 class="text-center">Bank Indemnity Form</h4>
-                        <form class="" action="{% url 'create_form' 'corporate' %}" method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
-                            <fieldset>
-                                <div class="row">
-                                    <div class="col-md-6 col-sm-6">
-                                        <label>Account holder name *
-                                            {{ bForm.account_name }}
-                                        </label>
-                                    </div>
-                                    <div class="col-md-6 col-sm-6">
-                                        <label>Account number *
-                                            {{ bForm.account_no }}
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6 col-sm-6">
-                                        <label>Bank Name *</label>
-                                        {{ bForm.bank_name }}
-                                        {% if bForm.bank_name.errors %}
-                                            {% for error in bForm.bank_name.errors %}
-                                                <div class="alert alert-mini alert-danger mb-30">
-                                                    <strong>{{ error|escape }}</strong>
-                                                </div>
-                                            {% endfor %}
-                                        {% endif %}
-                                    </div>
-                                    <div class="col-md-6 col-sm-6">
-                                        <label>Branch Name *</label>
-                                        {{ bForm.branch_name }}
-                                        {% if bForm.branch_name.errors %}
-                                            {% for error in bForm.branch_name.errors %}
-                                                <div class="alert alert-mini alert-danger mb-30">
-                                                    <strong>{{ error|escape }}</strong>
-                                                </div>
-                                            {% endfor %}
-                                        {% endif %}
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6 col-sm-6">
-                                        <label>Bank branch address *</label>
-                                        {{ bForm.bank_address }}
-                                        {% if bForm.bank_address.errors %}
-                                            {% for error in bForm.bank_address.errors %}
-                                                <div class="alert alert-mini alert-danger mb-30">
-                                                    <strong>{{ error|escape }}</strong>
-                                                </div>
-                                            {% endfor %}
-                                        {% endif %}
-                                    </div>
-                                    <div class="col-md-6 col-sm-6">
-                                        <label>Swift code </label>
-                                        {{ bForm.swift_code }}
-                                        {% if bForm.swift_code.errors %}
-                                            {% for error in bForm.swift_code.errors %}
-                                                <div class="alert alert-mini alert-danger mb-30">
-                                                    <strong>{{ error|escape }}</strong>
-                                                </div>
-                                            {% endfor %}
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            </fieldset>
-                            <div class="justify">
-                                <a href="{% url 'create_form' 'corporate' %}" class="btn btn-primary">Download blank form</a>
-                                <input type="submit" class="btn btn-primary btn-teal" value="Download completed form"/>
-                            </div>
-                        </form>
                     </div>
                 </div>
-                <a href="{% url 'index' %}" class="btn btn-primary">
-                    <i class="fa fa-arrow-left"></i>Go Home
-                </a>
+                <div class="row">
+                    <div class="col-lg-8 col-md-8 col-sm-10 col-xs-12 col-centered">
+                        <div class="card card-default">
+                            <div class="card-heading">
+                                <h4 class="text-center">Bank Indemnity Form</h4>
+                            </div>
+                            <div class="card-block">
+                                <form class="" action="{% url 'create_form' 'corporate' %}" method="post" enctype="multipart/form-data" target="_blank">
+                                {% csrf_token %}
+                                    <fieldset>
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6">
+                                                <label>Account holder name *
+                                                    {{ bForm.account_name }}
+                                                </label>
+                                            </div>
+                                            <div class="col-md-6 col-sm-6">
+                                                <label>Account number *
+                                                    {{ bForm.account_no }}
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6">
+                                                <label>Bank Name *</label>
+                                                {{ bForm.bank_name }}
+                                                {% if bForm.bank_name.errors %}
+                                                    {% for error in bForm.bank_name.errors %}
+                                                        <div class="alert alert-mini alert-danger mb-30">
+                                                            <strong>{{ error|escape }}</strong>
+                                                        </div>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </div>
+                                            <div class="col-md-6 col-sm-6">
+                                                <label>Branch Name *</label>
+                                                {{ bForm.branch_name }}
+                                                {% if bForm.branch_name.errors %}
+                                                    {% for error in bForm.branch_name.errors %}
+                                                        <div class="alert alert-mini alert-danger mb-30">
+                                                            <strong>{{ error|escape }}</strong>
+                                                        </div>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6">
+                                                <label>Bank branch address *</label>
+                                                {{ bForm.bank_address }}
+                                                {% if bForm.bank_address.errors %}
+                                                    {% for error in bForm.bank_address.errors %}
+                                                        <div class="alert alert-mini alert-danger mb-30">
+                                                            <strong>{{ error|escape }}</strong>
+                                                        </div>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </div>
+                                            <div class="col-md-6 col-sm-6">
+                                                <label>Swift code </label>
+                                                {{ bForm.swift_code }}
+                                                {% if bForm.swift_code.errors %}
+                                                    {% for error in bForm.swift_code.errors %}
+                                                        <div class="alert alert-mini alert-danger mb-30">
+                                                            <strong>{{ error|escape }}</strong>
+                                                        </div>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </form>
+                            </div>
+                            <div class="card-footer card-footer-transparent">
+                                <div class="justify">
+                                    <a target="_blank" href="{% url 'create_form' 'corporate' %}" class="btn btn-primary">Download blank form</a>
+                                    <input type="submit" class="btn btn-primary btn-teal" value="Download completed form"/>
+                                    <a href="{% url 'corporate' %}" class="btn btn-primary">
+                                        <i class="fa fa-arrow-left"></i>Finish
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             {% endif %}
         </div>
     </section>

@@ -994,7 +994,8 @@ def del_bank_acc(request):
 
 @login_required
 def new_group(request):
-    return render_with_global_data(request, 'pochi/create_group.html', {})
+    phone = request.user.username
+    return render_with_global_data(request, 'pochi/create_group.html', {'phone': phone})
 
 
 @login_required
@@ -1005,7 +1006,6 @@ def create_group(request):
         groupName = request.POST['profileGroupName'].capitalize()
         member_list = request.POST['members']
         first_admin = profile.profile_id
-        sec_admin = request.POST['admin']
         members = json.loads(member_list)
         grp_acc = uuid.uuid4().hex[:10].upper()
         try:
@@ -1025,8 +1025,8 @@ def create_group(request):
                 )
                 for member in members:
                     is_admin = 0
-                    if member == sec_admin:
-                        is_admin = 1
+                    # if member == sec_admin:
+                    #     is_admin = 1
                     try:
                         profile_id = Profile.objects.get(user__username=member).profile_id
                     except Profile.DoesNotExist:

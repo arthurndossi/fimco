@@ -138,10 +138,11 @@
                                                     <ul>
                                                         <li><a href="{% url 'group_dashboard' group.name %}">Dashboard</a></li>
                                                         <li><a href="{% url 'group_balance' group.name %}">Balance</a></li>
+                                                        <li><a href="{% url 'group_statement' group.name %}">Statement</a></li>
                                                         {% if group.admin %}
                                                         <li><a href="{% url 'group_activity' group.name %}">Funds Transfer</a></li>
                                                         {% endif %}
-                                                        <li><a href="{% url 'group_statement' group.name %}">Statement</a></li>
+                                                        <li><a href="{% url 'deposit' %}">How to deposit</a></li>
                                                         <li><a href="{% url 'group_settings' group.name %}">Settings</a></li>
                                                     </ul>
                                                 </li>

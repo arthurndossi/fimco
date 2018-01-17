@@ -159,8 +159,8 @@ $(document).ready(function() {
 
     if(member_input.val()) $('.addButton').show(); else $('.addButton').hide();
 
-    member_input.on('keyup', function () {
-        if(member_input.val()) $('.addButton').show(); else $('.addButton').hide();
+    member_input.on('keyup change', function () {
+        if (this.val().length === 13) $('.addButton').show(); else $('.addButton').hide();
     });
 
     $('#remove').click(function () {
