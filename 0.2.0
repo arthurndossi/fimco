@@ -1,0 +1,25 @@
+Collecting django-easy-pdf
+  Downloading django_easy_pdf-0.1.1-py2.py3-none-any.whl
+Collecting xhtml2pdf>=0.2b1 (from django-easy-pdf)
+  Downloading xhtml2pdf-0.2b1-py2-none-any.whl (232kB)
+Requirement already satisfied: reportlab>=3 in c:\users\mads\pycharmprojects\fimco\env27\lib\site-packages (from django-easy-pdf)
+Requirement already satisfied: django>=1.8 in c:\users\mads\pycharmprojects\fimco\env27\lib\site-packages (from django-easy-pdf)
+Collecting html5lib==1.0b10 (from xhtml2pdf>=0.2b1->django-easy-pdf)
+  Downloading html5lib-1.0b10-py2.py3-none-any.whl (112kB)
+Requirement already satisfied: pyPdf2 in c:\users\mads\pycharmprojects\fimco\env27\lib\site-packages (from xhtml2pdf>=0.2b1->django-easy-pdf)
+Requirement already satisfied: six in c:\users\mads\pycharmprojects\fimco\env27\lib\site-packages (from xhtml2pdf>=0.2b1->django-easy-pdf)
+Requirement already satisfied: Pillow in c:\users\mads\pycharmprojects\fimco\env27\lib\site-packages (from xhtml2pdf>=0.2b1->django-easy-pdf)
+Collecting httplib2 (from xhtml2pdf>=0.2b1->django-easy-pdf)
+Requirement already satisfied: pip>=1.4.1 in c:\users\mads\pycharmprojects\fimco\env27\lib\site-packages (from reportlab>=3->django-easy-pdf)
+Requirement already satisfied: setuptools>=2.2 in c:\users\mads\pycharmprojects\fimco\env27\lib\site-packages (from reportlab>=3->django-easy-pdf)
+Requirement already satisfied: pytz in c:\users\mads\pycharmprojects\fimco\env27\lib\site-packages (from django>=1.8->django-easy-pdf)
+Requirement already satisfied: webencodings in c:\users\mads\pycharmprojects\fimco\env27\lib\site-packages (from html5lib==1.0b10->xhtml2pdf>=0.2b1->django-easy-pdf)
+Requirement already satisfied: olefile in c:\users\mads\pycharmprojects\fimco\env27\lib\site-packages (from Pillow->xhtml2pdf>=0.2b1->django-easy-pdf)
+Installing collected packages: html5lib, httplib2, xhtml2pdf, django-easy-pdf
+  Found existing installation: html5lib 1.0.1
+    Uninstalling html5lib-1.0.1:
+      Successfully uninstalled html5lib-1.0.1
+  Found existing installation: xhtml2pdf 0.0.6
+    Uninstalling xhtml2pdf-0.0.6:
+      Successfully uninstalled xhtml2pdf-0.0.6
+Successfully installed django-easy-pdf-0.1.1 html5lib-1.0b10 httplib2-0.10.3 xhtml2pdf-0.2b1

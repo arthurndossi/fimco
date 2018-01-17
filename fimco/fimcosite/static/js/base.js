@@ -36,9 +36,9 @@ jQuery(document).ready(function() {
                     hide_onleave:false,
                     direction:"horizontal",
                     h_align:"center",
-                    v_align:"center",
+                    v_align:"bottom",
                     h_offset:0,
-                    v_offset:250,
+                    v_offset:20,
                     space:5,
                     tmp:''
                 }
