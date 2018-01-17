@@ -1,0 +1,28 @@
+.hero-slider {
+    padding: 0;
+}
+
+.ms-bullets.ms-dir-h {
+    bottom: 0;
+}
+
+.hero-slider .ms-bullet {
+    display: inline-block;
+    float: none;
+    width: 12px;
+    height: 12px;
+    margin: 4px;
+    background: transparent;
+    border: 1px solid white;
+    border-radius: 50%;
+}
+
+.hero-slider .ms-bullet-selected {
+    background-color: white;
+}
+
+@media only screen and (max-width: 482px) {
+    .ms-bullets-count {
+        display: none;
+    }
+}

@@ -10,6 +10,10 @@ a.no-text-decoration {
   color: #002A54;
 }
 
+#topMain ul li a {
+	text-transform:capitalize;
+}
+
 #aside .nav-list li a[disabled] {
     background-color: #001429;
     pointer-events: none;
@@ -73,100 +77,71 @@ ul.process-steps li a.active, ul.process-steps li a.active:focus, ul.process-ste
     color: #002A54 !important;
 }
 
-#topMain ul li a {
-	text-transform:capitalize;
+.ms-slide h2, .ms-slide h4, .ms-slide p {
+    font-family: Raleway, serif;
+    color: white;
 }
 
-.WebProduct-Content {
-    min-width: 548px!important;
-    font-size: 20px !important;
-    font-weight: 100 !important;
-    line-height: 1.3 !important;
+.ms-slide p {
+    font-size: 22px!important;
+    line-height: 1.3!important;
+    font-weight: 100;
 }
 
-/*@media only screen and (min-width:768px) and (max-width: 1024px) {*/
-    /*.WebProduct-SubTitle {*/
-        /*min-width: 0!important;*/
-    /*}*/
-    /*.WebProduct-Content {*/
-        /*text-align: center;*/
-        /*min-width: 330px!important;*/
-        /*max-height: 330px!important;*/
-    /*}*/
-/*}*/
+.ms-slide h2 {
+    line-height: 40px!important;
+    font-weight: 100!important;
+    font-size: 40px!important;
+}
 
-@media only screen and (orientation: landscape) {
+.ms-slide h4 {
+    font-weight: 100!important;
+    font-size: 28px!important;
+}
+
+@media only screen and (min-width:768px) and (max-width: 992px) {
+
+}
+
+@media only screen and (min-width:544px) and (max-width: 768px) {
+    .ms-slide p {
+        font-size: 16px!important;
+        line-height: 1.3!important;
+    }
+
+    .ms-slide h2 {
+        line-height: 28px!important;
+        font-size: 26px!important;
+    }
+
+    .ms-slide h4 {
+        font-size: 18px!important;
+    }
+
     .tp-static-layers {
         display: none;
     }
-    .tp-parallax-wrap {
-        left: 20%!important;
-    }
-    .WebProduct-Title {
-        line-height: 32px!important;
-        font-weight: 100!important;
-        font-size: 30px!important;
-        top: -40px;
-    }
-    .WebProduct-Content {
-        margin-top: 40px!important;
-        min-width: 448px!important;
-    }
 }
 
-/*@media only screen and (min-width: 640px) and (orientation: landscape) {*/
-    /*.tp-parallax-wrap {*/
-        /*left: 20%!important;*/
-    /*}*/
-    /*.WebProduct-Title {*/
-        /*line-height: 32px!important;*/
-        /*font-weight: 100!important;*/
-        /*font-size: 30px!important;*/
-        /*top: -40px;*/
-    /*}*/
-    /*.WebProduct-Content {*/
-        /*margin-top: 40px!important;*/
-        /*min-width: 448px!important;*/
-    /*}*/
-/*}*/
-
 @media only screen and (max-width: 768px) {
-    .WebProduct-SubTitle {
-        min-width: 414px!important;
-    }
-    .WebProduct-Content {
-        min-width: 414px!important;
-    }
+
 }
 
 @media only screen and (max-width: 482px) {
-    .tp-static-layers {
-        display: none;
-    }
-    .WebProduct-Content {
-        margin-top: 20px;
-        min-width: 448px!important;
-    }
-}
-
-@media only screen and (max-width: 414px) {
-    .tp-parallax-wrap {
-        left: 20%!important;
+    .ms-slide p {
+        font-size: 10px!important;
+        line-height: 1.2!important;
     }
 
-    .tp-static-layers {
-        display: none;
+    .ms-slide h2 {
+        line-height: 16px!important;
+        font-size: 16px!important;
     }
-    .WebProduct-Content {
-        margin-top: 20px;
-        min-width: 208px !important;
-    }
-}
 
-.WebProduct-SubTitle {
-    line-height: 1.3 !important;
-    letter-spacing:2px !important;
-    font-size: 21px !important;
+    .ms-slide h4 {
+        font-size: 12px!important;
+        line-height: 12px!important;
+    }
 }
 
 .contact:hover {

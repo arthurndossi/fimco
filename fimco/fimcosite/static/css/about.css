@@ -39,6 +39,18 @@ a .WebProduct-Button, .tp-caption.WebProduct-Button {
   color: white;
 }
 
+@media only screen and (min-width:544px) and (max-width: 768px) {
+  .box-flip, .box-default {
+    min-height: 400px !important;
+  }
+  .box-flip .btn-lg.btn-translucid {
+    font-size: 10px;
+  }
+  .box-flip p {
+    font-size: 12px;
+  }
+}
+
 /*.card img {*/
   /*-webkit-box-shadow: 10px 10px 5px 0 rgba(0,0,0,0.75);*/
   /*-moz-box-shadow: 10px 10px 5px 0 rgba(0,0,0,0.75);*/
