@@ -1,6 +1,9 @@
 *.pyc
-/venv
 /env27
+fimcoplatform/migrations
+fimcosite/migrations
+pochi/migrations
+/media
 .Python
 *.iml
 .idea
