@@ -6,6 +6,7 @@ jQuery(document).ready(function() {
 	*******************************************/
 	if($('#hero-slider').length > 0) {
 		var heroSlider = new MasterSlider();
+		heroSlider.control('arrows', {autohide:false});
 		heroSlider.control('bullets', {});
 		heroSlider.setup('hero-slider' , {
 				width:1140,
@@ -25,8 +26,8 @@ jQuery(document).ready(function() {
 	*******************************************/
 	if($('#fullscreen-slider').length > 0) {
 		var fullscreenSlider = new MasterSlider();
-		fullscreenSlider.control('arrows');
-		fullscreenSlider.control('bullets');
+		fullscreenSlider.control('arrows', {});
+		fullscreenSlider.control('bullets', {});
 		fullscreenSlider.setup('fullscreen-slider' , {
 				width:1140,
 				height:455,
