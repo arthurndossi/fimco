@@ -1,12 +1,8 @@
 {% extends "pochi/main.html" %}
 {% block links %}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/formvalidation@0.6.2-dev/dist/css/formValidation.min.css">
-    <style>
-        .form-control-feedback{
-            text-align: left;
-        }
-    </style>
 {% endblock %}
+{% load get_second %}
 {% block content %}
     <section id="middle">
         <div id="content" class="padding-20">
@@ -82,6 +78,11 @@
                                                             </li>
                                                             <li class="">
                                                                 <a href="#tab2_nobg" data-toggle="tab">
+                                                                    <i class="fa fa-cog"></i> Group Name
+                                                                </a>
+                                                            </li>
+                                                            <li class="">
+                                                                <a href="#tab3_nobg" data-toggle="tab">
                                                                     <i class="fa fa-sign-out"></i>Exit Group
                                                                 </a>
                                                             </li>
@@ -89,40 +90,58 @@
                                                         <div class="tab-content transparent">
                                                             <div id="tab1_nobg" class="tab-pane active">
                                                                 {% for member in members %}
-                                                                    {% for administrator in administrators %}
-                                                                        {% if member == administrator %}
+                                                                    {% if member.admin %}
+                                                                        <div>
                                                                             <i class="fa fa-user-secret"></i>
-                                                                            <p class="inline-block">
-                                                                                {{ administrator }}
+                                                                            <p class="inline-block margin-bottom-0">
+                                                                                {{ member.member }}
                                                                                 <span class="label label-success">Admin</span>
                                                                             </p>
-                                                                            {% if administrator %}
-                                                                            <a href="">Remove Admin</a>
+                                                                            <a href="{% url 'confirm_action_group' group 'removeAdmin-'|add:member.id %}">Remove Admin</a>
+                                                                        </div>
+                                                                    {% else %}
+                                                                        <div>
+                                                                            <i class="fa fa-user"></i>
+                                                                            <p class="inline-block margin-bottom-0">{{ member.member }}</p>
+                                                                            {% if user == member.member and member.admin %}
+                                                                            <a href="{% url 'confirm_action_group' group 'addAdmin-'|add:member.id %}">Add Admin</a>
                                                                             {% endif %}
-                                                                        {% else %}
-                                                                            <div>
-                                                                                <i class="fa fa-user"></i>
-                                                                                <p class="inline-block">{{ member }}</p>
-                                                                                {% if administrator %}
-                                                                                <a href="">Add Admin</a>
-                                                                                {% endif %}
-                                                                            </div>
-                                                                        {% endif %}
-                                                                    {% endfor %}
+                                                                        </div>
+                                                                    {% endif %}
                                                                 {% endfor %}
                                                             </div>
                                                             <div id="tab2_nobg" class="tab-pane">
+                                                                <form method="post" action="{% url 'confirm_action_group' group 'change' %}">
+                                                                    {% csrf_token %}
+                                                                    <div class="row">
+                                                                        <div class="col-xs-3 size-15">Change Group Name</div>
+                                                                        <div class="col-xs-5">
+                                                                            <input class="form-control" name="g_name" title="" />
+                                                                        </div>
+                                                                        <div class="col-xs-3">
+                                                                            <input type="submit" class="btn btn-primary" value="Change" />
+                                                                        </div>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                            <div id="tab3_nobg" class="tab-pane">
                                                                 {% for member in members %}
-                                                                    {% for administrator in administrators %}
-                                                                        {% if member == administrator %}
-                                                                            <a href="" class="btn btn-primary">Delete group</a>  <!--  url 'delete_group' group  -->
+                                                                    {% if user == member.member and member.admin %}
+                                                                        <a href="{% url 'confirm_action_group' group 'delete' %}" class="btn btn-primary">Delete group</a>  <!--  url 'delete_group' group  -->
+                                                                    {% endif %}
+                                                                    {% if number >= 1 %}
+                                                                        {% if user == member.member and member.admin and administrators <= 1 %}
+                                                                            <a href="#" class="btn btn-primary toastr-notify"
+                                                                               data-progressBar="true"
+                                                                               data-position="top-center"
+                                                                               data-notifyType="info"
+                                                                               data-message="You need to assign another admin before you exit the group!">
+                                                                                Exit
+                                                                            </a>
+                                                                        {% elif user == member.member %}
+                                                                            <a href="{% url 'confirm_action_group' group 'exit' %}" class="btn btn-primary">Exit</a>
                                                                         {% endif %}
-                                                                        {% if member == administrator and administrators.count <= 1 %}
-                                                                            <a disabled tabindex="-1" class="btn btn-primary">Exit</a>
-                                                                        {% else %}
-                                                                            <a href="{% url 'exit_group' group %}" class="btn btn-primary">Exit</a>
-                                                                        {% endif %}
-                                                                    {% endfor %}
+                                                                    {% endif %}
                                                                 {% endfor %}
                                                             </div>
                                                         </div>
@@ -145,20 +164,42 @@
                                                                     <div class="row">
                                                                         <fieldset>
                                                                             <div class="form-group">
-                                                                                <div class="col-xs-8">
-                                                                                    <input type="text" id="member" class="form-control" name="option[]" title=""/>
+                                                                                <label class="col-xs-3 control-label">Member 1</label>
+                                                                                <div class="col-xs-5">
+                                                                                    <input type="text"
+                                                                                           class="form-control"
+                                                                                           name="option[]"
+                                                                                           title=""
+                                                                                           placeholder="Phone number"
+                                                                                           autocomplete="off"/>
+                                                                                    <div class="loader text-center hide">
+                                                                                        <img src="/static/pochi/img/loading.gif" alt="" />
+                                                                                    </div>
+                                                                                    <small class="text-muted block hint">Format (0XXXXXXXXX)</small>
                                                                                 </div>
-                                                                                <div class="col-xs-4">
+                                                                                <div class="col-xs-4 extras hide">
                                                                                     <button type="button" class="btn btn-default addButton"><i class="fa fa-plus"></i></button>
+                                                                                    <button type="button" class="btn btn-default removeButton"><i class="fa fa-minus"></i></button>
                                                                                 </div>
                                                                             </div>
 
                                                                             <!-- The option field template containing an option field and a Remove button -->
                                                                             <div class="form-group hide" id="optionTemplate">
-                                                                                <div class="col-xs-8">
-                                                                                    <input class="form-control" type="text" name="option[]" title=""/>
+                                                                                <label class="col-xs-3 control-label"></label>
+                                                                                <div class="col-xs-5">
+                                                                                    <input type="text"
+                                                                                           class="form-control"
+                                                                                           name="option[]"
+                                                                                           title=""
+                                                                                           placeholder="Phone number"
+                                                                                           autocomplete="off"/>
+                                                                                    <div class="loader text-center hide">
+                                                                                        <img src="/static/pochi/img/loading.gif" alt="" />
+                                                                                    </div>
+                                                                                    <small class="text-muted block hint">Format (0XXXXXXXXX)</small>
                                                                                 </div>
-                                                                                <div class="col-xs-4">
+                                                                                <div class="col-xs-4 extras hide">
+                                                                                    <button type="button" class="btn btn-default addButton"><i class="fa fa-plus"></i></button>
                                                                                     <button type="button" class="btn btn-default removeButton"><i class="fa fa-minus"></i></button>
                                                                                 </div>
                                                                             </div>
@@ -167,8 +208,8 @@
                                                                     <div class="row">
                                                                         <div class="col-xs-12" align="center">
                                                                             <input type="hidden" id="members" name="members" value=""/>
-                                                                            <button type="submit" id="done" class="btn btn-primary" >
-                                                                                <i class="fa fa-check"></i> ADD MEMBER
+                                                                            <button type="submit" id="add" class="btn btn-primary hide" >
+                                                                                <i class="fa fa-check"></i> ADD MEMBER(s)
                                                                             </button>
                                                                         </div>
                                                                     </div>
@@ -190,8 +231,8 @@
                                                                             {% for member in members %}
                                                                                 <div>
                                                                                     <label class="checkbox">
-                                                                                        <input type="checkbox" name="members[]" value="{{ member }}">
-                                                                                        <i></i> {{ member }}
+                                                                                        <input type="checkbox" name="members[]" value="{{ member.member }}">
+                                                                                        <i></i> {{ member.member }}
                                                                                     </label>
                                                                                 </div>
                                                                             {% endfor %}
@@ -200,7 +241,7 @@
                                                                     <div class="row">
                                                                         <div class="col-xs-12" align="center">
                                                                             <input type="hidden" id="rejected" name="rejected" value=""/>
-                                                                            <button type="submit" id="remove" class="btn btn-primary" >
+                                                                            <button type="submit" id="remove" class="btn btn-primary" disabled>
                                                                                 <i class="fa fa-check"></i> REMOVE MEMBER(S)
                                                                             </button>
                                                                         </div>
@@ -226,21 +267,36 @@
                     {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
                         <div class="col-xs-12">
                             <div class="alert alert-danger margin-bottom-30">
-                                <button type="button" class="close" data-dismiss="alert">
-                                    <span aria-hidden="true">×</span>
-                                    <span class="sr-only">Close</span>
-                                </button>
                                 <strong>{{ message }}</strong>
+                            </div>
+                        </div>
+                    {% elif message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
+                        <div class="col-xs-12">
+                            <div class="alert alert-warning margin-bottom-30">
+                                <strong>{{ message }}</strong>
+                                {% if 'delete' in message.tags %}
+                                    <a href="{% url 'del_group' group %}" class="btn btn-warning btn-sm margin-top-10">Yes</a>
+                                    <input type="button" class="btn btn-warning btn-sm margin-top-10" data-dismiss="alert" value="Cancel">
+                                {% elif 'exit' in message.tags %}
+                                    <a href="{% url 'exit_group' group %}" class="btn btn-warning btn-sm margin-top-10">Yes</a>
+                                    <input type="button" class="btn btn-warning btn-sm margin-top-10" data-dismiss="alert" value="Cancel">
+                                {% elif 'removeAdmin' in message.tags %}
+                                    <a href="{% url 'group_admin' group message.tags|get_second 'remove' %}" class="btn btn-warning btn-sm margin-top-10">Yes</a>
+                                    <input type="button" class="btn btn-warning btn-sm margin-top-10" data-dismiss="alert" value="Cancel">
+                                {% elif 'change' in message.tags %}
+                                    <a href="{% url 'group_admin' group message.tags|get_second 'change' %}" class="btn btn-warning btn-sm margin-top-10">Yes</a>
+                                    <input type="button" class="btn btn-warning btn-sm margin-top-10" data-dismiss="alert" value="Cancel">
+                                {% endif %}
                             </div>
                         </div>
                     {% else %}
                         <div class="col-xs-12">
                             <div class="alert alert-info margin-bottom-30">
-                                <button type="button" class="close" data-dismiss="alert">
-                                    <span aria-hidden="true">×</span>
-                                    <span class="sr-only">Close</span>
-                                </button>
                                 <strong>{{ message }}</strong>
+                                {% if 'addAdmin' in message.tags %}
+                                    <a href="{% url 'group_admin' group message.tags|get_second 'add' %}" class="btn btn-info btn-sm margin-top-10">Yes</a>
+                                    <input type="button" class="btn btn-info btn-sm margin-top-10" data-dismiss="alert" value="Cancel">
+                                {% endif %}
                             </div>
                         </div>
                     {% endif %}

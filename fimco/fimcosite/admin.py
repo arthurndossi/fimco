@@ -6,7 +6,8 @@ from .models import Profile, CorporateProfile, KYC, Account
 
 
 class CorporateProfileAdmin(admin.ModelAdmin):
-    list_display = ('company_name', 'address', 'profile_id')
+    list_filter = ('indemnity',)
+    list_display = ('company_name', 'address', 'account', 'admin', 'indemnity')
 
 
 class KYCAdmin(admin.ModelAdmin):
@@ -14,8 +15,8 @@ class KYCAdmin(admin.ModelAdmin):
 
 
 class AccountAdmin(admin.ModelAdmin):
-    list_display = ('profile_id', 'created_on', 'account', 'currency', 'nickname', 'balance', 'ts_balance', 'status',
-                    'external_wallet_id', 'allow_overdraft')
+    list_display = ('profile_id', 'created_on', 'account', 'current_balance', 'available_balance',
+                    'ts_current_bal', 'ts_available_bal', 'status', 'allow_overdraft')
 
 
 class ProfileInline(admin.StackedInline):

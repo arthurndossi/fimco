@@ -15,6 +15,14 @@
                                 <button type="button" class="btn btn-danger" data-dismiss="alert">OK</button>
                             </div>
                         </div>
+                    {% elif message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
+                        <div class="col-lg-6 col-xs-12 col-centered">
+                            <div class="alert alert-warning margin-bottom-30 text-center">
+                                <p><strong>{{ message }}</strong></p>
+                                <a href="{% url 'del_bank' %}" class="btn btn-warning btn-sm margin-top-10">Yes</a>
+                                <button class="btn btn-warning btn-sm" data-dismiss="alert">Cancel</button>
+                            </div>
+                        </div>
                     {% elif message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
                         <div class="col-lg-6 col-xs-12 col-centered">
                             <div class="alert alert-info margin-bottom-30 text-center">
@@ -190,7 +198,7 @@
                                 {% if address %}
                                 <p><strong>Bank Address:</strong> {{ address }}</p>
                                 {% endif %}
-                                <div><a href="{% url 'del_bank' %}" class="btn btn-primary">Delete Bank Account</a></div>
+                                <div><a href="{% url 'confirm_del_bank' %}" class="btn btn-primary">Delete Bank Account</a></div>
                             </div>
                         </div>
                     </div>

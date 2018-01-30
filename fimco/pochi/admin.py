@@ -5,7 +5,7 @@ from .models import Group, GroupMember, Transaction, Ledger, BalanceSnapshot, Ex
 
 
 class GroupAdmin(admin.ModelAdmin):
-    list_display = ('created_on', 'name', 'group_account', 'balance')
+    list_display = ('created_on', 'name', 'account')
 
 
 class GroupMembersAdmin(admin.ModelAdmin):
@@ -13,23 +13,24 @@ class GroupMembersAdmin(admin.ModelAdmin):
 
 
 class TransactionAdmin(admin.ModelAdmin):
-    list_display = ('full_timestamp', 'profile_id', 'account', 'msisdn', 'external_wallet_id', 'service', 'channel',
-                    'mode', 'dest_account', 'amount', 'charge', 'currency', 'reference', 'status', 'result_code',
+    list_display = ('full_timestamp', 'profile_id', 'account', 'msisdn', 'trans_id', 'service', 'channel',
+                    'mode', 'dst_account', 'amount', 'charge', 'reference', 'status', 'result_code',
                     'message', 'processed_timestamp')
 
 
 class LedgerAdmin(admin.ModelAdmin):
-    list_display = ('full_timestamp', 'profile_id', 'account', 'trans_type', 'service', 'channel', 'amount', 'currency',
-                    'reference', 'o_bal', 'c_bal')
+    list_display = ('full_timestamp', 'profile_id', 'account', 'trans_type', 'service', 'channel', 'amount',
+                    'reference', 'available_o_bal', 'available_c_bal', 'current_o_bal', 'current_c_bal')
 
 
 class BalanceSnapshotAdmin(admin.ModelAdmin):
-    list_display = ('full_timestamp', 'profile_id', 'account', 'closing_balance', 'bonus_closing_balance')
+    list_display = ('full_timestamp', 'profile_id', 'account', 'available_closing_balance', 'current_closing_balance',
+                    'bonus_closing_balance')
 
 
 class ExternalAccountAdmin(admin.ModelAdmin):
-    list_display = ('profile_id', 'account_name', 'account_number', 'institution_name',
-                    'institution_branchcode', 'institution_code', 'account_type')
+    list_display = ('profile_id', 'account_name', 'account_number', 'institution_name', 'institution_branch',
+                    'institution_code', 'account_type')
 
 
 class NotificationAdmin(admin.ModelAdmin):

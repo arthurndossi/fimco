@@ -9,9 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.files.storage import FileSystemStorage
 from django.core.mail import EmailMessage, BadHeaderError
-from django.db import transaction, Error
-from django.db.models.signals import pre_save
-from django.dispatch import receiver
+from django.db import transaction
 from django.shortcuts import render, redirect, render_to_response
 from formtools.wizard.views import SessionWizardView
 
@@ -109,17 +107,6 @@ class CorporateWizard(SessionWizardView):
         return render_to_response('corporate.html', context)
 
 
-@receiver(pre_save, sender=Profile)
-def user_handler(sender, instance, **kwargs):
-    print instance.user
-    if instance.profile_type == 'C':
-        profile = Profile.objects.filter(user__username=instance.user.username, profile_type='C').exists()
-    else:
-        profile = Profile.objects.filter(user__username=instance.user.username, profile_type='I').exists()
-    if profile:
-        raise ValueError('Cannot create this Profile, you already have one registered in the system!')
-
-
 def index(request):
     return render(request, 'index.html', {})
 
@@ -163,7 +150,7 @@ def process_form_data(request, form_list):
     dob = form_data[2]['dob']
     gender = form_data[2]['gender']
     email = form_data[2]['email']
-    phone = form_data[2]['phone'].strip().replace('+255', '0')
+    phone = '%s-%s' % ('C', form_data[2]['phone'].strip().replace('+255', '0'))
     password = form_data[2]["password"]
 
     id_type = form_data[3]['id_type']
@@ -182,7 +169,8 @@ def process_form_data(request, form_list):
         CorporateProfile.objects.create(
             company_name=name,
             address=company_address,
-            profile_id=profile_id
+            account=account_no,
+            admin=profile_id
         )
 
         KYC.objects.create(
@@ -194,7 +182,7 @@ def process_form_data(request, form_list):
 
         user = User(username=phone, email=email, password=password, first_name=fName, last_name=lName, is_active=0)
         user.save()
-        profile = Profile(user=user, profile_id=profile_id, dob=dob, gender=gender, bot_cds=bot,
+        profile = Profile(user=user, profile_id=profile_id, dob=dob, msisdn=phone, gender=gender, bot_cds=bot,
                           dse_cds=dse, profile_type='C', pin=pin)
         profile.save()
 
@@ -221,11 +209,13 @@ def process_form_data(request, form_list):
 def add_user_corporate(request):
     tab = 'active'
     logged_in = False
+    form = CorporateLoginForm
 
     if 'login' in request.POST:
         form = CorporateLoginForm(request.POST or None)
         if form.is_valid():
             pochi_id = form.cleaned_data["id"]
+            request.session['company_id'] = pochi_id
             username = form.cleaned_data["corp_rep"]
             password = form.cleaned_data["password"]
             if re.match(r"[^@]+@[^@]+\.[^@]+", username):
@@ -238,15 +228,16 @@ def add_user_corporate(request):
                 except User.DoesNotExist:
                     user = None
             elif re.match(r'^([+]?(\d{1,3}\s?)|[0])\s?\d+(\s?-?\d{2,4}){1,3}?$', username):
-                user = CorporateBackend.authenticate(username, password, pochi_id)
+                user = CorporateBackend.authenticate(request, username, password, pochi_id, 'admin')
             else:
                 raise forms.ValidationError("Not a valid email or phone number!")
 
             if user:
                 login(request, user, backend='django.contrib.auth.backends.ModelBackend')
                 logged_in = True
-                company = CorporateProfile.objects.get(profile_id=pochi_id).company_name
-                members = Profile.objects.filter(profile_id=pochi_id).values_list('user__username', flat=True)
+                company = CorporateProfile.objects.get(account=pochi_id).company_name
+                profile_id = Account.objects.get(account=pochi_id).profile_id
+                members = Profile.objects.filter(profile_id=profile_id).values_list('user__username', flat=True)
                 corporate_users = []
                 for member in members:
                     user_obj = User.objects.select_related('profile').get(username=member)
@@ -254,6 +245,7 @@ def add_user_corporate(request):
                     corporate_users.append(corporate_user)
                 context = {
                     'second': tab,
+                    'inactive': 'disabled',
                     'adForm': UserCorporateForm,
                     'company': company,
                     'users': corporate_users,
@@ -261,19 +253,17 @@ def add_user_corporate(request):
                 }
                 return render(request, 'corporate.html', context)
             else:
-                messages.add_message(request, messages.ERROR, 'Incorrect credentials!')
                 context = {
                     'second': tab,
-                    'cForm': form,
+                    'lForm': form,
                     'logged_in': logged_in
                 }
                 return render(request, 'login.html', context)
         else:
-            return render(request, 'login.html', {'second': tab, 'cForm': form, 'logged_in': logged_in})
-    elif 'add_rep' in request.POST:
-        form = CorporateForm4(request.POST, request.FILES or None)
+            return render(request, 'login.html', {'second': tab, 'lForm': form, 'logged_in': logged_in})
+    elif 'addRep' in request.POST:
+        form = UserCorporateForm(request.POST, request.FILES or None)
         if form.is_valid():
-            name = request.POST['company']
             fName = form.cleaned_data['fName'].capitalize()
             lName = form.cleaned_data['lName'].capitalize()
             dob = form.cleaned_data['dob']
@@ -282,20 +272,19 @@ def add_user_corporate(request):
             id_type = form.cleaned_data['id_type']
             id_number = form.cleaned_data['id_number']
             user_id = request.FILES['user_id']
-            phone = form.cleaned_data['phone'].strip().replace('+255', '0')
+            phone = '%s-%s' % ('C', form.cleaned_data['phone'].strip().replace('+255', '0'))
             password = form.cleaned_data["password"]
+            profile_id = "CP%s" % uuid.uuid4().hex[:6].upper()
 
-            profile_id = None
-            while profile_id is None:
-                try:
-                    profile_id = CorporateProfile.objects.get(company_name=name).profile_id
-                except Error:
-                    pass
+            pochi_id = request.session['company_id']
+            company = CorporateProfile.objects.get(account=pochi_id).company_name
 
             with transaction.atomic():
-                user = User(username=phone, email=email, password=password, first_name=fName, last_name=lName, is_active=0)
+                user = User(username=phone, email=email, password=password, first_name=fName, last_name=lName,
+                            is_active=0)
                 user.save()
-                profile = Profile(user=user, dob=dob, gender=gender, profile_type='C', profile_id=profile_id)
+                profile = Profile(user=user, dob=dob, gender=gender, msisdn=phone, profile_type='C',
+                                  profile_id=profile_id)
                 profile.save()
 
                 KYC.objects.create(
@@ -305,9 +294,35 @@ def add_user_corporate(request):
                     document=user_id
                 )
 
-                messages.success(request, 'You have been added successfully to ' + name + ' corporate account!')
-
-        return render(request, 'corporate.html', {'adForm': form, 'second': tab})
+                messages.success(request, 'You have been added successfully to ' + company + ' corporate account!')
+            return redirect("corporate")
+        else:
+            pochi_id = request.session['company_id']
+            company = CorporateProfile.objects.get(account=pochi_id).company_name
+            profile_id = Account.objects.get(account=pochi_id).profile_id
+            members = Profile.objects.filter(profile_id=profile_id).values_list('user__username', flat=True)
+            corporate_users = []
+            for member in members:
+                user_obj = User.objects.select_related('profile').get(username=member)
+                corporate_user = user_obj.get_full_name()
+                corporate_users.append(corporate_user)
+            context = {
+                'second': tab,
+                'inactive': 'disabled',
+                'adForm': form,
+                'company': company,
+                'users': corporate_users,
+                'logged_in': True
+            }
+            return render(request, 'corporate.html', context)
+    else:
+        context = {
+            'second': tab,
+            'inactive': 'disabled',
+            'lForm': form,
+            'logged_in': logged_in
+        }
+        return render(request, 'corporate.html', context)
 
 
 @anonymous_required
@@ -316,7 +331,7 @@ def login_view(request):
     context = {
         'user': 'active',
         'lForm': IndividualLoginForm(),
-        'cForm': CorporateLoginForm(),
+        'cForm': CorporateLoginForm(prefix='corp'),
         'next': request.GET['next'] if request.GET and 'next' in request.GET else ''
     }
     return render(request, 'login.html', context)
@@ -336,7 +351,7 @@ def validate_credentials(request, form, username, password, _next, category, poc
         if category == 'user':
             user = authenticate(username=username, password=password)
         else:
-            user = CorporateBackend.authenticate(username, password, pochi)
+            user = CorporateBackend.authenticate(request, username, password, pochi)
     else:
         raise forms.ValidationError("Not a valid email or phone number!")
 
@@ -349,7 +364,6 @@ def validate_credentials(request, form, username, password, _next, category, poc
         else:
             return redirect(_next)
     else:
-        messages.add_message(request, messages.ERROR, 'Incorrect credentials!')
         if category == 'user':
             context = {'lForm': form, 'user': 'active'}
         else:
@@ -436,7 +450,7 @@ def register(request, form_list):
     with transaction.atomic():
         user = User(username=phone, email=email, password=password, first_name=fName, last_name=lName, is_active=0)
         user.save()
-        profile = Profile(user=user, profile_id=profile_id, dob=dob, gender=gender, bot_cds=bot,
+        profile = Profile(user=user, profile_id=profile_id, dob=dob, gender=gender, msisdn=phone, bot_cds=bot,
                           dse_cds=dse, profile_type='I', pin=pin)
         profile.save()
 

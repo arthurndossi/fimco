@@ -2,43 +2,24 @@
 {% block links %}
     <link href="/static/pochi/css/navyblue.css" rel="stylesheet" type="text/css" />
 {% endblock %}
+{% load djmoney %}
 {% block content %}
     <section id="middle">
         <div class="padding-15">
             <div class="sheet">
                 <div class="row">
                     <p class="lead">Current balance</p>
-                    {% if account.balance %}
-                        <p class="lead"> TZS {{ account.balance }}</p>
-                    {% else %}
-                        <p class="lead"> TZS 0.0</p>
-                    {% endif %}
+                    <p class="lead"> {{ account.current_balance }}</p>
                 </div>
                 <div class="row">
                     <div class="col-xs-6 headerDivider">
-                        <p class="lead">Available</p>
-                        {% if account.balance %}
-                            <p class="lead"> TZS {{ account.balance }}</p>
-                        {% else %}
-                            <p class="lead"> TZS 0.0</p>
-                        {% endif %}
+                        <p class="lead">Available balance</p>
+                        <p class="lead"> {{ account.available_balance }}</p>
                     </div>
                     <div class="col-xs-6">
                         <p class="lead">Monthly Interest to-date</p>
-                        {% if account.balance %}
-                            <p class="lead"> TZS {{ account.balance }}</p>
-                        {% else %}
-                            <p class="lead"> TZS 0.0</p>
-                        {% endif %}
+                        <p class="lead"> {{ account.bonus }}</p>
                     </div>
-                </div>
-            </div>
-            <div class="row margin-top-20 mid-align">
-                <div class="col-xs-12 col-md-4 col-lg-3 col-lg-offset-4">
-                    <a href="{% url 'statements' %}" class="btn btn-featured btn-primary">
-                        <span>View your statement</span>
-                        <i class="et-document"></i>
-                    </a>
                 </div>
             </div>
             {% if pendings %}
@@ -46,7 +27,7 @@
                     <div class="panel panel-default">
                         <div class="panel-heading text-center">
                             <span class="title elipsis text-danger">
-                                <strong>pending transactions</strong>
+                                <strong>recent transactions</strong>
                             </span>
                         </div>
 
@@ -65,20 +46,28 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {% for pending in pendings %}
+                                        {% for transaction in transactions %}
                                             <tr>
-                                                <td>{{ pending.full_timestamp }}</td>
-                                                <td>{{ pending.service }}</td>
-                                                <td>{{ pending.channel }}</td>
-                                                <td>{{ pending.mode }}</td>
-                                                <td>{{ pending.amount }}</td>
-                                                <td>{{ pending.charge }}</td>
+                                                <td>{{ transaction.full_timestamp }}</td>
+                                                <td>{{ transaction.service }}</td>
+                                                <td>{{ transaction.channel }}</td>
+                                                <td>{{ transaction.mode }}</td>
+{#                                                <td>{% money_localize transaction.amount 'TZS' %}</td>#}
+{#                                                <td>{% money_localize transaction.charge 'TZS' %}</td>#}
                                             </tr>
                                         {% endfor %}
                                     </tbody>
                                 </table>
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div class="row margin-top-20 mid-align">
+                    <div class="col-xs-12 col-md-4 col-lg-3 col-lg-offset-4">
+                        <a href="{% url 'statements' %}" class="btn btn-featured btn-primary">
+                            <span>View your statement</span>
+                            <i class="et-document"></i>
+                        </a>
                     </div>
                 </div>
             {% endif %}

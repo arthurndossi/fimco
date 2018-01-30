@@ -213,6 +213,7 @@ class RegisterForm1(forms.Form):
 
     def clean(self):
         clean_data = self.cleaned_data
+        clean_data['phone'].replace('+255', '0', 1)
         if 'phone' in clean_data and User.objects.filter(username=clean_data['phone']).exists():
             self.fields['phone'].widget.attrs['autofocus'] = 'autofocus'
             self.fields['phone'].widget.attrs['class'] = 'error'
@@ -245,10 +246,10 @@ class RegisterForm2(forms.Form):
     bot_cds = forms.CharField(required=False)
     dse_cds = forms.CharField(required=False)
     checker = forms.BooleanField(
-        required=True,
         widget=CheckboxInput(attrs={
             'class': 'checked-agree',
-            'id': 'checker'
+            'id': 'checker',
+            'required': True
         })
     )
 
@@ -267,7 +268,7 @@ class RegisterForm2(forms.Form):
         if image:
             self.fields['scanned_id'].widget.attrs['autofocus'] = 'autofocus'
             self.fields['scanned_id'].widget.attrs['class'] = 'error'
-            if image.file.size > 5 * 1024 * 1024:
+            if image.size > 5 * 1024 * 1024:
                 raise ValidationError("Image file too large ( > 5mb )")
             return image
         else:
@@ -430,6 +431,7 @@ class CorporateForm3(forms.Form):
 
     def clean(self):
         clean_data = self.cleaned_data
+        clean_data['phone'].replace('+255', '0', 1)
         if 'phone' in clean_data and User.objects.filter(username=clean_data['phone']).exists():
             self.fields['phone'].widget.attrs['autofocus'] = 'autofocus'
             self.fields['phone'].widget.attrs['class'] = 'error'
@@ -480,51 +482,51 @@ class CorporateForm4(forms.Form):
         })
     )
     checker = forms.BooleanField(
-        required=True,
         widget=CheckboxInput(attrs={
             'class': 'checked-agree',
-            'id': 'checker'
+            'id': 'checker',
+            'required': True
         })
     )
 
-    def clean_license(self):
-        license = self.cleaned_data['license']
-        if license:
-            if license.file.size > 5 * 1024 * 1024:
-                self.fields['certificate'].widget.attrs['autofocus'] = 'autofocus'
-                self.fields['certificate'].widget.attrs['class'] = 'error'
-                raise ValidationError("Image file too large ( > 5mb )")
-            return license
-        else:
-            self.fields['certificate'].widget.attrs['autofocus'] = 'autofocus'
-            self.fields['certificate'].widget.attrs['class'] = 'error'
-            raise ValidationError("Couldn't read uploaded image")
+    # def clean_license(self):
+    #     license = self.cleaned_data['license']
+    #     if license:
+    #         if license.file.size > 5 * 1024 * 1024:
+    #             self.fields['certificate'].widget.attrs['autofocus'] = 'autofocus'
+    #             self.fields['certificate'].widget.attrs['class'] = 'error'
+    #             raise ValidationError("Image file too large ( > 5mb )")
+    #         return license
+    #     else:
+    #         self.fields['certificate'].widget.attrs['autofocus'] = 'autofocus'
+    #         self.fields['certificate'].widget.attrs['class'] = 'error'
+    #         raise ValidationError("Couldn't read uploaded image")
+    #
+    # def clean_certificate(self):
+    #     certificate = self.cleaned_data['certificate']
+    #     if certificate:
+    #         if certificate.file.size > 5 * 1024 * 1024:
+    #             self.fields['certificate'].widget.attrs['autofocus'] = 'autofocus'
+    #             self.fields['certificate'].widget.attrs['class'] = 'error'
+    #             raise ValidationError("Image file too large ( > 5mb )")
+    #         return certificate
+    #     else:
+    #         self.fields['certificate'].widget.attrs['autofocus'] = 'autofocus'
+    #         self.fields['certificate'].widget.attrs['class'] = 'error'
+    #         raise ValidationError("Couldn't read uploaded image")
 
-    def clean_certificate(self):
-        certificate = self.cleaned_data['certificate']
-        if certificate:
-            if certificate.file.size > 5 * 1024 * 1024:
-                self.fields['certificate'].widget.attrs['autofocus'] = 'autofocus'
-                self.fields['certificate'].widget.attrs['class'] = 'error'
-                raise ValidationError("Image file too large ( > 5mb )")
-            return certificate
-        else:
-            self.fields['certificate'].widget.attrs['autofocus'] = 'autofocus'
-            self.fields['certificate'].widget.attrs['class'] = 'error'
-            raise ValidationError("Couldn't read uploaded image")
-
-    def clean_user_id(self):
-        identity = self.cleaned_data['user_id']
-        if identity:
-            if identity.file.size > 5 * 1024 * 1024:
-                self.fields['user_id'].widget.attrs['autofocus'] = 'autofocus'
-                self.fields['user_id'].widget.attrs['class'] = 'error'
-                raise ValidationError("Image file too large ( > 5mb )")
-            return identity
-        else:
-            self.fields['user_id'].widget.attrs['autofocus'] = 'autofocus'
-            self.fields['user_id'].widget.attrs['class'] = 'error'
-            raise ValidationError("Couldn't read uploaded image")
+    # def clean_user_id(self):
+    #     identity = self.cleaned_data['user_id']
+    #     if identity:
+    #         if identity.file.size > 5 * 1024 * 1024:
+    #             self.fields['user_id'].widget.attrs['autofocus'] = 'autofocus'
+    #             self.fields['user_id'].widget.attrs['class'] = 'error'
+    #             raise ValidationError("Image file too large ( > 5mb )")
+    #         return identity
+    #     else:
+    #         self.fields['user_id'].widget.attrs['autofocus'] = 'autofocus'
+    #         self.fields['user_id'].widget.attrs['class'] = 'error'
+    #         raise ValidationError("Couldn't read uploaded image")
 
 
 class UserCorporateForm(forms.Form):
@@ -597,10 +599,10 @@ class UserCorporateForm(forms.Form):
         })
     )
     checker = forms.BooleanField(
-        required=True,
         widget=CheckboxInput(attrs={
             'class': 'checked-agree',
-            'id': 'checker'
+            'id': 'checker',
+            'required': True
         })
     )
 
@@ -616,6 +618,7 @@ class UserCorporateForm(forms.Form):
 
     def clean(self):
         clean_data = self.cleaned_data
+        clean_data['phone'].replace('+255', '0', 1)
         if 'phone' in clean_data and User.objects.filter(username=clean_data['phone']).exists():
             self.fields['phone'].widget.attrs['autofocus'] = 'autofocus'
             self.fields['phone'].widget.attrs['class'] = 'error'
@@ -633,18 +636,18 @@ class UserCorporateForm(forms.Form):
 
         return clean_data
 
-    def clean_user_id(self):
-        identity = self.cleaned_data['user_id']
-        if identity:
-            if identity.file.size > 5 * 1024 * 1024:
-                self.fields['user_id'].widget.attrs['autofocus'] = 'autofocus'
-                self.fields['user_id'].widget.attrs['class'] = 'error'
-                raise ValidationError("Image file too large ( > 5mb )")
-            return identity
-        else:
-            self.fields['user_id'].widget.attrs['autofocus'] = 'autofocus'
-            self.fields['user_id'].widget.attrs['class'] = 'error'
-            raise ValidationError("Couldn't read uploaded image")
+    # def clean_user_id(self):
+    #     identity = self.cleaned_data['user_id']
+    #     if identity:
+    #         if identity.file.size > 5 * 1024 * 1024:
+    #             self.fields['user_id'].widget.attrs['autofocus'] = 'autofocus'
+    #             self.fields['user_id'].widget.attrs['class'] = 'error'
+    #             raise ValidationError("Image file too large ( > 5mb )")
+    #         return identity
+    #     else:
+    #         self.fields['user_id'].widget.attrs['autofocus'] = 'autofocus'
+    #         self.fields['user_id'].widget.attrs['class'] = 'error'
+    #         raise ValidationError("Couldn't read uploaded image")
 
 
 class BankAccountForm(forms.Form):
@@ -768,6 +771,7 @@ class EditProfileForm(forms.Form):
 
     def clean(self):
         clean_data = self.cleaned_data
+        clean_data['phone'].replace('+255', '0', 1)
         if 'phone' in clean_data and User.objects.filter(username=clean_data['phone']).exists():
             self.fields['phone'].widget.attrs['autofocus'] = 'autofocus'
             self.fields['phone'].widget.attrs['class'] = 'error'
@@ -785,15 +789,15 @@ class EditProfileForm(forms.Form):
 
         return clean_data
 
-    def clean_scanned_id(self):
-        image = self.cleaned_data['scanned_id']
-        if image:
-            if image.file.size > 5 * 1024 * 1024:
-                self.fields['scanned_id'].widget.attrs['autofocus'] = 'autofocus'
-                self.fields['scanned_id'].widget.attrs['class'] = 'error'
-                raise ValidationError("Image file too large ( > 5mb )")
-            return image
-        else:
-            self.fields['scanned_id'].widget.attrs['autofocus'] = 'autofocus'
-            self.fields['scanned_id'].widget.attrs['class'] = 'error'
-            raise ValidationError("Couldn't read uploaded image")
+    # def clean_scanned_id(self):
+    #     image = self.cleaned_data['scanned_id']
+    #     if image:
+    #         if image.file.size > 5 * 1024 * 1024:
+    #             self.fields['scanned_id'].widget.attrs['autofocus'] = 'autofocus'
+    #             self.fields['scanned_id'].widget.attrs['class'] = 'error'
+    #             raise ValidationError("Image file too large ( > 5mb )")
+    #         return image
+    #     else:
+    #         self.fields['scanned_id'].widget.attrs['autofocus'] = 'autofocus'
+    #         self.fields['scanned_id'].widget.attrs['class'] = 'error'
+    #         raise ValidationError("Couldn't read uploaded image")

@@ -15,7 +15,7 @@ def render_with_global_data(request, page, context):
             group_account_obj = GroupMember.objects.filter(profile_id=profile.profile_id).only('group_account')
             for group in group_account_obj:
                 try:
-                    grp_name = Group.objects.get(group_account=group.group_account).name
+                    grp_name = Group.objects.get(account=group.group_account).name
                     is_admin = group.admin
                     group_members_obj.append({'name': grp_name, 'admin': is_admin})
                 except Group.DoesNotExist:

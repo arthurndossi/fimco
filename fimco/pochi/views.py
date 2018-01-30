@@ -1,6 +1,8 @@
 import datetime
 import uuid
 
+from djmoney.money import Money
+
 from core.utils import render_with_global_data
 from django.contrib import messages
 from django.contrib.auth import user_logged_out
@@ -86,7 +88,7 @@ def home(request):
 
         for group in group_account_obj:
             try:
-                grp_name = Group.objects.get(group_account=group.group_account).name
+                grp_name = Group.objects.get(account=group.group_account).name
                 group_members_obj.append(grp_name)
             except Group.DoesNotExist:
                 pass
@@ -95,13 +97,13 @@ def home(request):
         pass
 
     try:
-        transactions = Transaction.objects.filter(profile_id=profile.profile_id, status='PENDING')\
-            .values('full_timestamp', 'service', 'channel', 'mode', 'amount', 'charge')
+        transactions = Transaction.objects.filter(profile_id=profile.profile_id)\
+            .values('full_timestamp', 'service', 'channel', 'mode', 'amount', 'charge')[:10]
     except Transaction.DoesNotExist:
         transactions = None
 
     context = {
-        'pendings': transactions,
+        'transactions': transactions,
         'account': balance_data,
         'groups': group_members_obj
     }
@@ -272,13 +274,13 @@ def admin(request, name=None):
 
     if profile_id:
         snap_obj = BalanceSnapshot.objects.filter(profile_id=profile_id)\
-            .values('closing_balance', 'bonus_closing_balance', 'full_timestamp')
+            .values('available_closing_balance', 'bonus_closing_balance', 'full_timestamp')
         bal_list = []
         bonus_list = []
         label_list = []
         for row in snap_obj:
             temp_label = row['full_timestamp']
-            temp_bal = row['closing_balance']
+            temp_bal = row['available_closing_balance']
             temp_bonus = row['bonus_closing_balance']
             label_list.append(temp_label.strftime('%d/%m/%Y'))
             bal_list.append(float(temp_bal))
@@ -394,6 +396,7 @@ def edit_profile(request):
             user.username = request.POST['phone']
             user.profile.dob = request.POST['dob']
             user.profile.gender = request.POST['gender']
+            user.profile.msisdn = request.POST['phone']
             user.profile.avatar = request.FILES['avatar']
             user.profile.client_id = request.POST['id_number']
             user.profile.bot_cds = request.POST['bot_account']
@@ -496,14 +499,14 @@ def confirm_transfer(request):
         src_account = dest_account = None
         try:
             src_account = Account.objects.get(profile_id=src_profile_id)
-            src_account.balance -= float(amount)
+            src_account.available_balance -= float(amount)
             src_account.save()
         except Account.DoesNotExist:
             pass
 
         try:
             dest_account = Account.objects.get(profile_id=dest_profile_id)
-            dest_account.balance += float(amount)
+            dest_account.available_balance += float(amount)
             dest_account.save()
         except Account.DoesNotExist:
             pass
@@ -548,14 +551,14 @@ def confirm_transfer(request):
         dest_account = None
         try:
             src_account = Account.objects.get(account=src_account_no)
-            src_account.balance -= float(amount)
+            src_account.available_balance -= float(amount)
             src_account.save()
         except Account.DoesNotExist:
             pass
 
         try:
             dest_account = Account.objects.get(profile_id=dest_profile_id)
-            dest_account.balance += float(amount)
+            dest_account.available_balance += float(amount)
             dest_account.save()
         except Account.DoesNotExist:
             pass
@@ -572,13 +575,8 @@ def confirm_transfer(request):
 @transaction.atomic
 def fund_transfer(request, service, ext_wallet, channel, profile_id, src, dest, bal, amount, msisdn, overdraft=0):
     try:
-        close_bal = Ledger.objects.last().c_bal
-    except Ledger.DoesNotExist:
-        close_bal = 0
-
-    try:
         charges = Charge.objects.get(service=service).charge
-    except Ledger.DoesNotExist:
+    except Charge.DoesNotExist:
         charges = 0
     total = amount + charges
     if service == 'P2P':
@@ -587,30 +585,30 @@ def fund_transfer(request, service, ext_wallet, channel, profile_id, src, dest, 
                 profile_id=profile_id,
                 account=src,
                 msisdn=msisdn,
-                external_wallet_id=ext_wallet,
+                trans_id=ext_wallet,
                 service=service,
                 dest_account=dest,
-                amount=amount,
+                amount=Money(amount, 'TZS'),
                 status='DONE'
             )
             Ledger.objects.create(
                 trans_type='DEBIT',
                 service=service,
-                amount=amount,
-                o_bal=close_bal,
-                c_bal=close_bal
+                amount=Money(amount, 'TZS'),
+                current_o_bal=Money(total, 'TZS'),
+                current_c_bal=Money(total, 'TZS')
             )
             Ledger.objects.create(
                 trans_type='CREDIT',
                 service=service,
-                amount=amount,
-                o_bal=close_bal,
-                c_bal=close_bal
+                amount=Money(amount, 'TZS'),
+                current_o_bal=Money(total, 'TZS'),
+                current_c_bal=Money(total, 'TZS')
             )
             BalanceSnapshot.objects.create(
                 profile_id=profile_id,
                 account=src,
-                closing_balance=close_bal - total
+                current_closing_balance=Money(bal - total, 'TZS')
             )
     elif service == 'WITHDRAW':
         if total <= bal or overdraft:
@@ -618,52 +616,52 @@ def fund_transfer(request, service, ext_wallet, channel, profile_id, src, dest, 
                 profile_id=profile_id,
                 account=src,
                 msisdn=msisdn,
-                external_wallet_id=ext_wallet,
+                trans_id=ext_wallet,
                 service=service,
                 channel=channel,
                 dest_account=dest,
-                amount=amount,
-                charge=charges
+                amount=Money(total, 'TZS'),
+                charge=Money(charges, 'TZS'),
             )
             Ledger.objects.create(
                 profile_id=profile_id,
                 trans_type='DEBIT',
                 service=service,
                 amount=amount,
-                o_bal=close_bal,
-                c_bal=close_bal - total
+                current_o_bal=Money(total, 'TZS'),
+                current_c_bal=Money(total, 'TZS')
             )
             CashOut.objects.create(
                 ext_entity=channel,
-                ext_acc_no=ext_wallet,
-                amount=total
+                ext_trans_id=ext_wallet,
+                amount=Money(total, 'TZS')
             )
             BalanceSnapshot.objects.create(
                 profile_id=profile_id,
                 account=src,
-                closing_balance=close_bal - total
+                current_closing_balance=Money(total, 'TZS')
             )
     elif service == 'DEPOSIT':
         Transaction.objects.create(
             profile_id=profile_id,
             account=dest,
             msisdn=msisdn,
-            external_wallet_id=ext_wallet,
+            trans_id=ext_wallet,
             service='DEPOSIT',
-            amount=amount
+            amount=Money(amount, 'TZS'),
         )
         Ledger.objects.create(
             profile_id=profile_id,
             trans_type='CREDIT',
             service=service,
             amount=amount,
-            o_bal=close_bal,
-            c_bal=close_bal + amount
+            current_o_bal=Money(amount, 'TZS'),
+            current_c_bal=Money(amount, 'TZS')
         )
         BalanceSnapshot.objects.create(
             profile_id=profile_id,
             account=src,
-            closing_balance=close_bal + amount
+            current_closing_balance=Money(amount, 'TZS')
         )
 
 
@@ -675,11 +673,11 @@ def pochi2pochi(request, name=None):
         bal = ov = 0
         try:
             this_group = Group.objects.get(name=name)
-            this_group_account = this_group.group_account
+            this_group_account = this_group.account
             try:
                 acc = Account.objects.get(account=this_group_account)
                 ov = acc.allow_overdraft
-                bal = acc.balance
+                bal = acc.available_balance
             except Account.DoesNotExist:
                 acc = None
         except Group.DoesNotExist:
@@ -689,7 +687,7 @@ def pochi2pochi(request, name=None):
         profile = request.user.profile
         try:
             acc = Account.objects.get(profile_id=profile.profile_id)
-            bal = acc.balance
+            bal = acc.available_balance
             ov = acc.allow_overdraft
         except Account.DoesNotExist:
             acc = None
@@ -857,11 +855,11 @@ def withdraw(request):
 
                 _account = Account.objects.get(profile_id=identifier)
                 pochi_id = _account.account
-                bal = _account.balance
+                bal = _account.available_balance
                 ov = _account.allow_overdraft
 
                 if amount <= bal:
-                    _account.balance -= amount
+                    _account.available_balance -= amount
                     _account.save()
 
                     request.session['institution'] = institution
@@ -890,11 +888,11 @@ def withdraw(request):
             try:
                 _account = Account.objects.get(profile_id=identifier)
                 pochi_id = _account.account
-                bal = _account.balance
+                bal = _account.available_balance
                 ov = _account.allow_overdraft
 
                 if amount <= bal:
-                    _account.balance -= amount
+                    _account.available_balance -= amount
                     _account.save()
 
                     request.session['institution'] = institution
@@ -947,12 +945,12 @@ def deposit(request):
             if src_profile_id:
                 try:
                     _account = Account.objects.get(profile_id=src_profile_id)
-                    bal = _account.balance
+                    bal = _account.available_balance
                     dst_account = _account.account
 
                     fund_transfer(request, 'DEPOSIT', 'NA', 'NA', src_profile_id, 'NA', dst_account, bal, amount, phone)
 
-                    _account.balance += amount
+                    _account.available_balance += amount
                     _account.save()
 
                     message = 'You have successfully deposited ' + str(amount) + ' to your account'
@@ -966,18 +964,19 @@ def deposit(request):
             this_account = request.GET['account']
 
             try:
-                _group = Group.objects.get(group_account=this_account)
-                bal = _group.balance
+                _group = Group.objects.get(account=this_account)
+                _acc = Account.objects.get(account=this_account)
+                bal = _acc.available_balance
                 name = _group.name
 
                 fund_transfer(request, 'DEPOSIT', 'NA', 'NA', name, 'NA', this_account, bal, amount, 'NA')
 
-                _group.balance += amount
-                _group.save()
+                _acc.available_balance += amount
+                _acc.save()
 
                 message = 'You have successfully deposited ' + str(amount) + ' to your group account'
 
-            except Group.DoesNotExist:
+            except Group.DoesNotExist or Account.DoesNotExist:
                 message = 'Sorry!, This account number does not belong to any group in the system!'
                 pass
     return JsonResponse({'message': message})
@@ -992,6 +991,11 @@ def del_bank_acc(request):
     return redirect(withdraw)
 
 
+def confirm_delete_bank_acc(request):
+    messages.warning(request, 'You are about to delete your bank account in POCHI. Proceed?')
+    return redirect(request.META['HTTP_REFERER'])
+
+
 @login_required
 def new_group(request):
     phone = request.user.username
@@ -1000,33 +1004,29 @@ def new_group(request):
 
 @login_required
 def create_group(request):
-    profile = request.user.profile
+    user = request.user.username
     import json
     if request.method == 'POST':
         groupName = request.POST['profileGroupName'].capitalize()
         member_list = request.POST['members']
-        first_admin = profile.profile_id
+        first_admin = user
         members = json.loads(member_list)
         grp_acc = uuid.uuid4().hex[:10].upper()
         try:
             with transaction.atomic():
                 Group.objects.create(
-                    group_account=grp_acc,
+                    account=grp_acc,
                     name=groupName,
                 )
                 Account.objects.create(
                     account=grp_acc,
                     nickname=groupName,
                 )
-                GroupMember.objects.create(
-                    group_account=grp_acc,
-                    profile_id=first_admin,
-                    admin=1
-                )
+
                 for member in members:
                     is_admin = 0
-                    # if member == sec_admin:
-                    #     is_admin = 1
+                    if member == first_admin:
+                        is_admin = 1
                     try:
                         profile_id = Profile.objects.get(user__username=member).profile_id
                     except Profile.DoesNotExist:
@@ -1049,7 +1049,7 @@ def create_group(request):
             #                  "message": "hello world",
             #              }), {"Content-type": "application/x-www-form-urlencoded"})
             # conn.getresponse()
-    return render_with_global_data(request, 'pochi/create_group.html', {})
+    return redirect(new_group)
 
 
 @login_required
@@ -1065,30 +1065,30 @@ def lock(request, **kwargs):
 @login_required
 def group_settings(request, name=None):
     count = 0
-    administrators = []
+    admin_count = 0
     members = []
+    my_name = request.user.get_full_name()
     try:
         this_group = Group.objects.get(name=name)
-        grp_acc = this_group.group_account
+        grp_acc = this_group.account
         count = GroupMember.objects.filter(group_account=grp_acc).count()
-        admins_profile_obj = GroupMember.objects.filter(group_account=grp_acc, admin=1).only('profile_id')
-        for admin_profile_obj in admins_profile_obj:
-            profile = Profile.objects.get(profile_id=admin_profile_obj.profile_id).user_id
-            administrator = User.objects.get(id=profile).get_full_name()
-            administrators.append(administrator)
 
-        members_profile_obj = GroupMember.objects.filter(group_account=grp_acc).only('profile_id')
+        members_profile_obj = GroupMember.objects.filter(group_account=grp_acc).values('profile_id', 'admin')
         for member_profile_obj in members_profile_obj:
-            profile = Profile.objects.get(profile_id=member_profile_obj.profile_id).user_id
-            member = User.objects.get(id=profile).get_full_name()
-            members.append(member)
+            pid = member_profile_obj['profile_id']
+            adm = member_profile_obj['admin']
+            if adm == 1:
+                admin_count = admin_count+1
+            member = User.objects.select_related('profile').get(profile__profile_id=pid).get_full_name()
+            members.append({'member': member, 'id': pid, 'admin': adm})
     except Account.DoesNotExist:
         pass
     context = {
         'group': name,
+        'user': my_name,
         'number': count,
         'members': members,
-        'administrators': administrators,
+        'administrators': admin_count
     }
     return render_with_global_data(request, 'pochi/group_settings.html', context)
 
@@ -1105,7 +1105,7 @@ def add_remove_member(request, name=None, action=None):
                 if profile.exists():
                     try:
                         this_group = Group.objects.get(name=name)
-                        grp_acc = this_group.group_account
+                        grp_acc = this_group.account
                         GroupMember.objects.create(group_account=grp_acc, profile_id=member)
                     except Account.DoesNotExist:
                         pass
@@ -1140,7 +1140,7 @@ def add_remove_member(request, name=None, action=None):
                     rejected_profile_id = Profile.objects.get(user__first_name=first_name).profile_id
                     try:
                         this_group = Group.objects.get(name=name)
-                        grp_acc = this_group.group_account
+                        grp_acc = this_group.account
                         GroupMember.objects.filter(group_account=grp_acc, profile_id=rejected_profile_id).delete()
                     except Account.DoesNotExist:
                         pass
@@ -1156,8 +1156,8 @@ def group_statement(request, name=None):
     group_transactions = None
     try:
         this_group = Group.objects.get(name=name)
-        grp_acc = this_group.group_account
-    except Account.DoesNotExist:
+        grp_acc = this_group.account
+    except Group.DoesNotExist:
         grp_acc = None
     if grp_acc:
         if request.GET:
@@ -1194,7 +1194,7 @@ def group_profile(request, name=None):
     statements = None
     try:
         this_group = Group.objects.get(name=name)
-        grp_acc = this_group.group_account
+        grp_acc = this_group.account
         try:
             statements = Transaction.objects.filter(account=grp_acc).exists()
             group_transactions = Transaction.objects.filter(account=grp_acc, status='PENDING')\
@@ -1220,31 +1220,30 @@ def group_profile(request, name=None):
 def delete_group(request, name=None):
     profile = request.user.profile
     try:
-        group = Group.objects.filter(name=name)
-        group_acc = group.group_account
+        group = Group.objects.get(name=name)
+        group_acc = group.account
     except Group.DoesNotExist:
         group_acc = None
-        group = None
     if group_acc:
-        group_member_obj = GroupMember.objects.get(profile_id=profile.profile_id)
+        group_member_obj = GroupMember.objects.get(group_account=group_acc, profile_id=profile.profile_id)
+        group_account = Account.objects.get(profile_id=profile.profile_id)
         is_admin = group_member_obj.admin
         if is_admin:
-            if group.balance > 0:
+            if group_account.current_balance > 0:
                 admin_id = group_member_obj.profile_id
-                Account.objects.get(profile_id=admin_id).balance += group.balance
+                Account.objects.get(profile_id=admin_id).available_balance += group_account.current_balance
             GroupMember.objects.filter(group_account=group_acc).delete()
             Group.objects.get(name=name).delete()
-    return redirect(request.META['HTTP_REFERER'])
+    return redirect(home)
 
 
 def exit_group(request, name=None):
     profile = request.user.profile
     try:
         group = Group.objects.filter(name=name)
-        group_acc = group.group_account
+        group_acc = group.account
     except Group.DoesNotExist:
         group_acc = None
-        group = None
 
     if group_acc:
         try:
@@ -1252,13 +1251,18 @@ def exit_group(request, name=None):
         except GroupMember.DoesNotExist:
             members_queryset = None
 
+        try:
+            grp_account = Account.objects.filter(account=group_acc)
+        except Account.DoesNotExist:
+            grp_account = None
+
         members_count = members_queryset.count()
 
         if members_count <= 2:
-            if group.balance > 0:
+            if grp_account.balance > 0:
                 remaining_member_queryset = GroupMember.objects.exclude(profile_id=profile.profile_id)
                 remaining_member_id = remaining_member_queryset.profile_id
-                Account.objects.get(profile_id=remaining_member_id).balance += group.balance
+                Account.objects.get(profile_id=remaining_member_id).available_balance += grp_account.balance
             GroupMember.objects.get(profile_id=profile.profile_id).delete()
             Group.objects.get(name=name).delete()
         else:
@@ -1282,10 +1286,21 @@ def view_data(request, page=None, name=None):
     else:
         profile_id = request.user.profile.profile_id
     if page == 'rates':
-        try:
-            all_rates = Rate.objects.all()
-        except Rate.DoesNotExist:
-            all_rates = None
+        if request.POST:
+            rates_range = request.POST['rates_range']
+            start, end = rates_range.split(' - ')
+            start = datetime.datetime.strptime(start, '%m/%d/%Y').strftime('%Y-%m-%d')
+            end = datetime.datetime.strptime(end, '%m/%d/%Y').strftime('%Y-%m-%d')
+
+            try:
+                all_rates = Rate.objects.filter(full_timestamp__range=[start, end])
+            except Rate.DoesNotExist:
+                all_rates = None
+        else:
+            try:
+                all_rates = Rate.objects.all()
+            except Rate.DoesNotExist:
+                all_rates = None
         if all_rates:
             now = datetime.datetime.now()
             this_year_rates = all_rates.filter(full_timestamp__year=now.year).only('rate')
@@ -1298,14 +1313,19 @@ def view_data(request, page=None, name=None):
                 today_rate = all_rates.get(full_timestamp__month=now.month).rate
             except Rate.DoesNotExist:
                 today_rate = None
-            print all_rates
+
+            day = datetime.datetime.now().day
+            month = datetime.datetime.now().month
+            prev_year = datetime.datetime.now().year - 1
+            last_year = datetime.date(prev_year, month, day)
             if today_rate:
                 context = {
                     'page': 'rates',
                     'group': name,
                     'rates': all_rates,
                     'year': rates_list,
-                    'today': today_rate
+                    'today': today_rate,
+                    'last_year': last_year
                 }
             else:
                 context = {
@@ -1320,11 +1340,31 @@ def view_data(request, page=None, name=None):
             messages.info(request, 'There are no pochi rates yet! Coming soon')
             return render_with_global_data(request, 'pochi/earnings.html', {'page': 'rates', 'group': name})
     elif page == 'daily':
-        try:
-            all_daily = BalanceSnapshot.objects.filter(profile_id=profile_id)\
-                .values('full_timestamp', 'bonus_closing_balance')
-        except BalanceSnapshot.DoesNotExist:
-            all_daily = None
+        if request.POST:
+            daily_range = request.POST['daily_range']
+            start, end = daily_range.split(' - ')
+            start = datetime.datetime.strptime(start, '%m/%d/%Y').strftime('%Y-%m-%d')
+            end = datetime.datetime.strptime(end, '%m/%d/%Y').strftime('%Y-%m-%d')
+
+            try:
+                all_daily = BalanceSnapshot.objects.filter(full_timestamp__range=[start, end], profile_id=profile_id) \
+                    .values('full_timestamp', 'bonus_closing_balance')
+            except BalanceSnapshot.DoesNotExist:
+                all_daily = None
+        else:
+            try:
+                all_daily = BalanceSnapshot.objects.filter(profile_id=profile_id) \
+                    .values('full_timestamp', 'bonus_closing_balance')
+            except BalanceSnapshot.DoesNotExist:
+                all_daily = None
+
+        day = datetime.datetime.now().day
+        prev_month = datetime.datetime.now().month - 1
+        year = datetime.datetime.now().year
+        if prev_month == 0:
+            prev_month = 12
+            year = year - 1
+        last_month = datetime.date(year, prev_month, day)
         if all_daily:
             last_30_days = datetime.datetime.today() - datetime.timedelta(days=30)
             daily_30 = all_daily.filter(full_timestamp__gte=last_30_days)
@@ -1337,13 +1377,15 @@ def view_data(request, page=None, name=None):
                 today_bonus = all_daily.get(full_timestamp__date=datetime.date.today())['bonus_closing_balance']
             except BalanceSnapshot.DoesNotExist:
                 today_bonus = None
+
             if today_bonus:
                 context = {
                     'page': 'daily',
                     'group': name,
                     'bonuses': all_daily,
                     'month': bonus_list,
-                    'today': today_bonus
+                    'today': today_bonus,
+                    'last_month': last_month
                 }
             else:
                 context = {
@@ -1351,21 +1393,47 @@ def view_data(request, page=None, name=None):
                     'group': name,
                     'bonuses': all_daily,
                     'month': bonus_list,
-                    'today': 'Nil'
+                    'today': 'Nil',
+                    'last_month': last_month
                 }
             return render_with_global_data(request, 'pochi/earnings.html', context)
         else:
             messages.info(request, 'There are no daily rates yet! Coming soon')
-            return render_with_global_data(request, 'pochi/earnings.html', {'page': 'daily', 'group': name})
+            context = {
+                'page': 'daily',
+                'group': name,
+                'last_month': last_month
+            }
+            return render_with_global_data(request, 'pochi/earnings.html', context)
     elif page == 'monthly':
-        try:
-            all_monthly = BalanceSnapshot.objects.filter(profile_id=profile_id)\
-                .annotate(month=TruncMonth('full_timestamp'))\
-                .values('month')\
-                .annotate(bonus=Sum('bonus_closing_balance'))\
-                .values('month', 'bonus')
-        except BalanceSnapshot.DoesNotExist:
-            all_monthly = None
+        if request.POST:
+            monthly_range = request.POST['monthly_range']
+            start, end = monthly_range.split(' - ')
+            start = datetime.datetime.strptime(start, '%m/%d/%Y').strftime('%Y-%m-%d')
+            end = datetime.datetime.strptime(end, '%m/%d/%Y').strftime('%Y-%m-%d')
+
+            try:
+                all_monthly = BalanceSnapshot.objects.filter(full_timestamp__range=[start, end], profile_id=profile_id)\
+                    .annotate(month=TruncMonth('full_timestamp')) \
+                    .values('month') \
+                    .annotate(bonus=Sum('bonus_closing_balance')) \
+                    .values('month', 'bonus')
+            except BalanceSnapshot.DoesNotExist:
+                all_monthly = None
+        else:
+            try:
+                all_monthly = BalanceSnapshot.objects.filter(profile_id=profile_id) \
+                    .annotate(month=TruncMonth('full_timestamp')) \
+                    .values('month') \
+                    .annotate(bonus=Sum('bonus_closing_balance')) \
+                    .values('month', 'bonus')
+            except BalanceSnapshot.DoesNotExist:
+                all_monthly = None
+
+        day = datetime.datetime.now().day
+        month = datetime.datetime.now().month
+        prev_year = datetime.datetime.now().year - 1
+        last_year = datetime.date(prev_year, month, day)
         if all_monthly:
             last_12 = all_monthly.reverse()[:12]
             bonus_arr = []
@@ -1379,21 +1447,41 @@ def view_data(request, page=None, name=None):
                 'group': name,
                 'bonuses': all_monthly,
                 'year': bonus_list,
-                'month': monthly_bonus
+                'month': monthly_bonus,
+                'last_year': last_year
             }
             return render_with_global_data(request, 'pochi/earnings.html', context)
         else:
             messages.info(request, 'There are no monthly rates yet! Coming soon')
-            return render_with_global_data(request, 'pochi/earnings.html', {'page': 'monthly', 'group': name})
+            context = {'page': 'monthly', 'group': name, 'last_year': last_year}
+            return render_with_global_data(request, 'pochi/earnings.html', context)
     elif page == 'total':
-        try:
-            bs = BalanceSnapshot.objects.filter(profile_id=profile_id)\
-                .annotate(month=TruncMonth('full_timestamp'))\
-                .values('month')\
-                .annotate(bonus=Sum('bonus_closing_balance'))\
-                .values('month', 'bonus')
-        except BalanceSnapshot.DoesNotExist:
-            bs = None
+        if request.POST:
+            total_range = request.POST['total_range']
+            start, end = total_range.split(' - ')
+            start = datetime.datetime.strptime(start, '%m/%d/%Y').strftime('%Y-%m-%d')
+            end = datetime.datetime.strptime(end, '%m/%d/%Y').strftime('%Y-%m-%d')
+            try:
+                bs = BalanceSnapshot.objects.filter(full_timestamp__range=[start, end], profile_id=profile_id) \
+                    .annotate(month=TruncMonth('full_timestamp')) \
+                    .values('month') \
+                    .annotate(bonus=Sum('bonus_closing_balance')) \
+                    .values('month', 'bonus')
+            except BalanceSnapshot.DoesNotExist:
+                bs = None
+        else:
+            try:
+                bs = BalanceSnapshot.objects.filter(profile_id=profile_id) \
+                    .annotate(month=TruncMonth('full_timestamp')) \
+                    .values('month') \
+                    .annotate(bonus=Sum('bonus_closing_balance')) \
+                    .values('month', 'bonus')
+            except BalanceSnapshot.DoesNotExist:
+                bs = None
+        day = datetime.datetime.now().day
+        month = datetime.datetime.now().month
+        prev_year = datetime.datetime.now().year - 1
+        last_year = datetime.date(prev_year, month, day)
         if bs:
             bs_arr = []
             cumulative = 0
@@ -1412,12 +1500,18 @@ def view_data(request, page=None, name=None):
                 'total': total_bonuses,
                 'history': bs_arr,
                 'month': cumulative_year_bonuses,
-                'now': datetime.datetime.now()
+                'now': datetime.datetime.now(),
+                'last_year': last_year
             }
             return render_with_global_data(request, 'pochi/earnings.html', context)
         else:
             messages.info(request, 'No earnings yet! Coming soon')
-            return render_with_global_data(request, 'pochi/earnings.html', {'page': 'total', 'group': name})
+            context = {
+                'page': 'total',
+                'group': name,
+                'last_year': last_year
+            }
+            return render_with_global_data(request, 'pochi/earnings.html', context)
     else:
         return redirect(admin)
 
@@ -1425,7 +1519,7 @@ def view_data(request, page=None, name=None):
 @login_required
 def delete_account(request):
     profile_id = request.user.profile.profile_id
-    balance = Account.objects.get(profile_id=profile_id).balance
+    balance = Account.objects.get(profile_id=profile_id).current_balance
     if balance != 0:
         messages.info(request, 'You have to transfer all your funds from POCHI to be able to delete your account!',
                       extra_tags='main')
@@ -1446,3 +1540,81 @@ def delete_account(request):
         request.user.save()
         return redirect(index)
     return redirect(request.META['HTTP_REFERER'])
+
+
+def validate_pochi_id(request):
+    if request.is_ajax() and request.POST:
+        username = request.POST['username']
+        try:
+            user_obj = User.objects.get(username=username)
+            user = '%s %s' % (user_obj.first_name, user_obj.last_name)
+        except User.DoesNotExist:
+            user = None
+        context = {'result': user}
+    else:
+        context = {'result': None}
+    return JsonResponse(context)
+
+
+def group_admin(request, name, identity, action):
+    if action == 'add':
+        try:
+            group = Group.objects.get(name=name)
+            group_acc = group.account
+        except Group.DoesNotExist:
+            group_acc = None
+            messages.error(request, "Sorry!, an error occurred, cannot complete this action.")
+
+        if group_acc:
+            try:
+                member_qs = GroupMember.objects.get(profile_id=identity, group_account=group_acc)
+                member_qs.admin = 1
+                member_qs.save()
+            except GroupMember.DoesNotExist:
+                messages.error(request, "Sorry!, an error occurred, This member does not exist!")
+    elif action == 'remove':
+        try:
+            group = Group.objects.get(name=name)
+            group_acc = group.account
+        except Group.DoesNotExist:
+            group_acc = None
+            messages.error(request, "Sorry!, an error occurred, cannot complete this action.")
+
+        if group_acc:
+            try:
+                member_qs = GroupMember.objects.get(profile_id=identity, group_account=group_acc)
+                member_qs.admin = 0
+                member_qs.save()
+            except GroupMember.DoesNotExist:
+                messages.error(request, "Sorry!, an error occurred, This member does not exist!")
+    if action == 'change':
+        try:
+            group = Group.objects.get(name=name)
+            group.name = identity
+            group.save()
+        except Group.DoesNotExist:
+            messages.error(request, "Sorry!, an error occurred, cannot complete this action.")
+
+    return redirect(group_settings, identity)
+
+
+def confirm_action_group(request, name, action):
+    if 'addAdmin' in action:
+        action_array = action.split('-')
+        tag = action_array[0]+' '+action_array[1]
+        messages.info(request, "Add this member as an admin of "+name+" group. Continue?",
+                      extra_tags=tag)
+    elif 'removeAdmin' in action:
+        action_array = action.split('-')
+        tag = action_array[0] + ' ' + action_array[1]
+        messages.warning(request, "This member will no longer be an admin of "+name+" group. Continue?",
+                         extra_tags=tag)
+    elif 'change' in action:
+        if request.POST:
+            new_name = request.POST['g_name']
+            tag = action+' '+new_name
+            messages.warning(request, "Are you sure you want to "+action+" "+name+" group name?", extra_tags=tag)
+    else:
+        messages.warning(request, "You are about to "+action+" "+name+" group. Do you wish to proceed?",
+                         extra_tags=action)
+    return redirect(request.META.get("HTTP_REFERER"))

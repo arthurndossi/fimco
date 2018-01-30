@@ -12,6 +12,11 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 
 import os
 
+from decimal import ROUND_HALF_EVEN
+
+import moneyed
+from moneyed.localization import _FORMATTER
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
@@ -138,3 +143,27 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
+
+TZS = moneyed.add_currency(
+    code='TZS',
+    numeric='068',
+    name='Tanzanian shilling',
+    countries=('TANZANIA', )
+)
+
+# Currency Formatter will output 2.000,00 Bs.
+_FORMATTER.add_sign_definition(
+    'default',
+    TZS,
+    prefix=u'Tshs. '
+)
+
+_FORMATTER.add_formatting_definition(
+    'es_TZ',
+    group_size=3, group_separator=",", decimal_point=".",
+    positive_sign="",  trailing_positive_sign="",
+    negative_sign="-", trailing_negative_sign="",
+    rounding_method=ROUND_HALF_EVEN
+)
+
+CURRENCIES = ('USD', 'TZS')

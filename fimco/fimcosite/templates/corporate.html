@@ -18,7 +18,6 @@
     <section>
         <div class="container">
             {% if not done %}
-                {{ done }}
                 <div class="row">
                 {% if messages %}
                     {% for message in messages %}
@@ -66,7 +65,7 @@
 
                 <ul class="nav nav-tabs nav-button-tabs mb-30">
                     <li class="nav-item">
-                        <a class="nav-link {% if first %}{{ first }}{% endif %}" href="#company" data-toggle="tab">Add New Company</a>
+                        <a class="nav-link {% if first %}{{ first }}{% endif %}{% if inactive %}{{ inactive }}{% endif %}" href="#company" data-toggle="tab">Add New Company</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {% if second %}{{ second }}{% endif %}{% if disabled %}{{ disabled }}{% endif %}" href="#user" {% if not disabled %}data-toggle="tab"{% endif %}>Add User to Existing company</a>
@@ -74,24 +73,24 @@
                 </ul>
 
                 <div class="tab-content">
-                    <div class="tab-pane {% if first %}{{ first }}{% else %}'fade'{% endif %}" id="company">
+                    <div class="tab-pane {% if first %}{{ first }}{% else %}fade{% endif %}" id="company">
                         <div class="card card-default">
                             <div class="card-heading card-heading-transparent">
                                 <ul class="process-steps nav nav-justified">
                                     <li class="nav-item">
-                                        <a class="nav-link {% if wizard.steps.current == wizard.steps.first %}'active'{% endif %}" href="#step1" data-toggle="tab">1</a>
+                                        <a class="nav-link {% if wizard.steps.current == wizard.steps.first %}active{% endif %}" href="#step1" data-toggle="tab">1</a>
                                         <h5>Company Details</h5>
                                     </li>
                                     <li class="nav-item disabled">
-                                        <a class="nav-link {% if wizard.steps.index == 1 %}'active'{% endif %}" href="#step2" data-toggle="tab">2</a>
+                                        <a class="nav-link {% if wizard.steps.index == 1 %}active{% endif %}" href="#step2" data-toggle="tab">2</a>
                                         <h5>BOT & DSE Form</h5>
                                     </li>
                                     <li class="nav-item disabled">
-                                        <a class="nav-link {% if wizard.steps.index == 2 %}'active'{% endif %}" href="#step3" data-toggle="tab">3</a>
+                                        <a class="nav-link {% if wizard.steps.index == 2 %}active{% endif %}" href="#step3" data-toggle="tab">3</a>
                                         <h5>User Details</h5>
                                     </li>
                                     <li class="nav-item disabled">
-                                        <a class="nav-link {% if wizard.steps.current == wizard.steps.last %}'active'{% endif %}" href="#step4" data-toggle="tab">4</a>
+                                        <a class="nav-link {% if wizard.steps.current == wizard.steps.last %}active{% endif %}" href="#step4" data-toggle="tab">4</a>
                                         <h5>KYC Information</h5>
                                     </li>
                                 </ul>
@@ -187,7 +186,7 @@
                                         {% elif wizard.steps.index == 1 %}
                                             <div role="tabpanel" class="tab-pane active" id="step2">
                                                 <h4 class="text-center">
-                                                    BOT & DSE CDS Accounts Form
+                                                    BOT & DSE Accounts Form
                                                     <small class="text-muted">(optional)</small>
                                                 </h4>
                                                 <fieldset>
@@ -265,7 +264,7 @@
                                                         <div class="col-md-6 col-sm-6">
                                                             <label>Email *</label>
                                                             {{ wizard.form.email }}
-                                                            <small class="text-muted">(Enter the company's email address)</small>
+                                                            <small class="text-muted">(Enter your company's email address)</small>
                                                             {% if wizard.form.email.errors %}
                                                                 {% for error in wizard.form.email.errors %}
                                                                     <div class="alert alert-mini alert-danger mb-30">
@@ -277,7 +276,6 @@
                                                         <div class="col-md-6 col-sm-6">
                                                             <label>Phone *</label>
                                                             {{ wizard.form.phone }}
-                                                            <small class="text-muted">(Enter the company's phone number)</small>
                                                             {% if wizard.form.phone.errors %}
                                                                 {% for error in wizard.form.phone.errors %}
                                                                     <div class="alert alert-mini alert-danger mb-30">
@@ -333,11 +331,7 @@
                                                                     </div>
                                                                 {% endfor %}
                                                             {% endif %}
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-xs-12">
-                                                            <div class="alert alert-mini mb-30 passMessage" style="display:none">
+                                                            <div id="passMessage" class="alert alert-mini mb-30" style="display:none">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -440,8 +434,9 @@
                                             </div>
                                         {% endif %}
                                         {% if wizard.steps.prev %}
-                                            <button name="wizard_goto_step" type="submit" class="btn btn-primary btn-teal" value="{{ wizard.steps.first }}">Start Again</button>
-                                            <button name="wizard_goto_step" type="submit" class="btn btn-primary btn-teal" value="{{ wizard.steps.prev }}">Previous</button>
+                                            <a href="{% url 'corporate' %}" class="btn btn-primary btn-teal">Start Again</a>
+{#                                            <button name="wizard_goto_step" type="submit" class="btn btn-primary btn-teal" value="{{ wizard.steps.first }}">First Page</button>#}
+                                            <button name="wizard_goto_step" type="submit" class="btn btn-primary btn-teal" formnovalidate value="{{ wizard.steps.prev }}">Previous</button>
                                         {% endif %}
                                         {% if wizard.steps.current == wizard.steps.last %}
                                             <input type="submit" class="btn btn-primary btn-teal float-right" value="Complete Registration!"/>
@@ -453,14 +448,14 @@
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane {% if second %}{{ second }}{% else %}'fade'{% endif %}" id="user">
+                    <div class="tab-pane {% if second %}{{ second }}{% else %}fade{% endif %}" id="user">
                     {% if logged_in %}
                         <div class="card card-default">
                             <div class="card-heading card-heading-transparent">
                                 <h4 class="text-center">Company representative details Form</h4>
                             </div>
                             <div class="card-block">
-                                <form class="" action="{% url 'add_user' %}" method="post" enctype="multipart/form-data">
+                                <form action="{% url 'add_user' %}" method="post" enctype="multipart/form-data">
                                 {% csrf_token %}
                                     {% if adForm.non_field_errors %}
                                         {% for general_error in adForm.non_field_errors %}
@@ -473,13 +468,16 @@
                                     {% endif %}
                                     <h2><span class="badge badge-primary">{{ company }}</span></h2>
                                     <h4>Registered representatives for {{ company }}</h4>
-                                    <ul class="list-group">
-                                        {% for user in users %}
-                                            <li class="list-group-item">{{ user }}</li>
-                                        {% endfor %}
-                                    </ul>
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-4 col-xs-12">
+                                            <ul class="list-group">
+                                                {% for user in users %}
+                                                    <li class="list-group-item">{{ user }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                    </div>
                                     <fieldset>
-                                        <input type="hidden" name="add_rep" value="" />
                                         <div class="row">
                                             <div class="col-md-6 col-sm-6">
                                             </div>
@@ -578,12 +576,7 @@
                                                         </div>
                                                     {% endfor %}
                                                 {% endif %}
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-xs-12">
-                                                <div class="alert alert-mini mb-30 passMessage" style="display:none">
-                                                </div>
+                                                <div id="passMessage" class="alert alert-mini mb-30" style="display:none"></div>
                                             </div>
                                         </div>
                                         <div class="row">
@@ -601,6 +594,7 @@
                                             <div class="col-lg-4 col-md-4 col-sm-4">
                                                 <label>ID Number *</label>
                                                 {{ adForm.id_number }}
+                                                <small class="text-muted block" id="hint"></small>
                                                 {% if adForm.id_number.errors %}
                                                     {% for error in adForm.id_number.errors %}
                                                         <div class="alert alert-mini alert-danger mb-30">
@@ -627,7 +621,12 @@
                                                 {% endif %}
                                             </div>
                                         </div>
+                                        <label class="checkbox m-0">
+                                            {{ adForm.checker }}
+                                            <i></i>I agree to the <a href="#" data-toggle="modal" data-target="#termsModal">Terms of Service</a>
+                                        </label>
                                     </fieldset>
+                                    <input type="hidden" name="addRep" value="" />
                                     <input type="submit" class="btn btn-primary btn-teal float-right" value="Add User"/>
                                 </form>
                             </div>
@@ -701,82 +700,85 @@
                 </div>
             {% else %}
                 <div class="row">
-                    {% if message %}
+{#                    {% if message %}#}
                         <div class="col-lg-6 col-xs-12 col-centered">
                             <div class="alert alert-success margin-bottom-30 text-center">
                                 <p>
                                     <strong>
-                                        Your corporate account has been created successfully!
-                                        Preview your details and proceed to <b>complete registration by filling the
-                                        indemnity form below!</b>
+                                        Your corporate account has been created successfully as per below information.
+                                        <b>Please complete the bank indemnity form below and submit it to FIMCO.</b>
                                     </strong>
                                 </p>
                             </div>
                         </div>
-                    {% endif %}
+{#                    {% endif %}#}
                 </div>
                 <div class="row">
-                    <div class="card card-default">
-                        <div class="card-heading">
-                            <h4>Preview your corporate details</h4>
-                        </div>
-                        <div class="card-block">
-                            <!-- tabs -->
-                            <div class="col-md-3 col-sm-3 p-0">
-                                <ul class="nav nav-tabs nav-stacked flex-column">
-                                    <li class="nav-item">
-                                        <a class="nav-link active" href="#tab_a" data-toggle="tab">
-                                            Company Profile
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#tab_b" data-toggle="tab">
-                                            KYC Information
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#tab_c" data-toggle="tab">
-                                            User Profile
-                                        </a>
-                                    </li>
-                                </ul>
+                    <div class="col-lg-8 col-md-8 col-sm-10 col-xs-12 col-centered">
+                        <div class="card card-default">
+                            <div class="card-heading">
+                                <h4>Preview your corporate details</h4>
                             </div>
-                            <!-- tabs content -->
-                            <div class="col-md-9 col-sm-9 p-0">
-                                <div class="tab-content tab-stacked">
-                                    <div id="tab_a" class="tab-pane active">
-                                        <h4>Company Information</h4>
-                                        <p><strong>Company Name: </strong>{{ form_data.0.name }}</p>
-                                        <p>
-                                            <strong>Company Address: </strong><br>
-                                            Building/Plot No. {{ form_data.0.place }}<br>
-                                            P.O. BOX {{ form_data.0.address }}<br>
-                                            {{ form_data.0.street }} St.,<br>
-                                            {{ form_data.0.location }}.<br>
-                                        </p>
-                                        <p>
-                                            <strong>Company Account: </strong><br>
-                                            {% if form_data.1.bot != '' %}BOT CDS number {{ form_data.1.bot }}<br>{% endif %}
-                                            {% if form_data.1.dse != '' %}DSE CDS number {{ form_data.1.bot }}<br>{% endif %}
-                                            {% if form_data.1.bot == '' and form_data.1.dse == '' %}No Accounts!{% endif %}
-                                        </p>
+                            <div class="card-block">
+                                <div class="row tabs nomargin">
+                                    <!-- tabs -->
+                                    <div class="col-md-3 col-sm-3 p-0">
+                                        <ul class="nav nav-tabs nav-stacked flex-column">
+                                            <li class="nav-item">
+                                                <a class="nav-link active" href="#tab_a" data-toggle="tab">
+                                                    Company Profile
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="#tab_b" data-toggle="tab">
+                                                    KYC Information
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="#tab_c" data-toggle="tab">
+                                                    User Profile
+                                                </a>
+                                            </li>
+                                        </ul>
                                     </div>
+                                    <!-- tabs content -->
+                                    <div class="col-md-9 col-sm-9 p-0">
+                                        <div class="tab-content tab-stacked">
+                                            <div id="tab_a" class="tab-pane active">
+                                                <h4>Company Information</h4>
+                                                <p><strong>Company Name: </strong>{{ form_data.0.name }}</p>
+                                                <p>
+                                                    <strong>Company Address: </strong><br>
+                                                    Building/Plot No. {{ form_data.0.place }}<br>
+                                                    P.O. BOX {{ form_data.0.address }}<br>
+                                                    {{ form_data.0.street }} St.,<br>
+                                                    {{ form_data.0.location }}.<br>
+                                                </p>
+                                                <p>
+                                                    <strong>BOT & DSE Accounts Form: </strong><br>
+                                                    {% if form_data.1.bot != '' %}BOT CDS number {{ form_data.1.bot }}<br>{% endif %}
+                                                    {% if form_data.1.dse != '' %}DSE CDS number {{ form_data.1.bot }}<br>{% endif %}
+                                                    {% if form_data.1.bot == '' and form_data.1.dse == '' %}No Accounts!{% endif %}
+                                                </p>
+                                            </div>
 
-                                    <div id="tab_b" class="tab-pane">
-                                        <h4>Company KYC Information</h4>
-                                        <p><strong>Business Licence: </strong>{{ form_data.3.license }}</p>
-                                        <p><strong>TIN Certificate: </strong>{{ form_data.3.certificate }}</p>
-                                    </div>
+                                            <div id="tab_b" class="tab-pane">
+                                                <h4>Company KYC Information</h4>
+                                                <p><strong>Business Licence: </strong>{{ form_data.3.license }}</p>
+                                                <p><strong>TIN Certificate: </strong>{{ form_data.3.certificate }}</p>
+                                            </div>
 
-                                    <div id="tab_c" class="tab-pane">
-                                        <h4>User Information</h4>
-                                        <p><strong>Full Name: </strong>{{ form_data.2.fName }} {{ form_data.2.lName }}</p>
-                                        <p><strong>Phone number: </strong>{{ form_data.2.phone }}</p>
-                                        <p><strong>Email: </strong>{{ form_data.2.email }}</p>
-                                        <p><strong>Gender: </strong>{{ form_data.2.gender }}</p>
-                                        <p><strong>Date of Birth: </strong>{{ form_data.2.dob|date:"d/M/Y" }}</p>
-                                        <p><strong>Identification: </strong>{{ form_data.3.id_type }} {{ form_data.3.id_number }}</p>
-                                        <p><strong>Attachment: </strong>{{ form_data.3.user_id }}</p>
+                                            <div id="tab_c" class="tab-pane">
+                                                <h4>User Information</h4>
+                                                <p><strong>Full Name: </strong>{{ form_data.2.fName }} {{ form_data.2.lName }}</p>
+                                                <p><strong>Phone number: </strong>{{ form_data.2.phone }}</p>
+                                                <p><strong>Email: </strong>{{ form_data.2.email }}</p>
+                                                <p><strong>Gender: </strong>{{ form_data.2.gender }}</p>
+                                                <p><strong>Date of Birth: </strong>{{ form_data.2.dob|date:"d/M/Y" }}</p>
+                                                <p><strong>Identification: </strong>{{ form_data.3.id_type }} {{ form_data.3.id_number }}</p>
+                                                <p><strong>Attachment: </strong>{{ form_data.3.user_id }}</p>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -790,7 +792,7 @@
                                 <h4 class="text-center">Bank Indemnity Form</h4>
                             </div>
                             <div class="card-block">
-                                <form class="" action="{% url 'create_form' 'corporate' %}" method="post" enctype="multipart/form-data" target="_blank">
+                                <form action="{% url 'create_form' 'corporate' %}" method="post" enctype="multipart/form-data" target="_blank">
                                 {% csrf_token %}
                                     <fieldset>
                                         <div class="row">
@@ -860,9 +862,7 @@
                                 <div class="justify">
                                     <a target="_blank" href="{% url 'create_form' 'corporate' %}" class="btn btn-primary">Download blank form</a>
                                     <input type="submit" class="btn btn-primary btn-teal" value="Download completed form"/>
-                                    <a href="{% url 'corporate' %}" class="btn btn-primary">
-                                        <i class="fa fa-arrow-left"></i>Finish
-                                    </a>
+                                    <a href="{% url 'corporate' %}" class="btn btn-primary">Finish</a>
                                 </div>
                             </div>
                         </div>

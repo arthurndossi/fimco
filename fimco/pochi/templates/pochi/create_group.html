@@ -55,45 +55,47 @@
                                             <div class="form-group">
                                                 <label class="col-xs-3 control-label">Group admin</label>
                                                 <div class="col-xs-6">
-                                                    <input type="text" id="member" class="form-control"
-                                                           value="{{ phone }}" disabled title="Admin"/>
+                                                    <input type="text" class="form-control"
+                                                           name="option[]"
+                                                           value="{{ phone }}"
+                                                           disabled
+                                                           title="Admin"/>
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="col-xs-3 control-label">Member</label>
+                                                <label class="col-xs-3 control-label">Member 1</label>
                                                 <div class="col-xs-6">
-                                                    <input type="text" id="member" class="form-control member masked"
+                                                    <input type="text" class="form-control"
                                                            name="option[]"
                                                            title=""
-                                                           data-format="0999999999"
-                                                           data-placeholder="X"
-                                                           placeholder="Phone number"/>
+                                                           placeholder="Phone number"
+                                                           autocomplete="off"/>
+                                                    <div class="loader text-center hide">
+                                                        <img src="/static/pochi/img/loading.gif" alt="" />
+                                                    </div>
+                                                    <small class="text-muted block hint">Format (0XXXXXXXXX)</small>
                                                 </div>
-                                                <div class="col-xs-3">
-                                                    <button type="button" class="btn btn-default">
-                                                        <i class="fa fa-check text-success"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            <div class="clearfix row">
-                                                <div class="offset-lg-3 offset-md-3 offset-xs-3 col-xs-6">
-                                                    <button type="button" class="btn btn-default addButton">
-                                                        <i class="fa fa-plus"></i>
-                                                    </button>
+                                                <div class="col-xs-3 extras hide">
+                                                    <button type="button" class="btn btn-default addButton"><i class="fa fa-plus"></i></button>
+                                                    <button type="button" class="btn btn-default removeButton"><i class="fa fa-minus"></i></button>
                                                 </div>
                                             </div>
 
                                             <!-- The option field template containing an option field and a Remove button -->
                                             <div class="form-group hide" id="optionTemplate">
-                                                <div class="col-xs-offset-3 col-xs-5">
-                                                    <input class="form-control masked"
+                                                <label class="col-xs-3 control-label"></label>
+                                                <div class="col-xs-6">
+                                                    <input type="text" class="form-control"
                                                            name="option[]"
                                                            title=""
-                                                           data-format="0999999999"
-                                                           data-placeholder="X"
-                                                           placeholder="Phone number"/>
+                                                           placeholder="Phone number"
+                                                           autocomplete="off"/>
+                                                    <div class="loader text-center hide">
+                                                        <img src="/static/pochi/img/loading.gif" alt="" />
+                                                    </div>
+                                                    <small class="text-muted block hint">Format (0XXXXXXXXX)</small>
                                                 </div>
-                                                <div class="col-xs-4">
+                                                <div class="col-xs-3 extras hide">
                                                     <button type="button" class="btn btn-default addButton"><i class="fa fa-plus"></i></button>
                                                     <button type="button" class="btn btn-default removeButton"><i class="fa fa-minus"></i></button>
                                                 </div>
@@ -101,23 +103,11 @@
 
                                             <div class="row">
                                                 <div class="col-xs-4 mid-align">
-                                                    <button type="button" id="done" class="btn btn-primary">
-                                                        <i class="fa fa-check"></i>Choose a second admin
-                                                        <small>(optional)</small>
+                                                    <button type="button" id="done" class="btn btn-primary hide">
+                                                        <i class="fa fa-check"></i>Form Group
                                                     </button>
                                                 </div>
                                             </div>
-
-{#                                            <div class="row">#}
-{#                                                <div class="col-md-6">#}
-{#                                                    <div id="second-admin" class="fancy-form fancy-form-select" style="display: none">#}
-{#                                                        <select class="form-control" id="admin" name="admin" title="admin">#}
-{#                                                            <option value="">Select second admin</option>#}
-{#                                                        </select>#}
-{#                                                        <i class="fancy-arrow"></i>#}
-{#                                                    </div>#}
-{#                                                </div>#}
-{#                                            </div>#}
                                         </fieldset>
 
                                         <hr />
@@ -125,7 +115,6 @@
                                         <div class="row">
                                             <div class="col-md-9 col-md-offset-3">
                                                 <input type="hidden" id="members" name="members" value=""/>
-                                                <button type="submit" class="btn btn-primary">Form Group</button>
                                                 <a href="{{ request.path }}" class="btn btn-default">Reset</a>
                                             </div>
                                         </div>

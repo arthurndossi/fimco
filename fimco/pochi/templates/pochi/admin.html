@@ -10,7 +10,7 @@
                 <div class="panel-heading">
                     <span class="title elipsis">
                         <strong>BALANCE & INTEREST SUMMARY</strong> <!-- panel title -->
-                        <small class="size-12 weight-300 text-mutted hidden-xs">2017</small>
+                        <small class="size-12 weight-300 text-mutted hidden-xs">(As at {% now 'd/m/Y' %})</small>
                     </span>
 
                     <!-- right options -->
@@ -42,7 +42,7 @@
                     <!-- BOX -->
                     <div class="box danger grow"><!-- default, danger, warning, info, success -->
                         <div class="box-title"><!-- add .noborder class if box-body is removed -->
-                            <h4>POCHI Rates</h4>
+                            <h4>Current POCHI Rate</h4>
                             <small class="block">{{ rates.today }}%</small>
 {#                            <i class="fa fa-comments"></i>#}
                         </div>

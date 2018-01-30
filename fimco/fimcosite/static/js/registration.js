@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    var id = $('#id_client_id'), choice = $("#id_id_choice"), hint = $("#hint"),
+    var id = $('#id_1-client_id'), choice = $("#id_1-id_choice"), hint = $("#hint"),
         uploadField = $("#file"), form_element = $('#one').find('.required');
 
     id.attr('pattern', '^[A-Z\\d]{8}(-)([A-Z\\d]{5}(-)){2}[A-Z\\d]{2}$');
@@ -30,7 +30,7 @@ $(document).ready(function () {
         });
     });
 
-    $("#id_password, #id_verify").keyup(validatePassword);
+    $("#id_1-password, #id_1-verify").keyup(validatePassword);
 
     uploadField.change(function(){
         readURL(this, 'wizardFilePreview');
@@ -57,9 +57,9 @@ function readURL(input, id) {
 }
 
 function validatePassword(){
-    var password = $("#id_password"),
+    var password = $("#id_1-password"),
 		msg = $("#pass-message"),
-        confirm_password = $("#id_verify");
+        confirm_password = $("#id_1-verify");
     if(password.val() !== '' && confirm_password.val() !== ''){
         if(password.val() !== confirm_password.val()) {
             if(msg.hasClass("alert-success")){
