@@ -191,8 +191,8 @@ def process_form_data(request, form_list):
             document=user_id
         )
 
-        user = User(username=phone, email=email, password=password, first_name=fName, last_name=lName, is_active=0)
-        user.save()
+        user = User.objects.create_user(username=phone, email=email, password=password, first_name=fName,
+                                        last_name=lName, is_active=0)
         profile = Profile(user=user, profile_id=profile_id, dob=dob, msisdn=phone, gender=gender, bot_cds=bot,
                           dse_cds=dse, profile_type='C', pin=pin)
         profile.save()
@@ -291,9 +291,8 @@ def add_user_corporate(request):
             company = CorporateProfile.objects.get(account=pochi_id).company_name
 
             with transaction.atomic():
-                user = User(username=phone, email=email, password=password, first_name=fName, last_name=lName,
-                            is_active=0)
-                user.save()
+                user = User.objects.create_user(username=phone, email=email, password=password, first_name=fName,
+                                                last_name=lName, is_active=0)
                 profile = Profile(user=user, dob=dob, gender=gender, msisdn=phone, profile_type='C',
                                   profile_id=profile_id)
                 profile.save()
@@ -482,8 +481,8 @@ def register(form_list):
         account_no = create_account(profile_id)
 
         with transaction.atomic():
-            user = User(username=phone, email=email, password=password, first_name=fName, last_name=lName, is_active=0)
-            user.save()
+            user = User.objects.create_user(username=phone, email=email, password=password, first_name=fName,
+                                            last_name=lName, is_active=0)
             profile = Profile(user=user, profile_id=profile_id, dob=dob, gender=gender, msisdn=phone, bot_cds=bot,
                               dse_cds=dse, profile_type='I', pin=pin)
             profile.save()
