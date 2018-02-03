@@ -9,6 +9,7 @@ olefile==0.44
 Pillow==4.3.0
 py-moneyed==0.7.0
 PyPDF2==1.26.0
+python-dateutil==2.6.1
 pytz==2017.3
 reportlab==3.4.0
 six==1.11.0
