@@ -393,10 +393,21 @@ def validate_credentials(request, form, username, password, _next, category, poc
         else:
             return redirect(_next)
     else:
+        messages.error(request, "Wrong username or password!")
         if category == 'user':
-            context = {'lForm': form, 'user': 'active'}
+            context = {
+                'user': 'active',
+                'lForm': form,
+                'cForm': CorporateLoginForm(prefix='corp'),
+                'next': request.GET['next'] if request.GET and 'next' in request.GET else ''
+            }
         else:
-            context = {'cForm': form, 'corporate': 'active'}
+            context = {
+                'corporate': 'active',
+                'lForm': IndividualLoginForm(),
+                'cForm': form,
+                'next': request.GET['next'] if request.GET and 'next' in request.GET else ''
+            }
         return render(request, 'login.html', context)
 
 
