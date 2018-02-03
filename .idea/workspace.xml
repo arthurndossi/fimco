@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2bb6a40e-3dd1-4683-a1ae-6832ed7492de" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/requirements.txt" afterPath="$PROJECT_DIR$/requirements.txt" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -168,7 +168,6 @@
         <option value="$PROJECT_DIR$/fimco/fimcosite/templates/sameer.html" />
         <option value="$PROJECT_DIR$/fimco/fimcosite/static/js/scripts.js" />
         <option value="$PROJECT_DIR$/fimco/fimcosite/static/css/slider.css" />
-        <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/requirements.txt" />
         <option value="$PROJECT_DIR$/fimco/fimcosite/static/js/corporate.js" />
         <option value="$PROJECT_DIR$/fimco/fimcosite/static/js/registration.js" />
@@ -203,6 +202,7 @@
         <option value="$PROJECT_DIR$/fimco/fimcosite/views.py" />
         <option value="$PROJECT_DIR$/fimco/fimcosite/templates/registration.html" />
         <option value="$PROJECT_DIR$/fimco/pochi/static/pochi/js/group.js" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -261,6 +261,24 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="fimco" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="FIMCO" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="FIMCO" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="fimco" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="fimcoplatform" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -543,13 +561,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1500455200738</updated>
-    </task>
-    <task id="LOCAL-00057" summary="removed charit in pochi views">
-      <created>1510743862077</created>
-      <option name="number" value="00057" />
-      <option name="presentableId" value="LOCAL-00057" />
-      <option name="project" value="LOCAL" />
-      <updated>1510743862077</updated>
     </task>
     <task id="LOCAL-00058" summary="removed charit in pochi views">
       <created>1510743971166</created>
@@ -887,7 +898,14 @@
       <option name="project" value="LOCAL" />
       <updated>1517646698675</updated>
     </task>
-    <option name="localTasksCounter" value="106" />
+    <task id="LOCAL-00106" summary="update 1.0.1 early bird updated requirements.txt">
+      <created>1517646823266</created>
+      <option name="number" value="00106" />
+      <option name="presentableId" value="LOCAL-00106" />
+      <option name="project" value="LOCAL" />
+      <updated>1517646823266</updated>
+    </task>
+    <option name="localTasksCounter" value="107" />
     <servers />
   </component>
   <component name="TodoView">
@@ -979,7 +997,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="fix bug login using email" />
     <MESSAGE value="fix pochi to pochi bug account not present" />
     <MESSAGE value="added sessions in between confirmations and transactions" />
     <MESSAGE value="Pochi changes" />
@@ -1004,7 +1021,8 @@
     <MESSAGE value="update logo img" />
     <MESSAGE value="update 1.0.0" />
     <MESSAGE value="update 1.0.1 early bird" />
-    <option name="LAST_COMMIT_MESSAGE" value="update 1.0.1 early bird" />
+    <MESSAGE value="update 1.0.1 early bird updated requirements.txt" />
+    <option name="LAST_COMMIT_MESSAGE" value="update 1.0.1 early bird updated requirements.txt" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1024,13 +1042,6 @@
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://C:/Python27/Lib/site-packages/django/contrib/admin/static/admin/js/vendor/jquery/jquery.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="362">
-          <caret line="5412" column="4" lean-forward="true" selection-start-line="5412" selection-start-column="4" selection-end-line="5412" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/env27/Lib/site-packages/django/core/handlers/base.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="110">
@@ -1461,6 +1472,14 @@
           <folding>
             <element signature="e#15#24#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" column="16" lean-forward="true" selection-start-line="7" selection-start-column="16" selection-end-line="7" selection-end-column="16" />
+          <folding />
         </state>
       </provider>
     </entry>
