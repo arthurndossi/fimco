@@ -427,7 +427,7 @@ def validate(request):
             else:
                 return render(request, 'login.html', {'cForm': form, 'corporate': tab})
         else:
-            redirect(login_view)
+            return redirect(login_view)
     else:
         return redirect(login_view)
 
