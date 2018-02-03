@@ -1,9 +1,10 @@
-import datetime
+# coding=utf-8
+import re
 import uuid
+from calendar import monthrange
+from datetime import datetime
 
-from djmoney.money import Money
-
-from core.utils import render_with_global_data
+from dateutil.relativedelta import relativedelta
 from django.contrib import messages
 from django.contrib.auth import user_logged_out
 from django.contrib.auth.decorators import login_required
@@ -14,13 +15,14 @@ from django.db.models.functions import TruncMonth
 from django.dispatch import receiver
 from django.http import JsonResponse
 from django.shortcuts import redirect
+from djmoney.money import Money
 from easy_pdf.views import PDFTemplateView
-from fimcosite.forms import EditProfileForm, BankAccountForm
-from fimcosite.models import Account, Profile
 
 from core import demo_settings
+from core.utils import render_with_global_data
+from fimcosite.forms import EditProfileForm, BankAccountForm
+from fimcosite.models import Account, Profile
 from fimcosite.views import index
-
 from .models import Transaction, Group, GroupMember, ExternalAccount, Ledger, Charge, CashOut, BalanceSnapshot, Rate, \
     PaidUser
 
@@ -110,21 +112,21 @@ def home(request):
     return render_with_global_data(request, 'pochi/home.html', context)
 
 
-def get_rates():
+def get_rates(start_date, end_date):
     try:
-        all_rates = Rate.objects.all()
+        this_year_rates = Rate.objects.filter(full_timestamp__range=[start_date, datetime.now()]).order_by('full_timestamp')\
+            .only('rate')
     except Rate.DoesNotExist:
-        all_rates = None
-    if all_rates:
-        now = datetime.datetime.now()
-        this_year_rates = all_rates.filter(full_timestamp__year=now.year).only('rate')
+        this_year_rates = None
+    if this_year_rates:
+        now = datetime.now()
         rates_arr = []
         for rate in this_year_rates:
             rates_arr.append(rate.rate)
         decimal_array = [float(decimal_value) for decimal_value in rates_arr]
         rates_list = (", ".join(repr(e) for e in decimal_array))
         try:
-            month_rate = all_rates.get(full_timestamp__month=now.month).rate
+            month_rate = Rate.objects.get(full_timestamp__month=now.month).rate
         except Rate.DoesNotExist:
             month_rate = None
         if month_rate:
@@ -146,22 +148,25 @@ def get_rates():
 
 
 def daily_rates(request):
+    now = datetime.now()
     profile_id = request.user.profile.profile_id
+    end_date = now - relativedelta(days=1)
+    start_date = end_date - relativedelta(months=1)
+
     try:
-        all_daily = BalanceSnapshot.objects.filter(profile_id=profile_id) \
-            .values('full_timestamp', 'bonus_closing_balance')
+        last_month_earnings = BalanceSnapshot.objects\
+            .filter(full_timestamp__range=[start_date, end_date], profile_id=profile_id) \
+            .values('full_timestamp', 'bonus_closing_balance').order_by('full_timestamp')
     except BalanceSnapshot.DoesNotExist:
-        all_daily = None
-    if all_daily:
-        last_30_days = datetime.datetime.today() - datetime.timedelta(days=30)
-        daily_30 = all_daily.filter(full_timestamp__gte=last_30_days)
+        last_month_earnings = None
+    if last_month_earnings:
         bonus_arr = []
-        for bonus in daily_30:
+        for bonus in last_month_earnings:
             bonus_arr.append(bonus['bonus_closing_balance'])
         numeric_array = [float(numeric_value) for numeric_value in bonus_arr]
         bonus_list = (", ".join(repr(e) for e in numeric_array))
         try:
-            today_bonus = all_daily.get(full_timestamp__date=datetime.date.today())['bonus_closing_balance']
+            today_bonus = last_month_earnings.get(full_timestamp__date=end_date)['bonus_closing_balance']
         except BalanceSnapshot.DoesNotExist:
             today_bonus = None
         if today_bonus:
@@ -182,44 +187,50 @@ def daily_rates(request):
     return context
 
 
-def get_monthly(request):
+def get_monthly(request, prev_date, start_date, end_date):
     profile_id = request.user.profile.profile_id
     try:
-        all_monthly = BalanceSnapshot.objects.filter(profile_id=profile_id) \
+        last_12 = BalanceSnapshot.objects\
+            .filter(full_timestamp__range=[start_date, end_date], profile_id=profile_id) \
             .annotate(month=TruncMonth('full_timestamp')) \
             .values('month') \
             .annotate(bonus=Sum('bonus_closing_balance')) \
-            .values('month', 'bonus')
+            .values('month', 'bonus').order_by('month')
     except BalanceSnapshot.DoesNotExist:
-        all_monthly = None
-    if all_monthly:
-        last_12 = all_monthly.reverse()[:12]
+        last_12 = None
+    if last_12:
         bonus_arr = []
         for bonus in last_12:
             bonus_arr.append(bonus['bonus'])
         numeric_array = [float(numeric_value) for numeric_value in bonus_arr]
         bonus_list = (", ".join(repr(e) for e in numeric_array))
-        monthly_bonus = all_monthly.reverse()[:1]
+        query_set = last_12.filter(full_timestamp__month=prev_date.month, full_timestamp__year=prev_date.year)
+        month, bonus = '', 0
+        for data in query_set:
+            month = data['month']
+            bonus = data['bonus']
         context = {
             'year': bonus_list,
-            'month': monthly_bonus
+            'month': month,
+            'bonus': bonus
         }
     else:
         context = {
             'year': [],
-            'month': 0
+            'month': '',
+            'bonus': 0
         }
     return context
 
 
-def get_total(request):
+def get_total(request, start_date, end_date):
     profile_id = request.user.profile.profile_id
     try:
-        bs = BalanceSnapshot.objects.filter(profile_id=profile_id) \
+        bs = BalanceSnapshot.objects.filter(full_timestamp__range=[start_date, end_date], profile_id=profile_id) \
             .annotate(month=TruncMonth('full_timestamp')) \
             .values('month') \
             .annotate(bonus=Sum('bonus_closing_balance')) \
-            .values('month', 'bonus')
+            .values('month', 'bonus').order_by('month')
     except BalanceSnapshot.DoesNotExist:
         bs = None
     if bs:
@@ -234,8 +245,7 @@ def get_total(request):
             )
             bs_arr.append(dto.cumulative)
         total_bonuses = bs.aggregate(Sum('bonus'))
-        cumulative_year_bonuses = bs_arr[-12:]
-        numeric_array = [float(numeric_value) for numeric_value in cumulative_year_bonuses]
+        numeric_array = [float(numeric_value) for numeric_value in bs_arr]
         cumulative_list = (", ".join(repr(e) for e in numeric_array))
         context = {
             'total': total_bonuses,
@@ -251,6 +261,13 @@ def get_total(request):
 
 @login_required
 def admin(request, name=None):
+    NOW = datetime.now()
+    yesterday = NOW - relativedelta(days=1)
+    prev_date = NOW - relativedelta(months=1)
+    last_day_in_prev_date = monthrange(prev_date.year, prev_date.month)[1]
+    end_date = prev_date.replace(day=last_day_in_prev_date)
+    start_date = end_date - relativedelta(years=1)
+
     if name:
         try:
             group = Group.objects.get(name=name)
@@ -260,12 +277,13 @@ def admin(request, name=None):
     else:
         profile_id = request.user.profile.profile_id
 
-    rates = get_rates()
+    rates = get_rates(start_date, end_date)
     daily_earnings = daily_rates(request)
-    monthly_earnings = get_monthly(request)
-    total = get_total(request)
+    monthly_earnings = get_monthly(request, prev_date, start_date, end_date)
+    total = get_total(request, start_date, end_date)
 
     context = {
+        'yesterday': yesterday,
         'rates': rates,
         'daily': daily_earnings,
         'monthly': monthly_earnings,
@@ -289,7 +307,8 @@ def admin(request, name=None):
         if name:
             context.update({'labels': label_list, 'balance': bal_list, 'bonus': bonus_list, 'group': name})
         else:
-            context.update({'labels': label_list, 'balance': bal_list, 'bonus': bonus_list})
+            more = {'labels': label_list, 'balance': bal_list, 'bonus': bonus_list}
+            context.update(more)
 
         return render_with_global_data(request, 'pochi/admin.html', context)
     else:
@@ -306,8 +325,8 @@ def statement(request):
         if request.GET.get('range'):
             date_range = request.GET.get('range')
             start, end = date_range.split(' - ')
-            start = datetime.datetime.strptime(start, '%m/%d/%Y').strftime('%Y-%m-%d')
-            end = datetime.datetime.strptime(end, '%m/%d/%Y').strftime('%Y-%m-%d')
+            start = datetime.strptime(start, '%m/%d/%Y').strftime('%Y-%m-%d')
+            end = datetime.strptime(end, '%m/%d/%Y').strftime('%Y-%m-%d')
             trans = Transaction.objects.filter(profile_id=profile.profile_id, fulltimestamp__range=[start, end])
         elif request.GET.get('channel'):
             selected_account = request.GET.get('channel')
@@ -359,7 +378,7 @@ def view_profile(request):
         'email': user.email,
         'dob': user.profile.dob,
         'gender': user.profile.gender,
-        'client_id': user.profile.client_id,
+        'client_id': user.profile.profile_id,
         'bot_cds': user.profile.bot_cds,
         'dse_cds': user.profile.dse_cds
     })
@@ -370,7 +389,7 @@ def view_profile(request):
         'email': user.email,
         'dob': user.profile.dob,
         'gender': user.profile.gender,
-        'client_id': user.profile.client_id,
+        'client_id': user.profile.profile_id,
         'bot_cds': user.profile.bot_cds,
         'dse_cds': user.profile.dse_cds
     }
@@ -1065,9 +1084,8 @@ def lock(request, **kwargs):
 @login_required
 def group_settings(request, name=None):
     count = 0
-    admin_count = 0
     members = []
-    my_name = request.user.get_full_name()
+    admins = []
     try:
         this_group = Group.objects.get(name=name)
         grp_acc = this_group.account
@@ -1077,18 +1095,17 @@ def group_settings(request, name=None):
         for member_profile_obj in members_profile_obj:
             pid = member_profile_obj['profile_id']
             adm = member_profile_obj['admin']
-            if adm == 1:
-                admin_count = admin_count+1
             member = User.objects.select_related('profile').get(profile__profile_id=pid).get_full_name()
+            if adm == 1:
+                admins.append(member)
             members.append({'member': member, 'id': pid, 'admin': adm})
     except Account.DoesNotExist:
         pass
     context = {
         'group': name,
-        'user': my_name,
         'number': count,
         'members': members,
-        'administrators': admin_count
+        'admins': admins,
     }
     return render_with_global_data(request, 'pochi/group_settings.html', context)
 
@@ -1098,15 +1115,16 @@ def add_remove_member(request, name=None, action=None):
     if action == 'add':
         if request.POST:
             members = request.POST['members']
-            count = len(eval(members))
+            evaluated_members = eval(members)
+            count = len(evaluated_members)
             invalid = 0
-            for member in eval(members):
-                profile = Profile.objects.filter(profile_id=member)
-                if profile.exists():
+            for member in evaluated_members:
+                profile = Profile.objects.select_related('user').get(user__username=member)
+                if profile:
                     try:
                         this_group = Group.objects.get(name=name)
                         grp_acc = this_group.account
-                        GroupMember.objects.create(group_account=grp_acc, profile_id=member)
+                        GroupMember.objects.create(group_account=grp_acc, profile_id=profile.profile_id)
                     except Account.DoesNotExist:
                         pass
                 else:
@@ -1131,23 +1149,26 @@ def add_remove_member(request, name=None, action=None):
                     request,
                     'Could not add ' + str(invalid) + ' invalid members in your list'
                 )
-        if action == 'remove':
-            if request.POST:
-                names = request.POST['rejected']
-                count = len(eval(names))
-                for name in eval(names):
-                    first_name = name.split[0]
-                    rejected_profile_id = Profile.objects.get(user__first_name=first_name).profile_id
-                    try:
-                        this_group = Group.objects.get(name=name)
-                        grp_acc = this_group.account
-                        GroupMember.objects.filter(group_account=grp_acc, profile_id=rejected_profile_id).delete()
-                    except Account.DoesNotExist:
-                        pass
-                messages.info(
-                    request,
-                    'You have successfully removed ' + str(count) + ' members from your group'
-                )
+            JsonResponse({'status': 'success', 'url': request.META['HTTP_REFERER']})
+        else:
+            JsonResponse({'status': 'fail', 'url': request.META['HTTP_REFERER']})
+    elif action == 'remove':
+        if request.POST:
+            names = request.POST['rejected']
+            count = len(eval(names))
+            for name in eval(names):
+                first_name = name.split[0]
+                rejected_profile_id = Profile.objects.get(user__first_name=first_name).profile_id
+                try:
+                    this_group = Group.objects.get(name=name)
+                    grp_acc = this_group.account
+                    GroupMember.objects.filter(group_account=grp_acc, profile_id=rejected_profile_id).delete()
+                except Account.DoesNotExist:
+                    pass
+            messages.info(
+                request,
+                'You have successfully removed ' + str(count) + ' members from your group'
+            )
     return redirect(request.META['HTTP_REFERER'])
 
 
@@ -1164,8 +1185,8 @@ def group_statement(request, name=None):
             if request.GET.get('range'):
                 date_range = request.GET.get('range')
                 start, end = date_range.split(' - ')
-                start = datetime.datetime.strptime(start, '%m/%d/%Y').strftime('%Y-%m-%d')
-                end = datetime.datetime.strptime(end, '%m/%d/%Y').strftime('%Y-%m-%d')
+                start = datetime.strptime(start, '%m/%d/%Y').strftime('%Y-%m-%d')
+                end = datetime.strptime(end, '%m/%d/%Y').strftime('%Y-%m-%d')
                 group_transactions = Transaction.objects.filter(account=grp_acc, fulltimestamp__range=[start, end])
             elif request.GET.get('channel'):
                 selected_account = request.GET.get('channel')
@@ -1285,47 +1306,46 @@ def view_data(request, page=None, name=None):
             profile_id = None
     else:
         profile_id = request.user.profile.profile_id
+
+    NOW = datetime.now()
+    prev_date = NOW - relativedelta(months=1)
+    last_day_in_prev_date = monthrange(prev_date.year, prev_date.month)[1]
+    end_date = prev_date.replace(day=last_day_in_prev_date)
+    start_date = end_date - relativedelta(years=1)
+
     if page == 'rates':
+        end_date = NOW
         if request.POST:
             rates_range = request.POST['rates_range']
             start, end = rates_range.split(' - ')
-            start = datetime.datetime.strptime(start, '%m/%d/%Y').strftime('%Y-%m-%d')
-            end = datetime.datetime.strptime(end, '%m/%d/%Y').strftime('%Y-%m-%d')
+            start_date = datetime.strptime(start, '%m/%d/%Y').strftime('%Y-%m-%d')
+            end_date = datetime.strptime(end, '%m/%d/%Y').strftime('%Y-%m-%d')
 
-            try:
-                all_rates = Rate.objects.filter(full_timestamp__range=[start, end])
-            except Rate.DoesNotExist:
-                all_rates = None
-        else:
-            try:
-                all_rates = Rate.objects.all()
-            except Rate.DoesNotExist:
-                all_rates = None
+        try:
+            all_rates = Rate.objects.filter(full_timestamp__range=[start_date, end_date])
+        except Rate.DoesNotExist:
+            all_rates = None
+
         if all_rates:
-            now = datetime.datetime.now()
-            this_year_rates = all_rates.filter(full_timestamp__year=now.year).only('rate')
+            this_year_rates = all_rates.order_by('full_timestamp').only('rate')
             rates_arr = []
             for rate in this_year_rates:
                 rates_arr.append(rate.rate)
             decimal_array = [float(decimal_value) for decimal_value in rates_arr]
             rates_list = (", ".join(repr(e) for e in decimal_array))
             try:
-                today_rate = all_rates.get(full_timestamp__month=now.month).rate
+                today_rate = all_rates.get(full_timestamp__month=NOW.month, full_timestamp__year=NOW.year).rate
             except Rate.DoesNotExist:
                 today_rate = None
 
-            day = datetime.datetime.now().day
-            month = datetime.datetime.now().month
-            prev_year = datetime.datetime.now().year - 1
-            last_year = datetime.date(prev_year, month, day)
             if today_rate:
                 context = {
                     'page': 'rates',
                     'group': name,
                     'rates': all_rates,
                     'year': rates_list,
-                    'today': today_rate,
-                    'last_year': last_year
+                    'start_date': start_date,
+                    'end_date': end_date
                 }
             else:
                 context = {
@@ -1333,48 +1353,40 @@ def view_data(request, page=None, name=None):
                     'group': name,
                     'rates': all_rates,
                     'year': rates_list,
-                    'today': 'No rate today'
+                    'today': 'No rate today',
+                    'start_date': start_date,
+                    'end_date': end_date
                 }
             return render_with_global_data(request, 'pochi/earnings.html', context)
         else:
             messages.info(request, 'There are no pochi rates yet! Coming soon')
             return render_with_global_data(request, 'pochi/earnings.html', {'page': 'rates', 'group': name})
+
     elif page == 'daily':
+        end_date = NOW - relativedelta(days=1)
+        start_date = end_date - relativedelta(months=1)
         if request.POST:
             daily_range = request.POST['daily_range']
             start, end = daily_range.split(' - ')
-            start = datetime.datetime.strptime(start, '%m/%d/%Y').strftime('%Y-%m-%d')
-            end = datetime.datetime.strptime(end, '%m/%d/%Y').strftime('%Y-%m-%d')
+            start_date = datetime.strptime(start, '%m/%d/%Y').strftime('%Y-%m-%d')
+            end_date = datetime.strptime(end, '%m/%d/%Y').strftime('%Y-%m-%d')
 
-            try:
-                all_daily = BalanceSnapshot.objects.filter(full_timestamp__range=[start, end], profile_id=profile_id) \
-                    .values('full_timestamp', 'bonus_closing_balance')
-            except BalanceSnapshot.DoesNotExist:
-                all_daily = None
-        else:
-            try:
-                all_daily = BalanceSnapshot.objects.filter(profile_id=profile_id) \
-                    .values('full_timestamp', 'bonus_closing_balance')
-            except BalanceSnapshot.DoesNotExist:
-                all_daily = None
+        try:
+            all_daily = BalanceSnapshot.objects\
+                .filter(full_timestamp__range=[start_date, end_date], profile_id=profile_id) \
+                .values('full_timestamp', 'bonus_closing_balance')
+        except BalanceSnapshot.DoesNotExist:
+            all_daily = None
 
-        day = datetime.datetime.now().day
-        prev_month = datetime.datetime.now().month - 1
-        year = datetime.datetime.now().year
-        if prev_month == 0:
-            prev_month = 12
-            year = year - 1
-        last_month = datetime.date(year, prev_month, day)
         if all_daily:
-            last_30_days = datetime.datetime.today() - datetime.timedelta(days=30)
-            daily_30 = all_daily.filter(full_timestamp__gte=last_30_days)
+            daily_30 = all_daily.order_by('full_timestamp')
             bonus_arr = []
             for bonus in daily_30:
                 bonus_arr.append(bonus['bonus_closing_balance'])
             numeric_array = [float(numeric_value) for numeric_value in bonus_arr]
             bonus_list = (", ".join(repr(e) for e in numeric_array))
             try:
-                today_bonus = all_daily.get(full_timestamp__date=datetime.date.today())['bonus_closing_balance']
+                today_bonus = all_daily.get(full_timestamp__date=end_date)['bonus_closing_balance']
             except BalanceSnapshot.DoesNotExist:
                 today_bonus = None
 
@@ -1384,8 +1396,8 @@ def view_data(request, page=None, name=None):
                     'group': name,
                     'bonuses': all_daily,
                     'month': bonus_list,
-                    'today': today_bonus,
-                    'last_month': last_month
+                    'start_date': start_date,
+                    'end_date': end_date
                 }
             else:
                 context = {
@@ -1393,8 +1405,8 @@ def view_data(request, page=None, name=None):
                     'group': name,
                     'bonuses': all_daily,
                     'month': bonus_list,
-                    'today': 'Nil',
-                    'last_month': last_month
+                    'start_date': start_date,
+                    'end_date': end_date
                 }
             return render_with_global_data(request, 'pochi/earnings.html', context)
         else:
@@ -1402,86 +1414,75 @@ def view_data(request, page=None, name=None):
             context = {
                 'page': 'daily',
                 'group': name,
-                'last_month': last_month
             }
             return render_with_global_data(request, 'pochi/earnings.html', context)
+
     elif page == 'monthly':
         if request.POST:
             monthly_range = request.POST['monthly_range']
             start, end = monthly_range.split(' - ')
-            start = datetime.datetime.strptime(start, '%m/%d/%Y').strftime('%Y-%m-%d')
-            end = datetime.datetime.strptime(end, '%m/%d/%Y').strftime('%Y-%m-%d')
+            start_date = datetime.strptime(start, '%m/%d/%Y').strftime('%Y-%m-%d')
+            end_date = datetime.strptime(end, '%m/%d/%Y').strftime('%Y-%m-%d')
 
-            try:
-                all_monthly = BalanceSnapshot.objects.filter(full_timestamp__range=[start, end], profile_id=profile_id)\
-                    .annotate(month=TruncMonth('full_timestamp')) \
-                    .values('month') \
-                    .annotate(bonus=Sum('bonus_closing_balance')) \
-                    .values('month', 'bonus')
-            except BalanceSnapshot.DoesNotExist:
-                all_monthly = None
-        else:
-            try:
-                all_monthly = BalanceSnapshot.objects.filter(profile_id=profile_id) \
-                    .annotate(month=TruncMonth('full_timestamp')) \
-                    .values('month') \
-                    .annotate(bonus=Sum('bonus_closing_balance')) \
-                    .values('month', 'bonus')
-            except BalanceSnapshot.DoesNotExist:
-                all_monthly = None
+        try:
+            all_monthly = BalanceSnapshot.objects\
+                .filter(full_timestamp__range=[start_date, end_date], profile_id=profile_id) \
+                .annotate(month=TruncMonth('full_timestamp')) \
+                .values('month') \
+                .annotate(bonus=Sum('bonus_closing_balance')) \
+                .values('month', 'bonus').order_by('month')
+        except BalanceSnapshot.DoesNotExist:
+            all_monthly = None
 
-        day = datetime.datetime.now().day
-        month = datetime.datetime.now().month
-        prev_year = datetime.datetime.now().year - 1
-        last_year = datetime.date(prev_year, month, day)
         if all_monthly:
-            last_12 = all_monthly.reverse()[:12]
+            prev_day = NOW - relativedelta(days=1)
             bonus_arr = []
-            for bonus in last_12:
+            for bonus in all_monthly:
                 bonus_arr.append(bonus['bonus'])
             numeric_array = [float(numeric_value) for numeric_value in bonus_arr]
             bonus_list = (", ".join(repr(e) for e in numeric_array))
-            monthly_bonus = all_monthly.reverse()[:1]
+            query_set = all_monthly.filter(full_timestamp__month=prev_date.month, full_timestamp__year=prev_date.year)
+            month, bonus = '', 0
+            for data in query_set:
+                month = data['month']
+                bonus = data['bonus']
+            month_to_date_bonus = all_monthly.filter(full_timestamp__month=NOW.month, full_timestamp__year=NOW.year)\
+                .aggregate(Sum('bonus'))
             context = {
                 'page': 'monthly',
                 'group': name,
                 'bonuses': all_monthly,
                 'year': bonus_list,
-                'month': monthly_bonus,
-                'last_year': last_year
+                'month': month,
+                'bonus': bonus,
+                'start_date': start_date,
+                'end_date': end_date,
+                'prev_day': prev_day,
+                'month_to_date_bonus': month_to_date_bonus['bonus__sum']
             }
             return render_with_global_data(request, 'pochi/earnings.html', context)
         else:
             messages.info(request, 'There are no monthly rates yet! Coming soon')
-            context = {'page': 'monthly', 'group': name, 'last_year': last_year}
+            context = {'page': 'monthly', 'group': name}
             return render_with_global_data(request, 'pochi/earnings.html', context)
+
     elif page == 'total':
         if request.POST:
             total_range = request.POST['total_range']
             start, end = total_range.split(' - ')
-            start = datetime.datetime.strptime(start, '%m/%d/%Y').strftime('%Y-%m-%d')
-            end = datetime.datetime.strptime(end, '%m/%d/%Y').strftime('%Y-%m-%d')
-            try:
-                bs = BalanceSnapshot.objects.filter(full_timestamp__range=[start, end], profile_id=profile_id) \
-                    .annotate(month=TruncMonth('full_timestamp')) \
-                    .values('month') \
-                    .annotate(bonus=Sum('bonus_closing_balance')) \
-                    .values('month', 'bonus')
-            except BalanceSnapshot.DoesNotExist:
-                bs = None
-        else:
-            try:
-                bs = BalanceSnapshot.objects.filter(profile_id=profile_id) \
-                    .annotate(month=TruncMonth('full_timestamp')) \
-                    .values('month') \
-                    .annotate(bonus=Sum('bonus_closing_balance')) \
-                    .values('month', 'bonus')
-            except BalanceSnapshot.DoesNotExist:
-                bs = None
-        day = datetime.datetime.now().day
-        month = datetime.datetime.now().month
-        prev_year = datetime.datetime.now().year - 1
-        last_year = datetime.date(prev_year, month, day)
+            start_date = datetime.strptime(start, '%m/%d/%Y').strftime('%Y-%m-%d')
+            end_date = datetime.strptime(end, '%m/%d/%Y').strftime('%Y-%m-%d')
+
+        try:
+            bs = BalanceSnapshot.objects\
+                .filter(full_timestamp__range=[start_date, end_date], profile_id=profile_id) \
+                .annotate(month=TruncMonth('full_timestamp')) \
+                .values('month') \
+                .annotate(bonus=Sum('bonus_closing_balance')) \
+                .values('month', 'bonus').order_by('month')
+        except BalanceSnapshot.DoesNotExist:
+            bs = None
+
         if bs:
             bs_arr = []
             cumulative = 0
@@ -1500,16 +1501,16 @@ def view_data(request, page=None, name=None):
                 'total': total_bonuses,
                 'history': bs_arr,
                 'month': cumulative_year_bonuses,
-                'now': datetime.datetime.now(),
-                'last_year': last_year
+                'now': datetime.now(),
+                'start_date': start_date,
+                'end_date': end_date
             }
             return render_with_global_data(request, 'pochi/earnings.html', context)
         else:
             messages.info(request, 'No earnings yet! Coming soon')
             context = {
                 'page': 'total',
-                'group': name,
-                'last_year': last_year
+                'group': name
             }
             return render_with_global_data(request, 'pochi/earnings.html', context)
     else:
@@ -1588,6 +1589,7 @@ def group_admin(request, name, identity, action):
             except GroupMember.DoesNotExist:
                 messages.error(request, "Sorry!, an error occurred, This member does not exist!")
     if action == 'change':
+        identity.replace('—', ' ')
         try:
             group = Group.objects.get(name=name)
             group.name = identity
@@ -1595,7 +1597,7 @@ def group_admin(request, name, identity, action):
         except Group.DoesNotExist:
             messages.error(request, "Sorry!, an error occurred, cannot complete this action.")
 
-    return redirect(group_settings, identity)
+    return redirect(group_settings, name)
 
 
 def confirm_action_group(request, name, action):
@@ -1612,6 +1614,8 @@ def confirm_action_group(request, name, action):
     elif 'change' in action:
         if request.POST:
             new_name = request.POST['g_name']
+            new_name = re.sub(' +', ' ', new_name.strip())
+            new_name.replace(' ', '—')
             tag = action+' '+new_name
             messages.warning(request, "Are you sure you want to "+action+" "+name+" group name?", extra_tags=tag)
     else:

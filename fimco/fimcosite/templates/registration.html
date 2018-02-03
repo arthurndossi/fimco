@@ -9,241 +9,308 @@
             <div class="row">
             {% if messages %}
                 {% for message in messages %}
-                    <div class="col-xs-12 col-centered">
-                        <div class="alert alert-success mb-30 text-center">
-                            <h4>Congratulations! <strong>Registration successful!</strong></h4>
-                            <p>{{ message }}</p>
-                            <a href="{% url 'index' %}" class="btn btn-success btn-sm mt-10">OK</a>
+                    {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                        <div class="col-xs-12 col-centered">
+                            <div class="alert alert-error mb-30 text-center">
+                                <p>{{ message }}</p>
+                            </div>
                         </div>
-                    </div>
+                    {% elif message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
+                        <div class="col-xs-12 col-centered">
+                            <div class="alert alert-info mb-30 text-center">
+                                <h4>Congratulations! <strong>Registration successful!</strong></h4>
+                                <p>{{ message }}</p>
+                            </div>
+                        </div>
+                    {% endif %}
                 {% endfor %}
             {% endif %}
             </div>
             <div class="row">
-                <div class="col-md-6 col-sm-6 offset-md-3 offset-sm-3">
-                    {% if wizard.form.non_field_errors %}
-                        {% for general_error in wizard.form.non_field_errors %}
-                            <div class="col-lg-6 col-xs-12 col-centered">
-                                <div class="alert alert-mini alert-danger mb-30 text-center">
-                                    <strong>{{ general_error }}</strong>
+                {% if form_data %}
+                    <div class="col-xs-12">
+                        <div class="box-static box-transparent box-bordered p-30">
+                            <div class="box-title mb-30">
+                                <h2 class="fs-20">Preview Information</h2>
+                            </div>
+                            <div class="row tabs nomargin">
+                                <!-- tabs -->
+                                <div class="col-md-3 col-sm-3 p-0">
+                                    <ul class="nav nav-tabs nav-stacked flex-column">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" href="#tab_a" data-toggle="tab">
+                                                User Profile
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#tab_b" data-toggle="tab">
+                                                KYC Information
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <!-- tabs content -->
+                                <div class="col-md-9 col-sm-9 p-0">
+                                    <div class="tab-content tab-stacked">
+                                        <div id="tab_a" class="tab-pane active">
+                                            <h4>User Information</h4>
+                                            <p><strong>Full Name: </strong>{{ form_data.0.fName }} {{ form_data.0.lName }}</p>
+                                            <p><strong>Phone number: </strong>{{ form_data.0.phone }}</p>
+                                            <p><strong>Email: </strong>{{ form_data.0.email }}</p>
+                                            <p><strong>Gender: </strong>
+                                                {% if form_data.0.gender == 'M' %} Male {% elif form_data.0.gender == 'F' %} Female {% else %} Others {% endif %}
+                                            </p>
+                                            <p><strong>Date of Birth: </strong>{{ form_data.0.dob|date:"d/M/Y" }}</p>
+                                            <p>
+                                                <strong>BOT & DSE Accounts: </strong><br>
+                                                {% if form_data.1.bot_cds != '' %}BOT CDS number {{ form_data.1.bot_cds }}<br>{% endif %}
+                                                {% if form_data.1.dse_cds != '' %}DSE CDS number {{ form_data.1.bot_cds }}<br>{% endif %}
+                                                {% if form_data.1.bot_cds == '' and form_data.1.dse_cds == '' %}No Accounts!{% endif %}
+                                            </p>
+                                        </div>
+
+                                        <div id="tab_b" class="tab-pane">
+                                            <h4>Company KYC Information</h4>
+                                            <p><strong>Identification: </strong>{{ form_data.1.id_choice }} {{ form_data.1.client_id }}</p>
+                                            <p><strong>Attachment: </strong>{{ form_data.1.scanned_id }}</p>
+                                        </div>
+                                        <hr />
+                                        <div style="justify-content: space-between">
+                                            <a href="{% url 'account' %}" class="btn btn-primary btn-teal">Start Again</a>
+                                            <a href="{% url 'index' %}" class="btn btn-primary btn-teal">Go home</a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        {% endfor %}
-                    {% endif %}
-                    <div class="box-static box-transparent box-bordered p-30">
-                        <div class="box-title mb-30">
-                            <h2 class="fs-20">Don't have an account yet?</h2>
                         </div>
-                        <form class="m-0 sky-form" action="{% url 'account' %}" method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
-                            {{ wizard.management_form }}
-                            {% if wizard.steps.current == wizard.steps.first %}
-                                <fieldset id="one">
-                                    <div class="row">
-                                        <div class="col-md-6 col-sm-6">
-                                            <label>First Name <small>(required)</small></label>
-                                            <label class="input mb-10">
-                                                <i class="ico-append fa fa-user"></i>
-                                                {{ wizard.form.fName }}
-                                                <b class="tooltip tooltip-bottom-right">Your First Name</b>
-                                            </label>
-                                            {% if wizard.form.fName.errors %}
-                                                {% for error in wizard.form.fName.errors %}
-                                                    <div class="alert alert-mini alert-danger mb-30">
-                                                        <strong>{{ error|escape }}</strong>
-                                                    </div>
-                                                {% endfor %}
-                                            {% endif %}
-                                        </div>
-                                        <div class="col-md-6 col-sm-6">
-                                            <label for="register:last_name">Last Name <small>(required)</small></label>
-                                            <label class="input mb-10">
-                                                <i class="ico-append fa fa-user"></i>
-                                                {{ wizard.form.lName }}
-                                                <b class="tooltip tooltip-bottom-right">Your Last Name</b>
-                                            </label>
-                                            {% if wizard.form.lName.errors %}
-                                                {% for error in wizard.form.lName.errors %}
-                                                    <div class="alert alert-mini alert-danger mb-30">
-                                                        <strong>{{ error|escape }}</strong>
-                                                    </div>
-                                                {% endfor %}
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6 col-sm-6">
-                                            <label for="register:dob">Date of Birth <small>(required)</small></label>
-                                            <label class="input mb-10">
-                                                {{ wizard.form.dob }}
-                                                <b class="tooltip tooltip-bottom-right">Date of Birth</b>
-                                            </label>
-                                            {% if wizard.form.dob.errors %}
-                                                {% for error in wizard.form.dob.errors %}
-                                                    <div class="alert alert-mini alert-danger mb-30">
-                                                        <strong>{{ error|escape }}</strong>
-                                                    </div>
-                                                {% endfor %}
-                                            {% endif %}
-                                        </div>
-                                        <div class="col-md-6 col-sm-6">
-                                            <label for="register:gender">Gender <small>(required)</small></label>
-                                            <label class="select mb-10">
-                                                {{ wizard.form.gender }}
-                                                <i class="ico-append fa fa-venus-mars"></i>
-                                            </label>
-                                            {% if wizard.form.gender.errors %}
-                                                {% for error in wizard.form.gender.errors %}
-                                                    <div class="alert alert-mini alert-danger mb-30">
-                                                        <strong>{{ error|escape }}</strong>
-                                                    </div>
-                                                {% endfor %}
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <label for="register:email">Email <small>(required)</small></label>
-                                            <label class="input mb-10">
-                                                <i class="ico-append fa fa-envelope"></i>
-                                                {{ wizard.form.email }}
-                                                <b class="tooltip tooltip-bottom-right">Your Email</b>
-                                            </label>
-                                            {% if wizard.form.email.errors %}
-                                                {% for error in wizard.form.email.errors %}
-                                                    <div class="alert alert-mini alert-danger mb-30">
-                                                        <strong>{{ error|escape }}</strong>
-                                                    </div>
-                                                {% endfor %}
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6 col-sm-6">
-                                            <label for="register:phone">Phone <small>(required)</small></label>
-                                            <label class="input mb-10">
-                                                <i class="ico-append fa fa-phone"></i>
-                                                {{ wizard.form.phone }}
-                                                <b class="tooltip tooltip-bottom-right">Your Phone</b>
-                                            </label>
-                                            {% if wizard.form.phone.errors %}
-                                                {% for error in wizard.form.phone.errors %}
-                                                    <div class="alert alert-mini alert-danger mb-30">
-                                                        <strong>{{ error|escape }}</strong>
-                                                    </div>
-                                                {% endfor %}
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6 col-sm-6">
-                                            <label for="register:pass1">Password <small>(required)</small></label>
-                                            <label class="input mb-10">
-                                                <i class="ico-append fa fa-lock"></i>
-                                                {{ wizard.form.password }}
-                                                <b class="tooltip tooltip-bottom-right">Min. 6 characters</b>
-                                            </label>
-                                        </div>
-                                        <div class="col-md-6 col-sm-6">
-                                            <label for="register:pass2">Repeat Password <small>(required)</small></label>
-                                            <label class="input mb-10">
-                                                <i class="ico-append fa fa-lock"></i>
-                                                {{ wizard.form.verify }}
-                                                <b class="tooltip tooltip-bottom-right">Type the password again</b>
-                                            </label>
-                                            <div id="pass-message" class="alert alert-mini mb-30" style="display:none">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <hr />
-                                </fieldset>
-                            {% elif wizard.steps.current == wizard.steps.last %}
-                                <fieldset id="two">
-                                    <div class="row">
-                                        <div class="col-md-6 col-sm-6">
-                                            <label>Select ID type <small>(required)</small></label>
-                                            <label class="select mb-10">
-                                                <i class="ico-append fa fa-id-card"></i>
-                                                {{ wizard.form.id_choice }}
-                                            </label>
-                                        </div>
-                                        <div class="col-md-6 col-sm-6" id="client_input">
-                                            <label for="register:id">Client ID <small>(required)</small></label>
-                                            <label class="input mb-10">
-                                                <i class="ico-append fa fa-id-card-o"></i>
-                                                {{ wizard.form.client_id }}
-                                                <b class="tooltip tooltip-bottom-right">Enter your ID</b>
-                                            </label>
-                                            <small class="text-muted block" id="hint"></small>
-                                            {% if wizard.form.client_id.errors %}
-                                                {% for error in wizard.form.client_id.errors %}
-                                                    <div class="alert alert-mini alert-danger mb-30">
-                                                        <strong>{{ error|escape }}</strong>
-                                                    </div>
-                                                {% endfor %}
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6 col-sm-6">
-                                            <div class="picture-container">
-                                                <div class="sqr-picture">
-                                                    <img src="/static/img/id-card.png" class="picture-src" id="wizardFilePreview" />
-                                                    {{ wizard.form.scanned_id }}
-                                                </div>
-                                                <h6>Select your ID (max. size 5MB)</h6>
-                                            </div>
-                                            {% if wizard.form.scanned_id.errors %}
-                                                {% for error in wizard.form.scanned_id.errors %}
-                                                    <div class="alert alert-mini alert-danger mb-30">
-                                                        <strong>{{ error|escape }}</strong>
-                                                    </div>
-                                                {% endfor %}
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6 col-sm-6">
-                                            <label for="register:bot">BOT CDS Account <small>(optional)</small></label>
-                                            <label class="input mb-10">
-                                                <i class="ico-append fa fa-briefcase"></i>
-                                                {{ wizard.form.bot_cds }}
-                                                <b class="tooltip tooltip-bottom-right">Enter your account no.</b>
-                                            </label>
-                                        </div>
-                                        <div class="col-md-6 col-sm-6">
-                                            <label for="register:dse">DSE CDS Account <small>(optional)</small></label>
-                                            <label class="input mb-10">
-                                                <i class="ico-append fa fa-briefcase"></i>
-                                                {{ wizard.form.dse_cds }}
-                                                <b class="tooltip tooltip-bottom-right">Enter your account no.</b>
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <label class="checkbox m-0">
-                                        {{ wizard.form.checker }}
-                                        <i></i>I agree to the <a href="#" data-toggle="modal" data-target="#termsModal">Terms of Service</a>
-                                    </label>
-
-                                    <hr />
-
-                                </fieldset>
-                            {% endif %}
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    {% if wizard.steps.prev %}
-                                        <button name="wizard_goto_step" type="submit" class="btn btn-primary btn-teal" value="{{ wizard.steps.prev }}">PREVIOUS</button>
-                                    {% endif %}
-                                    {% if wizard.steps.current == wizard.steps.last %}
-                                        <input type="submit" class="btn btn-primary btn-teal float-right" value="REGISTER"/>
-                                    {% else %}
-                                        <input type="submit" class="btn btn-primary btn-teal float-right" value="NEXT"/>
-                                    {% endif %}
-                                </div>
-                            </div>
-                        </form>
                     </div>
-                </div>
+                {% else %}
+                    <div class="col-md-6 col-sm-6 offset-md-3 offset-sm-3">
+                        {% if wizard.form.non_field_errors %}
+                            {% for general_error in wizard.form.non_field_errors %}
+                                <div class="col-lg-6 col-xs-12 col-centered">
+                                    <div class="alert alert-mini alert-danger mb-30 text-center">
+                                        <strong>{{ general_error }}</strong>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                        <div class="box-static box-transparent box-bordered p-30">
+                            <div class="box-title mb-30">
+                                <h2 class="fs-20">Don't have an account yet?</h2>
+                            </div>
+                            <form class="m-0 sky-form" action="{% url 'account' %}" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                                {{ wizard.management_form }}
+                                {% if wizard.steps.current == wizard.steps.first %}
+                                    <fieldset id="one">
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6">
+                                                <label>First Name <small>(required)</small></label>
+                                                <label class="input mb-10">
+                                                    <i class="ico-append fa fa-user"></i>
+                                                    {{ wizard.form.fName }}
+                                                    <b class="tooltip tooltip-bottom-right">Your First Name</b>
+                                                </label>
+                                                {% if wizard.form.fName.errors %}
+                                                    {% for error in wizard.form.fName.errors %}
+                                                        <div class="alert alert-mini alert-danger mb-30">
+                                                            <strong>{{ error|escape }}</strong>
+                                                        </div>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </div>
+                                            <div class="col-md-6 col-sm-6">
+                                                <label for="register:last_name">Last Name <small>(required)</small></label>
+                                                <label class="input mb-10">
+                                                    <i class="ico-append fa fa-user"></i>
+                                                    {{ wizard.form.lName }}
+                                                    <b class="tooltip tooltip-bottom-right">Your Last Name</b>
+                                                </label>
+                                                {% if wizard.form.lName.errors %}
+                                                    {% for error in wizard.form.lName.errors %}
+                                                        <div class="alert alert-mini alert-danger mb-30">
+                                                            <strong>{{ error|escape }}</strong>
+                                                        </div>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6">
+                                                <label for="register:dob">Date of Birth <small>(required)</small></label>
+                                                <label class="input mb-10">
+                                                    {{ wizard.form.dob }}
+                                                    <b class="tooltip tooltip-bottom-right">Date of Birth</b>
+                                                </label>
+                                                {% if wizard.form.dob.errors %}
+                                                    {% for error in wizard.form.dob.errors %}
+                                                        <div class="alert alert-mini alert-danger mb-30">
+                                                            <strong>{{ error|escape }}</strong>
+                                                        </div>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </div>
+                                            <div class="col-md-6 col-sm-6">
+                                                <label for="register:gender">Gender <small>(required)</small></label>
+                                                <label class="select mb-10">
+                                                    {{ wizard.form.gender }}
+                                                    <i class="ico-append fa fa-venus-mars"></i>
+                                                </label>
+                                                {% if wizard.form.gender.errors %}
+                                                    {% for error in wizard.form.gender.errors %}
+                                                        <div class="alert alert-mini alert-danger mb-30">
+                                                            <strong>{{ error|escape }}</strong>
+                                                        </div>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <label for="register:email">Email <small>(required)</small></label>
+                                                <label class="input mb-10">
+                                                    <i class="ico-append fa fa-envelope"></i>
+                                                    {{ wizard.form.email }}
+                                                    <b class="tooltip tooltip-bottom-right">Your Email</b>
+                                                </label>
+                                                {% if wizard.form.email.errors %}
+                                                    {% for error in wizard.form.email.errors %}
+                                                        <div class="alert alert-mini alert-danger mb-30">
+                                                            <strong>{{ error|escape }}</strong>
+                                                        </div>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6">
+                                                <label for="register:phone">Phone <small>(required)</small></label>
+                                                <label class="input mb-10">
+                                                    <i class="ico-append fa fa-phone"></i>
+                                                    {{ wizard.form.phone }}
+                                                    <b class="tooltip tooltip-bottom-right">Your Phone</b>
+                                                </label>
+                                                {% if wizard.form.phone.errors %}
+                                                    {% for error in wizard.form.phone.errors %}
+                                                        <div class="alert alert-mini alert-danger mb-30">
+                                                            <strong>{{ error|escape }}</strong>
+                                                        </div>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6">
+                                                <label for="register:pass1">Password <small>(required)</small></label>
+                                                <label class="input mb-10">
+                                                    <i class="ico-append fa fa-lock"></i>
+                                                    {{ wizard.form.password }}
+                                                    <b class="tooltip tooltip-bottom-right">Min. 6 characters</b>
+                                                </label>
+                                            </div>
+                                            <div class="col-md-6 col-sm-6">
+                                                <label for="register:pass2">Repeat Password <small>(required)</small></label>
+                                                <label class="input mb-10">
+                                                    <i class="ico-append fa fa-lock"></i>
+                                                    {{ wizard.form.verify }}
+                                                    <b class="tooltip tooltip-bottom-right">Type the password again</b>
+                                                </label>
+                                                <div id="pass-message" class="alert alert-mini mb-30" style="display:none">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr />
+                                    </fieldset>
+                                {% elif wizard.steps.current == wizard.steps.last %}
+                                    <fieldset id="two">
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6">
+                                                <label>Select ID type <small>(required)</small></label>
+                                                <label class="select mb-10">
+                                                    <i class="ico-append fa fa-id-card"></i>
+                                                    {{ wizard.form.id_choice }}
+                                                </label>
+                                            </div>
+                                            <div class="col-md-6 col-sm-6" id="client_input">
+                                                <label for="register:id">Client ID <small>(required)</small></label>
+                                                <label class="input mb-10">
+                                                    <i class="ico-append fa fa-id-card-o"></i>
+                                                    {{ wizard.form.client_id }}
+                                                    <b class="tooltip tooltip-bottom-right">Enter your ID</b>
+                                                </label>
+                                                <small class="text-muted block" id="hint"></small>
+                                                {% if wizard.form.client_id.errors %}
+                                                    {% for error in wizard.form.client_id.errors %}
+                                                        <div class="alert alert-mini alert-danger mb-30">
+                                                            <strong>{{ error|escape }}</strong>
+                                                        </div>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6">
+                                                <div class="picture-container">
+                                                    <div class="sqr-picture">
+                                                        <img src="/static/img/id-card.png" class="picture-src" id="wizardFilePreview" />
+                                                        {{ wizard.form.scanned_id }}
+                                                    </div>
+                                                    <h6>Select your ID (max. size 5MB)</h6>
+                                                </div>
+                                                {% if wizard.form.scanned_id.errors %}
+                                                    {% for error in wizard.form.scanned_id.errors %}
+                                                        <div class="alert alert-mini alert-danger mb-30">
+                                                            <strong>{{ error|escape }}</strong>
+                                                        </div>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6">
+                                                <label for="register:bot">BOT CDS Account <small>(optional)</small></label>
+                                                <label class="input mb-10">
+                                                    <i class="ico-append fa fa-briefcase"></i>
+                                                    {{ wizard.form.bot_cds }}
+                                                    <b class="tooltip tooltip-bottom-right">Enter your account no.</b>
+                                                </label>
+                                            </div>
+                                            <div class="col-md-6 col-sm-6">
+                                                <label for="register:dse">DSE CDS Account <small>(optional)</small></label>
+                                                <label class="input mb-10">
+                                                    <i class="ico-append fa fa-briefcase"></i>
+                                                    {{ wizard.form.dse_cds }}
+                                                    <b class="tooltip tooltip-bottom-right">Enter your account no.</b>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <label class="checkbox m-0">
+                                            {{ wizard.form.checker }}
+                                            <i></i>I agree to the <a href="#" data-toggle="modal" data-target="#termsModal">Terms of Service</a>
+                                        </label>
+
+                                        <hr />
+
+                                    </fieldset>
+                                {% endif %}
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        {% if wizard.steps.prev %}
+                                            <button name="wizard_goto_step" type="submit" class="btn btn-primary btn-teal" value="{{ wizard.steps.prev }}">PREVIOUS</button>
+                                        {% endif %}
+                                        {% if wizard.steps.current == wizard.steps.last %}
+                                            <input type="submit" class="btn btn-primary btn-teal float-right" value="REGISTER"/>
+                                        {% else %}
+                                            <input type="submit" class="btn btn-primary btn-teal float-right" value="NEXT"/>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                {% endif %}
+
             </div>
         </div>
     </section>

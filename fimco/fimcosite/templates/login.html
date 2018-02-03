@@ -104,9 +104,9 @@
                                     <h2 class="fs-20">I'm already a member</h2>
                                 </div>
                                 {% if next %}
-                                <form class="sky-form" method="post" action="{% url 'validate' %}?next={{next}}" autocomplete="off">
+                                <form id="corporate" class="sky-form" method="post" action="{% url 'validate' %}?next={{next}}" autocomplete="off">
                                 {% else %}
-                                <form class="sky-form" method="post" action="{% url 'validate' %}" autocomplete="off">
+                                <form id="corporate" class="sky-form" method="post" action="{% url 'validate' %}" autocomplete="off">
                                 {% endif %}
                                     <div class="clearfix">
                                         <!-- POCHI ID -->
@@ -132,16 +132,21 @@
                                         </label>
                                     </div>
                                     <div class="row">
+                                        <input type="hidden" name="next" value="{{ next }}" />
+                                        <input type="hidden" name="corporate" value=""/>
                                         <div class="col-md-6 col-sm-6 col-xs-6">
-                                            <!-- Inform Tip -->
-                                            <div class="form-tip pt-20">
-                                                <a class="no-text-decoration fs-13 mt-10 block" href="#">Forgot Password?</a>
-                                            </div>
+                                            <button id="addNew" class="btn btn-primary" type="submit">Add New User</button>
                                         </div>
                                         <div class="col-md-6 col-sm-6 col-xs-6">
                                             <button class="btn btn-primary" type="submit">LOG IN</button>
-                                            <input type="hidden" name="next" value="{{ next }}" />
-                                            <input type="hidden" name="corporate" value="" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 col-sm-6 col-xs-6">
+                                            <!-- Inform Tip -->
+                                            <div class="form-tip">
+                                                <a class="no-text-decoration fs-13 mt-10 block" href="#">Forgot Password?</a>
+                                            </div>
                                         </div>
                                     </div>
                                     {% csrf_token %}
@@ -164,4 +169,5 @@
 {% endblock %}
 
 {% block scripts %}
+    <script type="text/javascript" src="/static/js/login.js"/>
 {% endblock %}

@@ -3,6 +3,7 @@
     <link href="/static/pochi/css/dashboard.css" rel="stylesheet" type="text/css" />
     <link href="/static/pochi/css/navyblue.css" rel="stylesheet" type="text/css" />
 {% endblock %}
+{% load djmoney %}
 {% block content %}
     <section id="middle">
         <div id="content" class="dashboard padding-20">
@@ -10,7 +11,7 @@
                 <div class="panel-heading">
                     <span class="title elipsis">
                         <strong>BALANCE & INTEREST SUMMARY</strong> <!-- panel title -->
-                        <small class="size-12 weight-300 text-mutted hidden-xs">(As at {% now 'd/m/Y' %})</small>
+                        <small class="size-12 weight-300 text-mutted hidden-xs">(As at {{ yesterday|date:'d/m/Y' }})</small>
                     </span>
 
                     <!-- right options -->
@@ -66,7 +67,7 @@
                     <div class="box warning grow"><!-- default, danger, warning, info, success -->
                         <div class="box-title"><!-- add .noborder class if box-body is removed -->
                             <h4>Daily Earnings</h4>
-                            <small class="block">TZS {{ daily.today }}/=</small>
+                            <small class="block">{% money_localize daily.today 'TZS' %}</small>
     {#                        <i class="fa fa-bar-chart-o"></i>#}
                         </div>
                         <div class="box-body text-center">
@@ -89,7 +90,7 @@
                     <div class="box default grow"><!-- default, danger, warning, info, success -->
                         <div class="box-title"><!-- add .noborder class if box-body is removed -->
                             <h4>Monthly earnings</h4>
-                            <small class="block">TZS {{ monthly.bonus }}/=</small>
+                            <small class="block">{% money_localize monthly.bonus 'TZS' %}</small>
     {#                        <i class="fa fa-shopping-cart"></i>#}
                         </div>
                         <div class="box-body text-center">
@@ -111,8 +112,8 @@
                     <!-- BOX -->
                     <div class="box success grow"><!-- default, danger, warning, info, success -->
                         <div class="box-title"><!-- add .noborder class if box-body is removed -->
-                            <h4>Total Earnings</h4>
-                            <small class="block">TZS {{ total.total.bonus_closing_balance__sum }}/=</small>
+                            <h4>Cumulative Earnings</h4>
+                            <small class="block">{% money_localize total.total.bonus__sum 'TZS' %}</small>
     {#                        <i class="fa fa-globe"></i>#}
                         </div>
                         <div class="box-body text-center">

@@ -216,14 +216,14 @@
 
                     <h3 class="size-14">MORE</h3>
                     <ul class="nav nav-list">
-                        {% if profile.profile_type == 'I' %}
+                        {% comment %}{% if profile.profile_type == 'I' %}
                         <li>
                             <a href="{% url 'index' %}">
                                 <i class="main-icon fa fa-trash-o"></i>
                                 <span class="label label-info pull-right"></span><span>Delete POCHI account</span>
                             </a>
                         </li>
-                        {% endif %}
+                        {% endif %}{% endcomment %}
                         <li>
                             <a href="{% url 'index' %}">
                                 <i class="main-icon fa fa-link"></i>

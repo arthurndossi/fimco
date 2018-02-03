@@ -48,11 +48,22 @@ class RegistrationWizard(SessionWizardView):
     #     return context
 
     def done(self, form_list, **kwargs):
-        form_data = register(self.request, form_list)
-        context = {
-            'form_data': form_data
-        }
-        return render_to_response('registration.html', context)
+        form_data = register(form_list)
+        if form_data:
+            messages.info(
+                self.request,
+                'Your information is being verified and you will receive notification shortly!'
+            )
+            context = {
+                'form_data': form_data
+            }
+            return render(self.request, 'registration.html', context)
+        else:
+            messages.error(
+                self.request,
+                'Fill in all required details of this form!'
+            )
+            return redirect('account')
 
 
 class CorporateWizard(SessionWizardView):
@@ -337,7 +348,7 @@ def login_view(request):
     return render(request, 'login.html', context)
 
 
-def validate_credentials(request, form, username, password, _next, category, pochi=None):
+def validate_credentials(request, form, username, password, _next, category, pochi=None, new_user=False):
     if re.match(r"[^@]+@[^@]+\.[^@]+", username):
         try:
             user = User.objects.get(email=username)
@@ -359,8 +370,27 @@ def validate_credentials(request, form, username, password, _next, category, poc
         login(request, user, backend='django.contrib.auth.backends.ModelBackend')
         current_url = request.resolver_match.url_name
         if _next == "/" or "pochi" not in current_url:
-            from pochi.views import home
-            return redirect(home)
+            if new_user:
+                company = CorporateProfile.objects.get(account=pochi).company_name
+                profile_id = Account.objects.get(account=pochi).profile_id
+                members = Profile.objects.filter(profile_id=profile_id).values_list('user__username', flat=True)
+                corporate_users = []
+                for member in members:
+                    user_obj = User.objects.select_related('profile').get(username=member)
+                    corporate_user = user_obj.get_full_name()
+                    corporate_users.append(corporate_user)
+                context = {
+                    'second': 'active',
+                    'inactive': 'disabled',
+                    'adForm': UserCorporateForm,
+                    'company': company,
+                    'users': corporate_users,
+                    'logged_in': True
+                }
+                return render(request, 'corporate.html', context)
+            else:
+                from pochi.views import home
+                return redirect(home)
         else:
             return redirect(_next)
     else:
@@ -390,7 +420,10 @@ def validate(request):
                 rep = form.cleaned_data["corp_rep"]
                 password = form.cleaned_data["password"]
                 get_param = request.POST['next']
-                return validate_credentials(request, form, rep, password, get_param, 'corporate', pochi_id)
+                if request.is_ajax():
+                    return validate_credentials(request, form, rep, password, get_param, 'corporate', pochi_id, True)
+                else:
+                    return validate_credentials(request, form, rep, password, get_param, 'corporate', pochi_id)
             else:
                 return render(request, 'login.html', {'cForm': form, 'corporate': tab})
         else:
@@ -426,51 +459,50 @@ def create_account(profile_id):
     return account_no
 
 
-def register(request, form_list):
-    form_data = [form.cleaned_data for form in form_list]
+def register(form_list):
+    if form_list:
+        form_data = [form.cleaned_data for form in form_list]
 
-    fName = form_data[0]['fName'].capitalize()
-    lName = form_data[0]['lName'].capitalize()
-    dob = form_data[0]['dob']
-    gender = form_data[0]['gender']
-    email = form_data[0]['email']
-    phone = form_data[0]['phone'].strip().replace('+255', '0')
-    password = form_data[0]["password"]
+        fName = form_data[0]['fName'].capitalize()
+        lName = form_data[0]['lName'].capitalize()
+        dob = form_data[0]['dob']
+        gender = form_data[0]['gender']
+        email = form_data[0]['email']
+        phone = form_data[0]['phone'].strip().replace('+255', '0')
+        password = form_data[0]["password"]
 
-    id_choice = form_data[1]['id_choice']
-    client_id = form_data[1]['client_id']
-    scanned_id = form_data[1]['scanned_id']
-    bot = form_data[1]['bot_cds']
-    dse = form_data[1]['dse_cds']
+        id_choice = form_data[1]['id_choice']
+        client_id = form_data[1]['client_id']
+        scanned_id = form_data[1]['scanned_id']
+        bot = form_data[1]['bot_cds']
+        dse = form_data[1]['dse_cds']
 
-    profile_id = "POC%s" % uuid.uuid4().hex[:6].upper()
-    pin = uuid.uuid4().hex[:4].upper()
-    account_no = create_account(profile_id)
+        profile_id = "POC%s" % uuid.uuid4().hex[:6].upper()
+        pin = uuid.uuid4().hex[:4].upper()
+        account_no = create_account(profile_id)
 
-    with transaction.atomic():
-        user = User(username=phone, email=email, password=password, first_name=fName, last_name=lName, is_active=0)
-        user.save()
-        profile = Profile(user=user, profile_id=profile_id, dob=dob, gender=gender, msisdn=phone, bot_cds=bot,
-                          dse_cds=dse, profile_type='I', pin=pin)
-        profile.save()
+        with transaction.atomic():
+            user = User(username=phone, email=email, password=password, first_name=fName, last_name=lName, is_active=0)
+            user.save()
+            profile = Profile(user=user, profile_id=profile_id, dob=dob, gender=gender, msisdn=phone, bot_cds=bot,
+                              dse_cds=dse, profile_type='I', pin=pin)
+            profile.save()
 
-        KYC.objects.create(
-            profile_id=profile_id,
-            kyc_type=id_choice,
-            id_number=client_id,
-            document=scanned_id
-        )
+            KYC.objects.create(
+                profile_id=profile_id,
+                kyc_type=id_choice,
+                id_number=client_id,
+                document=scanned_id
+            )
 
-        Account.objects.create(
-            profile_id=profile_id,
-            account=account_no
-        )
+            Account.objects.create(
+                profile_id=profile_id,
+                account=account_no
+            )
 
-        messages.info(
-            request,
-            'Your information is being verified and you will receive notification shortly!'
-        )
-        return form_data
+            return form_data
+    else:
+        return None
 
 
 @login_required

@@ -16,8 +16,14 @@ $(document).ready(function() {
                     return {
                         valid: false,
                         message: 'Please provide a phone number that is registered in POCHI'
-                    };
-                }else{
+                    }
+                }else if ($.inArray(name, existingMembers) !== -1){
+                    return {
+                        valid: false,
+                        message: 'This member is already in the group, please enter a new member!'
+                    }
+                }
+                else{
                     return {
                         valid: true,
                         fullName: name
@@ -120,6 +126,23 @@ $(document).ready(function() {
         members.after("<button type='submit' class='btn btn-primary'>Submit</button>");
     })
 
+    .on('click', '#add-button', function(e) {
+        e.preventDefault();
+        var inputs  = $("[name='option[]']"),
+            uniqueItems = [],
+            options = [];
+
+        for(var i = 0; i < inputs.length; i++){
+            if ($(inputs[i]).val() !== ''){
+                options.push($(inputs[i]).val());
+                uniqueItems = Array.from(new Set(options));
+            }
+        }
+
+        var members = JSON.stringify(uniqueItems);
+        addMoreMembers(members)
+    })
+
     // Add button click handler
     .on('click', '.addButton', function() {
         inputIndex++;
@@ -131,7 +154,7 @@ $(document).ready(function() {
                             .insertBefore($template),
             $option   = $clone.find('[name="option[]"]').attr('autocomplete', 'off');
 
-        $('#add').addClass('hide');
+        $('#add-button').addClass('hide');
         $clone.find('.control-label').html('Member '+inputIndex);
         // Add new field
         form.formValidation('addField', $option);
@@ -197,7 +220,7 @@ $(document).ready(function() {
         if (data.validator === 'validMSISDN') {
             $informer.removeClass('hide').html(data.result.fullName);
             $row.find('.extras').removeClass('hide');
-            $('#add').removeClass('hide');
+            $('#add-button').removeClass('hide');
         }
     })
 
@@ -261,3 +284,28 @@ function validate_phone_no(value) {
 }
 
 // group settings
+
+function addMoreMembers(values) {
+    var form = $('#add').find('form');
+    $.ajax({
+        data: {'members': values, csrftoken: $("[name=csrfmiddlewaretoken]").val() },
+        type: form.attr('method'),
+        url: form.attr('action'),
+        dataType: "json",
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        },
+        error: function(xhr,errMsg,err) {
+            _toastr("Something went wrong... Please try again!","top-center","error",false);
+            console.log(errMsg+": "+err);
+        }
+    });
+}
+
+if($(":checkbox:checked").length > 2){
+    $('#remove').attr('disabled', true)
+}else{
+    $('#remove').attr('disabled', false)
+}
