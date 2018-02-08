@@ -112,10 +112,10 @@ def home(request):
     return render_with_global_data(request, 'pochi/home.html', context)
 
 
-def get_rates(start_date, end_date):
+def get_rates(start_date):
     try:
-        this_year_rates = Rate.objects.filter(full_timestamp__range=[start_date, datetime.now()]).order_by('full_timestamp')\
-            .only('rate')
+        this_year_rates = Rate.objects.filter(full_timestamp__range=[start_date, datetime.now()])\
+            .order_by('full_timestamp').only('rate')
     except Rate.DoesNotExist:
         this_year_rates = None
     if this_year_rates:
@@ -277,7 +277,7 @@ def admin(request, name=None):
     else:
         profile_id = request.user.profile.profile_id
 
-    rates = get_rates(start_date, end_date)
+    rates = get_rates(start_date)
     daily_earnings = daily_rates(request)
     monthly_earnings = get_monthly(request, prev_date, start_date, end_date)
     total = get_total(request, start_date, end_date)
@@ -574,7 +574,6 @@ def fund_transfer(request, service, mode, channel, profile_id, src, dst, bal, am
         charges = Charge.objects.get(service=mode).charge
     except Charge.DoesNotExist:
         charges = 0
-    # TODO make trans_id
     trans_id = make_trans_id(msisdn)
     total = amount + charges
     if service == 'P2P':
@@ -1008,7 +1007,7 @@ def deposit(request):
         phone = request.GET['msisdn']
         channel = request.GET['channel']
         mode = request.GET['source']
-        # TODO change msisdn field to some other value
+
         try:
             _account = Account.objects.get(account=dst_account)
             dst_profile_id = _account.profile_id
