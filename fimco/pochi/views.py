@@ -100,7 +100,7 @@ def home(request):
 
     try:
         transactions = Transaction.objects.filter(profile_id=profile.profile_id)\
-            .values('full_timestamp', 'service', 'channel', 'mode', 'amount', 'charge')[:10]
+            .values('full_timestamp', 'service', 'channel', 'amount', 'charge')[:10]
     except Transaction.DoesNotExist:
         transactions = None
 
@@ -447,7 +447,7 @@ def confirm_transfer(request):
         del request.session['amount']
         del request.session['overdraft']
 
-        fund_transfer(request, 'WITHDRAW', 'NA', institution, identifier, pochi_id, phone, bal, amount, phone, ov)
+        fund_transfer(request, 'WITHDRAW', 'MOBILE', institution, identifier, pochi_id, phone, bal, amount, phone, ov)
 
         messages.success(
             request,
@@ -477,8 +477,8 @@ def confirm_transfer(request):
 
         ext_account = ExternalAccount.objects.get(profile_id=identifier)
 
-        fund_transfer(request, 'WITHDRAW', 'NA', institution, identifier, pochi_id, ext_account_no, bal, amount, phone,
-                      ov)
+        fund_transfer(request, 'WITHDRAW', 'BANK', institution, identifier, pochi_id, ext_account_no, bal, amount,
+                      phone, ov)
 
         messages.success(
             request,
@@ -489,22 +489,19 @@ def confirm_transfer(request):
     elif request.session['confirm'] == u'P2P':
         src_account = request.session['account_no']
         name = request.session['name']
-        ext_wallet = request.session['ext_wallet']
-        dest_account = request.session['dest_account']
-        dest_profile_id = request.session['dest_profile_id']
+        dst_account = request.session['dst_account']
         amount = request.session['amount']
         ov = request.session['overdraft']
         bal = request.session['open_bal']
 
         del request.session['confirm']
-        del request.session['dest_account']
-        del request.session['dest_profile_id']
+        del request.session['dst_account']
+        del request.session['dst_profile_id']
         del request.session['amount']
         del request.session['overdraft']
         del request.session['open_bal']
         del request.session['account_no']
         del request.session['name']
-        del request.session['ext_wallet']
 
         amount = float(amount)
         bal = float(bal)
@@ -512,37 +509,20 @@ def confirm_transfer(request):
         profile = request.user.profile
         src_profile_id = profile.profile_id
 
-        fund_transfer(request, 'P2P', ext_wallet, 'NA', src_profile_id, src_account, dest_account, bal, amount,
-                      phone, ov)
+        fund_transfer(request, 'P2P', 'POCHI', 'NA', src_profile_id, src_account, dst_account, bal, amount, phone, ov)
 
-        src_account = dest_account = None
-        try:
-            src_account = Account.objects.get(profile_id=src_profile_id)
-            src_account.available_balance -= float(amount)
-            src_account.save()
-        except Account.DoesNotExist:
-            pass
-
-        try:
-            dest_account = Account.objects.get(profile_id=dest_profile_id)
-            dest_account.available_balance += float(amount)
-            dest_account.save()
-        except Account.DoesNotExist:
-            pass
-
-        if src_account and dest_account:
+        if src_account and dst_account:
             messages.success(request, 'TZS' + str(amount) + ' has been transferred from your account to ' + name + '.')
         else:
             messages.error(request, 'An invalid account was selected.')
+
         return render_with_global_data(request, 'pochi/pochi2pochi.html', {})
 
     elif request.session['confirm'] == u'G2P':
         src_account_no = request.session['account_no']
         name = request.session['name']
         group_name = request.session['group_name']
-        ext_wallet = request.session['ext_wallet']
-        dest_account_no = request.session['dest_account']
-        dest_profile_id = request.session['dest_profile_id']
+        dst_account_no = request.session['dst_account']
         amount = request.session['amount']
         ov = request.session['overdraft']
         bal = request.session['open_bal']
@@ -553,36 +533,18 @@ def confirm_transfer(request):
         src_profile_id = name
 
         del request.session['confirm']
-        del request.session['dest_account']
-        del request.session['dest_profile_id']
+        del request.session['dst_account']
         del request.session['amount']
         del request.session['overdraft']
         del request.session['open_bal']
         del request.session['account_no']
         del request.session['name']
-        del request.session['ext_wallet']
         del request.session['group_name']
 
-        fund_transfer(request, 'P2P', ext_wallet, 'NA', src_profile_id, src_account_no, dest_account_no, bal, amount,
+        fund_transfer(request, 'P2P', 'POCHI', 'NA', src_profile_id, src_account_no, dst_account_no, bal, amount,
                       phone, ov)
 
-        src_account = None
-        dest_account = None
-        try:
-            src_account = Account.objects.get(account=src_account_no)
-            src_account.available_balance -= float(amount)
-            src_account.save()
-        except Account.DoesNotExist:
-            pass
-
-        try:
-            dest_account = Account.objects.get(profile_id=dest_profile_id)
-            dest_account.available_balance += float(amount)
-            dest_account.save()
-        except Account.DoesNotExist:
-            pass
-
-        if src_account and dest_account:
+        if src_account_no and dst_account_no:
             messages.success(request, 'TZS' + str(amount) + ' has been transferred from ' + group_name + ' account to '
                              + name + '.')
         else:
@@ -591,97 +553,187 @@ def confirm_transfer(request):
         return render_with_global_data(request, 'pochi/group_activity.html', {})
 
 
+def make_trans_id(phone):
+    last_4_digits = phone[-4:]
+    str_padded = last_4_digits.zfill(9)
+    return "P%s" % str_padded
+
+
+def generate_ref(p_id):
+    last_4_digits = p_id[-4:]
+    ran = str(datetime.datetime.today().microsecond)
+    pad = ran[:3]
+    import random
+    fill = str(random.randint(11, 99))
+    return "5%s%s%s" % (fill, pad, last_4_digits)
+
+
 @transaction.atomic
-def fund_transfer(request, service, ext_wallet, channel, profile_id, src, dest, bal, amount, msisdn, overdraft=0):
+def fund_transfer(request, service, mode, channel, profile_id, src, dst, bal, amount, msisdn, overdraft=0):
     try:
-        charges = Charge.objects.get(service=service).charge
+        charges = Charge.objects.get(service=mode).charge
     except Charge.DoesNotExist:
         charges = 0
+    # TODO make trans_id
+    trans_id = make_trans_id(msisdn)
     total = amount + charges
     if service == 'P2P':
-        if bal > total or overdraft:
+        try:
+            src_acc = Account.objects.get(account=src)
+            dst_acc = Account.objects.get(account=dst)
+            dst_profile_id = dst_acc.profile_id
+        except Account.DoesNotExist:
+            src_acc, dst_acc, dst_profile_id = None, None, None
+        # TODO should check if this Profile exists
+        dst_msisdn = Profile.objects.get(profile_id=dst_profile_id).msisdn
+
+        src_ref = generate_ref(profile_id)
+        dst_ref = generate_ref(dst_profile_id)
+
+        if bal > total or overdraft and dst_profile_id:
             Transaction.objects.create(
                 profile_id=profile_id,
                 account=src,
                 msisdn=msisdn,
-                trans_id=ext_wallet,
+                trans_id=trans_id,
+                reference=src_ref,
                 service=service,
-                dest_account=dest,
+                mode=mode,
+                dst_account=dst,
                 amount=Money(amount, 'TZS'),
                 status='DONE'
             )
             Ledger.objects.create(
+                profile_id=profile_id,
+                account=src,
+                msisdn=msisdn,
                 trans_type='DEBIT',
-                service=service,
+                mode=mode,
+                trans_id=trans_id,
+                reference=src_ref,
                 amount=Money(amount, 'TZS'),
                 current_o_bal=Money(total, 'TZS'),
-                current_c_bal=Money(total, 'TZS')
+                current_c_bal=Money(total, 'TZS'),
+                available_o_bal=Money(total, 'TZS'),
+                available_c_bal=Money(total, 'TZS')
             )
             Ledger.objects.create(
+                profile_id=dst_profile_id,
+                account=dst,
+                msisdn=dst_msisdn,
                 trans_type='CREDIT',
-                service=service,
+                mode=mode,
+                trans_id=trans_id,
+                reference=dst_ref,
                 amount=Money(amount, 'TZS'),
                 current_o_bal=Money(total, 'TZS'),
-                current_c_bal=Money(total, 'TZS')
+                current_c_bal=Money(total, 'TZS'),
+                available_o_bal=Money(total, 'TZS'),
+                available_c_bal=Money(total, 'TZS')
+            )
+            BalanceSnapshot.objects.create(
+                profile_id=profile_id,
+                account=src,
+                current_closing_balance=Money(bal - total, 'TZS'),
+                available_closing_balance=Money(bal - total, 'TZS')
+            )
+            BalanceSnapshot.objects.create(
+                profile_id=dst_profile_id,
+                account=dst,
+                current_closing_balance=Money(dst_acc.available_balance + total, 'TZS'),
+                available_closing_balance=Money(dst_acc.available_balance + total, 'TZS')
+            )
+            if src_acc and dst_acc:
+                src_acc.available_balance -= total
+                src_acc.current_balance -= total
+                src_acc.save()
+                dst_acc.available_balance += total
+                dst_acc.current_balance += total
+                dst_acc.save()
+            # return src_acc, dst_acc
+    elif service == 'WITHDRAW':
+        try:
+            src_acc = Account.objects.get(account=src)
+        except Account.DoesNotExist:
+            src_acc = None
+        ref = generate_ref(profile_id)
+        if total <= bal or overdraft and src_acc:
+            Transaction.objects.create(
+                profile_id=profile_id,
+                account=src,
+                msisdn=msisdn,
+                trans_id=trans_id,
+                reference=ref,
+                service=service,
+                mode=mode,
+                dst_account=dst,
+                amount=Money(amount, 'TZS'),
+                charge=Money(charges, 'TZS')
+            )
+            Ledger.objects.create(
+                profile_id=profile_id,
+                account=src,
+                msisdn=msisdn,
+                trans_type='DEBIT',
+                mode=mode,
+                trans_id=trans_id,
+                reference=ref,
+                amount=Money(total, 'TZS'),
+                current_o_bal=Money(bal - total, 'TZS'),
+                current_c_bal=Money(bal - total, 'TZS')
+            )
+            CashOut.objects.create(
+                ext_entity=channel,
+                ext_account_no=dst,
+                ext_trans_id=trans_id,
+                amount=Money(total, 'TZS')
             )
             BalanceSnapshot.objects.create(
                 profile_id=profile_id,
                 account=src,
                 current_closing_balance=Money(bal - total, 'TZS')
             )
-    elif service == 'WITHDRAW':
-        if total <= bal or overdraft:
-            Transaction.objects.create(
-                profile_id=profile_id,
-                account=src,
-                msisdn=msisdn,
-                trans_id=ext_wallet,
-                service=service,
-                channel=channel,
-                dest_account=dest,
-                amount=Money(total, 'TZS'),
-                charge=Money(charges, 'TZS'),
-            )
-            Ledger.objects.create(
-                profile_id=profile_id,
-                trans_type='DEBIT',
-                service=service,
-                amount=amount,
-                current_o_bal=Money(total, 'TZS'),
-                current_c_bal=Money(total, 'TZS')
-            )
-            CashOut.objects.create(
-                ext_entity=channel,
-                ext_trans_id=ext_wallet,
-                amount=Money(total, 'TZS')
-            )
-            BalanceSnapshot.objects.create(
-                profile_id=profile_id,
-                account=src,
-                current_closing_balance=Money(total, 'TZS')
-            )
+            src_acc.available_balance -= total
+            src_acc.current_balance -= total
+            src_acc.save()
     elif service == 'DEPOSIT':
+        try:
+            dst_acc = Account.objects.get(account=dst)
+        except Account.DoesNotExist:
+            dst_acc = None
+        ref = generate_ref(profile_id)
         Transaction.objects.create(
             profile_id=profile_id,
-            account=dest,
+            account=src,
             msisdn=msisdn,
-            trans_id=ext_wallet,
-            service='DEPOSIT',
+            trans_id=trans_id,
+            reference=ref,
+            service=service,
+            mode=mode,
+            dst_account=dst,
             amount=Money(amount, 'TZS'),
+            charge=Money(charges, 'TZS')
         )
         Ledger.objects.create(
             profile_id=profile_id,
+            account=dst,
+            msisdn=msisdn,
             trans_type='CREDIT',
-            service=service,
-            amount=amount,
-            current_o_bal=Money(amount, 'TZS'),
-            current_c_bal=Money(amount, 'TZS')
+            mode=mode,
+            trans_id=trans_id,
+            reference=ref,
+            amount=Money(total, 'TZS'),
+            current_o_bal=Money(bal + total, 'TZS'),
+            current_c_bal=Money(bal + total, 'TZS')
         )
         BalanceSnapshot.objects.create(
             profile_id=profile_id,
-            account=src,
-            current_closing_balance=Money(amount, 'TZS')
+            account=dst,
+            current_closing_balance=Money(bal + total, 'TZS')
         )
+        dst_acc.available_balance += amount
+        dst_acc.current_balance += amount
+        dst_acc.save()
 
 
 @login_required
@@ -762,7 +814,6 @@ def pochi2pochi(request, name=None):
                 )
 
                 request.session['dest_account'] = dest_account
-                request.session['dest_profile_id'] = dest_profile_id
                 request.session['account_no'] = acc.account
                 request.session['name'] = user_name
                 request.session['ext_wallet'] = acc.external_wallet_id
@@ -953,51 +1004,29 @@ def deposit(request):
     message = None
     if request.method == "GET":
         amount = float(request.GET['amount'])
-        if 'msisdn' in request.GET:
-            phone = request.GET['msisdn']
+        dst_account = request.GET['account']
+        phone = request.GET['msisdn']
+        channel = request.GET['channel']
+        mode = request.GET['source']
+        # TODO change msisdn field to some other value
+        try:
+            _account = Account.objects.get(account=dst_account)
+            dst_profile_id = _account.profile_id
+            bal = _account.available_balance
+            dst_account = _account.account
 
-            try:
-                src_profile_id = Profile.objects.get(user__username=phone).profile_id
-            except Profile.DoesNotExist:
-                src_profile_id = None
-
-            if src_profile_id:
-                try:
-                    _account = Account.objects.get(profile_id=src_profile_id)
-                    bal = _account.available_balance
-                    dst_account = _account.account
-
-                    fund_transfer(request, 'DEPOSIT', 'NA', 'NA', src_profile_id, 'NA', dst_account, bal, amount, phone)
-
-                    _account.available_balance += amount
-                    _account.save()
-
-                    message = 'You have successfully deposited ' + str(amount) + ' to your account'
-
-                except Account.DoesNotExist:
-                    message = 'System unavailable, Try again later!'
-                    pass
+            if dst_profile_id == 'NA':
+                name = _account.nickname
+                fund_transfer(request, 'DEPOSIT', mode, channel, name, phone, dst_account, bal, amount, phone)
             else:
-                message = 'Sorry!, This phone number is not registered in the system!'
-        elif 'account' in request.GET:
-            this_account = request.GET['account']
+                fund_transfer(request, 'DEPOSIT', mode, channel, dst_profile_id, phone, dst_account, bal, amount,
+                              phone)
 
-            try:
-                _group = Group.objects.get(account=this_account)
-                _acc = Account.objects.get(account=this_account)
-                bal = _acc.available_balance
-                name = _group.name
+            message = 'You have successfully deposited ' + str(amount) + ' to your account'
 
-                fund_transfer(request, 'DEPOSIT', 'NA', 'NA', name, 'NA', this_account, bal, amount, 'NA')
+        except Account.DoesNotExist:
+            message = 'Sorry!, This account does not exist!'
 
-                _acc.available_balance += amount
-                _acc.save()
-
-                message = 'You have successfully deposited ' + str(amount) + ' to your group account'
-
-            except Group.DoesNotExist or Account.DoesNotExist:
-                message = 'Sorry!, This account number does not belong to any group in the system!'
-                pass
     return JsonResponse({'message': message})
 
 
@@ -1057,6 +1086,7 @@ def create_group(request):
                         profile_id=profile_id,
                         admin=is_admin
                     )
+                    messages.success(request, "Group "+groupName+"created successfully!")
         except IntegrityError:
             messages.error(request, 'Sorry!, this group name is already in use, try a different name')
             # import httplib, urllib
@@ -1068,7 +1098,7 @@ def create_group(request):
             #                  "message": "hello world",
             #              }), {"Content-type": "application/x-www-form-urlencoded"})
             # conn.getresponse()
-    return redirect(new_group)
+    return redirect(request.META['HTTP_REFERER'])
 
 
 @login_required
@@ -1222,7 +1252,7 @@ def group_profile(request, name=None):
                 .values('full_timestamp', 'service', 'channel', 'mode', 'amount', 'charge')
         except Transaction.DoesNotExist:
             group_transactions = None
-    except Account.DoesNotExist:
+    except Group.DoesNotExist:
         grp_acc = None
     if grp_acc:
         try:

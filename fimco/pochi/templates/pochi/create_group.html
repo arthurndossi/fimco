@@ -7,18 +7,26 @@
         <div id="content" class="dashboard padding-20">
             <div class="page-profile">
                 <div class="row">
-                {% if messages %}
-                    {% for message in messages %}
-                        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
-                            <div class="col-lg-6 col-xs-12 col-centered">
-                                <div class="alert alert-danger margin-bottom-30 text-center">
-                                    <p><strong>{{ message }}</strong></p>
-                                    <button type="button" class="btn btn-danger" data-dismiss="alert">OK</button>
+                    <div id="success" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-sm">
+                            <div class="modal-content">
+                                <div class="modal-body modal-success text-center">
+                                    <p><strong><i class="glyphicon glyphicon-thumbs-up"></i> {{ message }}</strong></p>
+                                    <button type="button" class="btn btn-success" data-dismiss="modal">OK</button>
                                 </div>
                             </div>
-                        {% endif %}
-                    {% endfor %}
-                {% endif %}
+                        </div>
+                    </div>
+                    <div id="error" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-sm">
+                            <div class="modal-content">
+                                <div class="modal-body modal-danger text-center">
+                                    <p><strong><i class="glyphicon glyphicon-thumbs-down"></i> {{ message }}</strong></p>
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">OK</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="row">
                     <!-- COL 1 -->
@@ -132,5 +140,21 @@
 {% block scripts %}
     <script src="https://cdn.jsdelivr.net/npm/formvalidation@0.6.2-dev/dist/js/formValidation.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/formvalidation@0.6.2-dev/dist/js/framework/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/static/pochi/plugins/bootstrap/js/bootstrap.min.js"></script>
+    <script>
+        var existingMembers = [];
+
+        $(document).ready(function(){
+            {% if messages %}
+                {% for message in messages %}
+                    {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                        $("#success").modal('show');
+                    {% elif message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                        $("#error").modal('show');
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        });
+    </script>
     <script type="text/javascript" src="/static/pochi/js/group.js"></script>
 {% endblock %}

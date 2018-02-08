@@ -2,7 +2,6 @@
 {% block links %}
     <link href="/static/pochi/css/navyblue.css" rel="stylesheet" type="text/css" />
 {% endblock %}
-{% load djmoney %}
 {% block content %}
     <section id="middle">
         <div class="padding-15">
@@ -52,8 +51,8 @@
                                                 <td>{{ transaction.service }}</td>
                                                 <td>{{ transaction.channel }}</td>
                                                 <td>{{ transaction.mode }}</td>
-{#                                                <td>{% money_localize transaction.amount 'TZS' %}</td>#}
-{#                                                <td>{% money_localize transaction.charge 'TZS' %}</td>#}
+                                                <td>{{ transaction.amount }}</td>
+                                                <td>{{ transaction.charge }}</td>
                                             </tr>
                                         {% endfor %}
                                     </tbody>

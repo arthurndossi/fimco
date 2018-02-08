@@ -6,6 +6,12 @@ from djmoney.models.fields import MoneyField
 from djmoney.models.validators import MinMoneyValidator, MaxMoneyValidator
 
 telephone = RegexValidator(r'^([+]?(\d{1,3}\s?)|[0])\s?\d+(\s?\-?\d{2,4}){1,3}?$', 'Not a valid phone number.')
+MODES = (
+        ('POCHI', 'Pochi'),
+        ('MOBILE', 'Mobile'),
+        ('BANK', 'Bank'),
+        ('CASH', 'Cash'),
+    )
 
 
 class Group(models.Model):
@@ -28,16 +34,11 @@ class Transaction(models.Model):
         ('PENDING', 'Pending')
     )
     SERVICES = (
-        ('P2P', 'p2p'),
+        ('P2P', 'Pochi to Pochi'),
         ('DEPOSIT', 'Deposit'),
         ('WITHDRAW', 'Withdraw'),
-        ('INTEREST', 'Interest'),
-    )
-    MODES = (
-        ('POCHI', 'Pochi'),
-        ('MOBILE', 'Mobile'),
-        ('BANK', 'Bank'),
-        ('CASH', 'Cash'),
+        ('BONUS', 'Bonus'),
+        ('FEES', 'Fees'),
     )
     full_timestamp = models.DateTimeField(auto_now_add=True)
     profile_id = models.CharField(max_length=10, db_index=True)
@@ -67,16 +68,16 @@ class Ledger(models.Model):
         ('CREDIT', 'Credit')
     )
     full_timestamp = models.DateTimeField(auto_now_add=True)
-    profile_id = models.CharField(max_length=10, db_index=True, default='POC0GL0001')
-    account = models.CharField(max_length=15, db_index=True, default='GL0001')
+    profile_id = models.CharField(max_length=10, db_index=True)
+    account = models.CharField(max_length=15, db_index=True)
     trans_type = models.CharField(max_length=10, choices=TYPES)
-    service = models.CharField(max_length=25, db_index=True)  # DEPOSIT, WITHDRAW, BONUS, P2P
-    channel = models.CharField(max_length=25, db_index=True, default='NA')  # system
+    mode = models.CharField(max_length=6, db_index=True, choices=MODES, default='POCHI')
     amount = MoneyField(max_digits=10, decimal_places=2, default_currency='TZS',
                         validators=[
                             MinMoneyValidator({'TZS': 1000, 'USD': 50}),
                             MaxMoneyValidator({'TZS': 1000000000, 'USD': 1000000}),
                         ])
+    trans_id = models.CharField(max_length=25, default='NA')
     reference = models.CharField(max_length=15, db_index=True, default='NA')
     available_o_bal = MoneyField(max_digits=10, decimal_places=2, default_currency='TZS')
     available_c_bal = MoneyField(max_digits=10, decimal_places=2, default_currency='TZS')

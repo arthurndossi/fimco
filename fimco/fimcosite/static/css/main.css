@@ -89,3 +89,29 @@ ul.process-steps li a.active, ul.process-steps li a.active:focus, ul.process-ste
 }
 
 .form-control {border: 1px solid rgba(0,0,0,.15)}
+
+.modal-success {
+    color:#fff;
+    padding:9px 15px;
+    background-color: #5cb85c;
+}
+.modal-warning {
+	color:#fff;
+    padding:9px 15px;
+    background-color: #e38d13;
+}
+.modal-danger {
+	color:#fff;
+    padding:9px 15px;
+    background-color: #d9534f;
+}
+.modal-info {
+    color:#fff;
+    padding:9px 15px;
+    background-color: #28a4c9;
+}
+.modal-primary {
+	color:#fff;
+    padding:9px 15px;
+    background-color: #428bca;
+}

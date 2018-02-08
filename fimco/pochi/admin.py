@@ -13,14 +13,14 @@ class GroupMembersAdmin(admin.ModelAdmin):
 
 
 class TransactionAdmin(admin.ModelAdmin):
-    list_display = ('full_timestamp', 'profile_id', 'account', 'msisdn', 'trans_id', 'service', 'channel',
-                    'mode', 'dst_account', 'amount', 'charge', 'reference', 'status', 'result_code',
+    list_display = ('full_timestamp', 'profile_id', 'account', 'msisdn', 'trans_id', 'service', 'channel', 'mode',
+                    'dst_account', 'amount', 'charge', 'reference', 'status', 'result_code',
                     'message', 'processed_timestamp')
 
 
 class LedgerAdmin(admin.ModelAdmin):
-    list_display = ('full_timestamp', 'profile_id', 'account', 'trans_type', 'service', 'channel', 'amount',
-                    'reference', 'available_o_bal', 'available_c_bal', 'current_o_bal', 'current_c_bal')
+    list_display = ('full_timestamp', 'profile_id', 'account', 'trans_type', 'trans_id', 'amount', 'mode', 'reference',
+                    'available_o_bal', 'available_c_bal', 'current_o_bal', 'current_c_bal')
 
 
 class BalanceSnapshotAdmin(admin.ModelAdmin):

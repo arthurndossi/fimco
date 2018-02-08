@@ -277,46 +277,61 @@
                 </div>
             </div>
             <div class="row">
-            {% if messages %}
-                {% for message in messages %}
-                    {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
-                        <div class="col-xs-12">
-                            <div class="alert alert-danger margin-bottom-30">
-                                <strong>{{ message }}</strong>
+                <div id="success" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-sm">
+                        <div class="modal-content">
+                            <div class="modal-body modal-success text-center">
+                                <p><strong><i class="glyphicon glyphicon-thumbs-up"></i> {{ message }}</strong></p>
+                                <button type="button" class="btn btn-success" data-dismiss="modal">OK</button>
                             </div>
                         </div>
-                    {% elif message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
-                        <div class="col-xs-12">
-                            <div class="alert alert-warning margin-bottom-30">
-                                <strong>{{ message }}</strong>
+                    </div>
+                </div>
+                <div id="error" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-sm">
+                        <div class="modal-content">
+                            <div class="modal-body modal-danger text-center">
+                                <p><strong><i class="glyphicon glyphicon-thumbs-down"></i> {{ message }}</strong></p>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">OK</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="warning" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-sm">
+                        <div class="modal-content">
+                            <div class="modal-body modal-warning text-center">
+                                <p><strong><i class="glyphicon glyphicon-exclamation-sign"></i> {{ message }}</strong></p>
                                 {% if 'delete' in message.tags %}
                                     <a href="{% url 'del_group' group %}" class="btn btn-warning btn-sm margin-top-10">Yes</a>
-                                    <input type="button" class="btn btn-warning btn-sm margin-top-10" data-dismiss="alert" value="Cancel">
+                                    <input type="button" class="btn btn-warning btn-sm margin-top-10" data-dismiss="modal" value="Cancel">
                                 {% elif 'exit' in message.tags %}
                                     <a href="{% url 'exit_group' group %}" class="btn btn-warning btn-sm margin-top-10">Yes</a>
-                                    <input type="button" class="btn btn-warning btn-sm margin-top-10" data-dismiss="alert" value="Cancel">
+                                    <input type="button" class="btn btn-warning btn-sm margin-top-10" data-dismiss="modal" value="Cancel">
                                 {% elif 'removeAdmin' in message.tags %}
                                     <a href="{% url 'group_admin' group message.tags|get_second 'remove' %}" class="btn btn-warning btn-sm margin-top-10">Yes</a>
-                                    <input type="button" class="btn btn-warning btn-sm margin-top-10" data-dismiss="alert" value="Cancel">
+                                    <input type="button" class="btn btn-warning btn-sm margin-top-10" data-dismiss="modal" value="Cancel">
                                 {% elif 'change' in message.tags %}
                                     <a href="{% url 'group_admin' group message.tags|get_second 'change' %}" class="btn btn-warning btn-sm margin-top-10">Yes</a>
-                                    <input type="button" class="btn btn-warning btn-sm margin-top-10" data-dismiss="alert" value="Cancel">
+                                    <input type="button" class="btn btn-warning btn-sm margin-top-10" data-dismiss="modal" value="Cancel">
                                 {% endif %}
                             </div>
                         </div>
-                    {% else %}
-                        <div class="col-xs-12">
-                            <div class="alert alert-info margin-bottom-30">
-                                <strong>{{ message }}</strong>
+                    </div>
+                </div>
+                <div id="info" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-sm">
+                        <div class="modal-content">
+                            <div class="modal-body modal-info text-center">
+                                <p><strong><i class="glyphicon glyphicon-info-sign"></i> {{ message }}</strong></p>
                                 {% if 'addAdmin' in message.tags %}
                                     <a href="{% url 'group_admin' group message.tags|get_second 'add' %}" class="btn btn-info btn-sm margin-top-10">Yes</a>
-                                    <input type="button" class="btn btn-info btn-sm margin-top-10" data-dismiss="alert" value="Cancel">
+                                    <input type="button" class="btn btn-info btn-sm margin-top-10" data-dismiss="modal" value="Cancel">
                                 {% endif %}
                             </div>
                         </div>
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -325,11 +340,27 @@
 {% block scripts %}
     <script src="https://cdn.jsdelivr.net/npm/formvalidation@0.6.2-dev/dist/js/formValidation.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/formvalidation@0.6.2-dev/dist/js/framework/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/static/pochi/plugins/bootstrap/js/bootstrap.min.js"></script>
     <script>
         var existingMembers = [];
         {% for member  in members %}
             existingMembers.push('{{ member.member }}');
         {% endfor %}
+        $(document).ready(function(){
+            {% if messages %}
+                {% for message in messages %}
+                    {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                        $("#success").modal('show');
+                    {% elif message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
+                        $("#info").modal('show');
+                    {% elif message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
+                        $("#warning").modal('show');
+                    {% elif message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                        $("#error").modal('show');
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        });
     </script>
     <script type="text/javascript" src="/static/pochi/js/group.js"></script>
 {% endblock %}
