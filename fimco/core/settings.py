@@ -31,7 +31,7 @@ SECRET_KEY = '+_yzro^08snp%$_640dl1aqk#zm+%+2)ckj5#bhbid#_k&bbx8'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['54.172.71.184', 'www.fimco.co.tz', 'fimco.co.tz', '127.0.0.1']
+ALLOWED_HOSTS = ['54.172.71.184', 'www.fimco.co.tz', 'fimco.co.tz', '127.0.0.1', '41.188.183.142']
 
 # Application definition
 

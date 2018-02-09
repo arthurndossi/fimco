@@ -39,7 +39,7 @@
                     </div>
                 </div>
             {% endif %}
-            {% if pendings %}
+            {% if pending %}
                 <div class="row margin-top-20 mid-align">
                     <div class="panel panel-default">
                         <div class="panel-heading text-center">
@@ -55,22 +55,28 @@
                                     <thead>
                                         <tr>
                                             <th>Date</th>
+                                            <th>Transaction ID</th>
                                             <th>Service</th>
                                             <th>Channel</th>
                                             <th>Mode</th>
                                             <th>Amount</th>
                                             <th>Charges</th>
+                                            <th>Dst. Account</th>
+                                            <th>Status</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {% for pending in pendings %}
+                                        {% for transaction in pending %}
                                             <tr>
-                                                <td>{{ pending.full_timestamp }}</td>
-                                                <td>{{ pending.service }}</td>
-                                                <td>{{ pending.channel }}</td>
-                                                <td>{{ pending.mode }}</td>
-                                                <td>{{ pending.amount }}</td>
-                                                <td>{{ pending.charge }}</td>
+                                                <td>{{ transaction.full_timestamp }}</td>
+                                                <td>{{ transaction.trans_id }}</td>
+                                                <td>{{ transaction.service }}</td>
+                                                <td>{{ transaction.channel }}</td>
+                                                <td>{{ transaction.mode }}</td>
+                                                <td>{{ transaction.amount }}</td>
+                                                <td>{{ transaction.charge }}</td>
+                                                <td>{{ transaction.dst_account }}</td>
+                                                <td>{{ transaction.status }}</td>
                                             </tr>
                                         {% endfor %}
                                     </tbody>

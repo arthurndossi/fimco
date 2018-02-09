@@ -99,8 +99,7 @@ def home(request):
         pass
 
     try:
-        transactions = Transaction.objects.filter(profile_id=profile.profile_id)\
-            .values('full_timestamp', 'service', 'channel', 'amount', 'charge')[:10]
+        transactions = Transaction.objects.filter(profile_id=profile.profile_id, status='PENDING')
     except Transaction.DoesNotExist:
         transactions = None
 
@@ -327,17 +326,17 @@ def statement(request):
             start, end = date_range.split(' - ')
             start = datetime.strptime(start, '%m/%d/%Y').strftime('%Y-%m-%d')
             end = datetime.strptime(end, '%m/%d/%Y').strftime('%Y-%m-%d')
-            trans = Transaction.objects.filter(profile_id=profile.profile_id, fulltimestamp__range=[start, end])
+            trans = Ledger.objects.filter(profile_id=profile.profile_id, fulltimestamp__range=[start, end])
         elif request.GET.get('channel'):
             selected_account = request.GET.get('channel')
-            trans = Transaction.objects.filter(profile_id=profile.profile_id, channel=selected_account)
+            trans = Ledger.objects.filter(profile_id=profile.profile_id, channel=selected_account)
         elif request.GET.get('service'):
             selected_account = request.GET.get('service')
-            trans = Transaction.objects.filter(profile_id=profile.profile_id, service=selected_account)
+            trans = Ledger.objects.filter(profile_id=profile.profile_id, service=selected_account)
     else:
         try:
-            trans = Transaction.objects.filter(profile_id=request.user.profile.profile_id)
-        except Transaction.DoesNotExist:
+            trans = Ledger.objects.filter(profile_id=profile.profile_id)
+        except Ledger.DoesNotExist:
             trans = trans
 
     context = {
@@ -561,7 +560,7 @@ def make_trans_id(phone):
 
 def generate_ref(p_id):
     last_4_digits = p_id[-4:]
-    ran = str(datetime.datetime.today().microsecond)
+    ran = str(datetime.today().microsecond)
     pad = ran[:3]
     import random
     fill = str(random.randint(11, 99))
@@ -575,87 +574,103 @@ def fund_transfer(request, service, mode, channel, profile_id, src, dst, bal, am
     except Charge.DoesNotExist:
         charges = 0
     trans_id = make_trans_id(msisdn)
-    total = amount + charges
+    total = float(amount) + float(charges)
     if service == 'P2P':
         try:
             src_acc = Account.objects.get(account=src)
+
+            src_avail_bal = src_acc.available_balance.__float__()
+            src_cur_bal = src_acc.current_balance.__float__()
+            src_avail_amount = src_avail_bal - total
+            src_cur_amount = src_cur_bal - total
+        except Account.DoesNotExist:
+            src_acc = None
+
+        try:
             dst_acc = Account.objects.get(account=dst)
             dst_profile_id = dst_acc.profile_id
+
+            dst_avail_bal = dst_acc.available_balance.__float__()
+            dst_cur_bal = dst_acc.current_balance.__float__()
+            dst_avail_amount = dst_avail_bal + total
+            dst_cur_amount = dst_cur_bal + total
         except Account.DoesNotExist:
-            src_acc, dst_acc, dst_profile_id = None, None, None
-        # TODO should check if this Profile exists
-        dst_msisdn = Profile.objects.get(profile_id=dst_profile_id).msisdn
+            dst_acc, dst_profile_id = None, None
 
         src_ref = generate_ref(profile_id)
         dst_ref = generate_ref(dst_profile_id)
 
-        if bal > total or overdraft and dst_profile_id:
-            Transaction.objects.create(
-                profile_id=profile_id,
-                account=src,
-                msisdn=msisdn,
-                trans_id=trans_id,
-                reference=src_ref,
-                service=service,
-                mode=mode,
-                dst_account=dst,
-                amount=Money(amount, 'TZS'),
-                status='DONE'
-            )
-            Ledger.objects.create(
-                profile_id=profile_id,
-                account=src,
-                msisdn=msisdn,
-                trans_type='DEBIT',
-                mode=mode,
-                trans_id=trans_id,
-                reference=src_ref,
-                amount=Money(amount, 'TZS'),
-                current_o_bal=Money(total, 'TZS'),
-                current_c_bal=Money(total, 'TZS'),
-                available_o_bal=Money(total, 'TZS'),
-                available_c_bal=Money(total, 'TZS')
-            )
-            Ledger.objects.create(
-                profile_id=dst_profile_id,
-                account=dst,
-                msisdn=dst_msisdn,
-                trans_type='CREDIT',
-                mode=mode,
-                trans_id=trans_id,
-                reference=dst_ref,
-                amount=Money(amount, 'TZS'),
-                current_o_bal=Money(total, 'TZS'),
-                current_c_bal=Money(total, 'TZS'),
-                available_o_bal=Money(total, 'TZS'),
-                available_c_bal=Money(total, 'TZS')
-            )
-            BalanceSnapshot.objects.create(
-                profile_id=profile_id,
-                account=src,
-                current_closing_balance=Money(bal - total, 'TZS'),
-                available_closing_balance=Money(bal - total, 'TZS')
-            )
-            BalanceSnapshot.objects.create(
-                profile_id=dst_profile_id,
-                account=dst,
-                current_closing_balance=Money(dst_acc.available_balance + total, 'TZS'),
-                available_closing_balance=Money(dst_acc.available_balance + total, 'TZS')
-            )
-            if src_acc and dst_acc:
-                src_acc.available_balance -= total
-                src_acc.current_balance -= total
+        if src_acc and dst_acc:
+            if bal > total or overdraft:
+                Transaction.objects.create(
+                    profile_id=profile_id,
+                    account=src,
+                    msisdn=msisdn,
+                    trans_id=trans_id,
+                    reference=src_ref,
+                    service=service,
+                    mode=mode,
+                    dst_account=dst,
+                    amount=Money(amount, 'TZS'),
+                    status='DONE'
+                )
+                Ledger.objects.create(
+                    profile_id=profile_id,
+                    account=src,
+                    trans_type='DEBIT',
+                    mode=mode,
+                    trans_id=trans_id,
+                    reference=src_ref,
+                    amount=Money(amount, 'TZS'),
+                    current_o_bal=Money(src_cur_bal, 'TZS'),
+                    current_c_bal=Money(src_cur_amount, 'TZS'),
+                    available_o_bal=Money(src_avail_bal, 'TZS'),
+                    available_c_bal=Money(src_avail_amount, 'TZS')
+                )
+                Ledger.objects.create(
+                    profile_id=dst_profile_id,
+                    account=dst,
+                    trans_type='CREDIT',
+                    mode=mode,
+                    trans_id=trans_id,
+                    reference=dst_ref,
+                    amount=Money(amount, 'TZS'),
+                    current_o_bal=Money(dst_cur_bal, 'TZS'),
+                    current_c_bal=Money(dst_cur_amount, 'TZS'),
+                    available_o_bal=Money(dst_avail_bal, 'TZS'),
+                    available_c_bal=Money(dst_avail_amount, 'TZS')
+                )
+                BalanceSnapshot.objects.create(
+                    profile_id=profile_id,
+                    account=src,
+                    current_closing_balance=Money(src_cur_amount, 'TZS'),
+                    available_closing_balance=Money(src_avail_amount, 'TZS')
+                )
+                BalanceSnapshot.objects.create(
+                    profile_id=dst_profile_id,
+                    account=dst,
+                    current_closing_balance=Money(dst_cur_amount, 'TZS'),
+                    available_closing_balance=Money(dst_avail_amount, 'TZS')
+                )
+                src_acc.available_balance = src_avail_amount
+                src_acc.current_balance = src_cur_amount
+                src_acc.ts_current_bal = datetime.now()
                 src_acc.save()
-                dst_acc.available_balance += total
-                dst_acc.current_balance += total
+                dst_acc.available_balance = dst_avail_amount
+                dst_acc.current_balance = dst_cur_amount
+                dst_acc.ts_current_bal = datetime.now()
                 dst_acc.save()
-            # return src_acc, dst_acc
     elif service == 'WITHDRAW':
         try:
             src_acc = Account.objects.get(account=src)
+
+            src_cur_bal = src_acc.current_balance.__float__()
+            src_cur_amount = src_cur_bal - total
         except Account.DoesNotExist:
             src_acc = None
+
         ref = generate_ref(profile_id)
+
         if total <= bal or overdraft and src_acc:
             Transaction.objects.create(
                 profile_id=profile_id,
@@ -672,14 +687,13 @@ def fund_transfer(request, service, mode, channel, profile_id, src, dst, bal, am
             Ledger.objects.create(
                 profile_id=profile_id,
                 account=src,
-                msisdn=msisdn,
                 trans_type='DEBIT',
                 mode=mode,
                 trans_id=trans_id,
                 reference=ref,
                 amount=Money(total, 'TZS'),
-                current_o_bal=Money(bal - total, 'TZS'),
-                current_c_bal=Money(bal - total, 'TZS')
+                current_o_bal=Money(src_cur_bal, 'TZS'),
+                current_c_bal=Money(src_cur_amount, 'TZS')
             )
             CashOut.objects.create(
                 ext_entity=channel,
@@ -690,17 +704,22 @@ def fund_transfer(request, service, mode, channel, profile_id, src, dst, bal, am
             BalanceSnapshot.objects.create(
                 profile_id=profile_id,
                 account=src,
-                current_closing_balance=Money(bal - total, 'TZS')
+                current_closing_balance=Money(src_cur_amount, 'TZS')
             )
-            src_acc.available_balance -= total
-            src_acc.current_balance -= total
+            src_acc.current_balance = src_cur_amount
+            src_acc.ts_current_bal = datetime.now()
             src_acc.save()
     elif service == 'DEPOSIT':
         try:
             dst_acc = Account.objects.get(account=dst)
+
+            dst_cur_bal = dst_acc.current_balance.__float__()
+            dst_cur_amount = dst_cur_bal + total
         except Account.DoesNotExist:
             dst_acc = None
+
         ref = generate_ref(profile_id)
+
         Transaction.objects.create(
             profile_id=profile_id,
             account=src,
@@ -716,22 +735,21 @@ def fund_transfer(request, service, mode, channel, profile_id, src, dst, bal, am
         Ledger.objects.create(
             profile_id=profile_id,
             account=dst,
-            msisdn=msisdn,
             trans_type='CREDIT',
             mode=mode,
             trans_id=trans_id,
             reference=ref,
             amount=Money(total, 'TZS'),
-            current_o_bal=Money(bal + total, 'TZS'),
-            current_c_bal=Money(bal + total, 'TZS')
+            current_o_bal=Money(dst_cur_bal, 'TZS'),
+            current_c_bal=Money(dst_cur_amount, 'TZS')
         )
         BalanceSnapshot.objects.create(
             profile_id=profile_id,
             account=dst,
-            current_closing_balance=Money(bal + total, 'TZS')
+            current_closing_balance=Money(dst_cur_amount, 'TZS')
         )
-        dst_acc.available_balance += amount
-        dst_acc.current_balance += amount
+        dst_acc.current_balance = dst_cur_amount
+        dst_acc.ts_current_bal = datetime.now()
         dst_acc.save()
 
 
@@ -1018,8 +1036,7 @@ def deposit(request):
                 name = _account.nickname
                 fund_transfer(request, 'DEPOSIT', mode, channel, name, phone, dst_account, bal, amount, phone)
             else:
-                fund_transfer(request, 'DEPOSIT', mode, channel, dst_profile_id, phone, dst_account, bal, amount,
-                              phone)
+                fund_transfer(request, 'DEPOSIT', mode, channel, dst_profile_id, phone, dst_account, bal, amount, phone)
 
             message = 'You have successfully deposited ' + str(amount) + ' to your account'
 
@@ -1216,17 +1233,17 @@ def group_statement(request, name=None):
                 start, end = date_range.split(' - ')
                 start = datetime.strptime(start, '%m/%d/%Y').strftime('%Y-%m-%d')
                 end = datetime.strptime(end, '%m/%d/%Y').strftime('%Y-%m-%d')
-                group_transactions = Transaction.objects.filter(account=grp_acc, fulltimestamp__range=[start, end])
+                group_transactions = Ledger.objects.filter(account=grp_acc, fulltimestamp__range=[start, end])
             elif request.GET.get('channel'):
                 selected_account = request.GET.get('channel')
-                group_transactions = Transaction.objects.filter(account=grp_acc, channel=selected_account)
+                group_transactions = Ledger.objects.filter(account=grp_acc, channel=selected_account)
             elif request.GET.get('service'):
                 selected_account = request.GET.get('service')
-                group_transactions = Transaction.objects.filter(account=grp_acc, service=selected_account)
+                group_transactions = Ledger.objects.filter(account=grp_acc, service=selected_account)
         else:
             try:
-                group_transactions = Transaction.objects.filter(account=grp_acc)
-            except Transaction.DoesNotExist:
+                group_transactions = Ledger.objects.filter(account=grp_acc)
+            except Ledger.DoesNotExist:
                 group_transactions = None
         context = {
             'group': name,
@@ -1247,8 +1264,7 @@ def group_profile(request, name=None):
         grp_acc = this_group.account
         try:
             statements = Transaction.objects.filter(account=grp_acc).exists()
-            group_transactions = Transaction.objects.filter(account=grp_acc, status='PENDING')\
-                .values('full_timestamp', 'service', 'channel', 'mode', 'amount', 'charge')
+            group_transactions = Transaction.objects.filter(account=grp_acc, status='PENDING')
         except Transaction.DoesNotExist:
             group_transactions = None
     except Group.DoesNotExist:
@@ -1262,7 +1278,7 @@ def group_profile(request, name=None):
         'group': name,
         'account': this_account,
         'statement': statements,
-        'pendings': group_transactions
+        'pending': group_transactions
     }
     return render_with_global_data(request, 'pochi/group_profile.html', context)
 

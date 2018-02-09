@@ -85,7 +85,7 @@
                         </div>
                     </div>
                 {% else %}
-                    <div class="col-md-6 col-sm-6 offset-md-3 offset-sm-3">
+                    <div class="col-lg-6 col-md-8 col-sm-10 offset-lg-3 offset-md-2 offset-sm-1">
                         {% if wizard.form.non_field_errors %}
                             {% for general_error in wizard.form.non_field_errors %}
                                 <div class="col-lg-6 col-xs-12 col-centered">
@@ -295,7 +295,7 @@
                                 <div class="row">
                                     <div class="col-xs-12">
                                         {% if wizard.steps.prev %}
-                                            <button name="wizard_goto_step" type="submit" class="btn btn-primary btn-teal" value="{{ wizard.steps.prev }}">PREVIOUS</button>
+                                            <button name="wizard_goto_step" type="submit" class="btn btn-primary btn-teal" formnovalidate value="{{ wizard.steps.prev }}">PREVIOUS</button>
                                         {% endif %}
                                         {% if wizard.steps.current == wizard.steps.last %}
                                             <input type="submit" class="btn btn-primary btn-teal float-right" value="REGISTER"/>

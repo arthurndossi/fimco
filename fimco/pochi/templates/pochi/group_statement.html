@@ -3,7 +3,7 @@
     <section id="middle">
         <!-- page title -->
         <header id="page-header">
-            <h1>{{ group }} Statement</h1>
+            <h1>{{ group }}'s Statement</h1>
         </header>
         <!-- /page title -->
 
@@ -52,24 +52,24 @@
                                 <thead>
                                     <tr>
                                         <th>Date</th>
-                                        <th>Service</th>
-                                        <th>Mode</th>
-                                        <th>Amount</th>
-                                        <th>Charges</th>
                                         <th>Reference</th>
-                                        <th>Status</th>
+                                        <th>Type</th>
+                                        <th>Mode</th>
+                                        <th>Opening Balance</th>
+                                        <th>Amount</th>
+                                        <th>Closing Balance</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                 {% for transaction in transactions %}
                                     <tr class="odd gradeX">
                                         <td class="center">{{ transaction.full_timestamp }}</td>
-                                        <td class="center">{{ transaction.service }}</td>
-                                        <td class="center">{{ transaction.channel }}</td>
-                                        <td class="center">{{ transaction.currency }} {{ transaction.amount }}</td>
-                                        <td class="center">{{ transaction.charge }}</td>
                                         <td class="center">{{ transaction.reference }}</td>
-                                        <td class="center">{{ transaction.status }}</td>
+                                        <td class="center">{{ transaction.trans_type }}</td>
+                                        <td class="center">{{ transaction.mode }}</td>
+                                        <td class="center">{{ transaction.current_o_bal }}</td>
+                                        <td class="center">{{ transaction.amount }}</td>
+                                        <td class="center">{{ transaction.current_c_bal }}</td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>

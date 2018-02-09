@@ -109,6 +109,7 @@ class IndividualLoginForm(forms.Form):
     password = forms.CharField(
         widget=forms.PasswordInput(attrs={
             'type': 'password',
+            'autocomplete': 'off',
             'required': True
         })
     )
@@ -133,6 +134,7 @@ class CorporateLoginForm(forms.Form):
     password = forms.CharField(
         widget=forms.PasswordInput(attrs={
             'type': 'password',
+            'autocomplete': 'off',
             'required': True
         })
     )
@@ -185,6 +187,7 @@ class RegisterForm1(forms.Form):
         validators=[validate_slug],
         widget=forms.PasswordInput(attrs={
             'class': 'required',
+            'autocomplete': 'off',
             'required': True
 
         })
@@ -213,8 +216,8 @@ class RegisterForm1(forms.Form):
 
     def clean(self):
         clean_data = self.cleaned_data
-        clean_data['phone'].replace('+255', '0', 1)
-        if 'phone' in clean_data and User.objects.filter(username=clean_data['phone']).exists():
+        username = clean_data['phone'].replace('+255', '0', 1)
+        if 'phone' in clean_data and User.objects.filter(username=username).exists():
             self.fields['phone'].widget.attrs['autofocus'] = 'autofocus'
             self.fields['phone'].widget.attrs['class'] = 'error'
             raise forms.ValidationError("This phone number is already associated with another user!")
@@ -408,6 +411,7 @@ class CorporateForm3(forms.Form):
         validators=[validate_slug],
         widget=forms.PasswordInput(attrs={
             'class': 'form-control',
+            'autocomplete': 'off',
             'required': True,
         })
     )
@@ -431,8 +435,8 @@ class CorporateForm3(forms.Form):
 
     def clean(self):
         clean_data = self.cleaned_data
-        clean_data['phone'].replace('+255', '0', 1)
-        if 'phone' in clean_data and User.objects.filter(username=clean_data['phone']).exists():
+        username = clean_data['phone'].replace('+255', '0', 1)
+        if 'phone' in clean_data and User.objects.filter(username=username).exists():
             self.fields['phone'].widget.attrs['autofocus'] = 'autofocus'
             self.fields['phone'].widget.attrs['class'] = 'error'
             raise forms.ValidationError("This phone number is already associated with another user!")
@@ -574,6 +578,7 @@ class UserCorporateForm(forms.Form):
         validators=[validate_slug],
         widget=forms.PasswordInput(attrs={
             'class': 'form-control',
+            'autocomplete': 'off',
             'required': True,
         })
     )
@@ -618,8 +623,8 @@ class UserCorporateForm(forms.Form):
 
     def clean(self):
         clean_data = self.cleaned_data
-        clean_data['phone'].replace('+255', '0', 1)
-        if 'phone' in clean_data and User.objects.filter(username=clean_data['phone']).exists():
+        username = clean_data['phone'].replace('+255', '0', 1)
+        if 'phone' in clean_data and User.objects.filter(username=username).exists():
             self.fields['phone'].widget.attrs['autofocus'] = 'autofocus'
             self.fields['phone'].widget.attrs['class'] = 'error'
             raise forms.ValidationError("This phone number is already associated with another user!")
@@ -757,6 +762,7 @@ class EditProfileForm(forms.Form):
     password = forms.CharField(
         validators=[validate_slug],
         widget=forms.PasswordInput(attrs={
+            'autocomplete': 'off',
             'required': True,
 
         })
@@ -771,8 +777,8 @@ class EditProfileForm(forms.Form):
 
     def clean(self):
         clean_data = self.cleaned_data
-        clean_data['phone'].replace('+255', '0', 1)
-        if 'phone' in clean_data and User.objects.filter(username=clean_data['phone']).exists():
+        username = clean_data['phone'].replace('+255', '0', 1)
+        if 'phone' in clean_data and User.objects.filter(username=username).exists():
             self.fields['phone'].widget.attrs['autofocus'] = 'autofocus'
             self.fields['phone'].widget.attrs['class'] = 'error'
             raise forms.ValidationError("This phone number is already associated with another user!")

@@ -30,7 +30,7 @@ $(document).ready(function () {
         });
     });
 
-    $("#id_1-password, #id_1-verify").keyup(validatePassword);
+    $("#id_0-password, #id_0-verify").keyup(validatePassword);
 
     uploadField.change(function(){
         readURL(this, 'wizardFilePreview');
@@ -57,9 +57,9 @@ function readURL(input, id) {
 }
 
 function validatePassword(){
-    var password = $("#id_1-password"),
+    var password = $("#id_0-password"),
 		msg = $("#pass-message"),
-        confirm_password = $("#id_1-verify");
+        confirm_password = $("#id_0-verify");
     if(password.val() !== '' && confirm_password.val() !== ''){
         if(password.val() !== confirm_password.val()) {
             if(msg.hasClass("alert-success")){
