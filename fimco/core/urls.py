@@ -21,4 +21,5 @@ urlpatterns = [
     url(r'^pochi/', include('pochi.urls')),
     url(r'^market/', include('fimcoplatform.urls')),
     url(r'^admin/', admin.site.urls),
+    url(r"^inbox/notifications/", include("notifications.urls", namespace="notifications")),
 ]

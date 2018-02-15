@@ -14,14 +14,16 @@ from django.db.models import Sum
 from django.db.models.functions import TruncMonth
 from django.dispatch import receiver
 from django.http import JsonResponse
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
 from djmoney.money import Money
 from easy_pdf.views import PDFTemplateView
+from notifications.signals import notify
+from notifications.views import AllNotificationsList
 
 from core import demo_settings
 from core.utils import render_with_global_data
 from fimcosite.forms import EditProfileForm, BankAccountForm
-from fimcosite.models import Account, Profile
+from fimcosite.models import Account, Profile, KYC
 from fimcosite.views import index
 from .models import Transaction, Group, GroupMember, ExternalAccount, Ledger, Charge, CashOut, BalanceSnapshot, Rate, \
     PaidUser
@@ -326,13 +328,22 @@ def statement(request):
             start, end = date_range.split(' - ')
             start = datetime.strptime(start, '%m/%d/%Y').strftime('%Y-%m-%d')
             end = datetime.strptime(end, '%m/%d/%Y').strftime('%Y-%m-%d')
-            trans = Ledger.objects.filter(profile_id=profile.profile_id, fulltimestamp__range=[start, end])
+            try:
+                trans = Ledger.objects.filter(profile_id=profile.profile_id, full_timestamp__range=[start, end])
+            except Ledger.DoesNotExist:
+                trans = trans
         elif request.GET.get('channel'):
             selected_account = request.GET.get('channel')
-            trans = Ledger.objects.filter(profile_id=profile.profile_id, channel=selected_account)
+            try:
+                trans = Ledger.objects.filter(profile_id=profile.profile_id, channel=selected_account)
+            except Ledger.DoesNotExist:
+                trans = trans
         elif request.GET.get('service'):
             selected_account = request.GET.get('service')
-            trans = Ledger.objects.filter(profile_id=profile.profile_id, service=selected_account)
+            try:
+                trans = Ledger.objects.filter(profile_id=profile.profile_id, service=selected_account)
+            except Ledger.DoesNotExist:
+                trans = trans
     else:
         try:
             trans = Ledger.objects.filter(profile_id=profile.profile_id)
@@ -370,6 +381,7 @@ def account(request):
 @login_required
 def view_profile(request):
     user = request.user
+    kyc_details = KYC.objects.get(profile_id=user.profile.profile_id)
     form = EditProfileForm(request.POST or None, initial={
         'fName': user.first_name,
         'lName': user.last_name,
@@ -377,7 +389,8 @@ def view_profile(request):
         'email': user.email,
         'dob': user.profile.dob,
         'gender': user.profile.gender,
-        'client_id': user.profile.profile_id,
+        'id_choice': kyc_details.kyc_type,
+        'client_id': kyc_details.id_number,
         'bot_cds': user.profile.bot_cds,
         'dse_cds': user.profile.dse_cds
     })
@@ -388,15 +401,23 @@ def view_profile(request):
         'email': user.email,
         'dob': user.profile.dob,
         'gender': user.profile.gender,
-        'client_id': user.profile.profile_id,
+        'client_id': kyc_details.kyc_type+' '+kyc_details.id_number,
         'bot_cds': user.profile.bot_cds,
         'dse_cds': user.profile.dse_cds
     }
-    obj = GroupMember.objects.filter(profile_id=user.profile.profile_id)
+    # gp_obj = GroupMember.objects.filter(profile_id=user.profile.profile_id)
+    # group_names = []
+    # for one_obj in gp_obj:
+    #     try:
+    #         name = Group.objects.get(account=one_obj.group_account).name
+    #         group_names.append(name)
+    #     except Group.DoesNotExist:
+    #         pass
+
     context = {
         'pForm': form,
         'data': form_data,
-        'groups': obj
+        'bForm': BankAccountForm
     }
 
     return render_with_global_data(request, "pochi/profile.html", context)
@@ -422,12 +443,15 @@ def edit_profile(request):
             user.save()
             user.profile.save()
 
+            notify.send(user, recipient=user, verb='you reached level 10')
+
             return redirect(view_profile)
     else:
         return redirect(edit_profile)
 
 
 def confirm_transfer(request):
+    user = request.user
     if request.session['confirm'] == u'mobile':
         institution = request.session['institution']
         identifier = request.session['identifier']
@@ -447,6 +471,9 @@ def confirm_transfer(request):
         del request.session['overdraft']
 
         fund_transfer(request, 'WITHDRAW', 'MOBILE', institution, identifier, pochi_id, phone, bal, amount, phone, ov)
+
+        notify.send(user, recipient=user, verb='You have successfully withdrawn TZS' + str(amount) + ' to your '
+                                               + institution + ' account ' + phone)
 
         messages.success(
             request,
@@ -479,6 +506,9 @@ def confirm_transfer(request):
         fund_transfer(request, 'WITHDRAW', 'BANK', institution, identifier, pochi_id, ext_account_no, bal, amount,
                       phone, ov)
 
+        notify.send(user, recipient=user, verb='You have successfully withdrawn TZS' + str(amount) + ' to your '
+                                               + institution + ' account ' + phone)
+
         messages.success(
             request,
             'You have successfully withdrawn TZS' + str(amount) + ' to your ' + institution + ' account ' + phone
@@ -495,7 +525,6 @@ def confirm_transfer(request):
 
         del request.session['confirm']
         del request.session['dst_account']
-        del request.session['dst_profile_id']
         del request.session['amount']
         del request.session['overdraft']
         del request.session['open_bal']
@@ -511,6 +540,8 @@ def confirm_transfer(request):
         fund_transfer(request, 'P2P', 'POCHI', 'NA', src_profile_id, src_account, dst_account, bal, amount, phone, ov)
 
         if src_account and dst_account:
+            notify.send(user, recipient=user, verb='TZS' + str(amount) + ' has been transferred from your account to '
+                                                   + name + '.')
             messages.success(request, 'TZS' + str(amount) + ' has been transferred from your account to ' + name + '.')
         else:
             messages.error(request, 'An invalid account was selected.')
@@ -544,6 +575,8 @@ def confirm_transfer(request):
                       phone, ov)
 
         if src_account_no and dst_account_no:
+            notify.send(user, recipient=user, verb='TZS' + str(amount) + ' has been transferred from ' + group_name
+                                                   + ' account to ' + name + '.')
             messages.success(request, 'TZS' + str(amount) + ' has been transferred from ' + group_name + ' account to '
                              + name + '.')
         else:
@@ -697,7 +730,7 @@ def fund_transfer(request, service, mode, channel, profile_id, src, dst, bal, am
             )
             CashOut.objects.create(
                 ext_entity=channel,
-                ext_account_no=dst,
+                ext_acc_no=dst,
                 ext_trans_id=trans_id,
                 amount=Money(total, 'TZS')
             )
@@ -775,78 +808,87 @@ def pochi2pochi(request, name=None):
         profile = request.user.profile
         try:
             acc = Account.objects.get(profile_id=profile.profile_id)
-            bal = acc.available_balance
+            bal = acc.available_balance.__float__()
             ov = acc.allow_overdraft
         except Account.DoesNotExist:
             acc = None
             bal = ov = 0
 
     if request.method == "POST":
-        user_name = dest_account = dest_profile_id = None
-        if request.POST['dest_mobile']:
-            phone = request.POST['dest_mobile']
+        user_name = dst_account = dst_profile_id = None
+        if request.POST['dst_mobile']:
+            phone = request.POST['dst_mobile']
             if phone == request.user.username:
                 messages.error(request, 'Sorry!, you cannot transfer money to your own account!')
                 return redirect(request.META['HTTP_REFERER'])
             try:
                 user_obj = User.objects.select_related('profile').get(username=phone)
-                dest_profile_id = user_obj.profile.profile_id
+                dst_profile_id = user_obj.profile.profile_id
                 user_name = user_obj.get_full_name()
             except User.DoesNotExist:
                 user_name = None
 
             try:
-                dest_account = Account.objects.get(profile_id=dest_profile_id).account
+                dst_account = Account.objects.get(profile_id=dst_profile_id).account
             except Account.DoesNotExist:
-                dest_account = None
+                dst_account = None
 
-        elif request.POST['dest_account']:
-            dest_account = request.POST['dest_account']
-            if acc.account == dest_account:
+        elif request.POST['dst_account']:
+            dst_account = request.POST['dst_account']
+            if acc.account == dst_account:
                 messages.error(request, 'Sorry!, you cannot transfer money to your own account!')
                 return redirect(request.META['HTTP_REFERER'])
 
             try:
-                dest_profile_id = Account.objects.get(account=dest_account).profile_id
+                dst_profile_id = Account.objects.get(account=dst_account).profile_id
             except Account.DoesNotExist:
-                dest_profile_id = None
+                dst_profile_id = None
 
-            if dest_profile_id:
+            if dst_profile_id == 'NA':
                 try:
-                    user_obj = User.objects.get(profile__profile_id=dest_profile_id)
+                    grp = Group.objects.get(account=dst_account)
+                    grp_name = grp.name
+                except Group.DoesNotExist:
+                    grp_name = None
+            elif dst_profile_id and dst_profile_id != 'NA':
+                try:
+                    user_obj = User.objects.get(profile__profile_id=dst_profile_id)
                     user_name = user_obj.get_full_name()
-                except Profile.DoesNotExist:
+                except User.DoesNotExist:
                     user_name = None
 
         amount = request.POST['amount']
         request.session['confirm'] = request.POST['type']
-        amount = float(amount)
+        amount = amount
 
-        if dest_account:
-            if amount <= bal and user_name is not None:
+        if dst_account:
+            if amount <= bal and user_name or grp_name:
+                get_name = user_name if user_name else grp_name
                 messages.info(
                     request,
-                    'You are about to transfer TZS' + str(amount) + ' to ' + user_name +
+                    'You are about to transfer TZS' + str(amount) + ' to ' + get_name +
                     '.\r Proceed with the transfer?'
                 )
 
-                request.session['dest_account'] = dest_account
+                request.session['dst_account'] = dst_account
                 request.session['account_no'] = acc.account
-                request.session['name'] = user_name
-                request.session['ext_wallet'] = acc.external_wallet_id
+                request.session['name'] = get_name
                 request.session['amount'] = amount
                 request.session['overdraft'] = ov
                 request.session['open_bal'] = bal
                 if name:
                     request.session['group_name'] = name
 
-            elif amount > bal and user_name is not None:
+            elif amount > bal and user_name or grp_name:
+                get_name = user_name if user_name else grp_name
                 messages.error(
                     request,
-                    'You do not have enough balance to make to transfer TZS' + str(amount) + ' to ' + user_name + '.'
+                    'You do not have enough balance to make to transfer TZS' + str(amount) + ' to ' + get_name + '.'
                 )
             elif user_name is None:
                 messages.error(request, 'This user is not registered with a POCHI account!')
+            elif grp_name is None:
+                messages.error(request, 'This group is not registered with a POCHI account!')
         else:
             messages.error(request, 'This user is not registered with a POCHI account!')
     if name:
@@ -942,13 +984,10 @@ def withdraw(request):
 
                 _account = Account.objects.get(profile_id=identifier)
                 pochi_id = _account.account
-                bal = _account.available_balance
+                bal = _account.available_balance.__float__()
                 ov = _account.allow_overdraft
 
                 if amount <= bal:
-                    _account.available_balance -= amount
-                    _account.save()
-
                     request.session['institution'] = institution
                     request.session['ext_account'] = ext_account_no
                     request.session['identifier'] = identifier
@@ -975,13 +1014,10 @@ def withdraw(request):
             try:
                 _account = Account.objects.get(profile_id=identifier)
                 pochi_id = _account.account
-                bal = _account.available_balance
+                bal = _account.available_balance.__float__()
                 ov = _account.allow_overdraft
 
                 if amount <= bal:
-                    _account.available_balance -= amount
-                    _account.save()
-
                     request.session['institution'] = institution
                     request.session['identifier'] = identifier
                     request.session['pochi_id'] = pochi_id
@@ -1018,6 +1054,7 @@ def how_to_deposit(request):
 
 
 def deposit(request):
+    user = request.user
     message = None
     if request.method == "GET":
         amount = float(request.GET['amount'])
@@ -1038,6 +1075,8 @@ def deposit(request):
             else:
                 fund_transfer(request, 'DEPOSIT', mode, channel, dst_profile_id, phone, dst_account, bal, amount, phone)
 
+            notify.send(user, recipient=user, verb='TShs. ' + str(amount) + ' deposited to your account')
+
             message = 'You have successfully deposited ' + str(amount) + ' to your account'
 
         except Account.DoesNotExist:
@@ -1047,8 +1086,10 @@ def deposit(request):
 
 
 def del_bank_acc(request):
+    user = request.user
     profile_id = request.user.profile.profile_id
     try:
+        notify.send(user, recipient=user, verb='Register your bank account!')
         ExternalAccount.objects.get(profile_id=profile_id).delete()
     except ExternalAccount.DoesNotExist:
         messages.warning(request, 'You have not registered a bank account!')
@@ -1068,12 +1109,12 @@ def new_group(request):
 
 @login_required
 def create_group(request):
-    user = request.user.username
+    user = request.user
     import json
     if request.method == 'POST':
         groupName = request.POST['profileGroupName'].capitalize()
         member_list = request.POST['members']
-        first_admin = user
+        first_admin = user.username
         members = json.loads(member_list)
         grp_acc = uuid.uuid4().hex[:10].upper()
         try:
@@ -1102,6 +1143,7 @@ def create_group(request):
                         profile_id=profile_id,
                         admin=is_admin
                     )
+                    notify.send(user, recipient=user, verb='You created group '+groupName+' successfully!')
                     messages.success(request, "Group "+groupName+"created successfully!")
         except IntegrityError:
             messages.error(request, 'Sorry!, this group name is already in use, try a different name')
@@ -1233,7 +1275,7 @@ def group_statement(request, name=None):
                 start, end = date_range.split(' - ')
                 start = datetime.strptime(start, '%m/%d/%Y').strftime('%Y-%m-%d')
                 end = datetime.strptime(end, '%m/%d/%Y').strftime('%Y-%m-%d')
-                group_transactions = Ledger.objects.filter(account=grp_acc, fulltimestamp__range=[start, end])
+                group_transactions = Ledger.objects.filter(account=grp_acc, full_timestamp__range=[start, end])
             elif request.GET.get('channel'):
                 selected_account = request.GET.get('channel')
                 group_transactions = Ledger.objects.filter(account=grp_acc, channel=selected_account)
@@ -1284,6 +1326,7 @@ def group_profile(request, name=None):
 
 
 def delete_group(request, name=None):
+    user = request.user
     profile = request.user.profile
     try:
         group = Group.objects.get(name=name)
@@ -1292,21 +1335,29 @@ def delete_group(request, name=None):
         group_acc = None
     if group_acc:
         group_member_obj = GroupMember.objects.get(group_account=group_acc, profile_id=profile.profile_id)
-        group_account = Account.objects.get(profile_id=profile.profile_id)
+        group_account = Account.objects.get(account=group_acc)
         is_admin = group_member_obj.admin
+        grp_cur_bal = group_account.current_balance.__float__()
         if is_admin:
-            if group_account.current_balance > 0:
+            if grp_cur_bal > 0:
                 admin_id = group_member_obj.profile_id
-                Account.objects.get(profile_id=admin_id).available_balance += group_account.current_balance
+                m_account = Account.objects.get(profile_id=admin_id)
+                m_account_bal = m_account.available_balance.__float__()
+                new_account_bal = m_account_bal + grp_cur_bal
+                m_account.available_balance = new_account_bal
+                m_account.save()
             GroupMember.objects.filter(group_account=group_acc).delete()
             Group.objects.get(name=name).delete()
+            group_account.delete()
+            notify.send(user, recipient=user, verb='You deleted group ' + name + ' successfully!')
     return redirect(home)
 
 
 def exit_group(request, name=None):
+    user = request.user
     profile = request.user.profile
     try:
-        group = Group.objects.filter(name=name)
+        group = Group.objects.get(name=name)
         group_acc = group.account
     except Group.DoesNotExist:
         group_acc = None
@@ -1318,27 +1369,32 @@ def exit_group(request, name=None):
             members_queryset = None
 
         try:
-            grp_account = Account.objects.filter(account=group_acc)
+            grp_account = Account.objects.get(account=group_acc)
+            grp_cur_bal = grp_account.current_balance.__float__()
         except Account.DoesNotExist:
             grp_account = None
+            grp_cur_bal = 0
 
         members_count = members_queryset.count()
 
-        if members_count <= 2:
-            if grp_account.balance > 0:
+        if grp_account and members_count <= 2:
+            if grp_cur_bal > 0:
                 remaining_member_queryset = GroupMember.objects.exclude(profile_id=profile.profile_id)
                 remaining_member_id = remaining_member_queryset.profile_id
-                Account.objects.get(profile_id=remaining_member_id).available_balance += grp_account.balance
-            GroupMember.objects.get(profile_id=profile.profile_id).delete()
+                m_account = Account.objects.get(profile_id=remaining_member_id)
+                m_account_bal = m_account.available_balance.__float__()
+                new_account_bal = m_account_bal + grp_cur_bal
+                m_account.available_balance = new_account_bal
+                m_account.save()
+            GroupMember.objects.get(group_account=group_acc, profile_id=profile.profile_id).delete()
             Group.objects.get(name=name).delete()
+            grp_account.delete()
         else:
-            is_admin = GroupMember.objects.get(profile_id=profile.profile_id).admin
-            if is_admin:
-                remaining_member_queryset = GroupMember.objects.exclude(profile_id=profile.profile_id)
-                new_admin_queryset = remaining_member_queryset.first()
-                new_admin_queryset.admin = 1
-            GroupMember.objects.get(profile_id=profile.profile_id).delete()
-    return redirect(request.META['HTTP_REFERER'])
+            GroupMember.objects.get(group_account=group_acc, profile_id=profile.profile_id).delete()
+
+        notify.send(user, recipient=user, verb='You exited group ' + name + ' successfully!')
+
+    return redirect(home)
 
 
 @login_required
@@ -1571,17 +1627,17 @@ def delete_account(request):
                       extra_tags='main')
     elif balance == 0:
         try:
-            subscription = PaidUser.objects.get(profile_id=profile_id)
-        except PaidUser.DoesNotExist:
-            subscription = None
-        if subscription:
-            subscription.delete()
+            Account.objects.get(profile_id=profile_id).delete()
+        except Account.DoesNotExist:
+            pass
         try:
-            membership = GroupMember.objects.filter(profile_id=profile_id)
+            PaidUser.objects.get(profile_id=profile_id).delete()
+        except PaidUser.DoesNotExist:
+            pass
+        try:
+            GroupMember.objects.filter(profile_id=profile_id).delete()
         except GroupMember.DoesNotExist:
-            membership = None
-        if membership:
-            membership.delete()
+            pass
         request.user.is_active = False
         request.user.save()
         return redirect(index)
@@ -1603,6 +1659,7 @@ def validate_pochi_id(request):
 
 
 def group_admin(request, name, identity, action):
+    user = request.user
     if action == 'add':
         try:
             group = Group.objects.get(name=name)
@@ -1616,6 +1673,7 @@ def group_admin(request, name, identity, action):
                 member_qs = GroupMember.objects.get(profile_id=identity, group_account=group_acc)
                 member_qs.admin = 1
                 member_qs.save()
+                notify.send(user, recipient=user, verb='XXXX is now an admin of ' + name + '!')
             except GroupMember.DoesNotExist:
                 messages.error(request, "Sorry!, an error occurred, This member does not exist!")
     elif action == 'remove':
@@ -1639,6 +1697,7 @@ def group_admin(request, name, identity, action):
             group = Group.objects.get(name=name)
             group.name = identity
             group.save()
+            notify.send(user, recipient=user, verb='Group ' + name + ' was changed to ' + identity + '!')
         except Group.DoesNotExist:
             messages.error(request, "Sorry!, an error occurred, cannot complete this action.")
 
@@ -1667,3 +1726,25 @@ def confirm_action_group(request, name, action):
         messages.warning(request, "You are about to "+action+" "+name+" group. Do you wish to proceed?",
                          extra_tags=action)
     return redirect(request.META.get("HTTP_REFERER"))
+
+
+class UserNotificationsList(AllNotificationsList):
+    template_name = 'pochi/notifications.html'
+
+
+@login_required
+def mark_as_read(request, slug=None):
+    from notifications.utils import slug2id
+    id = slug2id(slug)
+
+    from notifications.models import Notification
+    notification = get_object_or_404(
+        Notification, recipient=request.user, id=id)
+    notification.mark_as_read()
+
+    _next = request.GET.get('next')
+
+    if _next:
+        return redirect(_next)
+
+    return redirect('unread')

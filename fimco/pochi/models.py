@@ -108,13 +108,6 @@ class ExternalAccount(models.Model):
     account_type = models.CharField(max_length=2, choices=ACCOUNTS)
 
 
-class Notification(models.Model):
-    profile_id = models.CharField(max_length=20)
-    full_timestamp = models.DateTimeField(auto_now_add=True)
-    message = models.TextField(max_length=1024, default='NA')
-    read_status = models.IntegerField(default=0)
-
-
 class PaidUser(models.Model):
     TYPES = (
         ('STANDARD', 'Free'),
@@ -124,6 +117,7 @@ class PaidUser(models.Model):
     level = models.CharField(max_length=10, choices=TYPES)
     start_date = models.DateTimeField(auto_now_add=True)
     end_date = models.DateTimeField(null=True)
+#     model Subscriptions: plan, current_period, status
 
 
 class Charge(models.Model):

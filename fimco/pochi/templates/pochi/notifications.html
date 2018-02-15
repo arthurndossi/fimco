@@ -1,0 +1,40 @@
+{% extends "pochi/main.html" %}
+{#{% block links %}#}
+{#    <link href="/static/pochi/css/navyblue.css" rel="stylesheet" type="text/css" />#}
+{#{% endblock %}#}
+{% block content %}
+    <section id="middle">
+        <div class="padding-15">
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-xs-6">
+                    <ul class="notifications">
+                        {% for notice in notifications %}
+                            <div class="alert alert-block alert-{{ notice.level }}">
+                                <a class="close pull-right" href="{% url 'read' notice.slug %}">
+                                    <span aria-hidden="true">&times;</span>
+                                </a>
+                                <h4>
+                                    <i class="{% if notice.unread %}fa fa-envelope{% else %}et-envelope{% endif %}"></i>
+                                    New message <br>
+                                </h4>
+                                <p>
+                                    <b>{{ notice.actor }}</b><br>
+                                    {{ notice.verb }}
+                                    {% if notice.target %}
+                                        of {{ notice.target }}
+                                    {% endif %}
+                                    <span><small class="pull-right">{{ notice.timesince }} ago</small></span>
+                                </p>
+                                <div class="notice-actions">
+                                    {% for action in notice.data.actions %}
+                                        <a class="btn" href="{{ action.href }}">{{ action.title }}</a>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

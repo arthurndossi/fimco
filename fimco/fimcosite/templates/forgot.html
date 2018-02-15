@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block links %}
+{% endblock %}
+{% block content %}
+    <!-- REGISTER -->
+    <section>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-5 col-md-8 col-xs-6 col-centered">
+                    <div class="card card-default">
+                        <div class="card-block">
+                            <form method="POST" action="">
+                                <legend>Password reset</legend>
+                                <p class="lead">Forgotten your password? Enter your email address below, and we'll send
+                                    you an email allowing you to reset it.
+                                </p>
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label class="control-label" for="id_email">Email</label>
+                                    <div>
+                                        <input type="email" name="email" class="form-control" id="id_email" required>
+                                    </div>
+                                </div>
+                                <button class="btn btn-primary float-right">Reset my password</button>
+                                <p class="help-text">If you have any trouble resetting your password, contact us at
+                                    <a href="mailto:admin@fimco.co.tz">admin@fimco.co.tz</a>.
+                                </p>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $("#id_email").focus();
+    </script>
+{% endblock %}

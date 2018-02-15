@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     'fimcoplatform.apps.FimcoPlatformConfig',
     'formtools',
     'easy_pdf',
-    'djmoney'
+    'djmoney',
+    'notifications',
 ]
 
 

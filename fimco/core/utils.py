@@ -32,7 +32,7 @@ def render_with_global_data(request, page, context):
         _context = {
             'profile': profile,
             'groups': group_members_obj,
-            'paid': paid_user
+            'paid': paid_user,
         }
     else:
         company = CorporateProfile.objects.get(profile_id=profile.profile_id).company_name

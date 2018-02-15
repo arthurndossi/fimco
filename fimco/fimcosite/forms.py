@@ -243,7 +243,12 @@ class RegisterForm2(forms.Form):
         })
     )
     scanned_id = forms.ImageField(
-        widget=forms.ClearableFileInput(attrs={'id': 'file', 'required': True})
+        widget=forms.ClearableFileInput(attrs={
+            'id': 'file',
+            'class': 'form-control',
+            'onchange': 'jQuery(this).next("input").val(this.value)',
+            'required': True
+        })
     )
     id_choice = forms.ChoiceField(choices=ID_TYPES)
     bot_cds = forms.CharField(required=False)
@@ -715,6 +720,7 @@ class EditProfileForm(forms.Form):
         max_length=20,
         validators=[alphabetic],
         widget=forms.TextInput(attrs={
+            'class': 'form-control',
             'required': True,
         })
     )
@@ -723,11 +729,13 @@ class EditProfileForm(forms.Form):
         max_length=20,
         validators=[alphabetic],
         widget=forms.TextInput(attrs={
+            'class': 'form-control',
             'required': True,
         })
     )
     dob = forms.DateField(
         widget=forms.DateInput(attrs={
+            'class': 'form-control',
             'type': 'date',
             'required': True,
         })
@@ -735,16 +743,23 @@ class EditProfileForm(forms.Form):
     gender = forms.ChoiceField(choices=GENDER)
     client_id = forms.CharField(
         widget=forms.TextInput(attrs={
+            'class': 'form-control',
             'required': True
         })
     )
     scanned_id = forms.ImageField(
-        widget=forms.ClearableFileInput(attrs={'id': 'file', 'required': True})
+        widget=forms.ClearableFileInput(attrs={
+            'id': 'file',
+            'class': 'form-control',
+            'onchange': 'jQuery(this).next("input").val(this.value)',
+            'required': True
+        })
     )
     id_choice = forms.ChoiceField(choices=ID_TYPES)
     email = forms.EmailField(
         max_length=50,
         widget=forms.TextInput(attrs={
+         'class': 'form-control',
          'required': True,
         })
     )
@@ -752,16 +767,33 @@ class EditProfileForm(forms.Form):
         validators=[telephone],
         widget=forms.TextInput(attrs={
             'class': 'form-control masked',
-            'data-format': '+255999999999',
+            'data-format': '9999999999',
             'placeholder': 'Enter telephone',
             'required': True,
         })
     )
-    bot_cds = forms.CharField(required=False)
-    dse_cds = forms.CharField(required=False)
+    bot_cds = forms.CharField(
+        min_length=6,
+        max_length=20,
+        required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'required': False
+        })
+    )
+    dse_cds = forms.CharField(
+        min_length=6,
+        max_length=20,
+        required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'required': False
+        })
+    )
     password = forms.CharField(
         validators=[validate_slug],
         widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
             'autocomplete': 'off',
             'required': True,
 
@@ -770,6 +802,7 @@ class EditProfileForm(forms.Form):
     verify = forms.CharField(
         validators=[validate_slug],
         widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
             'required': True,
 
         })

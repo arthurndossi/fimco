@@ -5,6 +5,8 @@ from . import views
 urlpatterns = [
     url(r'^$', views.home, name='pochi'),
     url(r'^dashboard$', views.admin, name='dashboard'),
+    url(r'^notifications/unread$', views.UserNotificationsList.as_view(), name='unread'),
+    url(r'^notifications/read/(?P<slug>\d+)/$', views.mark_as_read, name='read'),
     url(r'^dashboard/(?P<page>[a-zA-Z]+)$', views.view_data, name='data'),
     url(r'^add/account$', views.account, name='accounts'),
     url(r'^statements$', views.statement, name='statements'),

@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from .models import Group, GroupMember, Transaction, Ledger, BalanceSnapshot, ExternalAccount, \
-    Notification, PaidUser, Charge, CashOut, Rate
+    PaidUser, Charge, CashOut, Rate
 
 
 class GroupAdmin(admin.ModelAdmin):
@@ -33,10 +33,6 @@ class ExternalAccountAdmin(admin.ModelAdmin):
                     'institution_code', 'account_type')
 
 
-class NotificationAdmin(admin.ModelAdmin):
-    list_display = ('profile_id', 'full_timestamp', 'message', 'read_status')
-
-
 class PaidUserAdmin(admin.ModelAdmin):
     list_display = ('profile_id', 'level', 'start_date', 'end_date')
 
@@ -59,7 +55,6 @@ admin.site.register(Transaction, TransactionAdmin)
 admin.site.register(Ledger, LedgerAdmin)
 admin.site.register(BalanceSnapshot, BalanceSnapshotAdmin)
 admin.site.register(ExternalAccount, ExternalAccountAdmin)
-admin.site.register(Notification, NotificationAdmin)
 admin.site.register(PaidUser, PaidUserAdmin)
 admin.site.register(Charge, ChargeAdmin)
 admin.site.register(CashOut, CashOutAdmin)

@@ -45,7 +45,7 @@
                         <div class="box-title"><!-- add .noborder class if box-body is removed -->
                             <h4>Current POCHI Rate</h4>
                             <small class="block">{{ rates.today }}%</small>
-{#                            <i class="fa fa-comments"></i>#}
+                            <i class="fa fa-bar-chart-o"></i>
                         </div>
                         <div class="box-body text-center">
                             <span class="sparkline" data-plugin-options='{"type":"bar","barColor":"#ffffff","height":"35px","width":"100%","zeroAxis":"false","barSpacing":"2"}'>
@@ -68,7 +68,7 @@
                         <div class="box-title"><!-- add .noborder class if box-body is removed -->
                             <h4>Daily Earnings</h4>
                             <small class="block">{% money_localize daily.today 'TZS' %}</small>
-    {#                        <i class="fa fa-bar-chart-o"></i>#}
+                            <i class="fa fa-calendar"></i>
                         </div>
                         <div class="box-body text-center">
                             <span class="sparkline" data-plugin-options='{"type":"bar","barColor":"#ffffff","height":"35px","width":"100%","zeroAxis":"false","barSpacing":"2"}'>
@@ -91,7 +91,7 @@
                         <div class="box-title"><!-- add .noborder class if box-body is removed -->
                             <h4>Monthly earnings</h4>
                             <small class="block">{% money_localize monthly.bonus 'TZS' %}</small>
-    {#                        <i class="fa fa-shopping-cart"></i>#}
+                            <i class="fa fa-moon-o"></i>
                         </div>
                         <div class="box-body text-center">
                             <span class="sparkline" data-plugin-options='{"type":"bar","barColor":"#ffffff","height":"35px","width":"100%","zeroAxis":"false","barSpacing":"2"}'>
@@ -113,8 +113,12 @@
                     <div class="box success grow"><!-- default, danger, warning, info, success -->
                         <div class="box-title"><!-- add .noborder class if box-body is removed -->
                             <h4>Cumulative Earnings</h4>
-                            <small class="block">{% money_localize total.total.bonus__sum 'TZS' %}</small>
-    {#                        <i class="fa fa-globe"></i>#}
+                            {% if total.total.bonus__sum %}
+                                <small class="block">{% money_localize total.total.bonus__sum 'TZS' %}</small>
+                            {% else %}
+                                <small class="block">0.00 TZS</small>
+                            {% endif %}
+                            <i class="fa fa-line-chart"></i>
                         </div>
                         <div class="box-body text-center">
                             <span class="sparkline" data-plugin-options='{"type":"bar","barColor":"#ffffff","height":"35px","width":"100%","zeroAxis":"false","barSpacing":"2"}'>

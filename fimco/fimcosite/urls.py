@@ -13,6 +13,8 @@ urlpatterns = [
     url(r'^information/(?P<page>[a-z-]+)$', views.info, name='info'),
     url(r'^site/contact/inquiry$', views.inquiry, name='inquiry'),
     url(r'^accounts/login', views.login_view, name='login'),
-    url(r'^login', views.validate, name='validate'),
-    url(r'^logout', views.log_out, name='logout'),
+    url(r'^login$', views.validate, name='validate'),
+    url(r'^logout$', views.log_out, name='logout'),
+    url(r'^account/password/reset$', views.forgot, name='forgot'),
+    url(r'^account/password/reset/(?P<token>[0-9a-zA-Z\-]+)$', views.reset, name='reset'),
 ]

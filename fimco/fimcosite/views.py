@@ -507,6 +507,7 @@ def register(form_list):
 
             Account.objects.create(
                 profile_id=profile_id,
+                nickname=fName,
                 account=account_no
             )
 
@@ -546,3 +547,13 @@ def inquiry(request):
             messages.success(request, "Your message is sent successfully!")
 
     return redirect(request.META['HTTP_REFERER'])
+
+
+def forgot(request):
+    context = {}
+    return render(request, 'forgot.html', context)
+
+
+def reset(request, token):
+    context = {'token': token}
+    return render(request, 'password-reset.html', context)

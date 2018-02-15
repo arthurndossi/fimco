@@ -43,12 +43,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'fimcosite.apps.FimcositeConfig',
     'pochi.apps.PochiConfig',
     'fimcoplatform.apps.FimcoPlatformConfig',
     'formtools',
     'easy_pdf',
-    'djmoney'
+    'djmoney',
+    'notifications',
 ]
 
 MIDDLEWARE = [
@@ -93,6 +95,7 @@ DATABASES = {
     }
 }
 
+SITE_ID = 1
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
@@ -167,3 +170,5 @@ _FORMATTER.add_formatting_definition(
 )
 
 CURRENCIES = ('USD', 'TZS')
+
+DEFAULT_FROM_EMAIL = "admin@fimco.co.tz"

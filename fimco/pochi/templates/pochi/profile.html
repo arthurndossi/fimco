@@ -1,7 +1,4 @@
 {% extends "pochi/main.html" %}
-{% block links %}
-{#    <link href="/static/css/profile.css" rel="stylesheet" type="text/css"/>#}
-{% endblock %}
 {% block content %}
     <section id="middle">
         <div id="content" class="padding-20">
@@ -25,12 +22,13 @@
 
                                 <!-- Overview -->
                                 <div id="overview" class="tab-pane active">
-                                    <h4>Name: </h4>{{ data.fName }} {{ data.lName }}
-                                    <h4>Gender: </h4>{{ data.gender }}
-                                    <h4>Date of Birth: </h4>{{ data.dob }}
-                                    <h4>Contacts: </h4>{{ data.email }}<br>{{ data.phone }}
-                                    <h4>KYC Info: </h4>{{ data.client_id }}
-                                    <h4>Accounts(BOT/DSE): </h4>{{ data.bot_cds }}, {{ data.bot_cds }}
+                                    <h4 class="inline-block">Name:&nbsp;</h4>{{ data.fName }} {{ data.lName }}<br>
+                                    <h4 class="inline-block">Gender:&nbsp;</h4>
+                                    {% if data.gender == 'M'  %}Male{% elif data.gender == 'F' %}Female{% else %}Other{% endif %}<br>
+                                    <h4 class="inline-block">Date of Birth:&nbsp;</h4>{{ data.dob }}<br>
+                                    <h4 class="inline-block">Contacts:&nbsp;</h4>{{ data.email }}, {{ data.phone }}<br>
+                                    <h4 class="inline-block">KYC Info:&nbsp;</h4>{{ data.client_id }}<br>
+                                    <h4 class="inline-block">Accounts(BOT, DSE):&nbsp;</h4>{{ data.bot_cds }}, {{ data.bot_cds }}
                                 </div>
 
                                 <!-- Edit -->
@@ -39,160 +37,137 @@
                                             data-success="Profile updated!" data-toastr-position="top-right">
                                         <fieldset>
                                             <div class="row">
-                                                <div class="col-md-6 col-sm-6">
-                                                    <label>First Name <small>(required)</small></label>
-                                                    <label class="input mb-10">
-                                                        <i class="ico-append fa fa-user"></i>
+                                                <div class="form-group">
+                                                    <div class="col-md-6 col-sm-6">
+                                                        <label>First Name *</label>
                                                         {{ pForm.fName }}
-                                                        <b class="tooltip tooltip-bottom-right">Your First Name</b>
-                                                    </label>
-                                                    {% if pForm.fName.errors %}
-                                                        {% for error in pForm.fName.errors %}
-                                                            <div class="alert alert-mini alert-danger mb-30">
-                                                                <strong>{{ error|escape }}</strong>
-                                                            </div>
-                                                        {% endfor %}
-                                                    {% endif %}
-                                                </div>
-                                                <div class="col-md-6 col-sm-6">
-                                                    <label for="profile:last_name">Last Name <small>(required)</small></label>
-                                                    <label class="input mb-10">
-                                                        <i class="ico-append fa fa-user"></i>
+                                                        {% if pForm.fName.errors %}
+                                                            {% for error in pForm.fName.errors %}
+                                                                <div class="alert alert-mini alert-danger mb-30">
+                                                                    <strong>{{ error|escape }}</strong>
+                                                                </div>
+                                                            {% endfor %}
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="col-md-6 col-sm-6">
+                                                        <label>Last Name *</label>
                                                         {{ pForm.lName }}
-                                                        <b class="tooltip tooltip-bottom-right">Your Last Name</b>
-                                                    </label>
-                                                    {% if pForm.lName.errors %}
-                                                        {% for error in pForm.lName.errors %}
-                                                            <div class="alert alert-mini alert-danger mb-30">
-                                                                <strong>{{ error|escape }}</strong>
-                                                            </div>
-                                                        {% endfor %}
-                                                    {% endif %}
+                                                        {% if pForm.lName.errors %}
+                                                            {% for error in pForm.lName.errors %}
+                                                                <div class="alert alert-mini alert-danger mb-30">
+                                                                    <strong>{{ error|escape }}</strong>
+                                                                </div>
+                                                            {% endfor %}
+                                                        {% endif %}
+                                                    </div>
                                                 </div>
                                             </div>
+
                                             <div class="row">
-                                                <div class="col-md-6 col-sm-6">
-                                                    <label for="profile:email">Email <small>(required)</small></label>
-                                                    <label class="input mb-10">
-                                                        <i class="ico-append fa fa-envelope"></i>
+                                                <div class="form-group">
+                                                    <div class="col-md-6 col-sm-6">
+                                                        <label>Email *</label>
                                                         {{ pForm.email }}
-                                                        <b class="tooltip tooltip-bottom-right">Your Email</b>
-                                                    </label>
-                                                    {% if pForm.email.errors %}
-                                                        {% for error in pForm.email.errors %}
-                                                            <div class="alert alert-mini alert-danger mb-30">
-                                                                <strong>{{ error|escape }}</strong>
-                                                            </div>
-                                                        {% endfor %}
-                                                    {% endif %}
-                                                </div>
-                                                <div class="col-md-6 col-sm-6">
-                                                    <label for="profile:phone">Phone <small>(required)</small></label>
-                                                    <label class="input mb-10">
-                                                        <i class="ico-append fa fa-phone"></i>
+                                                        {% if pForm.email.errors %}
+                                                            {% for error in pForm.email.errors %}
+                                                                <div class="alert alert-mini alert-danger mb-30">
+                                                                    <strong>{{ error|escape }}</strong>
+                                                                </div>
+                                                            {% endfor %}
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="col-md-6 col-sm-6">
+                                                        <label>Phone *</label>
                                                         {{ pForm.phone }}
-                                                        <b class="tooltip tooltip-bottom-right">Your Phone (optional)</b>
-                                                    </label>
-                                                    {% if pForm.phone.errors %}
-                                                        {% for error in pForm.phone.errors %}
-                                                            <div class="alert alert-mini alert-danger mb-30">
-                                                                <strong>{{ error|escape }}</strong>
-                                                            </div>
-                                                        {% endfor %}
-                                                    {% endif %}
+                                                        {% if pForm.phone.errors %}
+                                                            {% for error in pForm.phone.errors %}
+                                                                <div class="alert alert-mini alert-danger mb-30">
+                                                                    <strong>{{ error|escape }}</strong>
+                                                                </div>
+                                                            {% endfor %}
+                                                        {% endif %}
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-md-6 col-sm-6">
-                                                    <label for="profile:gender">Gender <small>(required)</small></label>
-                                                    <label class="select mb-10">
-                                                        {{ pForm.gender }}
-                                                        <i class="ico-append fa fa-venus-mars"></i>
-                                                    </label>
-                                                    {% if pForm.gender.errors %}
-                                                        {% for error in pForm.gender.errors %}
-                                                            <div class="alert alert-mini alert-danger mb-30">
-                                                                <strong>{{ error|escape }}</strong>
-                                                            </div>
-                                                        {% endfor %}
-                                                    {% endif %}
-                                                </div>
-                                                <div class="col-md-6 col-sm-6">
-                                                    <label for="profile:dob">Date of Birth <small>(required)</small></label>
-                                                    <label class="input mb-10">
-                                                        <i class="ico-append fa fa-calendar"></i>
+                                                <div class="form-group">
+                                                    <div class="col-md-6 col-sm-6">
+                                                        <label>Date of Birth *</label>
                                                         {{ pForm.dob }}
-                                                        <b class="tooltip tooltip-bottom-right">Date of Birth</b>
-                                                    </label>
-                                                    {% if pForm.dob.errors %}
-                                                        {% for error in pForm.dob.errors %}
-                                                            <div class="alert alert-mini alert-danger mb-30">
-                                                                <strong>{{ error|escape }}</strong>
-                                                            </div>
-                                                        {% endfor %}
-                                                    {% endif %}
+                                                        {% if pForm.dob.errors %}
+                                                            {% for error in pForm.dob.errors %}
+                                                                <div class="alert alert-mini alert-danger mb-30">
+                                                                    <strong>{{ error|escape }}</strong>
+                                                                </div>
+                                                            {% endfor %}
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="col-md-6 col-sm-6">
+                                                        <label>Gender *</label>
+                                                        {{ pForm.gender }}
+                                                        {% if pForm.gender.errors %}
+                                                            {% for error in pForm.gender.errors %}
+                                                                <div class="alert alert-mini alert-danger mb-30">
+                                                                    <strong>{{ error|escape }}</strong>
+                                                                </div>
+                                                            {% endfor %}
+                                                        {% endif %}
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-md-6 col-sm-6">
-                                                    <label>Change ID type
-                                                    </label>
-                                                    {{ pForm.id_choice }}
-                                                </div>
-                                                <div class="col-md-6 col-sm-6" id="client_input">
-                                                    <label>Client ID
-                                                        <small>(required)</small>
-                                                    </label>
-                                                    <label class="input mb-10">
-                                                        <i class="ico-append fa fa-id-card-o"></i>
+                                                <div class="form-group">
+                                                    <div class="col-md-6 col-sm-6">
+                                                        <label>Change ID type *</label>
+                                                        {{ pForm.id_choice }}
+                                                        {% if pForm.id_choice.errors %}
+                                                            {% for error in pForm.id_choice.errors %}
+                                                                <div class="alert alert-mini alert-danger mb-30">
+                                                                    <strong>{{ error|escape }}</strong>
+                                                                </div>
+                                                            {% endfor %}
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="col-md-6 col-sm-6">
+                                                        <label>Client ID *</label>
                                                         {{ pForm.client_id }}
-                                                        <b class="tooltip tooltip-bottom-right">Enter your ID</b>
-                                                    </label>
-                                                    {% if pForm.id_number.errors %}
-                                                        {% for error in pForm.id_number.errors %}
-                                                            <div class="alert alert-mini alert-danger mb-30">
-                                                                <strong>{{ error|escape }}</strong>
-                                                            </div>
-                                                        {% endfor %}
-                                                    {% endif %}
+                                                        {% if pForm.client_id.errors %}
+                                                            {% for error in pForm.client_id.errors %}
+                                                                <div class="alert alert-mini alert-danger mb-30">
+                                                                    <strong>{{ error|escape }}</strong>
+                                                                </div>
+                                                            {% endfor %}
+                                                        {% endif %}
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-12 col-sm-12">
-                                                    <label>
-                                                        Change your ID
-                                                    </label>
+                                                    <label>Change your ID *</label>
                                                     <!-- custom file upload -->
                                                     <div class="fancy-file-upload fancy-file-primary">
                                                         <i class="fa fa-upload"></i>
-                                                        {{ pForm.id }}
-                                                        <input type="text" class="form-control"
-                                                               placeholder="no file selected" readonly=""/>
+                                                        {{ pForm.scanned_id }}
+                                                        <input type="text" class="form-control" placeholder="User ID" readonly=""/>
                                                         <span class="button">Choose File</span>
                                                     </div>
-                                                    <small class="text-muted block">Max file size: 10Mb</small>
+                                                    <small class="text-muted block">Max file size: 5Mb</small>
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-md-6 col-sm-6">
-                                                    <label for="profile:bot">BOT CDS Account
-                                                        <small>(optional)</small>
-                                                    </label>
-                                                    <label class="input mb-10">
-                                                        <i class="ico-append fa fa-briefcase"></i>
+                                                <div class="form-group">
+                                                    <div class="col-md-6 col-sm-6">
+                                                        <label for="profile:bot">BOT CDS Account
+                                                            <small>(optional)</small>
+                                                        </label>
                                                         {{ pForm.bot_cds }}
-                                                        <b class="tooltip tooltip-bottom-right">Enter your account no.</b>
-                                                    </label>
-                                                </div>
-                                                <div class="col-md-6 col-sm-6">
-                                                    <label for="profile:dse">DSE CDS Account
-                                                        <small>(optional)</small>
-                                                    </label>
-                                                    <label class="input mb-10">
-                                                        <i class="ico-append fa fa-briefcase"></i>
+                                                    </div>
+                                                    <div class="col-md-6 col-sm-6">
+                                                        <label for="profile:dse">DSE CDS Account
+                                                            <small>(optional)</small>
+                                                        </label>
                                                         {{ pForm.dse_cds }}
-                                                        <b class="tooltip tooltip-bottom-right">Enter your account no.</b>
-                                                    </label>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </fieldset>
@@ -201,154 +176,118 @@
                                 <!-- Accounts -->
                                 <div id="accounts" class="tab-pane">
                                     {% if accounts %}
-                                        <div class="col-md-4 col-lg-2">
-                                            <div class="fancy-form fancy-form-select">
-                                                <select class="form-control select2" title="">
-                                                    {% for account in accounts %}
-                                                        <option value="{{ account }}">{{ account }}</option>
-                                                    {% endfor %}
-                                                </select>
-                                                <i class="fancy-arrow-double"></i>
-                                            </div>
-                                        </div>
+                                        You have registered the following account number to POCHI:
                                         {% for account in accounts %}
+                                            {{ account }}
                                         {% endfor %}
                                     {% else %}
                                         <span class="text-gray size-20">You have 0 accounts!</span>
-                                    {% endif %}
-
-                                    <br />
-
-                                    <div>
-                                        <button type="button" id="add_account" class="btn btn-primary">Add Account</button>
-                                    </div>
-
-                                    <br />
-
-                                    <label class="radio">
-                                        <input type="radio" name="radio-btn" value="m_money">
-                                        <i></i> Mobile money
-                                    </label>
-
-                                    <label class="radio">
-                                        <input type="radio" name="radio-btn" value="bank_acc">
-                                        <i></i> Bank Account
-                                    </label>
-
-                                    <br />
-
-                                    <div id="mm" class="panel panel-default">
-                                        <div class="panel-heading panel-heading-transparent">
-                                            <strong>Mobile Money</strong>
-                                        </div>
-                                        <div class="panel-body">
-                                            <div class="fancy-form fancy-form-select">
-                                                <select class="form-control" title="">
-                                                    <option value="none">None</option>
-                                                    <option value="tigopesa">TIGO-PESA</option>
-                                                    <option value="airtelmoney">AIRTEL-MONEY</option>
-                                                    <option value="mpesa">M-PESA</option>
-                                                </select>
-                                                <i class="fancy-arrow"></i>
+                                        <hr>
+                                        <h4>Register a <strong>Bank Account!</strong></h4>
+                                        <p>
+                                            You have not registered a bank account with us. Please register by filling the form below.
+                                            <span><i class="fa fa-hand-o-down"></i></span>
+                                        </p>
+                                        <strong>Complete Indemnity Form</strong>
+                                        <form id="create_account" method="post" action="{% url 'create_form' 'individual' %}">
+                                            {% csrf_token %}
+                                            <div class="row">
+                                                <div class="col-md-6 col-sm-6">
+                                                    <label>Account holder name *
+                                                        {{ bForm.account_name }}
+                                                    </label>
+                                                </div>
+                                                <div class="col-md-6 col-sm-6">
+                                                    <label>Account number *
+                                                        {{ bForm.account_no }}
+                                                    </label>
+                                                </div>
                                             </div>
-
-                                            <br />
-
-                                            <label>Add account Phone Number</label>
-                                            <div class="fancy-form"><!-- input -->
-                                                <i class="fa fa-phone-square"></i>
-
-                                                <input type="text" class="form-control masked" data-format="0999 999999" placeholder="Enter telephone">
-
-                                                <span class="fancy-tooltip top-left">
-                                                    <em>Type Your Phone Number</em>
-                                                </span>
-                                            </div><!-- /input -->
-                                        </div>
-                                    </div>
-
-                                    <br />
-
-                                    <div id="ba" class="panel panel-default">
-                                        <div class="panel-heading panel-heading-transparent">
-                                            <strong>Bank Account</strong>
-                                        </div>
-                                        <div class="panel-body">
-                                            <div class="fancy-form fancy-form-select">
-                                                <select class="form-control" title="">
-                                                    <option value="">Select bank</option>
-                                                    <option value="1">CRDB</option>
-                                                    <option value="2">NMB</option>
-                                                    <option value="3">AMANA BANK</option>
-                                                </select>
-                                                <i class="fancy-arrow"></i>
+                                            <div class="row">
+                                                <div class="col-md-6 col-sm-6">
+                                                    <label>Bank Name *</label>
+                                                    {{ bForm.bank_name }}
+                                                    {% if bForm.bank_name.errors %}
+                                                        {% for error in bForm.bank_name.errors %}
+                                                            <div class="alert alert-mini alert-danger mb-30">
+                                                                <strong>{{ error|escape }}</strong>
+                                                            </div>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </div>
+                                                <div class="col-md-6 col-sm-6">
+                                                    <label>Branch Name *</label>
+                                                    {{ bForm.branch_name }}
+                                                    {% if bForm.branch_name.errors %}
+                                                        {% for error in bForm.branch_name.errors %}
+                                                            <div class="alert alert-mini alert-danger mb-30">
+                                                                <strong>{{ error|escape }}</strong>
+                                                            </div>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </div>
                                             </div>
-
-                                            <br />
-
-                                            <label>
-                                                Account number
-                                                <input type="text" class="form-control masked" data-format="999999999999999">
-                                            </label>
-
-                                            <br />
+                                            <div class="row">
+                                                <div class="col-md-6 col-sm-6">
+                                                    <label>Bank branch address *</label>
+                                                    {{ bForm.bank_address }}
+                                                    {% if bForm.bank_address.errors %}
+                                                        {% for error in bForm.bank_address.errors %}
+                                                            <div class="alert alert-mini alert-danger mb-30">
+                                                                <strong>{{ error|escape }}</strong>
+                                                            </div>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </div>
+                                                <div class="col-md-6 col-sm-6">
+                                                    <label>Swift code </label>
+                                                    {{ bForm.swift_code }}
+                                                    {% if bForm.swift_code.errors %}
+                                                        {% for error in bForm.swift_code.errors %}
+                                                            <div class="alert alert-mini alert-danger mb-30">
+                                                                <strong>{{ error|escape }}</strong>
+                                                            </div>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-12">
+                                                <input type="submit" class="btn btn-primary" value="Download Completed Form"
+                                                       id="download" disabled="disabled">
+                                            </div>
+                                        </form>
+                                        <div class="clearfix"></div>
+                                        <hr />
+                                        <h3 class="text-center">--OR--</h3>
+                                        <hr />
+                                        <p>
+                                            Download and print the blank indemnity form and submit it to your bank for stamping, then upload the
+                                            stamped form by clicking the 'Upload Scanned copy' button below.
+                                        </p>
+                                        <div class="row" style="display: flex;justify-content: space-between;">
+                                            <div class="dropdown">
+                                                <a target="_blank" href="{% url 'create_form' 'individual' %}" class="btn btn-primary">Download Blank Form</a>
+                                            </div>
+                                            <div class="fancy-file-upload">
+                                                <i class="fa fa-upload"></i>
+                                                <input type="file" class="form-control" name="contact[attachment]" onchange="jQuery(this).next('input').val(this.value);" />
+                                                <input type="text" class="form-control" placeholder="Upload Scanned copy" readonly="" />
+                                                <span>Upload Scanned copy</span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                {% endif %}
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-12 col-lg-3">
-                        <!-- notifications -->
-                        <section class="panel panel-default">
-                            <header class="panel-heading">
-                                <h2 class="panel-title elipsis">
-                                    <i class="fa fa-rss"></i> Notifications
-                                </h2>
-                            </header>
-                            <div class="panel-body noradius padding-10">
-                                <ul class="bullet-list list-unstyled">
-                                    <li class="blue">
-                                        <span class="text-gray size-12">Lorem ipsum dolor sit amet, consectetuer adipiscing </span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </section>
-                        <!-- /notifications -->
-
-                        <!-- groups -->
-                        <section class="panel panel-default">
-                            <header class="panel-heading">
-                                <h2 class="panel-title elipsis">
-                                    <i class="fa fa-rss"></i> Groups
-                                </h2>
-                            </header>
-                            <div class="panel-body noradius padding-10">
-                                <div class="h-250 slimscroll" data-always-visible="true" data-size="5px" data-position="right" data-opacity="0.4">
-                                    {% for group in groups %}
-                                    <div class="clearfix mb-10">
-                                        <div class="thumbnail float-left rounded">
-                                            <i class="fa fa-users"></i>
-                                        </div>
-                                        <h4 class="fs-14 m-0 b-0 p-0 bold"><a href="#">{{ group.group_name }}</a></h4>
-                                    </div>
-                                    {% endfor %}
-                                </div>
-                        </section>
-                        <!-- /groups -->
-
                         <!-- activity -->
-                        <section class="panel panel-default">
+                        {% comment %}<section class="panel panel-default">
                             <header class="panel-heading">
-                                <h2 class="panel-title elipsis">
-                                    <i class="fa fa-rss"></i> Activity
-                                </h2>
+                                <h2 class="panel-title elipsis">My Activities</h2>
                             </header>
 
                             <div class="panel-body noradius padding-10">
                                 <!-- activity list -->
                                 <div class="row profile-activity">
-
                                     <!-- activity item -->
                                     <div class="col-xs-2 col-sm-1">
                                         <time datetime="2014-06-29" class="datebox">
@@ -382,15 +321,76 @@
                                 </div>
                                 <!-- /pagination -->
                             </div>
-                        </section>
+                        </section>{% endcomment %}
                         <!-- /activity -->
+                    </div>
+                    <div class="col-md-12 col-lg-3">
+                        <!-- notifications -->
+                        <section class="panel panel-default">
+                            <header class="panel-heading">
+                                <h2 class="panel-title elipsis">
+                                    <i class="fa fa-bell-o"></i> Notifications
+                                </h2>
+                            </header>
+                            <div class="panel-body noradius padding-10">
+                                <ul class="bullet-list list-unstyled">
+                                    {% if notifications %}
+                                        <li class="blue">
+                                            <span class="text-gray size-12"></span>
+                                        </li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </section>
+                        <!-- /notifications -->
+
+                        <!-- groups -->
+                        <section class="panel panel-default">
+                            <header class="panel-heading">
+                                <h2 class="panel-title elipsis">
+                                    <i class="fa fa-globe"></i> Groups
+                                </h2>
+                            </header>
+                            <div class="panel-body noradius padding-10">
+                                <div class="h-250 slimscroll" data-always-visible="true" data-size="5px" data-position="right" data-opacity="0.4">
+                                    {% for group in groups %}
+                                    <div class="clearfix mb-10">
+                                        <div>
+                                            <i class="fa fa-users inline-block"></i>
+                                            <h4 class="fs-14 margin-bottom-1 bold inline-block">
+                                                <a href="#">{{ group.name }}</a>
+                                            </h4>
+                                            <span class="text-gray size-12">{% if group.admin %}(Admin){% endif %}</span>
+                                        </div>
+                                        <hr class="half-margins">
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </section>
+                        <!-- /groups -->
                     </div>
                 </div>
             </div>
         </div>
     </section>
 {% endblock %}
-
 {% block scripts %}
-    <script type="text/javascript" src="/static/js/profile.js"></script>
+    <script>
+        var form_element = $('#create_account').find('.required');
+        form_element.keyup(function() {
+            var empty = false;
+            form_element.each(function() {
+                if ($(this).val() === '') {
+                    empty = true;
+                }
+            });
+
+            if (empty) {
+                $('#download').attr('disabled', 'disabled');
+            } else {
+                $('#download').removeAttr('disabled');
+            }
+        });
+    </script>
 {% endblock %}
