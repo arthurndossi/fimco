@@ -110,7 +110,7 @@ $(document).ready(function() {
     })
 
     .on('click', '#done', function() {
-        $(this).attr(disabled, true);
+        $(this).attr("disabled", true);
 
         var inputs  = $("[name='option[]']"),
             uniqueItems = [],

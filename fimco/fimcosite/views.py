@@ -1,6 +1,5 @@
 import re
 import uuid
-from random import randint
 
 from django import forms
 from django.contrib import messages
@@ -10,13 +9,14 @@ from django.contrib.auth.models import User
 from django.core.files.storage import FileSystemStorage
 from django.core.mail import EmailMessage, BadHeaderError
 from django.db import transaction
+from django.db.models import Max
 from django.shortcuts import render, redirect, render_to_response
 from formtools.wizard.views import SessionWizardView
 
-from .backend import CorporateBackend
+# from .backend import CorporateBackend
 from .forms import RegisterForm1, RegisterForm2, IndividualLoginForm, CorporateLoginForm, CorporateForm1, \
     CorporateForm2, CorporateForm3, CorporateForm4, BankAccountForm, UserCorporateForm, EnquiryForm
-from .models import KYC, CorporateProfile, Account, Profile, MEDIA_ROOT
+from .models import KYC, CorporateProfile, Account, Profile, MEDIA_ROOT, CorporateUser
 
 
 class AnonymousRequired(object):
@@ -41,11 +41,6 @@ class RegistrationWizard(SessionWizardView):
     form_list = [RegisterForm1, RegisterForm2]
     file_storage = FileSystemStorage(location=MEDIA_ROOT)
     template_name = "registration.html"
-
-    # @anonymous_required
-    # def get_context_data(self, form, **kwargs):
-    #     context = super(RegistrationWizard, self).get_context_data(form=form, **kwargs)
-    #     return context
 
     def done(self, form_list, **kwargs):
         form_data = register(form_list)
@@ -161,7 +156,7 @@ def process_form_data(request, form_list):
     dob = form_data[2]['dob']
     gender = form_data[2]['gender']
     email = form_data[2]['email']
-    phone = '%s-%s' % ('C', form_data[2]['phone'].strip().replace('+255', '0'))
+    phone = form_data[2]['phone'].strip().replace('+255', '0')
     password = form_data[2]["password"]
 
     id_type = form_data[3]['id_type']
@@ -169,50 +164,57 @@ def process_form_data(request, form_list):
     license = form_data[3]['license']
     certificate = form_data[3]['certificate']
     user_id = form_data[3]['user_id']
+    sms_notify = form_data[3]['notification']
 
+    username = '%s-%s' % (phone, name)  # not sure about duplicates if they may arise here
     company_address = address + '\r' + place + '\r' + street + '\r' + location
 
     profile_id = "CP%s" % uuid.uuid4().hex[:6].upper()
     pin = uuid.uuid4().hex[:4].upper()
-    account_no = create_account(profile_id)
+    account_no = create_account()
 
     with transaction.atomic():
         CorporateProfile.objects.create(
             company_name=name,
             address=company_address,
+            account=account_no
+        )
+
+        CorporateUser.objects.create(
+            profile_id=profile_id,
             account=account_no,
-            admin=profile_id
+            admin=True
         )
 
         KYC.objects.create(
-            profile_id=profile_id,
+            account=account_no,
             kyc_type=id_type,
             id_number=id_number,
             document=user_id
         )
 
-        user = User.objects.create_user(username=phone, email=email, password=password, first_name=fName,
+        user = User.objects.create_user(username=username, email=email, password=password, first_name=fName,
                                         last_name=lName, is_active=0)
         profile = Profile(user=user, profile_id=profile_id, dob=dob, msisdn=phone, gender=gender, bot_cds=bot,
-                          dse_cds=dse, profile_type='C', pin=pin)
+                          dse_cds=dse, profile_type='C', pin=pin, sms_notification=sms_notify)
         profile.save()
 
         Account.objects.create(
-            profile_id=profile_id,
-            account=account_no
+            account=account_no,
+            nickname=name
         )
 
         from_email = email
         message = ''
-        recipient_list = ['ivan@fimco.co.tz']
+        recipient_list = ['arthur@selcom.net']
         subject = 'Company KYC details'
-        # try:
-        #     mail = EmailMessage(subject, message, from_email, recipient_list)
-        #     mail.attach(license.name, license.read(), license.content_type)
-        #     mail.attach(certificate.name, certificate.read(), certificate.content_type)
-        #     mail.send()
-        # except BadHeaderError:
-        #     messages.error(request, 'Invalid header found.')
+        try:
+            mail = EmailMessage(subject, message, from_email, recipient_list)
+            mail.attach(license.name, license.read(), license.content_type)
+            mail.attach(certificate.name, certificate.read(), certificate.content_type)
+            mail.send()
+        except BadHeaderError:
+            messages.error(request, 'Invalid header found.')
 
         return form_data
 
@@ -229,30 +231,16 @@ def add_user_corporate(request):
             request.session['company_id'] = pochi_id
             username = form.cleaned_data["corp_rep"]
             password = form.cleaned_data["password"]
-            if re.match(r"[^@]+@[^@]+\.[^@]+", username):
-                try:
-                    user = User.objects.get(email=username)
-                    if user.check_password(password):
-                        user = user
-                    else:
-                        user = None
-                except User.DoesNotExist:
-                    user = None
-            elif re.match(r'^([+]?(\d{1,3}\s?)|[0])\s?\d+(\s?-?\d{2,4}){1,3}?$', username):
-                user = CorporateBackend.authenticate(request, username, password, pochi_id, 'admin')
-            else:
-                raise forms.ValidationError("Not a valid email or phone number!")
-
+            user = corporate_authentication(request, username, password, pochi_id, 'admin')
             if user:
                 login(request, user, backend='django.contrib.auth.backends.ModelBackend')
                 logged_in = True
                 company = CorporateProfile.objects.get(account=pochi_id).company_name
-                profile_id = Account.objects.get(account=pochi_id).profile_id
-                members = Profile.objects.filter(profile_id=profile_id).values_list('user__username', flat=True)
+                members = CorporateUser.objects.filter(account=pochi_id).values_list('profile_id', flat=True)
                 corporate_users = []
                 for member in members:
-                    user_obj = User.objects.select_related('profile').get(username=member)
-                    corporate_user = user_obj.get_full_name()
+                    corporate_user = User.objects.select_related('profile').get(profile__profile_id=member)\
+                        .get_full_name()
                     corporate_users.append(corporate_user)
                 context = {
                     'second': tab,
@@ -283,22 +271,30 @@ def add_user_corporate(request):
             id_type = form.cleaned_data['id_type']
             id_number = form.cleaned_data['id_number']
             user_id = request.FILES['user_id']
-            phone = '%s-%s' % ('C', form.cleaned_data['phone'].strip().replace('+255', '0'))
+            phone = form.cleaned_data['phone'].strip().replace('+255', '0')
             password = form.cleaned_data["password"]
+            sms_notify = form.cleaned_data['notification']
             profile_id = "CP%s" % uuid.uuid4().hex[:6].upper()
 
             pochi_id = request.session['company_id']
             company = CorporateProfile.objects.get(account=pochi_id).company_name
+            username = '%s-%s' % (phone, company)
 
             with transaction.atomic():
-                user = User.objects.create_user(username=phone, email=email, password=password, first_name=fName,
+                user = User.objects.create_user(username=username, email=email, password=password, first_name=fName,
                                                 last_name=lName, is_active=0)
                 profile = Profile(user=user, dob=dob, gender=gender, msisdn=phone, profile_type='C',
-                                  profile_id=profile_id)
+                                  profile_id=profile_id, sms_notification=sms_notify)
                 profile.save()
 
-                KYC.objects.create(
+                CorporateUser.objects.create(
                     profile_id=profile_id,
+                    account=pochi_id,
+                    admin=False
+                )
+
+                KYC.objects.create(
+                    account=pochi_id,
                     kyc_type=id_type,
                     id_number=id_number,
                     document=user_id
@@ -309,12 +305,10 @@ def add_user_corporate(request):
         else:
             pochi_id = request.session['company_id']
             company = CorporateProfile.objects.get(account=pochi_id).company_name
-            profile_id = Account.objects.get(account=pochi_id).profile_id
-            members = Profile.objects.filter(profile_id=profile_id).values_list('user__username', flat=True)
+            members = CorporateUser.objects.filter(account=pochi_id).values_list('profile_id', flat=True)
             corporate_users = []
             for member in members:
-                user_obj = User.objects.select_related('profile').get(username=member)
-                corporate_user = user_obj.get_full_name()
+                corporate_user = User.objects.select_related('profile').get(profile__profile_id=member).get_full_name()
                 corporate_users.append(corporate_user)
             context = {
                 'second': tab,
@@ -336,10 +330,10 @@ def add_user_corporate(request):
 
 
 @anonymous_required
-def login_view(request):
+def login_view(request, tab='user'):
 
     context = {
-        'user': 'active',
+        tab: 'active',
         'lForm': IndividualLoginForm(),
         'cForm': CorporateLoginForm(prefix='corp'),
         'next': request.GET['next'] if request.GET and 'next' in request.GET else ''
@@ -349,19 +343,14 @@ def login_view(request):
 
 def validate_credentials(request, form, username, password, _next, category, pochi=None, new_user=False):
     if re.match(r"[^@]+@[^@]+\.[^@]+", username):
-        try:
-            user = User.objects.get(email=username)
-            if user.check_password(password):
-                user = user
-            else:
-                user = None
-        except User.DoesNotExist:
-            user = None
-    elif re.match(r'^([+]?(\d{1,3}\s?)|[0])\s?\d+(\s?-?\d{2,4}){1,3}?$', username):
         if category == 'user':
+            username = User.objects.get(email=username).username
             user = authenticate(username=username, password=password)
         else:
-            user = CorporateBackend.authenticate(request, username, password, pochi)
+            user = corporate_authentication(request, username, password, pochi, 'admin')
+    elif re.match(r'^([+]?(\d{1,3}\s?)|[0])\s?\d+(\s?-?\d{2,4}){1,3}?$', username):
+        username = User.objects.select_related('profile').get(profile__msisdn__exact=username).username
+        user = authenticate(username=username, password=password)
     else:
         raise forms.ValidationError("Not a valid email or phone number!")
 
@@ -371,12 +360,11 @@ def validate_credentials(request, form, username, password, _next, category, poc
         if _next == "/" or "pochi" not in current_url:
             if new_user:
                 company = CorporateProfile.objects.get(account=pochi).company_name
-                profile_id = Account.objects.get(account=pochi).profile_id
-                members = Profile.objects.filter(profile_id=profile_id).values_list('user__username', flat=True)
+                members = CorporateUser.objects.get(account=pochi).values_list('profile_id', flat=True)
                 corporate_users = []
                 for member in members:
-                    user_obj = User.objects.select_related('profile').get(username=member)
-                    corporate_user = user_obj.get_full_name()
+                    corporate_user = User.objects.select_related('profile').get(profile__profile_id__exact=member)\
+                        .get_full_name()
                     corporate_users.append(corporate_user)
                 context = {
                     'second': 'active',
@@ -393,7 +381,6 @@ def validate_credentials(request, form, username, password, _next, category, poc
         else:
             return redirect(_next)
     else:
-        messages.error(request, "Wrong username or password!")
         if category == 'user':
             context = {
                 'user': 'active',
@@ -402,6 +389,7 @@ def validate_credentials(request, form, username, password, _next, category, poc
                 'next': request.GET['next'] if request.GET and 'next' in request.GET else ''
             }
         else:
+            messages.error(request, "Wrong username or password!")
             context = {
                 'corporate': 'active',
                 'lForm': IndividualLoginForm(),
@@ -424,7 +412,7 @@ def validate(request):
             else:
                 return render(request, 'login.html', {'lForm': form, 'user': tab})
         elif 'corporate' in request.POST:
-            form = CorporateLoginForm(request.POST or None)
+            form = CorporateLoginForm(request.POST or None, prefix='corp')
             if form.is_valid():
                 pochi_id = form.cleaned_data["id"]
                 rep = form.cleaned_data["corp_rep"]
@@ -435,37 +423,32 @@ def validate(request):
                 else:
                     return validate_credentials(request, form, rep, password, get_param, 'corporate', pochi_id)
             else:
-                return render(request, 'login.html', {'cForm': form, 'corporate': tab})
+                return redirect(login_view, tab='corporate')
         else:
             return redirect(login_view)
     else:
         return redirect(login_view)
 
 
-def create_account(profile_id):
-    max_count = len(profile_id) - 1
-    no1 = randint(0, max_count)
-    no2 = randint(0, max_count)
-    letter_one = profile_id[no1]
-    letter_two = profile_id[no2]
-    from datetime import datetime
-    now = datetime.now()
-    number_one_str = str(now.hour)
-    number_two_str = str(now.microsecond)
-    if len(number_one_str) != 2:
-        str_one = '0'+number_one_str
-    else:
-        str_one = number_one_str
-    if len(number_two_str) != 6:
-        pads = 6 - len(number_two_str)
-        pad_string = '0'
-        for i in range(1, pads):
-            pad_string += pad_string
-        str_two = pad_string + number_two_str
-    else:
-        str_two = number_two_str
-    account_no = str_one+letter_one+str_two+letter_two
+def make_random_number(f):
+    def random_number(n):
+        l = (n >> 16) & 65535
+        r = n & 65535
+        for _ in (1, 2, 3):
+            l, r = r, l ^ f(r)
+        return ((r & 65535) << 16) + l
+    return random_number
 
+
+def sample_f(x):
+    return int((((1366 * x + 150889) % 718925) * 32767) // 718925)
+
+
+def create_account():
+    max_agg = Account.objects.aggregate(Max('id'))
+    max_id = 0 if max_agg['id__max'] is None else max_agg['id__max']
+    random_number = make_random_number(sample_f)
+    account_no = 'P%011d' % luhn_sign(random_number(max_id))
     return account_no
 
 
@@ -479,6 +462,7 @@ def register(form_list):
         gender = form_data[0]['gender']
         email = form_data[0]['email']
         phone = form_data[0]['phone'].strip().replace('+255', '0')
+        username = '%s-%s' % (fName, phone)
         password = form_data[0]["password"]
 
         id_choice = form_data[1]['id_choice']
@@ -486,20 +470,21 @@ def register(form_list):
         scanned_id = form_data[1]['scanned_id']
         bot = form_data[1]['bot_cds']
         dse = form_data[1]['dse_cds']
+        sms_notify = form_data[1]['notification']
 
         profile_id = "POC%s" % uuid.uuid4().hex[:6].upper()
         pin = uuid.uuid4().hex[:4].upper()
-        account_no = create_account(profile_id)
+        account_no = create_account()
 
         with transaction.atomic():
-            user = User.objects.create_user(username=phone, email=email, password=password, first_name=fName,
+            user = User.objects.create_user(username=username, email=email, password=password, first_name=fName,
                                             last_name=lName, is_active=0)
             profile = Profile(user=user, profile_id=profile_id, dob=dob, gender=gender, msisdn=phone, bot_cds=bot,
-                              dse_cds=dse, profile_type='I', pin=pin)
+                              dse_cds=dse, profile_type='I', pin=pin, sms_notification=sms_notify)
             profile.save()
 
             KYC.objects.create(
-                profile_id=profile_id,
+                account=account_no,
                 kyc_type=id_choice,
                 id_number=client_id,
                 document=scanned_id
@@ -549,11 +534,65 @@ def inquiry(request):
     return redirect(request.META['HTTP_REFERER'])
 
 
-def forgot(request):
-    context = {}
-    return render(request, 'forgot.html', context)
+def luhn_checksum(n):
+    digits = digits_of(n)
+    checksum = (sum(digits[-2::-2]) + sum(sum2digits(d << 1) for d in digits[-1::-2])) % 10
+    return checksum and 10 - checksum or 0
 
 
-def reset(request, token):
-    context = {'token': token}
-    return render(request, 'password-reset.html', context)
+def luhn_sign(n):
+    return luhn_checksum(n) + (n << 3) + (n << 1)
+
+
+def is_luhn_valid(n):
+    digits = digits_of(n)
+    checksum = sum(digits[-1::-2]) + sum(sum2digits(d << 1) for d in digits[-2::-2])
+    return checksum % 10 == 0
+
+
+def digits_of(n):
+    return [int(d) for d in str(n)]
+
+
+def sum2digits(d):
+    return (d // 10) + (d % 10)
+
+
+def corporate_authentication(request, username=None, password=None, pochi=None, access='normal'):
+    if is_luhn_valid(int(pochi[1:])):
+        try:
+            company = CorporateProfile.objects.get(account=pochi)
+            try:
+                username = User.objects.get(email__exact=username).username
+                user = authenticate(username=username, password=password)
+                if user:
+                    try:
+                        profile_id = Profile.objects.get(user__username=username).profile_id
+                        corp_user_obj = CorporateUser.objects.get(profile_id=profile_id)
+                        if access == 'normal':
+                            if corp_user_obj:
+                                return user
+                            else:
+                                messages.error(request, 'Sorry, you are not a corporate user in '
+                                               + company.company_name + '.\r\n' +
+                                               'Please contact your corporate admin to add you as a user.')
+                                return None
+                        else:
+                            if corp_user_obj.admin:
+                                return user
+                            else:
+                                messages.error(request, 'You need admin rights to add a new user.\r\n'
+                                                        'Please contact your corporate admin to add another user.')
+                                return None
+                    except Profile.DoesNotExist or CorporateUser.DoesNotExist:
+                        return None
+                else:
+                    messages.error(request, 'Wrong username or password!')
+                    return None
+            except User.DoesNotExist:
+                messages.error(request, 'Wrong username or password!')
+                return None
+        except CorporateProfile.DoesNotExist:
+            return None
+    else:
+        messages.error(request, "Invalid account number!")

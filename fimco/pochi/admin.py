@@ -29,12 +29,12 @@ class BalanceSnapshotAdmin(admin.ModelAdmin):
 
 
 class ExternalAccountAdmin(admin.ModelAdmin):
-    list_display = ('profile_id', 'account_name', 'account_number', 'institution_name', 'institution_branch',
+    list_display = ('account', 'account_name', 'account_number', 'institution_name', 'institution_branch',
                     'institution_code', 'account_type')
 
 
 class PaidUserAdmin(admin.ModelAdmin):
-    list_display = ('profile_id', 'level', 'start_date', 'end_date')
+    list_display = ('account', 'level', 'start_date', 'end_date')
 
 
 class ChargeAdmin(admin.ModelAdmin):

@@ -119,7 +119,6 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 AUTHENTICATION_BACKENDS = (
    'django.contrib.auth.backends.ModelBackend',
-   'fimcosite.backend.CorporateBackend',
 )
 
 EMAIL_USE_TLS = True

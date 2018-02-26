@@ -1,9 +1,8 @@
 from django.contrib.auth.models import User
 from django.shortcuts import render
 
+from fimcosite.models import CorporateProfile, CorporateUser, Account
 from pochi.models import GroupMember, Group, PaidUser
-
-from fimcosite.models import CorporateProfile, Profile
 
 
 def render_with_global_data(request, page, context):
@@ -11,6 +10,10 @@ def render_with_global_data(request, page, context):
     if profile.profile_type == 'I':
         group_members_obj = []
         paid_user = None
+        try:
+            acc = Account.objects.get(profile_id=profile.profile_id).account
+        except Account.DoesNotExist:
+            acc = None
         try:
             group_account_obj = GroupMember.objects.filter(profile_id=profile.profile_id).only('group_account')
             for group in group_account_obj:
@@ -24,10 +27,11 @@ def render_with_global_data(request, page, context):
         except GroupMember.DoesNotExist:
             pass
 
-        try:
-            paid_user = PaidUser.objects.get(profile_id=profile.profile_id)
-        except PaidUser.DoesNotExist:
-            pass
+        if acc:
+            try:
+                paid_user = PaidUser.objects.get(account=acc)
+            except PaidUser.DoesNotExist:
+                pass
 
         _context = {
             'profile': profile,
@@ -35,12 +39,12 @@ def render_with_global_data(request, page, context):
             'paid': paid_user,
         }
     else:
-        company = CorporateProfile.objects.get(profile_id=profile.profile_id).company_name
-        members = Profile.objects.filter(profile_id=profile.profile_id).values_list('user__username', flat=True)
+        pochi = CorporateUser.objects.get(profile_id=profile.profile_id).account
+        members = CorporateUser.objects.filter(account=pochi).values_list('profile_id', flat=True)
+        company = CorporateProfile.objects.get(account=pochi).company_name
         corporate_users = []
         for member in members:
-            user_obj = User.objects.select_related('profile').get(username=member)
-            corporate_user = user_obj.get_full_name()
+            corporate_user = User.objects.select_related('profile').get(profile__profile_id=member).get_full_name()
             corporate_users.append(corporate_user)
         _context = {
             'profile': profile,

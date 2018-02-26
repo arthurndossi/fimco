@@ -1,9 +1,10 @@
 from django import forms
-from django.contrib.auth.models import User
+from django.contrib.auth import password_validation
+from django.contrib.auth.forms import PasswordResetForm, SetPasswordForm
 from django.core.validators import *
 from django.forms import CheckboxInput
 
-from .models import CorporateProfile
+from .models import CorporateProfile, Profile
 
 alphabetic = RegexValidator(r'^[a-zA-Z\s]*$', 'Only alphabetic characters are allowed.')
 telephone = RegexValidator(r'^([+]?(\d{1,3}\s?)|[0])\s?\d+(\s?\-?\d{2,4}){1,3}?$', 'Not a valid phone number.')
@@ -89,7 +90,7 @@ class EnquiryForm(forms.Form):
         if image:
             self.fields['attachment'].widget.attrs['autofocus'] = 'autofocus'
             self.fields['attachment'].widget.attrs['class'] = 'error'
-            if image.file.size > 5 * 1024 * 1024:
+            if image._size > 5 * 1024 * 1024:
                 raise ValidationError("Image file too large ( > 5mb )")
             return image
         else:
@@ -216,12 +217,12 @@ class RegisterForm1(forms.Form):
 
     def clean(self):
         clean_data = self.cleaned_data
-        username = clean_data['phone'].replace('+255', '0', 1)
-        if 'phone' in clean_data and User.objects.filter(username=username).exists():
+        phone = clean_data['phone'].replace('+255', '0', 1)
+        if 'phone' in clean_data and Profile.objects.filter(msisdn=phone, profile_type='I').exists():
             self.fields['phone'].widget.attrs['autofocus'] = 'autofocus'
             self.fields['phone'].widget.attrs['class'] = 'error'
             raise forms.ValidationError("This phone number is already associated with another user!")
-        if 'email' in clean_data and User.objects.filter(email=clean_data['email']).exists():
+        if 'email' in clean_data and Profile.objects.filter(user__email=clean_data['email'], profile_type='I').exists():
             self.fields['email'].widget.attrs['autofocus'] = 'autofocus'
             self.fields['email'].widget.attrs['class'] = 'error'
             self.add_error('email', 'Provide another email')
@@ -253,6 +254,12 @@ class RegisterForm2(forms.Form):
     id_choice = forms.ChoiceField(choices=ID_TYPES)
     bot_cds = forms.CharField(required=False)
     dse_cds = forms.CharField(required=False)
+    notification = forms.BooleanField(
+        widget=CheckboxInput(attrs={
+            'id': 'notification',
+            'checked': ''
+        })
+    )
     checker = forms.BooleanField(
         widget=CheckboxInput(attrs={
             'class': 'checked-agree',
@@ -440,12 +447,12 @@ class CorporateForm3(forms.Form):
 
     def clean(self):
         clean_data = self.cleaned_data
-        username = clean_data['phone'].replace('+255', '0', 1)
-        if 'phone' in clean_data and User.objects.filter(username=username).exists():
+        phone = clean_data['phone'].replace('+255', '0', 1)
+        if 'phone' in clean_data and Profile.objects.filter(msisdn=phone, profile_type='C').exists():
             self.fields['phone'].widget.attrs['autofocus'] = 'autofocus'
             self.fields['phone'].widget.attrs['class'] = 'error'
             raise forms.ValidationError("This phone number is already associated with another user!")
-        if 'email' in clean_data and User.objects.filter(email=clean_data['email']).exists():
+        if 'email' in clean_data and Profile.objects.filter(user__email=clean_data['email'], profile_type='C').exists():
             self.fields['email'].widget.attrs['autofocus'] = 'autofocus'
             self.fields['email'].widget.attrs['class'] = 'error'
             self.add_error('email', 'Provide another email')
@@ -490,6 +497,12 @@ class CorporateForm4(forms.Form):
             'required': True
         })
     )
+    notification = forms.BooleanField(
+        widget=CheckboxInput(attrs={
+            'id': 'notification',
+            'checked': ''
+        })
+    )
     checker = forms.BooleanField(
         widget=CheckboxInput(attrs={
             'class': 'checked-agree',
@@ -498,44 +511,44 @@ class CorporateForm4(forms.Form):
         })
     )
 
-    # def clean_license(self):
-    #     license = self.cleaned_data['license']
-    #     if license:
-    #         if license.file.size > 5 * 1024 * 1024:
-    #             self.fields['certificate'].widget.attrs['autofocus'] = 'autofocus'
-    #             self.fields['certificate'].widget.attrs['class'] = 'error'
-    #             raise ValidationError("Image file too large ( > 5mb )")
-    #         return license
-    #     else:
-    #         self.fields['certificate'].widget.attrs['autofocus'] = 'autofocus'
-    #         self.fields['certificate'].widget.attrs['class'] = 'error'
-    #         raise ValidationError("Couldn't read uploaded image")
-    #
-    # def clean_certificate(self):
-    #     certificate = self.cleaned_data['certificate']
-    #     if certificate:
-    #         if certificate.file.size > 5 * 1024 * 1024:
-    #             self.fields['certificate'].widget.attrs['autofocus'] = 'autofocus'
-    #             self.fields['certificate'].widget.attrs['class'] = 'error'
-    #             raise ValidationError("Image file too large ( > 5mb )")
-    #         return certificate
-    #     else:
-    #         self.fields['certificate'].widget.attrs['autofocus'] = 'autofocus'
-    #         self.fields['certificate'].widget.attrs['class'] = 'error'
-    #         raise ValidationError("Couldn't read uploaded image")
+    def clean_license(self):
+        license = self.cleaned_data['license']
+        if license:
+            if license._size > 5 * 1024 * 1024:
+                self.fields['certificate'].widget.attrs['autofocus'] = 'autofocus'
+                self.fields['certificate'].widget.attrs['class'] = 'error'
+                raise ValidationError("Image file too large ( > 5mb )")
+            return license
+        else:
+            self.fields['certificate'].widget.attrs['autofocus'] = 'autofocus'
+            self.fields['certificate'].widget.attrs['class'] = 'error'
+            raise ValidationError("Couldn't read uploaded image")
 
-    # def clean_user_id(self):
-    #     identity = self.cleaned_data['user_id']
-    #     if identity:
-    #         if identity.file.size > 5 * 1024 * 1024:
-    #             self.fields['user_id'].widget.attrs['autofocus'] = 'autofocus'
-    #             self.fields['user_id'].widget.attrs['class'] = 'error'
-    #             raise ValidationError("Image file too large ( > 5mb )")
-    #         return identity
-    #     else:
-    #         self.fields['user_id'].widget.attrs['autofocus'] = 'autofocus'
-    #         self.fields['user_id'].widget.attrs['class'] = 'error'
-    #         raise ValidationError("Couldn't read uploaded image")
+    def clean_certificate(self):
+        certificate = self.cleaned_data['certificate']
+        if certificate:
+            if certificate._size > 5 * 1024 * 1024:
+                self.fields['certificate'].widget.attrs['autofocus'] = 'autofocus'
+                self.fields['certificate'].widget.attrs['class'] = 'error'
+                raise ValidationError("Image file too large ( > 5mb )")
+            return certificate
+        else:
+            self.fields['certificate'].widget.attrs['autofocus'] = 'autofocus'
+            self.fields['certificate'].widget.attrs['class'] = 'error'
+            raise ValidationError("Couldn't read uploaded image")
+
+    def clean_user_id(self):
+        identity = self.cleaned_data['user_id']
+        if identity:
+            if identity.size > 5 * 1024 * 1024:
+                self.fields['user_id'].widget.attrs['autofocus'] = 'autofocus'
+                self.fields['user_id'].widget.attrs['class'] = 'error'
+                raise ValidationError("Image file too large ( > 5mb )")
+            return identity
+        else:
+            self.fields['user_id'].widget.attrs['autofocus'] = 'autofocus'
+            self.fields['user_id'].widget.attrs['class'] = 'error'
+            raise ValidationError("Couldn't read uploaded image")
 
 
 class UserCorporateForm(forms.Form):
@@ -608,6 +621,12 @@ class UserCorporateForm(forms.Form):
             'required': True
         })
     )
+    notification = forms.BooleanField(
+        widget=CheckboxInput(attrs={
+            'id': 'notification',
+            'checked': ''
+        })
+    )
     checker = forms.BooleanField(
         widget=CheckboxInput(attrs={
             'class': 'checked-agree',
@@ -628,12 +647,12 @@ class UserCorporateForm(forms.Form):
 
     def clean(self):
         clean_data = self.cleaned_data
-        username = clean_data['phone'].replace('+255', '0', 1)
-        if 'phone' in clean_data and User.objects.filter(username=username).exists():
+        phone = clean_data['phone'].replace('+255', '0', 1)
+        if 'phone' in clean_data and Profile.objects.filter(msisdn=phone, profile_type='C').exists():
             self.fields['phone'].widget.attrs['autofocus'] = 'autofocus'
             self.fields['phone'].widget.attrs['class'] = 'error'
             raise forms.ValidationError("This phone number is already associated with another user!")
-        if 'email' in clean_data and User.objects.filter(email=clean_data['email']).exists():
+        if 'email' in clean_data and Profile.objects.filter(user__email=clean_data['email'], profile_type='C').exists():
             self.fields['email'].widget.attrs['autofocus'] = 'autofocus'
             self.fields['email'].widget.attrs['class'] = 'error'
             self.add_error('email', 'Provide another email')
@@ -646,18 +665,18 @@ class UserCorporateForm(forms.Form):
 
         return clean_data
 
-    # def clean_user_id(self):
-    #     identity = self.cleaned_data['user_id']
-    #     if identity:
-    #         if identity.file.size > 5 * 1024 * 1024:
-    #             self.fields['user_id'].widget.attrs['autofocus'] = 'autofocus'
-    #             self.fields['user_id'].widget.attrs['class'] = 'error'
-    #             raise ValidationError("Image file too large ( > 5mb )")
-    #         return identity
-    #     else:
-    #         self.fields['user_id'].widget.attrs['autofocus'] = 'autofocus'
-    #         self.fields['user_id'].widget.attrs['class'] = 'error'
-    #         raise ValidationError("Couldn't read uploaded image")
+    def clean_user_id(self):
+        identity = self.cleaned_data['user_id']
+        if identity:
+            if identity.size > 5 * 1024 * 1024:
+                self.fields['user_id'].widget.attrs['autofocus'] = 'autofocus'
+                self.fields['user_id'].widget.attrs['class'] = 'error'
+                raise ValidationError("Image file too large ( > 5mb )")
+            return identity
+        else:
+            self.fields['user_id'].widget.attrs['autofocus'] = 'autofocus'
+            self.fields['user_id'].widget.attrs['class'] = 'error'
+            raise ValidationError("Couldn't read uploaded image")
 
 
 class BankAccountForm(forms.Form):
@@ -807,19 +826,15 @@ class EditProfileForm(forms.Form):
 
         })
     )
+    notification = forms.BooleanField(
+        widget=CheckboxInput(attrs={
+            'id': 'notification',
+            'checked': ''
+        })
+    )
 
     def clean(self):
         clean_data = self.cleaned_data
-        username = clean_data['phone'].replace('+255', '0', 1)
-        if 'phone' in clean_data and User.objects.filter(username=username).exists():
-            self.fields['phone'].widget.attrs['autofocus'] = 'autofocus'
-            self.fields['phone'].widget.attrs['class'] = 'error'
-            raise forms.ValidationError("This phone number is already associated with another user!")
-        if 'email' in clean_data and User.objects.filter(email=clean_data['email']).exists():
-            self.fields['email'].widget.attrs['autofocus'] = 'autofocus'
-            self.fields['email'].widget.attrs['class'] = 'error'
-            self.add_error('email', 'Provide another email')
-            raise forms.ValidationError("This email is already associated with another user!")
         if 'password' in clean_data and 'verify' in clean_data and clean_data['password'] != clean_data['verify']:
             self.fields['password'].widget.attrs['autofocus'] = 'autofocus'
             self.fields['password'].widget.attrs['class'] = 'error'
@@ -828,15 +843,50 @@ class EditProfileForm(forms.Form):
 
         return clean_data
 
-    # def clean_scanned_id(self):
-    #     image = self.cleaned_data['scanned_id']
-    #     if image:
-    #         if image.file.size > 5 * 1024 * 1024:
-    #             self.fields['scanned_id'].widget.attrs['autofocus'] = 'autofocus'
-    #             self.fields['scanned_id'].widget.attrs['class'] = 'error'
-    #             raise ValidationError("Image file too large ( > 5mb )")
-    #         return image
-    #     else:
-    #         self.fields['scanned_id'].widget.attrs['autofocus'] = 'autofocus'
-    #         self.fields['scanned_id'].widget.attrs['class'] = 'error'
-    #         raise ValidationError("Couldn't read uploaded image")
+    def clean_scanned_id(self):
+        image = self.cleaned_data['scanned_id']
+        if image:
+            if image.size > 5 * 1024 * 1024:
+                self.fields['scanned_id'].widget.attrs['autofocus'] = 'autofocus'
+                self.fields['scanned_id'].widget.attrs['class'] = 'error'
+                raise ValidationError("Image file too large ( > 5mb )")
+            return image
+        else:
+            self.fields['scanned_id'].widget.attrs['autofocus'] = 'autofocus'
+            self.fields['scanned_id'].widget.attrs['class'] = 'error'
+            raise ValidationError("Couldn't read uploaded image")
+
+
+class FIMCOPasswordResetForm(PasswordResetForm):
+    email = forms.EmailField(
+        label="Email",
+        max_length=254,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'id': 'id_email',
+            'required': False
+        })
+    )
+
+
+class FIMCOSetPasswordForm(SetPasswordForm):
+    error_messages = {
+        'password_mismatch': "The two password fields didn't match.",
+    }
+    new_password1 = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'id': 'id_email',
+            'required': False
+        }),
+        strip=False,
+        help_text=password_validation.password_validators_help_text_html(),
+    )
+    new_password2 = forms.CharField(
+        strip=False,
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'id': 'id_email',
+            'required': False
+        }),
+    )

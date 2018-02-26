@@ -64,7 +64,7 @@
                                             <p>
                                                 <strong>BOT & DSE Accounts: </strong><br>
                                                 {% if form_data.1.bot_cds != '' %}BOT CDS number {{ form_data.1.bot_cds }}<br>{% endif %}
-                                                {% if form_data.1.dse_cds != '' %}DSE CDS number {{ form_data.1.bot_cds }}<br>{% endif %}
+                                                {% if form_data.1.dse_cds != '' %}DSE CDS number {{ form_data.1.dse_cds }}<br>{% endif %}
                                                 {% if form_data.1.bot_cds == '' and form_data.1.dse_cds == '' %}No Accounts!{% endif %}
                                             </p>
                                         </div>
@@ -285,6 +285,11 @@
                                                 </label>
                                             </div>
                                         </div>
+                                        <label class="switch switch-success switch-round">
+                                            {{ wizard.form.notification }}
+                                            <span class="switch-label" data-on="YES" data-off="NO"></span>
+                                            <span> Receive SMS notifications?</span>
+                                        </label>
                                         <label class="checkbox m-0">
                                             {{ wizard.form.checker }}
                                             <i></i>I agree to the <a href="#" data-toggle="modal" data-target="#termsModal">Terms of Service</a>

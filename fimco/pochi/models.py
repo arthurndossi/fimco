@@ -17,12 +17,12 @@ MODES = (
 class Group(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     name = models.CharField(max_length=30, unique=True)
-    account = models.CharField(max_length=15, db_index=True)
+    account = models.CharField(max_length=13, db_index=True)
 
 
 class GroupMember(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
-    group_account = models.CharField(max_length=15, db_index=True)
+    group_account = models.CharField(max_length=13, db_index=True)
     profile_id = models.CharField(max_length=10)
     admin = models.IntegerField(default=0)
 
@@ -42,7 +42,7 @@ class Transaction(models.Model):
     )
     full_timestamp = models.DateTimeField(auto_now_add=True)
     profile_id = models.CharField(max_length=10, db_index=True)
-    account = models.CharField(max_length=15, db_index=True)
+    account = models.CharField(max_length=13, db_index=True)
     msisdn = models.CharField(max_length=10, db_index=True, default='NA')
     trans_id = models.CharField(max_length=25, default='NA')
     service = models.CharField(max_length=8, db_index=True, choices=SERVICES)
@@ -69,7 +69,7 @@ class Ledger(models.Model):
     )
     full_timestamp = models.DateTimeField(auto_now_add=True)
     profile_id = models.CharField(max_length=10, db_index=True)
-    account = models.CharField(max_length=15, db_index=True)
+    account = models.CharField(max_length=13, db_index=True)
     trans_type = models.CharField(max_length=10, choices=TYPES)
     mode = models.CharField(max_length=6, db_index=True, choices=MODES, default='POCHI')
     amount = MoneyField(max_digits=10, decimal_places=2, default_currency='TZS',
@@ -88,7 +88,7 @@ class Ledger(models.Model):
 class BalanceSnapshot(models.Model):
     full_timestamp = models.DateTimeField(auto_now_add=True)
     profile_id = models.CharField(max_length=10, db_index=True)
-    account = models.CharField(max_length=15, db_index=True)
+    account = models.CharField(max_length=13, db_index=True)
     available_closing_balance = MoneyField(max_digits=10, decimal_places=2, default_currency='TZS')
     current_closing_balance = MoneyField(max_digits=10, decimal_places=2, default_currency='TZS')
     bonus_closing_balance = MoneyField(max_digits=10, decimal_places=2, default_currency='TZS')
@@ -99,7 +99,7 @@ class ExternalAccount(models.Model):
         ('MM', 'MOBILE MONEY'),
         ('BA', 'BANK ACCOUNT')
     )
-    profile_id = models.CharField(max_length=10, db_index=True)
+    account = models.CharField(max_length=13, db_index=True)
     account_name = models.CharField(max_length=150)
     account_number = models.CharField(max_length=30, default='NA')
     institution_name = models.CharField(max_length=100)  # M-PESA, TIGO-PESA, CRDB-BANK
@@ -113,7 +113,7 @@ class PaidUser(models.Model):
         ('STANDARD', 'Free'),
         ('PREMIUM', 'Premium')
     )
-    profile_id = models.CharField(max_length=20)
+    account = models.CharField(max_length=13, db_index=True)
     level = models.CharField(max_length=10, choices=TYPES)
     start_date = models.DateTimeField(auto_now_add=True)
     end_date = models.DateTimeField(null=True)
@@ -131,7 +131,7 @@ class Rate(models.Model):
 
 
 class SMSCount(models.Model):
-    profile_id = models.CharField(max_length=20)
+    account = models.CharField(max_length=13, db_index=True)
     count = models.IntegerField(default=0)
 
 

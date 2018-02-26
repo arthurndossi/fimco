@@ -233,16 +233,26 @@
                                 <span class="label label-info pull-right"></span><span>Website</span>
                             </a>
                         </li>
+                        {% if profile.profile_type == 'C' %}
+                            <li class="menu-open"><!-- individual -->
+                                <a href="#">
+                                    <i class="fa fa-menu-arrow pull-right"></i>
+                                    <i class="main-icon fa fa-briefcase"></i>
+                                    <span>{{ company }}</span>
+                                </a>
+                                <ul style="display: block">
+                                    {% for user in users %}
+                                        <li>
+                                            <a href="">
+                                                <i class="fa fa-user"></i>
+                                                <span>{{ user }}</span>
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% endif %}
                     </ul>
-
-                    {% if profile.profile_type == 'C' %}
-                        <h3 class="size-14">{{ company }}</h3>
-                        <ul class="nav nav-list">
-                            {% for user in users %}
-                                <li>{{ user }}</li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
 
                     <time datetime="{% now 'Y-m-d' %}" class="icon">
                         <em>{% now 'l' %}</em>

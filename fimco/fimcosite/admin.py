@@ -2,16 +2,21 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 
-from .models import Profile, CorporateProfile, KYC, Account
+from .models import Profile, CorporateProfile, KYC, Account, CorporateUser
 
 
 class CorporateProfileAdmin(admin.ModelAdmin):
     list_filter = ('indemnity',)
-    list_display = ('company_name', 'address', 'account', 'admin', 'indemnity')
+    list_display = ('company_name', 'address', 'account', 'indemnity')
+
+
+class CorporateUserAdmin(admin.ModelAdmin):
+    list_filter = ('admin',)
+    list_display = ('profile_id', 'account', 'admin')
 
 
 class KYCAdmin(admin.ModelAdmin):
-    list_display = ('profile_id', 'created_on', 'kyc_type', 'id_number', 'document')
+    list_display = ('account', 'created_on', 'kyc_type', 'id_number', 'document')
 
 
 class AccountAdmin(admin.ModelAdmin):
@@ -39,5 +44,6 @@ class FimcoUserAdmin(UserAdmin):
 admin.site.unregister(User)
 admin.site.register(User, FimcoUserAdmin)
 admin.site.register(CorporateProfile, CorporateProfileAdmin)
+admin.site.register(CorporateUser, CorporateUserAdmin)
 admin.site.register(KYC, KYCAdmin)
 admin.site.register(Account, AccountAdmin)

@@ -15,7 +15,7 @@ telephone = RegexValidator(r'^([+]?(\d{1,3}\s?)|[0])\s?\d+(\s?\-?\d{2,4}){1,3}?$
 
 
 def avatar_path(instance, filename):
-    current_path = '{0}/{1}/{2}'.format(PROFILE_ROOT, instance.profile_id, filename)
+    current_path = '{0}/{1}/{2}'.format(PROFILE_ROOT, instance.account, filename)
     if os.path.isfile(current_path):
         os.remove(current_path)
     return current_path
@@ -40,11 +40,10 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     dob = models.DateField(null=True)
     gender = models.CharField(max_length=1, choices=GENDER, default='M')
-    msisdn = models.CharField(validators=[telephone], max_length=14, null=True)
+    msisdn = models.CharField(validators=[telephone], max_length=14)
     pin = models.CharField(max_length=4, unique=True, null=True)
     bot_cds = models.CharField(max_length=15, null=True)
     dse_cds = models.CharField(max_length=15, null=True)
-    created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True)
     profile_type = models.CharField(max_length=1, choices=TYPE, default='I')
     profile_id = models.CharField(max_length=10)
@@ -58,13 +57,18 @@ class CorporateProfile(models.Model):
     )
     company_name = models.CharField(max_length=100)
     address = models.TextField(max_length=500)
-    account = models.CharField(max_length=15)
-    admin = models.CharField(max_length=20)
+    account = models.CharField(max_length=13)
     indemnity = models.CharField(max_length=1, choices=FLAG, default='NO')
 
 
-class KYC(models.Model):
+class CorporateUser(models.Model):
     profile_id = models.CharField(max_length=10, db_index=True)
+    account = models.CharField(max_length=13)
+    admin = models.BooleanField(default=False)
+
+
+class KYC(models.Model):
+    account = models.CharField(max_length=13, db_index=True)
     created_on = models.DateTimeField(auto_now_add=True)
     kyc_type = models.CharField(max_length=15)
     id_number = models.CharField(max_length=35)
@@ -76,9 +80,9 @@ class Account(models.Model):
         (1, 'Active'),
         (0, 'Inactive')
     )
-    profile_id = models.CharField(max_length=10, db_index=True, default='NA')
+    profile_id = models.CharField(max_length=10, default='NA')
     created_on = models.DateTimeField(auto_now_add=True)
-    account = models.CharField(max_length=15, db_index=True)
+    account = models.CharField(max_length=13, db_index=True)
     nickname = models.CharField(max_length=25)
     current_balance = MoneyField(max_digits=10, decimal_places=2, default_currency='TZS')
     ts_current_bal = models.DateTimeField(null=True)

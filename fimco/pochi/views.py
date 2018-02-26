@@ -23,7 +23,7 @@ from notifications.views import AllNotificationsList
 from core import demo_settings
 from core.utils import render_with_global_data
 from fimcosite.forms import EditProfileForm, BankAccountForm
-from fimcosite.models import Account, Profile, KYC
+from fimcosite.models import Account, Profile, KYC, CorporateUser, CorporateProfile
 from fimcosite.views import index
 from .models import Transaction, Group, GroupMember, ExternalAccount, Ledger, Charge, CashOut, BalanceSnapshot, Rate, \
     PaidUser
@@ -81,29 +81,40 @@ class IndemnityPDF(PDFTemplateView):
 @login_required
 def home(request):
     profile = request.user.profile
-    try:
-        balance_data = Account.objects.get(profile_id=profile.profile_id)
-    except Account.DoesNotExist:
-        balance_data = None
+    if profile.profile_type == 'I':
+        try:
+            balance_data = Account.objects.get(profile_id=profile.profile_id)
+        except Account.DoesNotExist:
+            balance_data = None
 
-    group_members_obj = []
-    try:
-        group_account_obj = GroupMember.objects.filter(profile_id=profile.profile_id).only('group_account')
+        group_members_obj = []
+        try:
+            group_account_obj = GroupMember.objects.filter(profile_id=profile.profile_id).only('group_account')
+            for group in group_account_obj:
+                try:
+                    grp_name = Group.objects.get(account=group.group_account).name
+                    group_members_obj.append(grp_name)
+                except Group.DoesNotExist:
+                    pass
+        except GroupMember.DoesNotExist:
+            pass
 
-        for group in group_account_obj:
-            try:
-                grp_name = Group.objects.get(account=group.group_account).name
-                group_members_obj.append(grp_name)
-            except Group.DoesNotExist:
-                pass
+        try:
+            transactions = Transaction.objects.filter(profile_id=profile.profile_id, status='PENDING')
+        except Transaction.DoesNotExist:
+            transactions = None
+    else:
+        group_members_obj = None
+        pochi = CorporateUser.objects.get(profile_id=profile.profile_id).account
+        try:
+            balance_data = Account.objects.get(account=pochi)
+        except Account.DoesNotExist:
+            balance_data = None
 
-    except GroupMember.DoesNotExist:
-        pass
-
-    try:
-        transactions = Transaction.objects.filter(profile_id=profile.profile_id, status='PENDING')
-    except Transaction.DoesNotExist:
-        transactions = None
+        try:
+            transactions = Transaction.objects.filter(account=pochi, status='PENDING')
+        except Transaction.DoesNotExist:
+            transactions = None
 
     context = {
         'transactions': transactions,
@@ -148,15 +159,14 @@ def get_rates(start_date):
     return context
 
 
-def daily_rates(request):
+def daily_rates(acc):
     now = datetime.now()
-    profile_id = request.user.profile.profile_id
     end_date = now - relativedelta(days=1)
     start_date = end_date - relativedelta(months=1)
 
     try:
         last_month_earnings = BalanceSnapshot.objects\
-            .filter(full_timestamp__range=[start_date, end_date], profile_id=profile_id) \
+            .filter(full_timestamp__range=[start_date, end_date], account=acc) \
             .values('full_timestamp', 'bonus_closing_balance').order_by('full_timestamp')
     except BalanceSnapshot.DoesNotExist:
         last_month_earnings = None
@@ -188,11 +198,10 @@ def daily_rates(request):
     return context
 
 
-def get_monthly(request, prev_date, start_date, end_date):
-    profile_id = request.user.profile.profile_id
+def get_monthly(prev_date, start_date, end_date, acc):
     try:
         last_12 = BalanceSnapshot.objects\
-            .filter(full_timestamp__range=[start_date, end_date], profile_id=profile_id) \
+            .filter(full_timestamp__range=[start_date, end_date], account=acc) \
             .annotate(month=TruncMonth('full_timestamp')) \
             .values('month') \
             .annotate(bonus=Sum('bonus_closing_balance')) \
@@ -224,10 +233,9 @@ def get_monthly(request, prev_date, start_date, end_date):
     return context
 
 
-def get_total(request, start_date, end_date):
-    profile_id = request.user.profile.profile_id
+def get_total(start_date, end_date, acc):
     try:
-        bs = BalanceSnapshot.objects.filter(full_timestamp__range=[start_date, end_date], profile_id=profile_id) \
+        bs = BalanceSnapshot.objects.filter(full_timestamp__range=[start_date, end_date], account=acc) \
             .annotate(month=TruncMonth('full_timestamp')) \
             .values('month') \
             .annotate(bonus=Sum('bonus_closing_balance')) \
@@ -269,19 +277,30 @@ def admin(request, name=None):
     end_date = prev_date.replace(day=last_day_in_prev_date)
     start_date = end_date - relativedelta(years=1)
 
+    profile = request.user.profile
+
     if name:
         try:
-            group = Group.objects.get(name=name)
-            profile_id = group.name
+            acc = Group.objects.get(name=name).account
         except Group.DoesNotExist:
-            profile_id = None
+            acc = None
+    elif profile.profile_type == 'I':
+        profile_id = profile.profile_id
+        try:
+            acc = Account.objects.get(profile_id=profile_id).account
+        except Group.DoesNotExist:
+            acc = None
     else:
-        profile_id = request.user.profile.profile_id
+        profile_id = profile.profile_id
+        try:
+            acc = CorporateUser.objects.get(profile_id=profile_id).account
+        except CorporateUser.DoesNotExist:
+            acc = None
 
     rates = get_rates(start_date)
-    daily_earnings = daily_rates(request)
-    monthly_earnings = get_monthly(request, prev_date, start_date, end_date)
-    total = get_total(request, start_date, end_date)
+    daily_earnings = daily_rates(acc)
+    monthly_earnings = get_monthly(prev_date, start_date, end_date, acc)
+    total = get_total(start_date, end_date, acc)
 
     context = {
         'yesterday': yesterday,
@@ -291,8 +310,8 @@ def admin(request, name=None):
         'total': total
     }
 
-    if profile_id:
-        snap_obj = BalanceSnapshot.objects.filter(profile_id=profile_id)\
+    try:
+        snap_obj = BalanceSnapshot.objects.filter(account=acc)\
             .values('available_closing_balance', 'bonus_closing_balance', 'full_timestamp')
         bal_list = []
         bonus_list = []
@@ -312,7 +331,7 @@ def admin(request, name=None):
             context.update(more)
 
         return render_with_global_data(request, 'pochi/admin.html', context)
-    else:
+    except BalanceSnapshot.DoesNotExist:
         messages.info(request, 'This group has no transactions yet!')
         return render_with_global_data(request, 'pochi/admin.html', {})
 
@@ -322,6 +341,19 @@ def statement(request):
     trans = None
     profile = request.user.profile
 
+    if profile.profile_type == 'I':
+        profile_id = profile.profile_id
+        try:
+            acc = Account.objects.get(profile_id=profile_id).account
+        except Group.DoesNotExist:
+            acc = None
+    else:
+        profile_id = profile.profile_id
+        try:
+            acc = CorporateUser.objects.get(profile_id=profile_id).account
+        except CorporateUser.DoesNotExist:
+            acc = None
+
     if request.GET:
         if request.GET.get('range'):
             date_range = request.GET.get('range')
@@ -329,24 +361,24 @@ def statement(request):
             start = datetime.strptime(start, '%m/%d/%Y').strftime('%Y-%m-%d')
             end = datetime.strptime(end, '%m/%d/%Y').strftime('%Y-%m-%d')
             try:
-                trans = Ledger.objects.filter(profile_id=profile.profile_id, full_timestamp__range=[start, end])
+                trans = Ledger.objects.filter(account=acc, full_timestamp__range=[start, end])
             except Ledger.DoesNotExist:
                 trans = trans
         elif request.GET.get('channel'):
             selected_account = request.GET.get('channel')
             try:
-                trans = Ledger.objects.filter(profile_id=profile.profile_id, channel=selected_account)
+                trans = Ledger.objects.filter(account=acc, channel=selected_account)
             except Ledger.DoesNotExist:
                 trans = trans
         elif request.GET.get('service'):
             selected_account = request.GET.get('service')
             try:
-                trans = Ledger.objects.filter(profile_id=profile.profile_id, service=selected_account)
+                trans = Ledger.objects.filter(account=acc, service=selected_account)
             except Ledger.DoesNotExist:
                 trans = trans
     else:
         try:
-            trans = Ledger.objects.filter(profile_id=profile.profile_id)
+            trans = Ledger.objects.filter(account=acc)
         except Ledger.DoesNotExist:
             trans = trans
 
@@ -357,62 +389,34 @@ def statement(request):
 
 
 @login_required
-def account(request):
-    if request.method == 'POST':
-        user = request.user.profile
-        institution = request.POST['institution']
-        name = request.POST['name'].upper()
-        account_num = request.POST['account']
-        account_type = request.POST['type']
-        ExternalAccount.objects.create(
-            profile_id=user.profile_id,
-            account_name=name,
-            account_number=account_num,
-            institution_name=institution,
-            account_type=account_type
-        )
-        messages.success(
-            request,
-            'You have successfully added '+name+' account!'
-        )
-    return render_with_global_data(request, 'pochi/account.html', {})
-
-
-@login_required
 def view_profile(request):
     user = request.user
     kyc_details = KYC.objects.get(profile_id=user.profile.profile_id)
     form = EditProfileForm(request.POST or None, initial={
         'fName': user.first_name,
         'lName': user.last_name,
-        'phone': user.username,
         'email': user.email,
+        'phone': user.profile.msisdn,
         'dob': user.profile.dob,
         'gender': user.profile.gender,
         'id_choice': kyc_details.kyc_type,
         'client_id': kyc_details.id_number,
         'bot_cds': user.profile.bot_cds,
-        'dse_cds': user.profile.dse_cds
+        'dse_cds': user.profile.dse_cds,
+        'sms_notify': user.profile.sms_notification
     })
     form_data = {
         'fName': user.first_name,
         'lName': user.last_name,
-        'phone': user.username,
         'email': user.email,
+        'phone': user.profile.msisdn,
         'dob': user.profile.dob,
         'gender': user.profile.gender,
         'client_id': kyc_details.kyc_type+' '+kyc_details.id_number,
         'bot_cds': user.profile.bot_cds,
-        'dse_cds': user.profile.dse_cds
+        'dse_cds': user.profile.dse_cds,
+        'sms_notify': user.profile.sms_notification
     }
-    # gp_obj = GroupMember.objects.filter(profile_id=user.profile.profile_id)
-    # group_names = []
-    # for one_obj in gp_obj:
-    #     try:
-    #         name = Group.objects.get(account=one_obj.group_account).name
-    #         group_names.append(name)
-    #     except Group.DoesNotExist:
-    #         pass
 
     context = {
         'pForm': form,
@@ -429,21 +433,22 @@ def edit_profile(request):
     form = EditProfileForm(request.POST, request.FILES)
     if request.method == 'POST':
         if form.is_valid():
-            user.first_name = request.POST['fName']
+            user.first_name = fName = request.POST['fName']
             user.last_name = request.POST['lName']
             user.email = request.POST['email']
-            user.username = request.POST['phone']
             user.profile.dob = request.POST['dob']
             user.profile.gender = request.POST['gender']
-            user.profile.msisdn = request.POST['phone']
+            user.profile.msisdn = phone = request.POST['phone']
             user.profile.avatar = request.FILES['avatar']
             user.profile.client_id = request.POST['id_number']
             user.profile.bot_cds = request.POST['bot_account']
             user.profile.dse_cds = request.POST['dse_account']
+            user.profile.sms_notification = request.POST['notification']
+            user.username = '%s-%s' % (fName, phone)
             user.save()
             user.profile.save()
 
-            notify.send(user, recipient=user, verb='you reached level 10')
+            notify.send(user, recipient=user, verb='You have updated your profile!')
 
             return redirect(view_profile)
     else:
@@ -501,13 +506,13 @@ def confirm_transfer(request):
         del request.session['amount']
         del request.session['overdraft']
 
-        ext_account = ExternalAccount.objects.get(profile_id=identifier)
+        ext_account = ExternalAccount.objects.get(account=pochi_id)
 
         fund_transfer(request, 'WITHDRAW', 'BANK', institution, identifier, pochi_id, ext_account_no, bal, amount,
                       phone, ov)
 
-        notify.send(user, recipient=user, verb='You have successfully withdrawn TZS' + str(amount) + ' to your '
-                                               + institution + ' account ' + phone)
+        notify.send(user, recipient=user, verb='You have successfully withdrawn TZS ' + str(amount) + ' to your '
+                                               + institution + ' bank account.')
 
         messages.success(
             request,
@@ -533,15 +538,25 @@ def confirm_transfer(request):
 
         amount = float(amount)
         bal = float(bal)
-        phone = request.user.username
         profile = request.user.profile
+        phone = profile.msisdn
         src_profile_id = profile.profile_id
 
         fund_transfer(request, 'P2P', 'POCHI', 'NA', src_profile_id, src_account, dst_account, bal, amount, phone, ov)
 
         if src_account and dst_account:
-            notify.send(user, recipient=user, verb='TZS' + str(amount) + ' has been transferred from your account to '
-                                                   + name + '.')
+            try:
+                src_p_id = Account.objects.get(account=src_account).profile_id
+                dst_p_id = Account.objects.get(account=dst_account).profile_id
+                recipient1 = User.objects.select_related('user').get(profile__profile_id=src_p_id).user
+                me = recipient1.get_full_name()
+                recipient2 = User.objects.select_related('user').get(profile__profile_id=dst_p_id).user
+                notify.send(user, recipient=recipient1, verb='TZS' + str(amount) +
+                                                             ' has been transferred from your account to ' + name + '.')
+                notify.send(user, recipient=recipient2,
+                            verb='You have received TZS' + str(amount) + ' from ' + me + '\'s POCHI account.')
+            except Account.DoesNotExist:
+                pass
             messages.success(request, 'TZS' + str(amount) + ' has been transferred from your account to ' + name + '.')
         else:
             messages.error(request, 'An invalid account was selected.')
@@ -575,8 +590,17 @@ def confirm_transfer(request):
                       phone, ov)
 
         if src_account_no and dst_account_no:
-            notify.send(user, recipient=user, verb='TZS' + str(amount) + ' has been transferred from ' + group_name
-                                                   + ' account to ' + name + '.')
+            try:
+                all_members = GroupMember.objects.filter(group_account=src_account_no)\
+                    .values_list('profile_id', flat=True)
+                for member in all_members:
+                    recipient = User.objects.select_related('user').get(profile__profile_id=member).user
+                    notify.send(user, recipient=recipient, verb='TZS' + str(amount) + ' has been transferred from '
+                                                                + group_name + ' account to ' + name + '.')
+            except GroupMember.DoesNotExist:
+                pass
+            notify.send(user, recipient=user, verb='You have received TZS' + str(amount) + ' from ' + group_name
+                                                   + ' account.')
             messages.success(request, 'TZS' + str(amount) + ' has been transferred from ' + group_name + ' account to '
                              + name + '.')
         else:
@@ -788,13 +812,14 @@ def fund_transfer(request, service, mode, channel, profile_id, src, dst, bal, am
 
 @login_required
 def pochi2pochi(request, name=None):
+    profile = request.user.profile
+    profile_type = profile.profile_type
     this_group = None
     acc = None
     if name:
         bal = ov = 0
         try:
-            this_group = Group.objects.get(name=name)
-            this_group_account = this_group.account
+            this_group_account = Group.objects.get(name=name).account
             try:
                 acc = Account.objects.get(account=this_group_account)
                 ov = acc.allow_overdraft
@@ -804,8 +829,7 @@ def pochi2pochi(request, name=None):
         except Group.DoesNotExist:
             pass
 
-    else:
-        profile = request.user.profile
+    elif profile_type == 'I':
         try:
             acc = Account.objects.get(profile_id=profile.profile_id)
             bal = acc.available_balance.__float__()
@@ -813,25 +837,51 @@ def pochi2pochi(request, name=None):
         except Account.DoesNotExist:
             acc = None
             bal = ov = 0
+    else:
+        try:
+            corp_obj_acc = CorporateUser.objects.get(profile_id=profile.profile_id).account
+            acc = Account.objects.get(account=corp_obj_acc)
+            bal = acc.available_balance.__float__()
+            ov = acc.allow_overdraft
+        except CorporateUser.DoesNotExist:
+            acc = None
+            bal = ov = 0
 
     if request.method == "POST":
-        user_name = dst_account = dst_profile_id = None
+        user_name, grp_name, corp_name, dst_account, dst_profile_id = None, None, None, None, None
         if request.POST['dst_mobile']:
             phone = request.POST['dst_mobile']
-            if phone == request.user.username:
+            if phone == profile.msisdn:
                 messages.error(request, 'Sorry!, you cannot transfer money to your own account!')
                 return redirect(request.META['HTTP_REFERER'])
-            try:
-                user_obj = User.objects.select_related('profile').get(username=phone)
-                dst_profile_id = user_obj.profile.profile_id
-                user_name = user_obj.get_full_name()
-            except User.DoesNotExist:
-                user_name = None
-
-            try:
-                dst_account = Account.objects.get(profile_id=dst_profile_id).account
-            except Account.DoesNotExist:
-                dst_account = None
+            if profile_type == 'I':
+                try:
+                    user_name = User.objects.select_related('profile')\
+                        .get(profile__msisdn=phone, profile__profile_type=profile_type).get_full_name()
+                except User.DoesNotExist:
+                    user_name = None
+                try:
+                    dst_profile_id = Profile.objects.get(msisdn=phone, profile__profile_type=profile_type).profile_id
+                except Profile.DoesNotExist:
+                    dst_profile_id = None
+                try:
+                    dst_account = Account.objects.get(profile_id=dst_profile_id).account
+                except Account.DoesNotExist:
+                    dst_account = None
+            else:
+                try:
+                    user_name = User.objects.select_related('profile')\
+                        .get(profile__msisdn=phone, profile__profile_type='C').get_full_name()
+                except User.DoesNotExist:
+                    user_name = None
+                try:
+                    dst_profile_id = Profile.objects.get(msisdn=phone, profile__profile_type='C').profile_id
+                except Profile.DoesNotExist:
+                    dst_profile_id = None
+                try:
+                    dst_account = CorporateUser.objects.get(profile_id=dst_profile_id).account
+                except CorporateUser.DoesNotExist:
+                    dst_account = None
 
         elif request.POST['dst_account']:
             dst_account = request.POST['dst_account']
@@ -849,6 +899,10 @@ def pochi2pochi(request, name=None):
                     grp = Group.objects.get(account=dst_account)
                     grp_name = grp.name
                 except Group.DoesNotExist:
+                    try:
+                        corp_name = CorporateUser.objects.get(account=dst_account).name
+                    except CorporateUser.DoesNotExist:
+                        corp_name = None
                     grp_name = None
             elif dst_profile_id and dst_profile_id != 'NA':
                 try:
@@ -859,11 +913,13 @@ def pochi2pochi(request, name=None):
 
         amount = request.POST['amount']
         request.session['confirm'] = request.POST['type']
-        amount = amount
+        amt = float(amount)
 
         if dst_account:
-            if amount <= bal and user_name or grp_name:
+            if amt <= bal and user_name or grp_name or corp_name:
                 get_name = user_name if user_name else grp_name
+                if get_name is None:
+                    get_name = corp_name
                 messages.info(
                     request,
                     'You are about to transfer TZS' + str(amount) + ' to ' + get_name +
@@ -878,17 +934,19 @@ def pochi2pochi(request, name=None):
                 request.session['open_bal'] = bal
                 if name:
                     request.session['group_name'] = name
+                elif corp_name:
+                    request.session['corp_name'] = corp_name
 
-            elif amount > bal and user_name or grp_name:
+            elif amount > bal and user_name or grp_name or corp_name:
                 get_name = user_name if user_name else grp_name
+                if get_name is None:
+                    get_name = corp_name
                 messages.error(
                     request,
                     'You do not have enough balance to make to transfer TZS' + str(amount) + ' to ' + get_name + '.'
                 )
-            elif user_name is None:
-                messages.error(request, 'This user is not registered with a POCHI account!')
-            elif grp_name is None:
-                messages.error(request, 'This group is not registered with a POCHI account!')
+            elif user_name or grp_name or corp_name is None:
+                messages.error(request, 'This is not a valid POCHI account!')
         else:
             messages.error(request, 'This user is not registered with a POCHI account!')
     if name:
@@ -913,7 +971,8 @@ def mobile(request):
 def withdraw(request):
     profile = request.user.profile
     identifier = profile.profile_id
-    phone = request.user.username
+    profile_type = profile.profile_type
+    phone = profile.msisdn
     msisdn_3 = phone[:3]
 
     swift = None
@@ -939,19 +998,31 @@ def withdraw(request):
     else:
         institution = None
 
+    if profile_type == 'I':
+        try:
+            _account = Account.objects.get(profile_id=identifier)
+            acc = _account.account
+        except Account.DoesNotExist:
+            _account, acc = None, None
+    else:
+        try:
+            _account = CorporateUser.objects.get(profile_id=identifier)
+            acc = _account.account
+        except CorporateUser.DoesNotExist:
+            _account, acc = None, None
     try:
-        external_account = ExternalAccount.objects.get(profile_id=identifier)
+        external_account = ExternalAccount.objects.get(account=acc)
     except ExternalAccount.DoesNotExist:
         external_account = None
 
-    if request.method == "POST":
+    if _account and request.method == "POST":
         if request.POST['type'] == u"account":
             institution = request.POST['institution']
             bank_name = request.POST['name'].upper()
             account_num = request.POST['account']
             account_type = request.POST['type']
             ExternalAccount.objects.create(
-                profile_id=identifier,
+                account=acc,
                 account_name=bank_name,
                 account_number=account_num,
                 institution_name=institution,
@@ -971,7 +1042,7 @@ def withdraw(request):
             request.session['confirm'] = request.POST['type']
 
             try:
-                ext_account = ExternalAccount.objects.get(profile_id=identifier)
+                ext_account = ExternalAccount.objects.get(account=acc)
                 institution = ext_account.institution_name
                 ext_account_no = ext_account.account_number
             except ExternalAccount.DoesNotExist:
@@ -981,9 +1052,6 @@ def withdraw(request):
                 return redirect(request.META['HTTP_REFERER'])
 
             try:
-
-                _account = Account.objects.get(profile_id=identifier)
-                pochi_id = _account.account
                 bal = _account.available_balance.__float__()
                 ov = _account.allow_overdraft
 
@@ -991,7 +1059,7 @@ def withdraw(request):
                     request.session['institution'] = institution
                     request.session['ext_account'] = ext_account_no
                     request.session['identifier'] = identifier
-                    request.session['pochi_id'] = pochi_id
+                    request.session['pochi_id'] = acc
                     request.session['phone'] = phone
                     request.session['bal'] = bal
                     request.session['amount'] = amount
@@ -1012,15 +1080,13 @@ def withdraw(request):
             request.session['confirm'] = request.POST['type']
 
             try:
-                _account = Account.objects.get(profile_id=identifier)
-                pochi_id = _account.account
                 bal = _account.available_balance.__float__()
                 ov = _account.allow_overdraft
 
                 if amount <= bal:
                     request.session['institution'] = institution
                     request.session['identifier'] = identifier
-                    request.session['pochi_id'] = pochi_id
+                    request.session['pochi_id'] = acc
                     request.session['phone'] = phone
                     request.session['bal'] = bal
                     request.session['amount'] = amount
@@ -1075,7 +1141,7 @@ def deposit(request):
             else:
                 fund_transfer(request, 'DEPOSIT', mode, channel, dst_profile_id, phone, dst_account, bal, amount, phone)
 
-            notify.send(user, recipient=user, verb='TShs. ' + str(amount) + ' deposited to your account')
+            notify.send(user, recipient=user, verb='TShs. ' + str(amount) + 'has been deposited to your account')
 
             message = 'You have successfully deposited ' + str(amount) + ' to your account'
 
@@ -1088,11 +1154,37 @@ def deposit(request):
 def del_bank_acc(request):
     user = request.user
     profile_id = request.user.profile.profile_id
-    try:
-        notify.send(user, recipient=user, verb='Register your bank account!')
-        ExternalAccount.objects.get(profile_id=profile_id).delete()
-    except ExternalAccount.DoesNotExist:
-        messages.warning(request, 'You have not registered a bank account!')
+    profile_type = request.user.profile.profile_type
+    if profile_type == 'I':
+        try:
+            acc = Account.objects.get(profile_id=profile_id).account
+        except Account.DoesNotExist:
+            acc = None
+        if acc:
+            try:
+                # TODO
+                notify.send(user, recipient=user, verb='Your bank account was deleted in POCHI!')
+                ExternalAccount.objects.get(account=acc).delete()
+            except ExternalAccount.DoesNotExist:
+                messages.warning(request, 'You have not registered a bank account!')
+    else:
+        try:
+            acc = CorporateUser.objects.get(profile_id=profile_id).account
+        except CorporateUser.DoesNotExist:
+            acc = None
+        if acc:
+            corp_users = []
+            members = CorporateProfile.objects.filter(account=acc).values_list('profile_id', flat=True)
+            for member in members:
+                user_id = Profile.objects.get(profile_id=member, profile_type='C').user
+                corp_user = User.objects.get(pk=user_id)
+                corp_users.append(corp_user)
+            try:
+                # TODO
+                notify.send(user, recipient=corp_users, verb='Your corporate bank account was deleted in POCHI!')
+                ExternalAccount.objects.get(account=acc).delete()
+            except ExternalAccount.DoesNotExist:
+                messages.warning(request, 'You have not registered a bank account!')
     return redirect(withdraw)
 
 
@@ -1103,18 +1195,19 @@ def confirm_delete_bank_acc(request):
 
 @login_required
 def new_group(request):
-    phone = request.user.username
+    phone = request.user.profile.msisdn
     return render_with_global_data(request, 'pochi/create_group.html', {'phone': phone})
 
 
 @login_required
 def create_group(request):
     user = request.user
+    profile = user.profile
     import json
     if request.method == 'POST':
         groupName = request.POST['profileGroupName'].capitalize()
         member_list = request.POST['members']
-        first_admin = user.username
+        first_admin = profile.msisdn
         members = json.loads(member_list)
         grp_acc = uuid.uuid4().hex[:10].upper()
         try:
@@ -1133,7 +1226,7 @@ def create_group(request):
                     if member == first_admin:
                         is_admin = 1
                     try:
-                        profile_id = Profile.objects.get(user__username=member).profile_id
+                        profile_id = Profile.objects.get(msisdn=member, profile_type='I').profile_id
                     except Profile.DoesNotExist:
                         profile_id = None
                     if profile_id is None:
@@ -1143,19 +1236,11 @@ def create_group(request):
                         profile_id=profile_id,
                         admin=is_admin
                     )
-                    notify.send(user, recipient=user, verb='You created group '+groupName+' successfully!')
-                    messages.success(request, "Group "+groupName+"created successfully!")
+                    recipient = User.objects.select_related('profile').get(profile__profile_id=profile_id)
+                    notify.send(user, recipient=recipient, verb='You created group '+groupName+' successfully!')
+                messages.success(request, "Group "+groupName+"created successfully!")
         except IntegrityError:
             messages.error(request, 'Sorry!, this group name is already in use, try a different name')
-            # import httplib, urllib
-            # conn = httplib.HTTPSConnection("api.pushover.net:443")
-            # conn.request("POST", "/1/messages.json",
-            #              urllib.urlencode({
-            #                  "token": "APP_TOKEN",
-            #                  "user": "USER_KEY",
-            #                  "message": "hello world",
-            #              }), {"Content-type": "application/x-www-form-urlencoded"})
-            # conn.getresponse()
     return redirect(request.META['HTTP_REFERER'])
 
 
@@ -1207,7 +1292,7 @@ def add_remove_member(request, name=None, action=None):
             count = len(evaluated_members)
             invalid = 0
             for member in evaluated_members:
-                profile = Profile.objects.select_related('user').get(user__username=member)
+                profile = Profile.objects.get(msisdn=member, profile_type='I')
                 if profile:
                     try:
                         this_group = Group.objects.get(name=name)
@@ -1246,7 +1331,7 @@ def add_remove_member(request, name=None, action=None):
             count = len(eval(names))
             for name in eval(names):
                 first_name = name.split[0]
-                rejected_profile_id = Profile.objects.get(user__first_name=first_name).profile_id
+                rejected_profile_id = Profile.objects.get(user__first_name=first_name, profile_type='I').profile_id
                 try:
                     this_group = Group.objects.get(name=name)
                     grp_acc = this_group.account
@@ -1346,10 +1431,16 @@ def delete_group(request, name=None):
                 new_account_bal = m_account_bal + grp_cur_bal
                 m_account.available_balance = new_account_bal
                 m_account.save()
+            try:
+                all_members = GroupMember.objects.filter(group_account=group_acc).values_list('profile_id', flat=True)
+                for member in all_members:
+                    recipient = User.objects.select_related('user').get(profile__profile_id=member).user
+                    notify.send(user, recipient=recipient, verb='You deleted group ' + name + ' successfully!')
+            except GroupMember.DoesNotExist:
+                pass
             GroupMember.objects.filter(group_account=group_acc).delete()
             Group.objects.get(name=name).delete()
             group_account.delete()
-            notify.send(user, recipient=user, verb='You deleted group ' + name + ' successfully!')
     return redirect(home)
 
 
@@ -1386,6 +1477,13 @@ def exit_group(request, name=None):
                 new_account_bal = m_account_bal + grp_cur_bal
                 m_account.available_balance = new_account_bal
                 m_account.save()
+            try:
+                all_members = GroupMember.objects.filter(group_account=group_acc).values_list('profile_id', flat=True)
+                for member in all_members:
+                    recipient = User.objects.select_related('user').get(profile__profile_id=member).user
+                    notify.send(user, recipient=recipient, verb='You exited group ' + name + ' successfully!')
+            except GroupMember.DoesNotExist:
+                pass
             GroupMember.objects.get(group_account=group_acc, profile_id=profile.profile_id).delete()
             Group.objects.get(name=name).delete()
             grp_account.delete()
@@ -1648,9 +1746,9 @@ def validate_pochi_id(request):
     if request.is_ajax() and request.POST:
         username = request.POST['username']
         try:
-            user_obj = User.objects.get(username=username)
-            user = '%s %s' % (user_obj.first_name, user_obj.last_name)
-        except User.DoesNotExist:
+            user_obj = Profile.objects.select_related('user').get(msisdn=username, profile_type='I').user
+            user = user_obj.get_full_name()
+        except Profile.DoesNotExist:
             user = None
         context = {'result': user}
     else:
@@ -1671,9 +1769,17 @@ def group_admin(request, name, identity, action):
         if group_acc:
             try:
                 member_qs = GroupMember.objects.get(profile_id=identity, group_account=group_acc)
+                new_admin = User.objects.select_related('user').get(profile__profile_id=identity).user.get_full_name()
                 member_qs.admin = 1
                 member_qs.save()
-                notify.send(user, recipient=user, verb='XXXX is now an admin of ' + name + '!')
+                try:
+                    all_members = GroupMember.objects.filter(group_account=group_acc).values_list('profile_id',
+                                                                                                  flat=True)
+                    for member in all_members:
+                        recipient = User.objects.select_related('user').get(profile__profile_id=member).user
+                        notify.send(user, recipient=recipient, verb=new_admin+' is now an admin of ' + name + '!')
+                except GroupMember.DoesNotExist:
+                    pass
             except GroupMember.DoesNotExist:
                 messages.error(request, "Sorry!, an error occurred, This member does not exist!")
     elif action == 'remove':
@@ -1689,15 +1795,32 @@ def group_admin(request, name, identity, action):
                 member_qs = GroupMember.objects.get(profile_id=identity, group_account=group_acc)
                 member_qs.admin = 0
                 member_qs.save()
+                old_admin = User.objects.select_related('user').get(profile__profile_id=identity).user.get_full_name()
+                try:
+                    all_members = GroupMember.objects.filter(group_account=group_acc).values_list('profile_id',
+                                                                                                  flat=True)
+                    for member in all_members:
+                        recipient = User.objects.select_related('user').get(profile__profile_id=member).user
+                        notify.send(user, recipient=recipient, verb=old_admin+' is now an admin of ' + name + '!')
+                except GroupMember.DoesNotExist:
+                    pass
             except GroupMember.DoesNotExist:
                 messages.error(request, "Sorry!, an error occurred, This member does not exist!")
     if action == 'change':
         identity.replace('—', ' ')
         try:
             group = Group.objects.get(name=name)
+            group_acc = group.account
             group.name = identity
             group.save()
-            notify.send(user, recipient=user, verb='Group ' + name + ' was changed to ' + identity + '!')
+            me = user.get_full_name()
+            try:
+                all_members = GroupMember.objects.filter(group_account=group_acc).values_list('profile_id', flat=True)
+                for member in all_members:
+                    recipient = User.objects.select_related('user').get(profile__profile_id=member).user
+                    notify.send(user, recipient=recipient, verb=me+'changed Group "'+name+'" to "'+identity+'"!')
+            except GroupMember.DoesNotExist:
+                pass
         except Group.DoesNotExist:
             messages.error(request, "Sorry!, an error occurred, cannot complete this action.")
 
@@ -1735,11 +1858,11 @@ class UserNotificationsList(AllNotificationsList):
 @login_required
 def mark_as_read(request, slug=None):
     from notifications.utils import slug2id
-    id = slug2id(slug)
+    m_id = slug2id(slug)
 
     from notifications.models import Notification
     notification = get_object_or_404(
-        Notification, recipient=request.user, id=id)
+        Notification, recipient=request.user, id=m_id)
     notification.mark_as_read()
 
     _next = request.GET.get('next')

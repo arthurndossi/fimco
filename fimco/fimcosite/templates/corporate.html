@@ -426,6 +426,11 @@
                                                             {% endif %}
                                                         </div>
                                                     </div>
+                                                    <label class="switch switch-success switch-round">
+                                                        {{ wizard.form.notification }}
+                                                        <span class="switch-label" data-on="YES" data-off="NO"></span>
+                                                        <span> Receive SMS notifications?</span>
+                                                    </label>
                                                     <label class="checkbox m-0">
                                                         {{ wizard.form.checker }}
                                                         <i></i>I agree to the <a href="#" data-toggle="modal" data-target="#termsModal">Terms of Service</a>
@@ -621,6 +626,11 @@
                                                 {% endif %}
                                             </div>
                                         </div>
+                                        <label class="switch switch-success switch-round">
+                                            {{ adForm.notification }}
+                                            <span class="switch-label" data-on="YES" data-off="NO"></span>
+                                            <span> Receive SMS notifications?</span>
+                                        </label>
                                         <label class="checkbox m-0">
                                             {{ adForm.checker }}
                                             <i></i>I agree to the <a href="#" data-toggle="modal" data-target="#termsModal">Terms of Service</a>
@@ -777,6 +787,9 @@
                                                 <p><strong>Date of Birth: </strong>{{ form_data.2.dob|date:"d/M/Y" }}</p>
                                                 <p><strong>Identification: </strong>{{ form_data.3.id_type }} {{ form_data.3.id_number }}</p>
                                                 <p><strong>Attachment: </strong>{{ form_data.3.user_id }}</p>
+                                                <p><strong>SMS notifications:&nbsp;</strong>
+                                                {% if form_data.3.notification %}YES{% else %}NO{% endif %}
+                                                </p>
                                             </div>
                                         </div>
                                     </div>

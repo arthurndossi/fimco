@@ -8,7 +8,6 @@ urlpatterns = [
     url(r'^notifications/unread$', views.UserNotificationsList.as_view(), name='unread'),
     url(r'^notifications/read/(?P<slug>\d+)/$', views.mark_as_read, name='read'),
     url(r'^dashboard/(?P<page>[a-zA-Z]+)$', views.view_data, name='data'),
-    url(r'^add/account$', views.account, name='accounts'),
     url(r'^statements$', views.statement, name='statements'),
     url(r'^pochi2pochi', views.pochi2pochi, name='pochi2pochi'),
     url(r'^withdraw$', views.withdraw, name='withdraw'),

@@ -29,6 +29,8 @@
                                     <h4 class="inline-block">Contacts:&nbsp;</h4>{{ data.email }}, {{ data.phone }}<br>
                                     <h4 class="inline-block">KYC Info:&nbsp;</h4>{{ data.client_id }}<br>
                                     <h4 class="inline-block">Accounts(BOT, DSE):&nbsp;</h4>{{ data.bot_cds }}, {{ data.bot_cds }}
+                                    <h4 class="inline-block">SMS notifications:&nbsp;</h4>
+                                    {% if data.notification %}YES{% else %}NO{% endif %}
                                 </div>
 
                                 <!-- Edit -->
@@ -142,7 +144,7 @@
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-md-12 col-sm-12">
+                                                <div class="col-md-8 col-sm-8">
                                                     <label>Change your ID *</label>
                                                     <!-- custom file upload -->
                                                     <div class="fancy-file-upload fancy-file-primary">
@@ -152,6 +154,13 @@
                                                         <span class="button">Choose File</span>
                                                     </div>
                                                     <small class="text-muted block">Max file size: 5Mb</small>
+                                                </div>
+                                                <div class="col-md-4 col-sm-4">
+                                                    <label class="switch switch-success switch-round">
+                                                        {{ pForm.notification }}
+                                                        <span class="switch-label" data-on="YES" data-off="NO"></span>
+                                                        <span> Receive SMS notifications?</span>
+                                                    </label>
                                                 </div>
                                             </div>
                                             <div class="row">
