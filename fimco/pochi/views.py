@@ -1120,7 +1120,6 @@ def how_to_deposit(request):
 
 
 def deposit(request):
-    user = request.user
     message = None
     if request.method == "GET":
         amount = float(request.GET['amount'])
@@ -1133,18 +1132,28 @@ def deposit(request):
             _account = Account.objects.get(account=dst_account)
             dst_profile_id = _account.profile_id
             bal = _account.available_balance
-            dst_account = _account.account
 
             if dst_profile_id == 'NA':
                 name = _account.nickname
                 fund_transfer(request, 'DEPOSIT', mode, channel, name, phone, dst_account, bal, amount, phone)
+                try:
+                    members = CorporateUser.objects.filter(account=dst_account).values_list('profile_id', flat=True)
+                    for member in members:
+                        recipient = Profile.objects.get(profile_id=member).user
+                        notify.send(recipient, recipient=recipient,
+                                    verb='TShs. ' + str(amount) + 'has been deposited to the specified account')
+                        message = 'TShs. ' + str(amount) + ' has been deposited to the specified account!'
+                except CorporateUser.DoesNotExist:
+                    message = 'Sorry!, Could not deposit, please contact your group or company administrator!'
             else:
                 fund_transfer(request, 'DEPOSIT', mode, channel, dst_profile_id, phone, dst_account, bal, amount, phone)
-
-            notify.send(user, recipient=user, verb='TShs. ' + str(amount) + 'has been deposited to your account')
-
-            message = 'You have successfully deposited ' + str(amount) + ' to your account'
-
+                try:
+                    user = Profile.objects.get(profile_id=dst_profile_id).user
+                    notify.send(user, recipient=user,
+                                verb='TShs. ' + str(amount) + ' has been deposited to your account!')
+                    message = 'TShs. ' + str(amount) + ' has been deposited to your account!'
+                except Profile.DoesNotExist:
+                    message = 'Sorry!, This profile does not exist!'
         except Account.DoesNotExist:
             message = 'Sorry!, This account does not exist!'
 
@@ -1162,7 +1171,6 @@ def del_bank_acc(request):
             acc = None
         if acc:
             try:
-                # TODO
                 notify.send(user, recipient=user, verb='Your bank account was deleted in POCHI!')
                 ExternalAccount.objects.get(account=acc).delete()
             except ExternalAccount.DoesNotExist:
@@ -1180,7 +1188,6 @@ def del_bank_acc(request):
                 corp_user = User.objects.get(pk=user_id)
                 corp_users.append(corp_user)
             try:
-                # TODO
                 notify.send(user, recipient=corp_users, verb='Your corporate bank account was deleted in POCHI!')
                 ExternalAccount.objects.get(account=acc).delete()
             except ExternalAccount.DoesNotExist:

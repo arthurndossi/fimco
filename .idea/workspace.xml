@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2bb6a40e-3dd1-4683-a1ae-6832ed7492de" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dataSources/532288af-247b-4932-9df9-87488435154e/_metadata_/metadata" afterPath="$PROJECT_DIR$/.idea/dataSources/532288af-247b-4932-9df9-87488435154e/_metadata_/metadata" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dataSources/532288af-247b-4932-9df9-87488435154e/_metadata_/metadata.values.at" afterPath="$PROJECT_DIR$/.idea/dataSources/532288af-247b-4932-9df9-87488435154e/_metadata_/metadata.values.at" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fimco/fimcosite/forms.py" afterPath="$PROJECT_DIR$/fimco/fimcosite/forms.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fimco/pochi/views.py" afterPath="$PROJECT_DIR$/fimco/pochi/views.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -81,24 +79,14 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/fimco/pochi/views.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="17">
-              <caret line="994" column="33" lean-forward="false" selection-start-line="994" selection-start-column="33" selection-end-line="994" selection-end-column="33" />
+              <caret line="1119" column="0" lean-forward="true" selection-start-line="1119" selection-start-column="0" selection-end-line="1119" selection-end-column="0" />
               <folding>
                 <element signature="e#15#24#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="forms.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/fimco/fimcosite/forms.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="262">
-              <caret line="839" column="20" lean-forward="true" selection-start-line="839" selection-start-column="20" selection-end-line="839" selection-end-column="20" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -244,8 +232,8 @@
         <option value="$PROJECT_DIR$/fimco/pochi/static/pochi/js/group.js" />
         <option value="$PROJECT_DIR$/fimco/fimcosite/views.py" />
         <option value="$PROJECT_DIR$/fimco/pochi/templates/pochi/main.html" />
-        <option value="$PROJECT_DIR$/fimco/pochi/views.py" />
         <option value="$PROJECT_DIR$/fimco/fimcosite/forms.py" />
+        <option value="$PROJECT_DIR$/fimco/pochi/views.py" />
       </list>
     </option>
   </component>
@@ -630,13 +618,6 @@
       <option name="presentableId" value="Default" />
       <updated>1500455200738</updated>
     </task>
-    <task id="LOCAL-00069" summary="added reportlab dependency">
-      <created>1512804930233</created>
-      <option name="number" value="00069" />
-      <option name="presentableId" value="LOCAL-00069" />
-      <option name="project" value="LOCAL" />
-      <updated>1512804930234</updated>
-    </task>
     <task id="LOCAL-00070" summary="added css fix for small laptops">
       <created>1512806257070</created>
       <option name="number" value="00070" />
@@ -973,7 +954,14 @@
       <option name="project" value="LOCAL" />
       <updated>1519659935214</updated>
     </task>
-    <option name="localTasksCounter" value="118" />
+    <task id="LOCAL-00118" summary="update 1.0.6 ...SMS notification not required">
+      <created>1519716483337</created>
+      <option name="number" value="00118" />
+      <option name="presentableId" value="LOCAL-00118" />
+      <option name="project" value="LOCAL" />
+      <updated>1519716483337</updated>
+    </task>
+    <option name="localTasksCounter" value="119" />
     <servers />
   </component>
   <component name="TodoView">
@@ -1068,7 +1056,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="general changes" />
     <MESSAGE value="Updated website components" />
     <MESSAGE value="Updated advisory, brokerage and fund management" />
     <MESSAGE value="mobile responsiveness" />
@@ -1093,7 +1080,8 @@
     <MESSAGE value="update 1.0.4" />
     <MESSAGE value="update 1.0.5" />
     <MESSAGE value="update 1.0.6" />
-    <option name="LAST_COMMIT_MESSAGE" value="update 1.0.6" />
+    <MESSAGE value="update 1.0.6 ...SMS notification not required" />
+    <option name="LAST_COMMIT_MESSAGE" value="update 1.0.6 ...SMS notification not required" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1370,6 +1358,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="526">
           <caret line="42" column="0" lean-forward="true" selection-start-line="42" selection-start-column="0" selection-end-line="42" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#32#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1396,6 +1387,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="134">
           <caret line="135" column="0" lean-forward="true" selection-start-line="135" selection-start-column="0" selection-end-line="135" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#39#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1403,6 +1397,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="526">
           <caret line="58" column="0" lean-forward="true" selection-start-line="58" selection-start-column="0" selection-end-line="58" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#43#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1418,7 +1415,7 @@
         <state relative-caret-position="-2330">
           <caret line="22" column="0" lean-forward="true" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
           <folding>
-            <element signature="e#309#318#0" expanded="true" />
+            <element signature="e#309#318#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1428,6 +1425,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="58">
           <caret line="117" column="38" lean-forward="true" selection-start-line="117" selection-start-column="38" selection-end-line="117" selection-end-column="38" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1435,6 +1433,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="51">
           <caret line="3" column="0" lean-forward="true" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1442,6 +1441,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-52">
           <caret line="272" column="8" lean-forward="true" selection-start-line="272" selection-start-column="8" selection-end-line="272" selection-end-column="8" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1501,6 +1501,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="17">
           <caret line="106" column="81" lean-forward="true" selection-start-line="106" selection-start-column="81" selection-end-line="106" selection-end-column="81" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1588,24 +1589,25 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="51">
           <caret line="274" column="35" lean-forward="true" selection-start-line="274" selection-start-column="35" selection-end-line="274" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fimco/pochi/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="994" column="33" lean-forward="false" selection-start-line="994" selection-start-column="33" selection-end-line="994" selection-end-column="33" />
-          <folding>
-            <element signature="e#15#24#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/fimco/fimcosite/forms.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="262">
-          <caret line="839" column="20" lean-forward="true" selection-start-line="839" selection-start-column="20" selection-end-line="839" selection-end-column="20" />
+          <caret line="839" column="20" lean-forward="false" selection-start-line="839" selection-start-column="20" selection-end-line="839" selection-end-column="20" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fimco/pochi/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1119" column="0" lean-forward="true" selection-start-line="1119" selection-start-column="0" selection-end-line="1119" selection-end-column="0" />
+          <folding>
+            <element signature="e#15#24#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
