@@ -255,6 +255,7 @@ class RegisterForm2(forms.Form):
     bot_cds = forms.CharField(required=False)
     dse_cds = forms.CharField(required=False)
     notification = forms.BooleanField(
+        required=False,
         widget=CheckboxInput(attrs={
             'id': 'notification',
             'checked': ''
@@ -498,6 +499,7 @@ class CorporateForm4(forms.Form):
         })
     )
     notification = forms.BooleanField(
+        required=False,
         widget=CheckboxInput(attrs={
             'id': 'notification',
             'checked': ''
@@ -622,6 +624,7 @@ class UserCorporateForm(forms.Form):
         })
     )
     notification = forms.BooleanField(
+        required=False,
         widget=CheckboxInput(attrs={
             'id': 'notification',
             'checked': ''
@@ -827,6 +830,7 @@ class EditProfileForm(forms.Form):
         })
     )
     notification = forms.BooleanField(
+        required=False,
         widget=CheckboxInput(attrs={
             'id': 'notification',
             'checked': ''
