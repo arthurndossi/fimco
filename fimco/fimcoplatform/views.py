@@ -8,6 +8,7 @@ from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.template.defaultfilters import register
 
+from fimcosite.models import Account
 from pochi.models import PaidUser
 from .models import ExchangeRate, OvernightInterest, Tbill, Tbond, LiborRate
 
@@ -26,13 +27,19 @@ def market_views(request, page):
 def start_trial(request):
     profile = request.user.profile
     profile_id = profile.profile_id
-    PaidUser.objects.create(
-        profile_id=profile_id,
-        start_date=datetime.datetime.today(),
-        level='STANDARD'
-    )
-    messages.info(request, 'You now have limited access to market information, you can always try the paid version'
-                           ' for unlimited information and unsubscribe at any time.')
+    try:
+        src_account = Account.objects.get(profile_id=profile_id).account
+    except Account.DoesNotExist:
+        src_account = None
+
+    if src_account:
+        PaidUser.objects.create(
+            account=src_account,
+            start_date=datetime.datetime.today(),
+            level='STANDARD'
+        )
+        messages.info(request, 'You now have limited access to market information, you can always try the paid version'
+                               ' for unlimited information and unsubscribe at any time.')
     return redirect(request.META['HTTP_REFERER'])
 
 
