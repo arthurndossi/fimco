@@ -344,13 +344,21 @@ def login_view(request, tab='user'):
 def validate_credentials(request, form, username, password, _next, category, pochi=None, new_user=False):
     if re.match(r"[^@]+@[^@]+\.[^@]+", username):
         if category == 'user':
-            username = User.objects.get(email=username).username
-            user = authenticate(username=username, password=password)
+            try:
+                username = User.objects.get(email=username).username
+                user = authenticate(username=username, password=password)
+            except User.DoesNotExist:
+                user = None
+                messages.error(request, "Invalid credentials!")
         else:
             user = corporate_authentication(request, username, password, pochi, 'admin')
     elif re.match(r'^([+]?(\d{1,3}\s?)|[0])\s?\d+(\s?-?\d{2,4}){1,3}?$', username):
-        username = User.objects.select_related('profile').get(profile__msisdn__exact=username).username
-        user = authenticate(username=username, password=password)
+        try:
+            username = User.objects.select_related('profile').get(profile__msisdn__exact=username).username
+            user = authenticate(username=username, password=password)
+        except User.DoesNotExist:
+            user = None
+            messages.error(request, "Invalid credentials!")
     else:
         raise forms.ValidationError("Not a valid email or phone number!")
 
